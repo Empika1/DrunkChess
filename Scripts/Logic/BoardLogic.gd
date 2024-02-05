@@ -12,7 +12,6 @@ static func doPiecesOverlap(pos1: Vector2i, radius1: int, pos2: Vector2i, radius
 	return distance_squared < sum_radii_squared
 
 static func isPieceOutsideBoard(pos: Vector2i, radius: int, maxPos: Vector2i) -> bool:
-	print(pos.x + radius, " ", maxPos.x)
 	return pos.x - radius < 0 or pos.y - radius < 0 or pos.x + radius > maxPos.x or pos.y + radius > maxPos.y
 
 static func validateStartingState(state: BoardState) -> BoardState.StateResult:
@@ -82,7 +81,21 @@ static func makeMove(state: BoardState, move: Move) -> BoardState:
 			for piece: Piece in newState.pieces:
 				if piece.valueEquals(move.movedPiece):
 					piece.pos = move.posMovedTo
-					
+			
+			var capturedPieceIndices: Array[int] = []
+			for i: int in range(newState.pieces.size()):
+				var piece: Piece = newState.pieces[i]
+				if piece.color != move.movedPiece.color:
+					if doPiecesOverlap(piece.pos, piece.hitRadius, move.posMovedTo, move.movedPiece.hitRadius):
+						capturedPieceIndices.append(i)
+						print(capturedPieceIndices.size())
+			
+			for i: int in range(capturedPieceIndices.size() - 1, -1, -1):
+				print(i)
+				var pieceIndex: int = capturedPieceIndices[i]
+				newState.capturedPieces.append(newState.pieces[pieceIndex])
+				newState.pieces.pop_at(pieceIndex)
+			
 			newState.turnToMove = (1 - newState.turnToMove) as Piece.PieceColor
 			return newState
 		_:
