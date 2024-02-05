@@ -54,18 +54,21 @@ func getPieceTexture(pieceType: Piece.PieceType, pieceColor: Piece.PieceColor) -
 					return bq
 				_:
 					return bk
-					
+
+func getScaledRectSize():
+	return get_rect().size * global_scale
+
 func boardPosToGamePos(boardPos: Vector2i) -> Vector2:
-	return Vector2(boardPos) / Vector2(Piece.maxPos) * get_rect().size + global_position
+	return Vector2(boardPos) / Vector2(Piece.maxPos) * getScaledRectSize() + global_position
 	
 func gamePosToBoardPos(gamePos: Vector2) -> Vector2i:
-	return Vector2i((gamePos - global_position) * Vector2(Piece.maxPos) / get_rect().size)
+	return Vector2i((gamePos - global_position) * Vector2(Piece.maxPos) / getScaledRectSize())
 
 func getHoveredPiece(mousePos: Vector2i) -> Piece:
 	for c in pieceHolder.get_children():
 		var cs = c as DraggablePiece
 		var distanceSquared = (cs.global_position.x - mousePos.x) ** 2 + (cs.global_position.y - mousePos.y) ** 2
-		if distanceSquared < (float(c.piece.hitRadius) / Piece.maxPos.x * get_rect().size.x) ** 2:
+		if distanceSquared < (float(c.piece.hitRadius) / Piece.maxPos.x * getScaledRectSize().x) ** 2:
 			return cs.piece
 	return null
 
@@ -91,7 +94,7 @@ func render() -> void:
 			dragOffset = Vector2i.ZERO
 			
 	var stateToRender = attemptedNextState if attemptedNextState != null else states[-1]
-	print(BoardState.StateResult.keys()[stateToRender.result])
+	#print(BoardState.StateResult.keys()[stateToRender.result])
 			
 	for c in pieceHolder.get_children():
 		pieceHolder.remove_child(c)

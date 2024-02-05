@@ -12,6 +12,7 @@ static func doPiecesOverlap(pos1: Vector2i, radius1: int, pos2: Vector2i, radius
 	return distance_squared < sum_radii_squared
 
 static func isPieceOutsideBoard(pos: Vector2i, radius: int, maxPos: Vector2i) -> bool:
+	print(pos.x + radius, " ", maxPos.x)
 	return pos.x - radius < 0 or pos.y - radius < 0 or pos.x + radius > maxPos.x or pos.y + radius > maxPos.y
 
 static func validateStartingState(state: BoardState) -> BoardState.StateResult:
