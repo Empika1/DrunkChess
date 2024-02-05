@@ -1,2 +1,2 @@
-.mono/
-.fake
+# Godot 4+ specific ignores
+.godot/
