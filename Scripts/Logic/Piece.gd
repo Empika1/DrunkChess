@@ -38,3 +38,6 @@ func duplicate() -> Piece:
 	
 func valueEquals(other: Piece) -> bool:
 	return pos == other.pos && type == other.type && color == other.color && hasMoved == other.hasMoved;
+	
+func toString() -> String:
+	return PieceColor.keys()[color] + " " + PieceType.keys()[type] + " at " + str(pos) + (" that has moved" if hasMoved else " that hasn't moved")

@@ -49,20 +49,34 @@ static func newDefaultStartingState() -> BoardState:
 	var whiteKing: Piece = Piece.new(Vector2i(768, 768), Piece.PieceType.KING, Piece.PieceColor.WHITE)
 	var blackKing: Piece = Piece.new(Vector2i(5000, 5000), Piece.PieceType.KING, Piece.PieceColor.BLACK)
 	var randomRook: Piece = Piece.new(Vector2i(2500, 768), Piece.PieceType.ROOK, Piece.PieceColor.WHITE)
-	var state: BoardState = BoardState.newStartingState([whiteKing, blackKing, randomRook])
+	var otherRandomRook: Piece = Piece.new(Vector2i(5900, 768), Piece.PieceType.ROOK, Piece.PieceColor.BLACK)
+	var state: BoardState = BoardState.newStartingState([whiteKing, blackKing, randomRook, otherRandomRook])
 	state.result = BoardLogic.validateStartingState(state)
 	return state
 
-func makeMove(move_: Move):
-	return BoardLogic.makeMove(self, move_)
+func makeMove(move_: Move) -> BoardState:
+	return BoardLogic.makeMove(self, move_).duplicate()
 	
-func duplicate():
+func duplicate() -> BoardState:
 	var newPieces: Array[Piece] = []
 	for piece in pieces:
 		newPieces.append(piece.duplicate())
+	print("pieces size ", pieces.size(), " ", newPieces.size())
 	
 	var newCapturedPieces: Array[Piece] = []
 	for piece in capturedPieces:
 		newPieces.append(piece.duplicate())
+	print("captured pieces size ", capturedPieces.size(), " ", newCapturedPieces.size())
 		
 	return BoardState.new(newPieces, newCapturedPieces, turnToMove, result, previousState)
+
+func toString() -> String:
+	var str = "State:\nPieces:\n"
+	for i: Piece in pieces:
+		str += i.toString() + "\n"
+	str += "Captured Pieces:\n"
+	for i: Piece in capturedPieces:
+		str += i.toString() + "\n"
+	str += "Turn to move: " + Piece.PieceColor.keys()[turnToMove] + "\n"
+	str += "Result: " + StateResult.keys()[result]
+	return str

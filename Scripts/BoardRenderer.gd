@@ -77,9 +77,9 @@ var dragOffset: Vector2i
 var attemptedNextState: BoardState
 func render() -> void:
 	var mousePos: Vector2i = get_viewport().get_mouse_position()
-	if pieceDragging == null:
-		if Input.is_action_just_pressed("lmb"):
-			pieceDragging = getHoveredPiece(mousePos)
+	if pieceDragging == null && Input.is_action_just_pressed("lmb"):
+		pieceDragging = getHoveredPiece(mousePos)
+		if pieceDragging != null:
 			dragOffset = boardPosToGamePos(pieceDragging.pos) - Vector2(mousePos)
 	
 	if pieceDragging != null:
@@ -93,8 +93,12 @@ func render() -> void:
 			pieceDragging = null
 			dragOffset = Vector2i.ZERO
 			
-	var stateToRender = attemptedNextState if attemptedNextState != null else states[-1]
-	#print(BoardState.StateResult.keys()[stateToRender.result])
+	var stateToRender: BoardState
+	if attemptedNextState != null:
+		stateToRender = attemptedNextState
+	else:
+		stateToRender = states[-1]
+	#print(stateToRender.toString())
 			
 	for c in pieceHolder.get_children():
 		pieceHolder.remove_child(c)

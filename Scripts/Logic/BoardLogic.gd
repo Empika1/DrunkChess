@@ -81,6 +81,7 @@ static func makeMove(state: BoardState, move: Move) -> BoardState:
 			for piece: Piece in newState.pieces:
 				if piece.valueEquals(move.movedPiece):
 					piece.pos = move.posMovedTo
+					piece.hasMoved = true
 			
 			var capturedPieceIndices: Array[int] = []
 			for i: int in range(newState.pieces.size()):
@@ -88,10 +89,8 @@ static func makeMove(state: BoardState, move: Move) -> BoardState:
 				if piece.color != move.movedPiece.color:
 					if doPiecesOverlap(piece.pos, piece.hitRadius, move.posMovedTo, move.movedPiece.hitRadius):
 						capturedPieceIndices.append(i)
-						print(capturedPieceIndices.size())
 			
 			for i: int in range(capturedPieceIndices.size() - 1, -1, -1):
-				print(i)
 				var pieceIndex: int = capturedPieceIndices[i]
 				newState.capturedPieces.append(newState.pieces[pieceIndex])
 				newState.pieces.pop_at(pieceIndex)
