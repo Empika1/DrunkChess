@@ -5,6 +5,10 @@ extends Sprite2D
 @onready var states: Array[BoardState] = [BoardState.newDefaultStartingState()]
 
 func _ready() -> void:
+	var val: int = 5
+	print(9 ** (1/2))
+	print(9 ** 0.5)
+	print(Geometry.ceilSqrt(5))
 	pass
 	
 func _process(_delta) -> void:

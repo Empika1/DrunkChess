@@ -55,28 +55,26 @@ static func newDefaultStartingState() -> BoardState:
 	return state
 
 func makeMove(move_: Move) -> BoardState:
-	return BoardLogic.makeMove(self, move_).duplicate()
+	return BoardLogic.makeMove(self, move_)
 	
 func duplicate() -> BoardState:
 	var newPieces: Array[Piece] = []
 	for piece in pieces:
 		newPieces.append(piece.duplicate())
-	print("pieces size ", pieces.size(), " ", newPieces.size())
 	
 	var newCapturedPieces: Array[Piece] = []
 	for piece in capturedPieces:
-		newPieces.append(piece.duplicate())
-	print("captured pieces size ", capturedPieces.size(), " ", newCapturedPieces.size())
+		newCapturedPieces.append(piece.duplicate())
 		
 	return BoardState.new(newPieces, newCapturedPieces, turnToMove, result, previousState)
 
 func toString() -> String:
-	var str = "State:\nPieces:\n"
+	var strn = "State:\nPieces:\n"
 	for i: Piece in pieces:
-		str += i.toString() + "\n"
-	str += "Captured Pieces:\n"
+		strn += i.toString() + "\n"
+	strn += "Captured Pieces:\n"
 	for i: Piece in capturedPieces:
-		str += i.toString() + "\n"
-	str += "Turn to move: " + Piece.PieceColor.keys()[turnToMove] + "\n"
-	str += "Result: " + StateResult.keys()[result]
-	return str
+		strn += i.toString() + "\n"
+	strn += "Turn to move: " + Piece.PieceColor.keys()[turnToMove] + "\n"
+	strn += "Result: " + StateResult.keys()[result]
+	return strn

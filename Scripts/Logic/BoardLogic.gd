@@ -1,4 +1,4 @@
-extends Node
+extends RefCounted
 class_name BoardLogic
 
 static func doPiecesOverlap(pos1: Vector2i, radius1: int, pos2: Vector2i, radius2: int) -> bool:

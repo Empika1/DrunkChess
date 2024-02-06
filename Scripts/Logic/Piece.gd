@@ -22,7 +22,8 @@ var type: PieceType
 var color: PieceColor
 var hasMoved: bool
 const hitRadius: int = 768
-const maxPos: Vector2i = Vector2i(16384, 16384)
+const boardSize: Vector2i = Vector2i(16384, 16384)
+const maxPos: Vector2i = boardSize - Vector2i(1, 1)
 
 func getHitRadius(_pieceType: PieceType):
 	return hitRadius
