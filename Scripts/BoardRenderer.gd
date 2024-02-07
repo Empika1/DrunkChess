@@ -83,7 +83,7 @@ func render() -> void:
 			dragOffset = boardPosToGamePos(pieceDragging.pos) - Vector2(mousePos)
 	
 	if pieceDragging != null:
-		var move: Move = Move.newNormal(pieceDragging, gamePosToBoardPos(mousePos + dragOffset))
+		var move: Move = Move.newNormal(pieceDragging, PieceLogic.closestPosCanMoveTo(pieceDragging, states[-1].pieces, gamePosToBoardPos(mousePos + dragOffset)))
 		attemptedNextState = states[-1].makeMove(move)
 		
 		if Input.is_action_just_released("lmb"):

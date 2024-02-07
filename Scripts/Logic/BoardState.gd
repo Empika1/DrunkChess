@@ -48,7 +48,7 @@ static func newStartingState(pieces_: Array[Piece]) -> BoardState:
 static func newDefaultStartingState() -> BoardState:
 	var whiteKing: Piece = Piece.new(Vector2i(768, 768), Piece.PieceType.KING, Piece.PieceColor.WHITE)
 	var blackKing: Piece = Piece.new(Vector2i(5000, 5000), Piece.PieceType.KING, Piece.PieceColor.BLACK)
-	var randomRook: Piece = Piece.new(Vector2i(2500, 768), Piece.PieceType.ROOK, Piece.PieceColor.WHITE)
+	var randomRook: Piece = Piece.new(Vector2i(3000, 768), Piece.PieceType.ROOK, Piece.PieceColor.WHITE)
 	var otherRandomRook: Piece = Piece.new(Vector2i(5900, 768), Piece.PieceType.ROOK, Piece.PieceColor.BLACK)
 	var state: BoardState = BoardState.newStartingState([whiteKing, blackKing, randomRook, otherRandomRook])
 	state.result = BoardLogic.validateStartingState(state)
