@@ -105,6 +105,28 @@ static func closestPosQueenCanMoveTo(queen: Piece, pieces: Array[Piece], tryMove
 	var rookPos: Vector2i = closestPosRookCanMoveTo(queen, pieces, tryMovePos)
 	var bishopPos: Vector2i = closestPosBishopCanMoveTo(queen, pieces, tryMovePos)
 	return bishopPos if (bishopPos - tryMovePos).length_squared() < (rookPos - tryMovePos).length_squared() else rookPos
+	
+static func closestPosKingCanMoveTo(king: Piece, pieces: Array[Piece], tryMovePos: Vector2i) -> Vector2i:
+	var rookPos: Vector2i = closestPosRookCanMoveTo(king, pieces, tryMovePos)
+	rookPos.x = clamp(rookPos.x, king.pos.x - (Piece.boardSize.x / 8), king.pos.x + (Piece.boardSize.x / 8))
+	rookPos.y = clamp(rookPos.y, king.pos.y - (Piece.boardSize.y / 8), king.pos.y + (Piece.boardSize.y / 8))
+	var bishopPos: Vector2i = closestPosBishopCanMoveTo(king, pieces, tryMovePos)
+	var bishopDiff: Vector2i = bishopPos - king.pos
+	if bishopDiff.x == bishopDiff.y:
+		var posOnPositiveDiagonalClampedX: int = clamp(bishopPos.x, king.pos.x - (Piece.boardSize.x / 8), king.pos.x + (Piece.boardSize.x / 8))
+		bishopPos.y -= bishopPos.x - posOnPositiveDiagonalClampedX
+		bishopPos.x = posOnPositiveDiagonalClampedX
+		var posOnPositiveDiagonalClampedY: int = clamp(bishopPos.y, king.pos.y - (Piece.boardSize.y / 8), king.pos.y + (Piece.boardSize.y / 8))
+		bishopPos.x -= bishopPos.y - posOnPositiveDiagonalClampedY
+		bishopPos.y = posOnPositiveDiagonalClampedY
+	else:
+		var posOnNegativeDiagonalClampedX: int = clamp(bishopPos.x, king.pos.x - (Piece.boardSize.x / 8), king.pos.x + (Piece.boardSize.x / 8))
+		bishopPos.y += bishopPos.x - posOnNegativeDiagonalClampedX
+		bishopPos.x = posOnNegativeDiagonalClampedX
+		var posOnNegativeDiagonalClampedY: int = clamp(bishopPos.y, king.pos.y - (Piece.boardSize.y / 8), king.pos.y + (Piece.boardSize.y / 8))
+		bishopPos.x += bishopPos.y - posOnNegativeDiagonalClampedY
+		bishopPos.y = posOnNegativeDiagonalClampedY
+	return bishopPos if (bishopPos - tryMovePos).length_squared() < (rookPos - tryMovePos).length_squared() else rookPos
 
 static func closestPosCanMoveTo(piece: Piece, pieces: Array[Piece], tryMovePos: Vector2i) -> Vector2i:
 	match piece.type:
@@ -114,6 +136,8 @@ static func closestPosCanMoveTo(piece: Piece, pieces: Array[Piece], tryMovePos: 
 			return closestPosRookCanMoveTo(piece, pieces, tryMovePos)
 		Piece.PieceType.QUEEN:
 			return closestPosQueenCanMoveTo(piece, pieces, tryMovePos)
+		Piece.PieceType.KING:
+			return closestPosKingCanMoveTo(piece, pieces, tryMovePos)
 		_:
 			return tryMovePos
 			
