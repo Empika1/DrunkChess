@@ -108,3 +108,48 @@ static func diagonalLinesIntersection(pointOnPositiveSlopeLine: Vector2i, pointO
 				intersectionx2.y += 1
 	
 	return Vector2i(intersectionx2.x / 2, intersectionx2.y / 2)
+
+static func circlesIntersection(pos1: Vector2i, radius1: int, pos2: Vector2i, radius2: int) -> Array[Vector2]:
+	var x1: float = float(pos1.x)
+	var y1: float = float(pos1.y)
+	var r1: float = float(radius1)
+	var x2: float = float(pos2.x)
+	var y2: float = float(pos2.y)
+	var r2: float = float(radius2)
+	
+	var centerdx: float = x1 - x2
+	var centerdy: float = y1 - y2
+	var R: float = sqrt(centerdx ** 2 + centerdy ** 2)
+	if !(absf(r1 - r2) <= R && R <= r1 + r2):
+		return []
+	
+	var R2: float = centerdx ** 2 + centerdy ** 2
+	var R4: float = R2 ** 2
+	var a: float = (r1 ** 2 - r2 ** 2) / (2 * R2)
+	var r2r2: float = r1 ** 2 - r2 ** 2
+	var c = sqrt(2 * (r1 ** 2 + r2 ** 2) / R2 - (r2r2 ** 2) / R4 - 1)
+	
+	var fx = (x1 + x2) / 2 + a * (x2 - x1)
+	var gx = c * (y2 - y1) / 2
+	var ix1 = fx + gx
+	var ix2 = fx - gx
+	
+	var fy = (y1 + y2) / 2 + a * (y2 - y1)
+	var gy = c * (x1 - x2) / 2
+	var iy1 = fy + gy
+	var iy2 = fy - gy
+	
+	var intersection1 = Vector2(ix1, iy1)
+	var intersection2 = Vector2(ix2, iy2)
+	if intersection1 == intersection2:
+		return [intersection1]
+	return [intersection1, intersection2]
+	
+static func circlesIntersectionInt(pos1: Vector2i, radius1: int, pos2: Vector2i, radius2: int, inside: bool) -> Array[Vector2]:
+	return ceilSqrt((testPos - circlePos).length_squared()) <= circleRadius
+
+static func isOnCircle(circlePos: Vector2i, circleRadius: int, testPos: Vector2i) -> bool:
+	return ceilSqrt((testPos - circlePos).length_squared()) == circleRadius
+
+static func isInsideCircle(circlePos: Vector2i, circleRadius: int, testPos: Vector2i) -> bool:
+	return ceilSqrt((testPos - circlePos).length_squared()) <= circleRadius
