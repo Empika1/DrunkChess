@@ -73,7 +73,7 @@ static func closestPosRookCanMoveTo(rook: Piece, pieces: Array[Piece], tryMovePo
 		var intersections: Array[Vector2i] = Geometry.verticalLineCircleIntersections(posOnVertical.x, piece.pos, piece.hitRadius + rook.hitRadius)
 		if piece.color == rook.color:
 			for intersection: Vector2i in intersections:
-				if (intersection.y < posOnVertical.y and intersection.y > rook.pos.y) or (intersection.y > posOnVertical.y and intersection.y < rook.pos.y):
+				if (intersection.y < posOnVertical.y and intersection.y > rook.pos.y) or (intersection.y > posOnVertical.y and intersection.y < rook.pos.y) or (intersection.y == rook.pos.y and sign(posOnVertical.y - intersection.y) == sign(piece.pos.y - intersection.y)):
 					posOnVertical.y = intersection.y
 		else:
 			if intersections.size() > 0:
@@ -90,7 +90,7 @@ static func closestPosRookCanMoveTo(rook: Piece, pieces: Array[Piece], tryMovePo
 		var intersections: Array[Vector2i] = Geometry.horizontalLineCircleIntersections(posOnHorizontal.y, piece.pos, piece.hitRadius + rook.hitRadius)
 		if piece.color == rook.color:
 			for intersection: Vector2i in intersections:
-				if (intersection.x < posOnHorizontal.x and intersection.x > rook.pos.x) or (intersection.x > posOnHorizontal.x and intersection.x < rook.pos.x):
+				if (intersection.x < posOnHorizontal.x and intersection.x > rook.pos.x) or (intersection.x > posOnHorizontal.x and intersection.x < rook.pos.x) or (intersection.x == rook.pos.x and sign(posOnHorizontal.x - intersection.x) == sign(piece.pos.x - intersection.x)):
 					posOnHorizontal.x = intersection.x
 		else:
 			if intersections.size() > 0:
