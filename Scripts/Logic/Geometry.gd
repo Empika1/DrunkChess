@@ -55,6 +55,7 @@ static func positiveDiagonalLineCircleIntersections(lineYIntercept: int, circleP
 	
 	var v1: Vector2i = Vector2i(x1, x1 + lineYIntercept)
 	var v2: Vector2i = Vector2i(x2, x2 + lineYIntercept)
+
 	if v1 == v2:
 		return [v1]
 	return [v1, v2]
@@ -81,20 +82,29 @@ static func negativeDiagonalLineCircleIntersections(lineYIntercept: int, circleP
 	
 	var v1: Vector2i = Vector2i(x1, -x1 + lineYIntercept)
 	var v2: Vector2i = Vector2(x2, -x2 + lineYIntercept)
+
 	if v1 == v2:
 		return [v1]
 	return [v1, v2]
 
-static func diagonalLinesIntersection(pointOnPositiveSlopeLine: Vector2i, pointOnNegativeSlopeLine: Vector2i, roundToPositiveSlopeLine: bool) -> Vector2i:
+static func diagonalLinesIntersection(pointOnPositiveSlopeLine: Vector2i, pointOnNegativeSlopeLine: Vector2i, roundToPositiveSlopeLine: bool, towardsPoint: bool) -> Vector2i:
 	var intersectionx2: Vector2i = Vector2i(pointOnPositiveSlopeLine.x - pointOnPositiveSlopeLine.y + pointOnNegativeSlopeLine.x + pointOnNegativeSlopeLine.y,
 											pointOnPositiveSlopeLine.y - pointOnPositiveSlopeLine.x + pointOnNegativeSlopeLine.x + pointOnNegativeSlopeLine.y)
 	
 	if intersectionx2.x % 2 == 1:
 		if roundToPositiveSlopeLine:
-			intersectionx2.x += 1
-			intersectionx2.y += 1
+			if (pointOnPositiveSlopeLine.x * 2 < intersectionx2.x) == towardsPoint:
+				intersectionx2.x -= 1
+				intersectionx2.y -= 1
+			else:
+				intersectionx2.x += 1
+				intersectionx2.y += 1
 		else:
-			intersectionx2.x += 1
-			intersectionx2.y -= 1
+			if (pointOnPositiveSlopeLine.x * 2 < intersectionx2.x) == towardsPoint:
+				intersectionx2.x += 1
+				intersectionx2.y -= 1
+			else:
+				intersectionx2.x -= 1
+				intersectionx2.y += 1
 	
 	return Vector2i(intersectionx2.x / 2, intersectionx2.y / 2)

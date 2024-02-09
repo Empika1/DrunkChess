@@ -15,8 +15,7 @@ static func isPieceOutsideBoard(pos: Vector2i, radius: int, maxPos: Vector2i) ->
 	return pos.x - radius < 0 or pos.y - radius < 0 or pos.x + radius > maxPos.x or pos.y + radius > maxPos.y
 
 static func closestPosBishopCanMoveTo(bishop: Piece, pieces: Array[Piece], tryMovePos: Vector2i) -> Vector2i:
-	var posOnPositiveDiagonal = Geometry.diagonalLinesIntersection(bishop.pos, tryMovePos, true)
-	
+	var posOnPositiveDiagonal = Geometry.diagonalLinesIntersection(bishop.pos, tryMovePos, true, true)
 	for piece: Piece in pieces:
 		if piece.valueEquals(bishop):
 			continue
@@ -24,25 +23,46 @@ static func closestPosBishopCanMoveTo(bishop: Piece, pieces: Array[Piece], tryMo
 		var intersections: Array[Vector2i] = Geometry.positiveDiagonalLineCircleIntersections(bishop.pos.y - bishop.pos.x, piece.pos, piece.hitRadius + bishop.hitRadius)
 		if piece.color == bishop.color:
 			for intersection: Vector2i in intersections:
-				if (intersection.y < posOnPositiveDiagonal.y and intersection.y > bishop.pos.y) or (intersection.y > posOnPositiveDiagonal.y and intersection.y < bishop.pos.y):
+				print(intersection.y == bishop.pos.y and sign(posOnPositiveDiagonal.y - intersection.y) == sign(piece.pos.y - intersection.y))
+				if (intersection.x < posOnPositiveDiagonal.x and intersection.x > bishop.pos.x) or 	(intersection.x > posOnPositiveDiagonal.x and intersection.x < bishop.pos.x) or (intersection.x == bishop.pos.x and sign(posOnPositiveDiagonal.x - intersection.x) == sign(piece.pos.x - intersection.x)):
 					posOnPositiveDiagonal = intersection
-					
-	var posOnNegativeDiagonal = Geometry.diagonalLinesIntersection(tryMovePos, bishop.pos, false)
+		else:
+			if intersections.size() > 0:
+				var intersectionPos: Vector2i = Geometry.diagonalLinesIntersection(bishop.pos, piece.pos, true, true)
+				if (posOnPositiveDiagonal - bishop.pos).length_squared() > (intersectionPos - bishop.pos).length_squared() and sign(posOnPositiveDiagonal.x - bishop.pos.x) == sign(intersectionPos.x - bishop.pos.x):
+					posOnPositiveDiagonal = intersectionPos
 	
+	var posOnPositiveDiagonalClampedX: int = clamp(posOnPositiveDiagonal.x, bishop.hitRadius, bishop.maxPos.x - bishop.hitRadius)
+	posOnPositiveDiagonal.y -= posOnPositiveDiagonal.x - posOnPositiveDiagonalClampedX
+	posOnPositiveDiagonal.x = posOnPositiveDiagonalClampedX
+	var posOnPositiveDiagonalClampedY: int = clamp(posOnPositiveDiagonal.y, bishop.hitRadius, bishop.maxPos.y - bishop.hitRadius)
+	posOnPositiveDiagonal.x -= posOnPositiveDiagonal.y - posOnPositiveDiagonalClampedY
+	posOnPositiveDiagonal.y = posOnPositiveDiagonalClampedY
+
+	var posOnNegativeDiagonal = Geometry.diagonalLinesIntersection(tryMovePos, bishop.pos, false, true)
 	for piece: Piece in pieces:
 		if piece.valueEquals(bishop):
 			continue
 			
 		var intersections: Array[Vector2i] = Geometry.negativeDiagonalLineCircleIntersections(bishop.pos.y + bishop.pos.x, piece.pos, piece.hitRadius + bishop.hitRadius)
-		if piece.color == boshop.color:
+		if piece.color == bishop.color:
 			for intersection: Vector2i in intersections:
-				if (piece.pos.y < posOnVertical.y and piece.pos.y > rook.pos.y) or (piece.pos.y > posOnVertical.y and piece.pos.y < rook.pos.y):
-					posOnNegativeDiagonal = piece.pos
+				#print("neg ", (intersection.x <= posOnNegativeDiagonal.x and intersection.x >= bishop.pos.x) or (intersection.x >= posOnNegativeDiagonal.x and intersection.x <= bishop.pos.x))
+				if (intersection.x < posOnNegativeDiagonal.x and intersection.x > bishop.pos.x) or 	(intersection.x > posOnNegativeDiagonal.x and intersection.x < bishop.pos.x) or (intersection.x == bishop.pos.x and sign(posOnNegativeDiagonal.x - intersection.x) == sign(piece.pos.x - intersection.x)):
+					posOnNegativeDiagonal = intersection
+		else:
+			if intersections.size() > 0:
+				var intersectionPos: Vector2i = Geometry.diagonalLinesIntersection(piece.pos, bishop.pos, false, true)
+				if (posOnNegativeDiagonal - bishop.pos).length_squared() > (intersectionPos - bishop.pos).length_squared() and sign(posOnNegativeDiagonal.x - bishop.pos.x) == sign(intersectionPos.x - bishop.pos.x):
+					posOnNegativeDiagonal = intersectionPos
 	
+	var posOnNegativeDiagonalClampedX: int = clamp(posOnNegativeDiagonal.x, bishop.hitRadius, bishop.maxPos.x - bishop.hitRadius)
+	posOnNegativeDiagonal.y += posOnNegativeDiagonal.x - posOnNegativeDiagonalClampedX
+	posOnNegativeDiagonal.x = posOnNegativeDiagonalClampedX
+	var posOnNegativeDiagonalClampedY: int = clamp(posOnNegativeDiagonal.y, bishop.hitRadius, bishop.maxPos.y - bishop.hitRadius)
+	posOnNegativeDiagonal.x += posOnNegativeDiagonal.y - posOnNegativeDiagonalClampedY
+	posOnNegativeDiagonal.y = posOnNegativeDiagonalClampedY		
 	return posOnPositiveDiagonal if (posOnPositiveDiagonal - tryMovePos).length_squared() < (posOnNegativeDiagonal - tryMovePos).length_squared() else posOnNegativeDiagonal
-
-static func canRookMoveTo(rook: Piece, pieces: Array[Piece], movePos: Vector2i) -> bool:
-	return closestPosRookCanMoveTo(rook, pieces, movePos) == movePos
 
 static func closestPosRookCanMoveTo(rook: Piece, pieces: Array[Piece], tryMovePos: Vector2i) -> Vector2i:
 	var posOnVertical: Vector2i = Vector2i(rook.pos.x, tryMovePos.y)
@@ -81,11 +101,21 @@ static func closestPosRookCanMoveTo(rook: Piece, pieces: Array[Piece], tryMovePo
 	
 	return posOnVertical if (posOnVertical - tryMovePos).length_squared() < (posOnHorizontal - tryMovePos).length_squared() else posOnHorizontal
 
+static func closestPosQueenCanMoveTo(queen: Piece, pieces: Array[Piece], tryMovePos: Vector2i) -> Vector2i:
+	var rookPos: Vector2i = closestPosRookCanMoveTo(queen, pieces, tryMovePos)
+	var bishopPos: Vector2i = closestPosBishopCanMoveTo(queen, pieces, tryMovePos)
+	return bishopPos if (bishopPos - tryMovePos).length_squared() < (rookPos - tryMovePos).length_squared() else rookPos
+
 static func closestPosCanMoveTo(piece: Piece, pieces: Array[Piece], tryMovePos: Vector2i) -> Vector2i:
 	match piece.type:
 		Piece.PieceType.BISHOP:
 			return closestPosBishopCanMoveTo(piece, pieces, tryMovePos)
 		Piece.PieceType.ROOK:
 			return closestPosRookCanMoveTo(piece, pieces, tryMovePos)
+		Piece.PieceType.QUEEN:
+			return closestPosQueenCanMoveTo(piece, pieces, tryMovePos)
 		_:
-			return piece.pos
+			return tryMovePos
+			
+static func canPieceMoveTo(piece: Piece, pieces: Array[Piece], tryMovePos: Vector2i) -> bool:
+	return closestPosCanMoveTo(piece, pieces, tryMovePos) == tryMovePos
