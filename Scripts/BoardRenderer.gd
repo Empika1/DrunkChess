@@ -5,7 +5,10 @@ extends Sprite2D
 @onready var states: Array[BoardState] = [BoardState.newDefaultStartingState()]
 
 func _ready() -> void:
-	print(Geometry.negativeDiagonalLineCircleIntersections(389, Vector2i(230, 201), 300, true))
+	var pos: Vector2i = Vector2i(0, 0)
+	for i in range(200):
+		print(pos)
+		pos = Geometry.nextPointOnSpiral(pos)
 	
 func _process(_delta) -> void:
 	render()

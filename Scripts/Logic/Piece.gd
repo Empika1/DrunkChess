@@ -25,6 +25,8 @@ const hitRadius: int = 768
 const boardSize: Vector2i = Vector2i(16384, 16384)
 const maxPos: Vector2i = boardSize - Vector2i(1, 1)
 
+const knightMoveRadius: int = int(sqrt(2 ** 2 + 1 ** 2) * boardSize.x / 8)
+
 func getHitRadius(_pieceType: PieceType):
 	return hitRadius
 

@@ -14,6 +14,97 @@ static func doPiecesOverlap(pos1: Vector2i, radius1: int, pos2: Vector2i, radius
 static func isPieceOutsideBoard(pos: Vector2i, radius: int, maxPos: Vector2i) -> bool:
 	return pos.x - radius < 0 or pos.y - radius < 0 or pos.x + radius > maxPos.x or pos.y + radius > maxPos.y
 
+static func closestPosKnightCanMoveTo(knight: Piece, pieces: Array[Piece], tryMovePos: Vector2i) -> Vector2i:
+	var scaledPos: Vector2 = Vector2(tryMovePos - knight.pos).normalized() * Piece.knightMoveRadius
+	var roundedScaledPos: Vector2i = Vector2i(roundi(scaledPos.x), roundi(scaledPos.y)) + knight.pos
+	var spiralPos: Vector2i = Vector2i(0, 0)
+	while !Geometry.isOnCircle(knight.pos, Piece.knightMoveRadius, roundedScaledPos + spiralPos):
+		spiralPos = Geometry.nextPointOnSpiral(spiralPos)
+	var wantedPos: Vector2i = roundedScaledPos + spiralPos
+	
+	var noGoArcs: Array = []
+	var createArc = func(intersections: Array[Vector2i]):
+		if intersections.size() == 1:
+			return [intersections[0], intersections[0]]
+		elif intersections.size() == 2:
+			if Geometry.acbOrientation(intersections[0], intersections[1], knight.pos) == 1:
+				return [intersections[1], intersections[0]]
+			else:
+				return [intersections[0], intersections[1]]
+		return null
+	var addArc = func(newArc) -> void:
+			var i: int = 0
+			while i < noGoArcs.size():
+				var arcI = noGoArcs[i]
+				if Geometry.acbOrientation(arcI[1], newArc[0], knight.pos) == 1 and Geometry.acbOrientation(newArc[1], arcI[0], knight.pos) == 1:
+					noGoArcs.pop_at(i)
+					newArc = [arcI[0] if Geometry.acbOrientation(arcI[0], newArc[0], knight.pos) == 0 else newArc[0], 
+							  arcI[1] if Geometry.acbOrientation(arcI[1], newArc[1], knight.pos) == 1 else newArc[1]]
+				else:
+					i += 1
+			noGoArcs.append(newArc)
+	
+	for piece: Piece in pieces:
+		if piece.valueEquals(knight):
+			continue
+		if piece.color != knight.color:
+			continue
+		
+		var intersections: Array[Vector2i] = Geometry.circlesIntersectionInt(knight.pos, Piece.knightMoveRadius, piece.pos, knight.hitRadius + piece.hitRadius, false)
+		var newArc = createArc.call(intersections)
+		if newArc != null:
+			addArc.call(newArc)
+	
+	var topIntersections: Array[Vector2i] = Geometry.horizontalLineCircleIntersections(knight.hitRadius, knight.pos, Piece.knightMoveRadius, true)
+	var topIntersectionsSnapped: Array[Vector2i] = []
+	for intersection: Vector2i in topIntersections:
+		var spiralPosTop: Vector2i = Vector2i(0, 0)
+		while !(Geometry.isOnCircle(knight.pos, Piece.knightMoveRadius, intersection + spiralPosTop) and (intersection.y + spiralPosTop.y) >= knight.hitRadius):
+			spiralPosTop = Geometry.nextPointOnSpiral(spiralPosTop)
+		topIntersectionsSnapped.append(intersection + spiralPosTop)
+	var newArcTop = createArc.call(topIntersections)
+	if newArcTop != null:
+		addArc.call(newArcTop)
+	
+	var bottomIntersections: Array[Vector2i] = Geometry.horizontalLineCircleIntersections(knight.maxPos.y - knight.hitRadius, knight.pos, Piece.knightMoveRadius, true)
+	var bottomIntersectionsSnapped: Array[Vector2i] = []
+	for intersection: Vector2i in bottomIntersections:
+		var spiralPosBottom: Vector2i = Vector2i(0, 0)
+		while !(Geometry.isOnCircle(knight.pos, Piece.knightMoveRadius, intersection + spiralPosBottom) and (intersection.y + spiralPosBottom.y) <= knight.maxPos.y - knight.hitRadius):
+			spiralPosBottom = Geometry.nextPointOnSpiral(spiralPosBottom)
+		bottomIntersectionsSnapped.append(intersection + spiralPosBottom)
+	var newArcBottom = createArc.call(bottomIntersectionsSnapped)
+	if newArcBottom != null:
+		addArc.call(newArcBottom)
+		
+	var leftIntersections: Array[Vector2i] = Geometry.verticalLineCircleIntersections(knight.hitRadius, knight.pos, Piece.knightMoveRadius, true)
+	var leftIntersectionsSnapped: Array[Vector2i] = []
+	for intersection: Vector2i in leftIntersections:
+		var spiralPosLeft: Vector2i = Vector2i(0, 0)
+		while !(Geometry.isOnCircle(knight.pos, Piece.knightMoveRadius, intersection + spiralPosLeft) and (intersection.x + spiralPosLeft.x) >= knight.hitRadius):
+			spiralPosLeft = Geometry.nextPointOnSpiral(spiralPosLeft)
+		leftIntersectionsSnapped.append(intersection + spiralPosLeft)
+	var newArcLeft = createArc.call(leftIntersectionsSnapped)
+	if newArcLeft != null:
+		addArc.call(newArcLeft)
+		
+	var rightIntersections: Array[Vector2i] = Geometry.verticalLineCircleIntersections(knight.maxPos.x - knight.hitRadius, knight.pos, Piece.knightMoveRadius, true)
+	var rightIntersectionsSnapped: Array[Vector2i] = []
+	for intersection: Vector2i in rightIntersections:
+		var spiralPosRight: Vector2i = Vector2i(0, 0)
+		while !(Geometry.isOnCircle(knight.pos, Piece.knightMoveRadius, intersection + spiralPosRight) and (intersection.x + spiralPosRight.x) <= knight.maxPos.x - knight.hitRadius):
+			spiralPosRight = Geometry.nextPointOnSpiral(spiralPosRight)
+		rightIntersectionsSnapped.append(intersection + spiralPosRight)
+	var newArcRight = createArc.call(rightIntersectionsSnapped)
+	if newArcRight != null:
+		addArc.call(newArcRight)
+	
+	for arc in noGoArcs:
+		if Geometry.acbOrientation(wantedPos, arc[0], knight.pos) == 1 and Geometry.acbOrientation(wantedPos, arc[1], knight.pos) == -1:
+			wantedPos = arc[0] if (wantedPos - arc[0]).length_squared() < (wantedPos - arc[1]).length_squared() else arc[1]
+	print(wantedPos)
+	return wantedPos
+
 static func closestPosBishopCanMoveTo(bishop: Piece, pieces: Array[Piece], tryMovePos: Vector2i) -> Vector2i:
 	var posOnPositiveDiagonal = Geometry.diagonalLinesIntersection(bishop.pos, tryMovePos, true, true)
 	for piece: Piece in pieces:
@@ -23,7 +114,6 @@ static func closestPosBishopCanMoveTo(bishop: Piece, pieces: Array[Piece], tryMo
 		var intersections: Array[Vector2i] = Geometry.positiveDiagonalLineCircleIntersections(bishop.pos.y - bishop.pos.x, piece.pos, piece.hitRadius + bishop.hitRadius)
 		if piece.color == bishop.color:
 			for intersection: Vector2i in intersections:
-				print(intersection.y == bishop.pos.y and sign(posOnPositiveDiagonal.y - intersection.y) == sign(piece.pos.y - intersection.y))
 				if (intersection.x < posOnPositiveDiagonal.x and intersection.x > bishop.pos.x) or 	(intersection.x > posOnPositiveDiagonal.x and intersection.x < bishop.pos.x) or (intersection.x == bishop.pos.x and sign(posOnPositiveDiagonal.x - intersection.x) == sign(piece.pos.x - intersection.x)):
 					posOnPositiveDiagonal = intersection
 		else:
@@ -47,7 +137,6 @@ static func closestPosBishopCanMoveTo(bishop: Piece, pieces: Array[Piece], tryMo
 		var intersections: Array[Vector2i] = Geometry.negativeDiagonalLineCircleIntersections(bishop.pos.y + bishop.pos.x, piece.pos, piece.hitRadius + bishop.hitRadius)
 		if piece.color == bishop.color:
 			for intersection: Vector2i in intersections:
-				#print("neg ", (intersection.x <= posOnNegativeDiagonal.x and intersection.x >= bishop.pos.x) or (intersection.x >= posOnNegativeDiagonal.x and intersection.x <= bishop.pos.x))
 				if (intersection.x < posOnNegativeDiagonal.x and intersection.x > bishop.pos.x) or 	(intersection.x > posOnNegativeDiagonal.x and intersection.x < bishop.pos.x) or (intersection.x == bishop.pos.x and sign(posOnNegativeDiagonal.x - intersection.x) == sign(piece.pos.x - intersection.x)):
 					posOnNegativeDiagonal = intersection
 		else:
@@ -130,6 +219,8 @@ static func closestPosKingCanMoveTo(king: Piece, pieces: Array[Piece], tryMovePo
 
 static func closestPosCanMoveTo(piece: Piece, pieces: Array[Piece], tryMovePos: Vector2i) -> Vector2i:
 	match piece.type:
+		Piece.PieceType.KNIGHT:
+			return closestPosKnightCanMoveTo(piece, pieces, tryMovePos)
 		Piece.PieceType.BISHOP:
 			return closestPosBishopCanMoveTo(piece, pieces, tryMovePos)
 		Piece.PieceType.ROOK:
