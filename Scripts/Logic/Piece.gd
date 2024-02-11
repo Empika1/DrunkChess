@@ -21,9 +21,10 @@ var pos: Vector2i
 var type: PieceType
 var color: PieceColor
 var hasMoved: bool
-const hitRadius: int = 768
 const boardSize: Vector2i = Vector2i(16384, 16384)
+const squareSize: Vector2i = boardSize / 8
 const maxPos: Vector2i = boardSize - Vector2i(1, 1)
+const hitRadius: int = boardSize.x / 8 / 2 * 3 / 4
 
 const knightMoveRadius: int = int(sqrt(2 ** 2 + 1 ** 2) * boardSize.x / 8)
 

@@ -7,6 +7,88 @@ static func doPiecesOverlap(pos1: Vector2i, radius1: int, pos2: Vector2i, radius
 static func isPieceOutsideBoard(pos: Vector2i, radius: int, maxPos: Vector2i) -> bool:
 	return pos.x - radius < 0 or pos.y - radius < 0 or pos.x + radius > maxPos.x or pos.y + radius > maxPos.y
 
+static func closestPosPawnCanMoveTo(pawn: Piece, pieces: Array[Piece], tryMovePos: Vector2i) -> Vector2i:
+	var posOnVertical: Vector2i = Vector2i(pawn.pos.x, tryMovePos.y)
+	
+	for piece: Piece in pieces:
+		if piece.valueEquals(pawn):
+			continue
+		
+		var intersections: Array[Vector2i] = Geometry.verticalLineCircleIntersections(posOnVertical.x, piece.pos, piece.hitRadius + pawn.hitRadius)
+		for intersection: Vector2i in intersections:
+			if (intersection.y < posOnVertical.y and intersection.y > pawn.pos.y) or (intersection.y > posOnVertical.y and intersection.y < pawn.pos.y) or (intersection.y == pawn.pos.y and sign(posOnVertical.y - intersection.y) == sign(piece.pos.y - intersection.y)):
+				posOnVertical.y = intersection.y
+					
+	posOnVertical.y = clampi(posOnVertical.y, pawn.hitRadius, pawn.maxPos.y - pawn.hitRadius)
+	if pawn.color == Piece.PieceColor.WHITE:
+		posOnVertical.y = clampi(posOnVertical.y, pawn.pos.y - (Piece.squareSize.y if pawn.hasMoved else Piece.squareSize.y * 2), pawn.pos.y)
+	else:
+		posOnVertical.y = clampi(posOnVertical.y, pawn.pos.y, pawn.pos.y + (Piece.squareSize.y if pawn.hasMoved else Piece.squareSize.y * 2))
+	
+	var positiveDiagonalInterestingPoints: Array[Vector2i] = []
+	var canMoveToPositiveDiagonal: Callable = func(pos: Vector2i) -> bool:
+		if isPieceOutsideBoard(pos, pawn.hitRadius, Piece.maxPos):
+			print("point outside board")
+			return false
+			
+		if pos.y > pawn.pos.y:
+			print("point y big")
+			return false
+		if pos.y < pawn.pos.y - Piece.squareSize.y:
+			print("point y small")
+			return false
+		
+		var overlapsWithSameColor: bool = false
+		for piece in pieces:
+			if piece.valueEquals(pawn):
+				continue
+				
+			if piece.color == pawn.color:
+				if doPiecesOverlap(pos, pawn.hitRadius, piece.pos, piece.hitRadius):
+					print("point piece overlap same")
+					return false
+			else:
+				if !overlapsWithSameColor and doPiecesOverlap(pos, pawn.hitRadius, piece.pos, piece.hitRadius):
+					overlapsWithSameColor = true
+		
+		if !overlapsWithSameColor:
+			print("point no overlap different")
+		return overlapsWithSameColor
+	
+	var finalPosOnPositiveDiagonal: Vector2i
+	var posOnPositiveDiagonal: Vector2i = Geometry.diagonalLinesIntersection(pawn.pos, tryMovePos, true, true)
+	
+	if canMoveToPositiveDiagonal.call(posOnPositiveDiagonal):
+		finalPosOnPositiveDiagonal = posOnPositiveDiagonal
+	else:
+		for piece: Piece in pieces:
+			if piece.valueEquals(pawn):
+				continue
+		
+			var intersections: Array[Vector2i]
+			if piece.color == pawn.color:
+				intersections = Geometry.positiveDiagonalLineCircleIntersections(pawn.pos.y - pawn.pos.x, piece.pos, piece.hitRadius + pawn.hitRadius, true)
+			else:
+				intersections = Geometry.positiveDiagonalLineCircleIntersections(pawn.pos.y - pawn.pos.x, piece.pos, piece.hitRadius + pawn.hitRadius, false)
+			positiveDiagonalInterestingPoints.append_array(intersections)
+		
+		var closestPointOnPositiveDiagonal = null
+		for point in positiveDiagonalInterestingPoints:
+			print(point)
+			if closestPointOnPositiveDiagonal != null and (point - tryMovePos).length_squared() >= (closestPointOnPositiveDiagonal - tryMovePos).length_squared():
+				print("point too far")
+				continue
+			
+			if !canMoveToPositiveDiagonal.call(point):
+				print("point fail")
+				continue
+			closestPointOnPositiveDiagonal = point
+			
+		finalPosOnPositiveDiagonal = closestPointOnPositiveDiagonal if closestPointOnPositiveDiagonal != null else pawn.pos
+
+	#var posOnNegativeDiagonal: Vector2i = Geometry.diagonalLinesIntersection(tryMovePos, pawn.pos, false, true)
+	return finalPosOnPositiveDiagonal
+
 static func closestPosKnightCanMoveTo(knight: Piece, pieces: Array[Piece], tryMovePos: Vector2i) -> Vector2i:
 	var scaledPos: Vector2 = Vector2(tryMovePos - knight.pos).normalized() * Piece.knightMoveRadius
 	var roundedScaledPos: Vector2i = Vector2i(roundi(scaledPos.x), roundi(scaledPos.y)) + knight.pos
@@ -47,7 +129,7 @@ static func closestPosKnightCanMoveTo(knight: Piece, pieces: Array[Piece], tryMo
 		rightIntersectionsSnapped.append(Geometry.spiralizePoint(intersection, func(pos): return Geometry.isOnCircle(knight.pos, Piece.knightMoveRadius, pos) and pos.x <= knight.maxPos.x - knight.hitRadius))
 	interestingPoints.append_array(rightIntersectionsSnapped)
 
-	var isKnightMovable = func(pos: Vector2i):
+	var isKnightMovable: Callable = func(pos: Vector2i):
 		if isPieceOutsideBoard(pos, knight.hitRadius, knight.maxPos):
 			return false
 		
@@ -85,7 +167,7 @@ static func closestPosBishopCanMoveTo(bishop: Piece, pieces: Array[Piece], tryMo
 		var intersections: Array[Vector2i] = Geometry.positiveDiagonalLineCircleIntersections(bishop.pos.y - bishop.pos.x, piece.pos, piece.hitRadius + bishop.hitRadius)
 		if piece.color == bishop.color:
 			for intersection: Vector2i in intersections:
-				if (intersection.x < posOnPositiveDiagonal.x and intersection.x > bishop.pos.x) or 	(intersection.x > posOnPositiveDiagonal.x and intersection.x < bishop.pos.x) or (intersection.x == bishop.pos.x and sign(posOnPositiveDiagonal.x - intersection.x) == sign(piece.pos.x - intersection.x)):
+				if (intersection.x < posOnPositiveDiagonal.x and intersection.x > bishop.pos.x) or (intersection.x > posOnPositiveDiagonal.x and intersection.x < bishop.pos.x) or (intersection.x == bishop.pos.x and sign(posOnPositiveDiagonal.x - intersection.x) == sign(piece.pos.x - intersection.x)):
 					posOnPositiveDiagonal = intersection
 		else:
 			if intersections.size() > 0:
@@ -108,7 +190,7 @@ static func closestPosBishopCanMoveTo(bishop: Piece, pieces: Array[Piece], tryMo
 		var intersections: Array[Vector2i] = Geometry.negativeDiagonalLineCircleIntersections(bishop.pos.y + bishop.pos.x, piece.pos, piece.hitRadius + bishop.hitRadius)
 		if piece.color == bishop.color:
 			for intersection: Vector2i in intersections:
-				if (intersection.x < posOnNegativeDiagonal.x and intersection.x > bishop.pos.x) or 	(intersection.x > posOnNegativeDiagonal.x and intersection.x < bishop.pos.x) or (intersection.x == bishop.pos.x and sign(posOnNegativeDiagonal.x - intersection.x) == sign(piece.pos.x - intersection.x)):
+				if (intersection.x < posOnNegativeDiagonal.x and intersection.x > bishop.pos.x) or (intersection.x > posOnNegativeDiagonal.x and intersection.x < bishop.pos.x) or (intersection.x == bishop.pos.x and sign(posOnNegativeDiagonal.x - intersection.x) == sign(piece.pos.x - intersection.x)):
 					posOnNegativeDiagonal = intersection
 		else:
 			if intersections.size() > 0:
@@ -190,6 +272,8 @@ static func closestPosKingCanMoveTo(king: Piece, pieces: Array[Piece], tryMovePo
 
 static func closestPosCanMoveTo(piece: Piece, pieces: Array[Piece], tryMovePos: Vector2i) -> Vector2i:
 	match piece.type:
+		Piece.PieceType.PAWN:
+			return closestPosPawnCanMoveTo(piece, pieces, tryMovePos)
 		Piece.PieceType.KNIGHT:
 			return closestPosKnightCanMoveTo(piece, pieces, tryMovePos)
 		Piece.PieceType.BISHOP:
@@ -198,10 +282,8 @@ static func closestPosCanMoveTo(piece: Piece, pieces: Array[Piece], tryMovePos: 
 			return closestPosRookCanMoveTo(piece, pieces, tryMovePos)
 		Piece.PieceType.QUEEN:
 			return closestPosQueenCanMoveTo(piece, pieces, tryMovePos)
-		Piece.PieceType.KING:
-			return closestPosKingCanMoveTo(piece, pieces, tryMovePos)
 		_:
-			return tryMovePos
+			return closestPosKingCanMoveTo(piece, pieces, tryMovePos)
 			
 static func canPieceMoveTo(piece: Piece, pieces: Array[Piece], tryMovePos: Vector2i) -> bool:
 	return closestPosCanMoveTo(piece, pieces, tryMovePos) == tryMovePos

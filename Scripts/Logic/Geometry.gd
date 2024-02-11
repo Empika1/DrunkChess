@@ -43,6 +43,9 @@ static func positiveDiagonalLineCircleIntersections(lineYIntercept: int, circleP
 	var sqrtDiscr: int = ceilSqrt(discr) if outside else floorSqrt(discr)
 	var twoX1: int = nonDiscr + sqrtDiscr
 	var twoX2: int = nonDiscr - sqrtDiscr
+	if outside:
+		twoX1 += 1
+		twoX2 -= 1
 	if twoX1 % 2 == 1:
 		if outside:
 			twoX1 += 1
@@ -109,6 +112,18 @@ static func diagonalLinesIntersection(pointOnPositiveSlopeLine: Vector2i, pointO
 	
 	return Vector2i(intersectionx2.x / 2, intersectionx2.y / 2)
 
+static func positiveDiagonalLineVerticalLineIntersection(pointOnPositiveSlopeLine: Vector2i, verticalLineX: int) -> Vector2i:
+	return Vector2i(verticalLineX, verticalLineX + pointOnPositiveSlopeLine.y - pointOnPositiveSlopeLine.x)
+	
+static func positiveDiagonalLineHorizontalLineIntersection(pointOnPositiveSlopeLine: Vector2i, horizontalLineY: int) -> Vector2i:
+	return Vector2i(horizontalLineY + pointOnPositiveSlopeLine.x - pointOnPositiveSlopeLine.y, horizontalLineY)
+
+static func negativeDiagonalLineVerticalLineIntersection(pointOnNegativeSlopeLine: Vector2i, verticalLineX: int) -> Vector2i:
+	return Vector2i(verticalLineX, -verticalLineX + pointOnNegativeSlopeLine.y + pointOnNegativeSlopeLine.x)
+
+static func negativeDiagonalLineHorizontalLineIntersection(pointOnNegativeSlopeLine: Vector2i, horizontalLineY: int) -> Vector2i:
+	return Vector2i(-horizontalLineY + pointOnNegativeSlopeLine.y + pointOnNegativeSlopeLine.x, horizontalLineY)
+
 static func circlesIntersection(pos1: Vector2i, radius1: int, pos2: Vector2i, radius2: int) -> Array[Vector2]:
 	var x1: float = float(pos1.x)
 	var y1: float = float(pos1.y)
@@ -169,7 +184,7 @@ static func circlesIntersectionInt(pos1: Vector2i, radius1: int, pos2: Vector2i,
 	for intersection: Vector2 in unroundedIntersections:
 		var roundedIntersection: Vector2i = Vector2i(roundi(intersection.x), roundi(intersection.y))
 		var spiralPos: Vector2i = Vector2i(0, 0)
-		while !(isOnCircle(pos1, radius1, roundedIntersection + spiralPos) and (pos2 - (roundedIntersection + spiralPos)).length_squared() >= radius2 ** 2):
+		while !(isOnCircle(pos1, radius1, roundedIntersection + spiralPos) and (pos2 - (roundedIntersection + spiralPos)).length_squared() <= radius2 ** 2 if inside else (pos2 - (roundedIntersection + spiralPos)).length_squared() >= radius2 ** 2):
 			spiralPos = nextPointOnSpiral(spiralPos)
 		roundedIntersections.append(roundedIntersection + spiralPos)
 	return roundedIntersections

@@ -5,9 +5,7 @@ extends Sprite2D
 @onready var states: Array[BoardState] = [BoardState.newDefaultStartingState()]
 
 func _ready() -> void:
-	var pos = Vector2i(3, 5)
-	var wantedX = 15
-	print(Geometry.spiralizePoint(pos, func(pos): return pos.x >= wantedX))
+	pass
 	
 func _process(_delta) -> void:
 	render()

@@ -1,0 +1,43 @@
+[gd_scene load_steps=16 format=3 uid="uid://cudne81ew8j5r"]
+
+[ext_resource type="Texture2D" uid="uid://16w6m1h0rk2" path="res://Images/board.png" id="1_qfrm1"]
+[ext_resource type="Material" uid="uid://bj8qkul1hm84t" path="res://test.tres" id="1_ra0je"]
+[ext_resource type="Script" path="res://Scripts/BoardRenderer.gd" id="2_snayh"]
+[ext_resource type="Texture2D" uid="uid://c550f6o7qagcf" path="res://Images/wp.png" id="3_tc1df"]
+[ext_resource type="Texture2D" uid="uid://c8fur8a1j7mni" path="res://Images/wn.png" id="4_nd67d"]
+[ext_resource type="Texture2D" uid="uid://b2segi4y8eofv" path="res://Images/wb.png" id="5_gmvi3"]
+[ext_resource type="Texture2D" uid="uid://cmilywwxwcfrk" path="res://Images/wr.png" id="6_xah4d"]
+[ext_resource type="Texture2D" uid="uid://d2om1o481poba" path="res://Images/wq.png" id="7_8i1u4"]
+[ext_resource type="Texture2D" uid="uid://mdc8eqqlpbsf" path="res://Images/wk.png" id="8_likdm"]
+[ext_resource type="Texture2D" uid="uid://c1e40ppp0bqse" path="res://Images/bp.png" id="9_7y45i"]
+[ext_resource type="Texture2D" uid="uid://bs3dmx8mo47p3" path="res://Images/bn.png" id="10_5qs4b"]
+[ext_resource type="Texture2D" uid="uid://dq0u28mlh21jl" path="res://Images/bb.png" id="11_v0t11"]
+[ext_resource type="Texture2D" uid="uid://ddue0u57vas2h" path="res://Images/br.png" id="12_c24eo"]
+[ext_resource type="Texture2D" uid="uid://fu2ww1e6n4j5" path="res://Images/bq.png" id="13_2xtgc"]
+[ext_resource type="Texture2D" uid="uid://dp652nsgoaq33" path="res://Images/bk.png" id="14_v70io"]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="BoardRenderer" type="Sprite2D" parent="." node_paths=PackedStringArray("pieceHolder")]
+material = ExtResource("1_ra0je")
+position = Vector2(230, 104)
+scale = Vector2(0.394167, 0.394167)
+texture = ExtResource("1_qfrm1")
+centered = false
+script = ExtResource("2_snayh")
+pieceHolder = NodePath("PieceHolder")
+wp = ExtResource("3_tc1df")
+wn = ExtResource("4_nd67d")
+wb = ExtResource("5_gmvi3")
+wr = ExtResource("6_xah4d")
+wq = ExtResource("7_8i1u4")
+wk = ExtResource("8_likdm")
+bp = ExtResource("9_7y45i")
+bn = ExtResource("10_5qs4b")
+bb = ExtResource("11_v0t11")
+br = ExtResource("12_c24eo")
+bq = ExtResource("13_2xtgc")
+bk = ExtResource("14_v70io")
+
+[node name="PieceHolder" type="Node2D" parent="BoardRenderer"]
+scale = Vector2(1.95759, 1.95759)
