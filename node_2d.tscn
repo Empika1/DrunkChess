@@ -20,6 +20,7 @@
 
 [node name="BoardRenderer" type="Sprite2D" parent="." node_paths=PackedStringArray("pieceHolder")]
 material = ExtResource("1_ra0je")
+position = Vector2(230, 104)
 scale = Vector2(0.394167, 0.394167)
 texture = ExtResource("1_qfrm1")
 centered = false

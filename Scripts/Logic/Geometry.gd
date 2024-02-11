@@ -153,15 +153,15 @@ static func nextPointOnSpiral(point: Vector2i) -> Vector2i:
 	if point.y >= point.x and point.y < -point.x:
 		return Vector2(point.x, point.y + 1)
 	return Vector2(point.x + 1, point.y)
+	
+static func spiralizePoint(point: Vector2i, predicate: Callable) -> Vector2i:
+	var spiralPos: Vector2i = Vector2i(0, 0)
+	while !predicate.call(point + spiralPos):
+		spiralPos = nextPointOnSpiral(spiralPos)
+	return point + spiralPos
 
 static func isOnCircle(circlePos: Vector2i, circleRadius: int, testPos: Vector2i) -> bool:
 	return floorSqrt((testPos - circlePos).length_squared()) == circleRadius
-
-static func isInsideCircle(circlePos: Vector2i, circleRadius: int, testPos: Vector2i) -> bool:
-	return floorSqrt((testPos - circlePos).length_squared()) <= circleRadius
-	
-static func isOutsideCircle(circlePos: Vector2i, circleRadius: int, testPos: Vector2i) -> bool:
-	return floorSqrt((testPos - circlePos).length_squared()) >= circleRadius
 
 static func circlesIntersectionInt(pos1: Vector2i, radius1: int, pos2: Vector2i, radius2: int, inside: bool) -> Array[Vector2i]:
 	var unroundedIntersections: Array[Vector2] = circlesIntersection(pos1, radius1, pos2, radius2)
@@ -169,7 +169,7 @@ static func circlesIntersectionInt(pos1: Vector2i, radius1: int, pos2: Vector2i,
 	for intersection: Vector2 in unroundedIntersections:
 		var roundedIntersection: Vector2i = Vector2i(roundi(intersection.x), roundi(intersection.y))
 		var spiralPos: Vector2i = Vector2i(0, 0)
-		while !(isOnCircle(pos1, radius1, roundedIntersection + spiralPos) and (isInsideCircle(pos2, radius2, roundedIntersection + spiralPos) if inside else isOutsideCircle(pos2, radius2, roundedIntersection + spiralPos))):
+		while !(isOnCircle(pos1, radius1, roundedIntersection + spiralPos) and (pos2 - (roundedIntersection + spiralPos)).length_squared() >= radius2 ** 2):
 			spiralPos = nextPointOnSpiral(spiralPos)
 		roundedIntersections.append(roundedIntersection + spiralPos)
 	return roundedIntersections
