@@ -43,9 +43,6 @@ static func positiveDiagonalLineCircleIntersections(lineYIntercept: int, circleP
 	var sqrtDiscr: int = ceilSqrt(discr) if outside else floorSqrt(discr)
 	var twoX1: int = nonDiscr + sqrtDiscr
 	var twoX2: int = nonDiscr - sqrtDiscr
-	if outside:
-		twoX1 += 1
-		twoX2 -= 1
 	if twoX1 % 2 == 1:
 		if outside:
 			twoX1 += 1
