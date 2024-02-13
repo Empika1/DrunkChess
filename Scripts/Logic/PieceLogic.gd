@@ -110,9 +110,87 @@ static func closestPosPawnCanMoveTo(pawn: Piece, pieces: Array[Piece], tryMovePo
 			negativeDiagonalX = clampi(Geometry.diagonalLinesIntersection(tryMovePos, pawn.pos, false, true).x, maxi(negativeDiagonalLowerBoundX, negativeDiagonalLowerBoundCaptureX), mini(negativeDiagonalUpperBoundX, negativeDiagonalUpperBoundCaptureX))
 		posOnNegativeDiagonal = Vector2i(negativeDiagonalX, pawn.pos.x - negativeDiagonalX + pawn.pos.y)
 	else:
-		pass
-	#print(capturingPieceOnNegativeDiagonal)
-	#return Vector2i(negativeDiagonalLowerBoundCaptureX, pawn.pos.x - negativeDiagonalLowerBoundCaptureX + pawn.pos.y)
+		var positiveDiagonalLowerBoundX: int = pawn.pos.x
+		var positiveDiagonalUpperBoundX: int = mini(mini(Piece.maxPos.x - Piece.hitRadius, pawn.pos.x + Piece.squareSize.x), pawn.pos.x - pawn.pos.y + Piece.maxPos.y - Piece.hitRadius)
+		var positiveDiagonalLowerBoundCaptureX: int = Piece.maxPos.x
+		var positiveDiagonalUpperBoundCaptureX: int = Piece.maxPos.x
+		var capturingPieceOnPositiveDiagonal: bool = false
+		for piece: Piece in pieces:
+			if piece.valueEquals(pawn):
+				continue
+			
+			var intersections: Array[Vector2i]
+			if piece.color == pawn.color:
+				intersections = Geometry.positiveDiagonalLineCircleIntersections(pawn.pos.y - pawn.pos.x, piece.pos, piece.hitRadius + pawn.hitRadius, true)
+				if intersections.size() == 0:
+					continue
+				var smallerX: int
+				if intersections.size() == 1:
+					smallerX = intersections[0].x
+				else:
+					smallerX = mini(intersections[0].x, intersections[1].x)
+				if smallerX >= pawn.pos.x:
+					positiveDiagonalUpperBoundX = mini(positiveDiagonalUpperBoundX, smallerX)
+			else:
+				intersections = Geometry.positiveDiagonalLineCircleIntersections(pawn.pos.y - pawn.pos.x, piece.pos, piece.hitRadius + pawn.hitRadius, false)
+				if intersections.size() == 0:
+					continue
+				var smallerX: int
+				if intersections.size() == 1:
+					smallerX = intersections[0].x
+				else:
+					smallerX = mini(intersections[0].x, intersections[1].x)
+				if smallerX >= pawn.pos.x and smallerX <= positiveDiagonalLowerBoundCaptureX:
+					positiveDiagonalUpperBoundCaptureX = Geometry.diagonalLinesIntersection(pawn.pos, piece.pos, true, true).x
+					positiveDiagonalLowerBoundCaptureX = smallerX
+					capturingPieceOnPositiveDiagonal = true
+		var positiveDiagonalX: int
+		if !capturingPieceOnPositiveDiagonal or mini(positiveDiagonalUpperBoundX, positiveDiagonalUpperBoundCaptureX) < maxi(positiveDiagonalLowerBoundX, positiveDiagonalLowerBoundCaptureX):
+			positiveDiagonalX = pawn.pos.x
+		else:
+			positiveDiagonalX = clampi(Geometry.diagonalLinesIntersection(pawn.pos, tryMovePos, true, true).x, maxi(positiveDiagonalLowerBoundX, positiveDiagonalLowerBoundCaptureX), mini(positiveDiagonalUpperBoundX, positiveDiagonalUpperBoundCaptureX))
+		posOnPositiveDiagonal = Vector2i(positiveDiagonalX, positiveDiagonalX - pawn.pos.x + pawn.pos.y)
+		
+		var negativeDiagonalLowerBoundX: int = maxi(maxi(Piece.hitRadius, pawn.pos.x - Piece.squareSize.x), pawn.pos.y + pawn.pos.x - Piece.maxPos.y + Piece.hitRadius)
+		var negativeDiagonalUpperBoundX: int = pawn.pos.x
+		var negativeDiagonalLowerBoundCaptureX: int = 0
+		var negativeDiagonalUpperBoundCaptureX: int = 0
+		var capturingPieceOnNegativeDiagonal: bool = false
+		for piece: Piece in pieces:
+			if piece.valueEquals(pawn):
+				continue
+				
+			var intersections: Array[Vector2i]
+			if piece.color == pawn.color:
+				intersections = Geometry.negativeDiagonalLineCircleIntersections(pawn.pos.y + pawn.pos.x, piece.pos, piece.hitRadius + pawn.hitRadius, true)
+				if intersections.size() == 0:
+					continue
+				var largerX: int
+				if intersections.size() == 1:
+					largerX = intersections[0].x
+				else:
+					largerX = maxi(intersections[0].x, intersections[1].x)
+				if largerX <= pawn.pos.x:
+					negativeDiagonalLowerBoundX = maxi(negativeDiagonalLowerBoundX, largerX)
+			else:
+				intersections = Geometry.negativeDiagonalLineCircleIntersections(pawn.pos.y + pawn.pos.x, piece.pos, piece.hitRadius + pawn.hitRadius, false)
+				if intersections.size() == 0:
+					continue
+				var largerX: int
+				if intersections.size() == 1:
+					largerX = intersections[0].x
+				else:
+					largerX = maxi(intersections[0].x, intersections[1].x)
+				if largerX <= pawn.pos.x and largerX >= negativeDiagonalUpperBoundCaptureX:
+					negativeDiagonalLowerBoundCaptureX = Geometry.diagonalLinesIntersection(piece.pos, pawn.pos, false, true).x
+					negativeDiagonalUpperBoundCaptureX = largerX
+					capturingPieceOnNegativeDiagonal = true
+		var negativeDiagonalX: int
+		if !capturingPieceOnNegativeDiagonal or mini(negativeDiagonalUpperBoundX, negativeDiagonalUpperBoundCaptureX) < maxi(negativeDiagonalLowerBoundX, negativeDiagonalLowerBoundCaptureX):
+			negativeDiagonalX = pawn.pos.x
+		else:
+			negativeDiagonalX = clampi(Geometry.diagonalLinesIntersection(tryMovePos, pawn.pos, false, true).x, maxi(negativeDiagonalLowerBoundX, negativeDiagonalLowerBoundCaptureX), mini(negativeDiagonalUpperBoundX, negativeDiagonalUpperBoundCaptureX))
+		posOnNegativeDiagonal = Vector2i(negativeDiagonalX, pawn.pos.x - negativeDiagonalX + pawn.pos.y)
 	
 	var verticalDistanceSquared: int = (posOnVertical - tryMovePos).length_squared()
 	var positiveDiagonalDistanceSquared: int = (posOnPositiveDiagonal - tryMovePos).length_squared()
