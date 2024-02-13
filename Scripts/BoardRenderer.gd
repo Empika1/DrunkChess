@@ -75,6 +75,7 @@ func getHoveredPiece(mousePos: Vector2i) -> Piece:
 var pieceDragging: Piece
 var dragOffset: Vector2i
 var attemptedNextState: BoardState
+var spriteScene: PackedScene = preload("res://Prefabs/DraggablePiece.tscn")
 func render() -> void:
 	var mousePos: Vector2i = get_viewport().get_mouse_position()
 	if pieceDragging == null && Input.is_action_just_pressed("lmb"):
@@ -105,7 +106,7 @@ func render() -> void:
 		c.queue_free()
 
 	for piece in stateToRender.pieces:
-		var sprite: DraggablePiece = DraggablePiece.new()
+		var sprite: DraggablePiece = spriteScene.instantiate()
 		pieceHolder.add_child(sprite)
 		sprite.piece = piece
 		sprite.texture = getPieceTexture(piece.type, piece.color)

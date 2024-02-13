@@ -1,0 +1,19 @@
+[gd_scene load_steps=5 format=3 uid="uid://dq5xhvo7d40h2"]
+
+[ext_resource type="Texture2D" uid="uid://mdc8eqqlpbsf" path="res://Images/wk.png" id="1_1cmkb"]
+[ext_resource type="Script" path="res://Scripts/DraggablePiece.gd" id="2_qblmd"]
+[ext_resource type="Material" uid="uid://rsdnh7vry363" path="res://Shader/DrawCircle.tres" id="3_jmyxt"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_hkt8u"]
+
+[node name="DraggablePiece" type="Sprite2D"]
+z_index = 1
+z_as_relative = false
+texture = ExtResource("1_1cmkb")
+script = ExtResource("2_qblmd")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+z_index = -1
+material = ExtResource("3_jmyxt")
+scale = Vector2(150, 150)
+texture = SubResource("PlaceholderTexture2D_hkt8u")
