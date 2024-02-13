@@ -1,12 +1,25 @@
-class_name BoardRenderer
 extends Sprite2D
+class_name BoardRenderer
 
 @export var pieceHolder: Node2D
 
 @onready var states: Array[BoardState] = [BoardState.newDefaultStartingState()]
 
+const shadowRealm: Vector2 = Vector2(9999999, 9999999)
+var pieceScene: PackedScene = preload("res://Prefabs/DraggablePiece.tscn")
+var piecePool: Dictionary
+var freePiecePool: Dictionary
+var capturedPiecePool: Dictionary
 func _ready() -> void:
-	pass
+	for type in Piece.PieceType.values():
+		piecePool[type] = []
+		freePiecePool[type] = []
+		capturedPiecePool[type] = []
+	for piece in states[-1].pieces:
+		var sprite: DraggablePiece = pieceScene.instantiate()
+		freePiecePool[piece.type].append(sprite)
+		pieceHolder.add_child(sprite)
+		sprite.init(self, piece)
 	
 func _process(_delta) -> void:
 	render()
@@ -82,7 +95,6 @@ func getHoveredPiece(mousePos: Vector2i) -> Piece:
 var pieceDragging: Piece
 var dragOffset: Vector2i
 var attemptedNextState: BoardState
-var spriteScene: PackedScene = preload("res://Prefabs/DraggablePiece.tscn")
 func render() -> void:
 	var mousePos: Vector2i = get_viewport().get_mouse_position()
 	if pieceDragging == null && Input.is_action_just_pressed("lmb"):
@@ -91,6 +103,7 @@ func render() -> void:
 			dragOffset = boardPosToGamePos(pieceDragging.pos) - Vector2(mousePos)
 	
 	if pieceDragging != null:
+		print(PieceLogic.closestPosCanMoveTo(pieceDragging, states[-1].pieces, gamePosToBoardPos(mousePos + dragOffset)))
 		var move: Move = Move.newNormal(pieceDragging, PieceLogic.closestPosCanMoveTo(pieceDragging, states[-1].pieces, gamePosToBoardPos(mousePos + dragOffset)))
 		attemptedNextState = states[-1].makeMove(move)
 		
@@ -106,17 +119,19 @@ func render() -> void:
 		stateToRender = attemptedNextState
 	else:
 		stateToRender = states[-1]
-	#print(stateToRender.toString())
-			
-	for c in pieceHolder.get_children():
-		pieceHolder.remove_child(c)
-		c.queue_free()
 
+	for key in piecePool:
+		var arr: Array = piecePool[key]
+		while arr.size() > 0:
+			var piece = arr.pop_back()
+			freePiecePool[key].append(piece)
 	for piece in stateToRender.pieces:
-		var sprite: DraggablePiece = spriteScene.instantiate()
-		pieceHolder.add_child(sprite)
-		sprite.piece = piece
-		sprite.texture = getPieceTexture(piece.type, piece.color)
+		var sprite: DraggablePiece = freePiecePool[piece.type].pop_back()
+		piecePool[piece.type].append(sprite)
 		sprite.global_position = boardPosToGamePos(piece.pos)
 		sprite.global_scale = global_scale
+	for key in freePiecePool:
+		var arr: Array = freePiecePool[key]
+		for piece in arr:
+			piece.global_position = shadowRealm
 	

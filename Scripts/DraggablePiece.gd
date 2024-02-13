@@ -15,10 +15,9 @@ func setPiece(piece_: Piece):
 	mat.set_shader_parameter("radius", renderer.boardLengthToGameLength(Vector2i(piece.hitRadius, piece.hitRadius)))
 	
 	hitSprite.visible = false
-	moveSprite.visible = false
+	#moveSprite.visible = false
 	
-func _init(renderer_: BoardRenderer, piece_: Piece):
-	self = preload("res://Prefabs/DraggablePiece.tscn").instantiate()
+func init(renderer_: BoardRenderer, piece_: Piece):
 	renderer = renderer_
-	renderer.add_child(self)
+	texture = renderer.getPieceTexture(piece_.type, piece_.color)
 	setPiece(piece_)

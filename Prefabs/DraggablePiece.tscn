@@ -1,24 +1,20 @@
-[gd_scene load_steps=6 format=3 uid="uid://dq5xhvo7d40h2"]
+[gd_scene load_steps=5 format=3 uid="uid://dq5xhvo7d40h2"]
 
 [ext_resource type="Texture2D" uid="uid://mdc8eqqlpbsf" path="res://Images/wk.png" id="1_1cmkb"]
 [ext_resource type="Script" path="res://Scripts/DraggablePiece.gd" id="2_qblmd"]
 [ext_resource type="Material" uid="uid://rsdnh7vry363" path="res://Shader/DrawCircle.tres" id="3_jmyxt"]
 
-[sub_resource type="Gradient" id="Gradient_8rgwp"]
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_hkt8u"]
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_bvem0"]
-gradient = SubResource("Gradient_8rgwp")
-width = 1
-height = 1
-
-[node name="DraggablePiece" type="Sprite2D"]
+[node name="DraggablePiece" type="Sprite2D" node_paths=PackedStringArray("hitSprite")]
 z_index = 1
 z_as_relative = false
 texture = ExtResource("1_1cmkb")
 script = ExtResource("2_qblmd")
+hitSprite = NodePath("Sprite2D")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 z_index = -1
 material = ExtResource("3_jmyxt")
 scale = Vector2(150, 150)
-texture = SubResource("GradientTexture2D_bvem0")
+texture = SubResource("PlaceholderTexture2D_hkt8u")

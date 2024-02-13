@@ -18,6 +18,10 @@
 
 [node name="Node2D" type="Node2D"]
 
+[node name="PieceHolder" type="Node2D" parent="."]
+position = Vector2(230, 104)
+scale = Vector2(0.771617, 0.771617)
+
 [node name="BoardRenderer" type="Sprite2D" parent="." node_paths=PackedStringArray("pieceHolder")]
 material = ExtResource("1_ra0je")
 position = Vector2(230, 104)
@@ -25,7 +29,7 @@ scale = Vector2(0.394167, 0.394167)
 texture = ExtResource("1_qfrm1")
 centered = false
 script = ExtResource("2_snayh")
-pieceHolder = NodePath("PieceHolder")
+pieceHolder = NodePath("../PieceHolder")
 wp = ExtResource("3_tc1df")
 wn = ExtResource("4_nd67d")
 wb = ExtResource("5_gmvi3")
@@ -38,6 +42,3 @@ bb = ExtResource("11_v0t11")
 br = ExtResource("12_c24eo")
 bq = ExtResource("13_2xtgc")
 bk = ExtResource("14_v70io")
-
-[node name="PieceHolder" type="Node2D" parent="BoardRenderer"]
-scale = Vector2(1.95759, 1.95759)
