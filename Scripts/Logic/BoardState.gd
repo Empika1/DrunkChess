@@ -61,7 +61,6 @@ static func newDefaultStartingState() -> BoardState:
 		startPieces.append(Piece.new(Vector2i(x, secondRowBlackY), Piece.PieceType.PAWN, Piece.PieceColor.BLACK))
 		startPieces.append(Piece.new(Vector2i(x, secondRowWhiteY), Piece.PieceType.PAWN, Piece.PieceColor.WHITE))
 	var state: BoardState = BoardState.newStartingState(startPieces)
-	state.result = BoardLogic.validateStartingState(state)
 	return state
 
 func makeMove(move_: Move) -> BoardState:
