@@ -46,11 +46,21 @@ static func newStartingState(pieces_: Array[Piece]) -> BoardState:
 	return state
 	
 static func newDefaultStartingState() -> BoardState:
-	var whiteKing: Piece = Piece.new(Vector2i(768, 768), Piece.PieceType.KING, Piece.PieceColor.WHITE)
-	var blackKing: Piece = Piece.new(Vector2i(1000, 5000), Piece.PieceType.PAWN, Piece.PieceColor.BLACK)
-	var randomRook: Piece = Piece.new(Vector2i(5000, 6000), Piece.PieceType.PAWN, Piece.PieceColor.BLACK)
-	var otherRandomRook: Piece = Piece.new(Vector2i(5900, 768), Piece.PieceType.ROOK, Piece.PieceColor.BLACK)
-	var state: BoardState = BoardState.newStartingState([whiteKing, blackKing, randomRook, otherRandomRook])
+	var startPieces: Array[Piece] = []
+	
+	var firstRowBlackY: int = Piece.boardSize.y / 16
+	var secondRowBlackY: int = Piece.boardSize.y * 3 / 16
+	var firstRowWhiteY: int = Piece.boardSize.y - firstRowBlackY
+	var secondRowWhiteY: int = Piece.boardSize.y - secondRowBlackY
+	var pieceOrder: Array[Piece.PieceType] = [Piece.PieceType.ROOK, Piece.PieceType.KNIGHT, Piece.PieceType.BISHOP, Piece.PieceType.QUEEN, Piece.PieceType.KING, Piece.PieceType.BISHOP, Piece.PieceType.KNIGHT, Piece.PieceType.ROOK]
+	for i: int in range(8):
+		var x: int = Piece.boardSize.x / 16 + Piece.boardSize.x * i / 8
+		startPieces.append(Piece.new(Vector2i(x, firstRowBlackY), pieceOrder[i], Piece.PieceColor.BLACK))
+		startPieces.append(Piece.new(Vector2i(x, firstRowWhiteY), pieceOrder[i], Piece.PieceColor.WHITE))
+		
+		startPieces.append(Piece.new(Vector2i(x, secondRowBlackY), Piece.PieceType.PAWN, Piece.PieceColor.BLACK))
+		startPieces.append(Piece.new(Vector2i(x, secondRowWhiteY), Piece.PieceType.PAWN, Piece.PieceColor.WHITE))
+	var state: BoardState = BoardState.newStartingState(startPieces)
 	state.result = BoardLogic.validateStartingState(state)
 	return state
 
