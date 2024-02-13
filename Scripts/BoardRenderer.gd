@@ -1,3 +1,4 @@
+class_name BoardRenderer
 extends Sprite2D
 
 @export var pieceHolder: Node2D
@@ -58,11 +59,17 @@ func getPieceTexture(pieceType: Piece.PieceType, pieceColor: Piece.PieceColor) -
 func getScaledRectSize():
 	return get_rect().size * global_scale
 
+func boardLengthToGameLength(boardLength: Vector2i) -> Vector2:
+	return Vector2(boardLength) / Vector2(Piece.maxPos) * getScaledRectSize()
+
 func boardPosToGamePos(boardPos: Vector2i) -> Vector2:
-	return Vector2(boardPos) / Vector2(Piece.maxPos) * getScaledRectSize() + global_position
-	
+	return boardLengthToGameLength(boardPos) + global_position
+
+func gameLengthToBoardLength(gameLength: Vector2) -> Vector2i:
+	return Vector2i(gameLength * Vector2(Piece.maxPos) / getScaledRectSize())
+
 func gamePosToBoardPos(gamePos: Vector2) -> Vector2i:
-	return Vector2i((gamePos - global_position) * Vector2(Piece.maxPos) / getScaledRectSize())
+	return gameLengthToBoardLength(gamePos - global_position)
 
 func getHoveredPiece(mousePos: Vector2i) -> Piece:
 	for c in pieceHolder.get_children():
