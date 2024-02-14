@@ -12,7 +12,7 @@ var piece: Piece
 func setPiece(piece_: Piece):
 	piece = piece_
 	var mat: ShaderMaterial = hitSprite.material as ShaderMaterial
-	mat.set_shader_parameter("radius", renderer.boardLengthToGameLength(Vector2i(piece.hitRadius, piece.hitRadius)))
+	mat.set_shader_parameter("radius", float(piece.hitRadius) * 8. / float(piece.boardSize.x))
 	
 	hitSprite.visible = false
 	#moveSprite.visible = false

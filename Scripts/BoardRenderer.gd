@@ -7,23 +7,21 @@ class_name BoardRenderer
 
 const shadowRealm: Vector2 = Vector2(9999999, 9999999)
 var pieceScene: PackedScene = preload("res://Prefabs/DraggablePiece.tscn")
-var whitePiecePool: Dictionary
-var whiteFreePiecePool: Dictionary
-var blackPiecePool: Dictionary
-var blackFreePiecePool: Dictionary
+var usedPiecePool: Dictionary
+var freePiecePool: Dictionary
 func _ready() -> void:
+	usedPiecePool[Piece.PieceColor.WHITE] = Dictionary()
+	usedPiecePool[Piece.PieceColor.BLACK] = Dictionary()
+	freePiecePool[Piece.PieceColor.WHITE] = Dictionary()
+	freePiecePool[Piece.PieceColor.BLACK] = Dictionary()
 	for type in Piece.PieceType.values():
-		whitePiecePool[type] = []
-		whiteFreePiecePool[type] = []
-		blackPiecePool[type] = []
-		blackFreePiecePool[type] = []
+		usedPiecePool[Piece.PieceColor.WHITE][type] = []
+		usedPiecePool[Piece.PieceColor.BLACK][type] = []
+		freePiecePool[Piece.PieceColor.WHITE][type] = []
+		freePiecePool[Piece.PieceColor.BLACK][type] = []
 	for piece in states[-1].pieces:
 		var sprite: DraggablePiece = pieceScene.instantiate()
-		match piece.color:
-			Piece.PieceColor.WHITE:
-				whiteFreePiecePool[piece.type].append(sprite)
-			_:
-				blackFreePiecePool[piece.type].append(sprite)
+		freePiecePool[piece.color][piece.type].append(sprite)
 		pieceHolder.add_child(sprite)
 		sprite.init(self, piece)
 	
@@ -109,7 +107,6 @@ func render() -> void:
 			dragOffset = boardPosToGamePos(pieceDragging.pos) - Vector2(mousePos)
 	
 	if pieceDragging != null:
-		print(Piece.PieceColor.keys()[pieceDragging.color])
 		var move: Move = Move.newNormal(pieceDragging, PieceLogic.closestPosCanMoveTo(pieceDragging, states[-1].pieces, gamePosToBoardPos(mousePos + dragOffset)))
 		attemptedNextState = states[-1].makeMove(move)
 		
@@ -126,28 +123,23 @@ func render() -> void:
 	else:
 		stateToRender = states[-1]
 
-	for key in whitePiecePool:
-		var arr: Array = whitePiecePool[key]
-		while arr.size() > 0:
-			var piece = arr.pop_back()
-			whiteFreePiecePool[key].append(piece)
-	for key in blackPiecePool:
-		var arr: Array = blackPiecePool[key]
-		while arr.size() > 0:
-			var piece = arr.pop_back()
-			blackFreePiecePool[key].append(piece)
+	for col in [Piece.PieceColor.BLACK, Piece.PieceColor.WHITE]:
+		for key in usedPiecePool[col]:
+			var arr: Array = usedPiecePool[col][key]
+			while arr.size() > 0:
+				var piece = arr.pop_back()
+				freePiecePool[col][key].append(piece)
 	for piece in stateToRender.pieces:
-		var sprite: DraggablePiece = whiteFreePiecePool[piece.type].pop_back() if piece.color == Piece.PieceColor.WHITE else blackFreePiecePool[piece.type].pop_back()
+		var sprite: DraggablePiece = freePiecePool[piece.color][piece.type].pop_back()
 		sprite.piece = piece
-		(whitePiecePool[piece.type] if piece.color == Piece.PieceColor.WHITE else blackPiecePool[piece.type]).append(sprite)
+		usedPiecePool[piece.color][piece.type].append(sprite)
 		sprite.global_position = boardPosToGamePos(piece.pos)
 		sprite.global_scale = global_scale
-	for key in whiteFreePiecePool:
-		var arr: Array = whiteFreePiecePool[key]
-		for piece in arr:
-			piece.global_position = shadowRealm
-	for key in blackFreePiecePool:
-		var arr: Array = blackFreePiecePool[key]
-		for piece in arr:
-			piece.global_position = shadowRealm
+		sprite.hitSprite.visible = pieceDragging != null
+		
+	for col in [Piece.PieceColor.BLACK, Piece.PieceColor.WHITE]:
+		for key in freePiecePool[col]:
+			var arr: Array = freePiecePool[col][key]
+			for piece in arr:
+				piece.global_position = shadowRealm
 	
