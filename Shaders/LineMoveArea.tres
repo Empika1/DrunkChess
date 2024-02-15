@@ -1,8 +1,0 @@
-[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://bi752f5q4uyki"]
-
-[ext_resource type="Shader" path="res://Shaders/LineMoveArea.gdshader" id="1_nhdjr"]
-
-[resource]
-shader = ExtResource("1_nhdjr")
-shader_parameter/thresh = 0.002
-shader_parameter/color = Vector4(0, 0, 0, 0.5)

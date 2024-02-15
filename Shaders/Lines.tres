@@ -1,0 +1,12 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://bi752f5q4uyki"]
+
+[ext_resource type="Shader" path="res://Shaders/Lines.gdshader" id="1_8dvso"]
+
+[resource]
+shader = ExtResource("1_8dvso")
+shader_parameter/lineStarts = null
+shader_parameter/lineEnds = null
+shader_parameter/lineStart = Vector2(0.26, 0.125)
+shader_parameter/lineEnd = Vector2(0.845, 0.645)
+shader_parameter/thickness = 0.005
+shader_parameter/blur = 0.001

@@ -3,7 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://mdc8eqqlpbsf" path="res://Images/wk.png" id="1_1cmkb"]
 [ext_resource type="Script" path="res://Scripts/DraggablePiece.gd" id="2_qblmd"]
 [ext_resource type="Material" uid="uid://rsdnh7vry363" path="res://Shaders/DrawCircle.tres" id="3_skk30"]
-[ext_resource type="Material" uid="uid://bi752f5q4uyki" path="res://Shaders/LineMoveArea.tres" id="4_1cfeu"]
+[ext_resource type="Material" uid="uid://bi752f5q4uyki" path="res://Shaders/Lines.tres" id="4_w055f"]
 
 [sub_resource type="Gradient" id="Gradient_8rgwp"]
 
@@ -35,6 +35,6 @@ texture = SubResource("GradientTexture2D_bvem0")
 
 [node name="moveArea" type="Sprite2D" parent="."]
 z_index = -1
-material = ExtResource("4_1cfeu")
+material = ExtResource("4_w055f")
 scale = Vector2(2550, 2550)
 texture = SubResource("GradientTexture2D_cd81e")
