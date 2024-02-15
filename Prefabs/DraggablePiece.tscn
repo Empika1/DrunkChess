@@ -1,9 +1,15 @@
-[gd_scene load_steps=9 format=3 uid="uid://dq5xhvo7d40h2"]
+[gd_scene load_steps=11 format=3 uid="uid://dq5xhvo7d40h2"]
 
 [ext_resource type="Texture2D" uid="uid://mdc8eqqlpbsf" path="res://Images/wk.png" id="1_1cmkb"]
 [ext_resource type="Script" path="res://Scripts/DraggablePiece.gd" id="2_qblmd"]
-[ext_resource type="Material" uid="uid://rsdnh7vry363" path="res://Shaders/DrawCircle.tres" id="3_skk30"]
-[ext_resource type="Material" uid="uid://bi752f5q4uyki" path="res://Shaders/Lines.tres" id="4_w055f"]
+[ext_resource type="Shader" path="res://Shaders/DrawCircle.gdshader" id="3_ifhtt"]
+[ext_resource type="Shader" path="res://Shaders/Lines.gdshader" id="4_qnnjf"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ymimi"]
+shader = ExtResource("3_ifhtt")
+shader_parameter/color = Vector4(0, 0, 0, 0.5)
+shader_parameter/center = Vector2(0.5, 0.5)
+shader_parameter/radius = 0.5
 
 [sub_resource type="Gradient" id="Gradient_8rgwp"]
 
@@ -11,6 +17,14 @@
 gradient = SubResource("Gradient_8rgwp")
 width = 1
 height = 1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ti3bd"]
+shader = ExtResource("4_qnnjf")
+shader_parameter/lineStarts = PackedVector2Array(0.5, 0.3, 0, 0)
+shader_parameter/lineEnds = PackedVector2Array(1, 1, 1, 1)
+shader_parameter/lineColorsrg = PackedVector2Array(1, 1, 1, 1)
+shader_parameter/lineColorsba = PackedVector2Array(1, 0.5, 1, 1)
+shader_parameter/lineThicknesses = PackedFloat32Array(0.003, 0.002)
 
 [sub_resource type="Gradient" id="Gradient_fgbif"]
 
@@ -29,12 +43,12 @@ moveSprite = NodePath("moveArea")
 
 [node name="hitRadius" type="Sprite2D" parent="."]
 z_index = -1
-material = ExtResource("3_skk30")
+material = SubResource("ShaderMaterial_ymimi")
 scale = Vector2(150, 150)
 texture = SubResource("GradientTexture2D_bvem0")
 
 [node name="moveArea" type="Sprite2D" parent="."]
 z_index = -1
-material = ExtResource("4_w055f")
+material = SubResource("ShaderMaterial_ti3bd")
 scale = Vector2(2550, 2550)
 texture = SubResource("GradientTexture2D_cd81e")
