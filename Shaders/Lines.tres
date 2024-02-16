@@ -1,0 +1,11 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://bti4vwbsocp80"]
+
+[ext_resource type="Shader" path="res://Shaders/Lines.gdshader" id="1_8dvso"]
+
+[resource]
+shader = ExtResource("1_8dvso")
+shader_parameter/lineStarts = null
+shader_parameter/lineEnds = null
+shader_parameter/lineColorsrg = null
+shader_parameter/lineColorsba = null
+shader_parameter/lineThicknesses = null

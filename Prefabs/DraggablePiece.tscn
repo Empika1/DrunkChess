@@ -2,14 +2,9 @@
 
 [ext_resource type="Texture2D" uid="uid://mdc8eqqlpbsf" path="res://Images/wk.png" id="1_1cmkb"]
 [ext_resource type="Script" path="res://Scripts/DraggablePiece.gd" id="2_qblmd"]
-[ext_resource type="Shader" path="res://Shaders/DrawCircle.gdshader" id="3_ifhtt"]
-[ext_resource type="Shader" path="res://Shaders/Lines.gdshader" id="4_qnnjf"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ymimi"]
-shader = ExtResource("3_ifhtt")
-shader_parameter/color = Vector4(0, 0, 0, 0.5)
-shader_parameter/center = Vector2(0.5, 0.5)
-shader_parameter/radius = 0.5
+[ext_resource type="Material" path="res://Shaders/DrawCircle.tres" id="3_skk30"]
+[ext_resource type="Material" uid="uid://bti4vwbsocp80" path="res://Shaders/Lines.tres" id="4_w055f"]
+[ext_resource type="Shader" path="res://Shaders/Circles.gdshader" id="5_lo84t"]
 
 [sub_resource type="Gradient" id="Gradient_8rgwp"]
 
@@ -18,20 +13,19 @@ gradient = SubResource("Gradient_8rgwp")
 width = 1
 height = 1
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ti3bd"]
-shader = ExtResource("4_qnnjf")
-shader_parameter/lineStarts = PackedVector2Array(0.5, 0.3, 0, 0)
-shader_parameter/lineEnds = PackedVector2Array(1, 1, 1, 1)
-shader_parameter/lineColorsrg = PackedVector2Array(1, 1, 1, 1)
-shader_parameter/lineColorsba = PackedVector2Array(1, 0.5, 1, 1)
-shader_parameter/lineThicknesses = PackedFloat32Array(0.003, 0.002)
-
 [sub_resource type="Gradient" id="Gradient_fgbif"]
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_cd81e"]
 gradient = SubResource("Gradient_fgbif")
 width = 1
 height = 1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_s85oq"]
+shader = ExtResource("5_lo84t")
+shader_parameter/circleCenters = PackedVector2Array(0.5, 0.5, 0.4, 0.4)
+shader_parameter/circleRadii = PackedFloat32Array(0.14, 0.19)
+shader_parameter/circleColorsrg = PackedVector2Array(0.675, 0.685, 0.675, 0.685)
+shader_parameter/circleColorsba = PackedVector2Array(0.705, 0.72, 0.785, 0.865)
 
 [node name="DraggablePiece" type="Sprite2D" node_paths=PackedStringArray("hitSprite", "moveSprite")]
 z_index = 1
@@ -43,12 +37,18 @@ moveSprite = NodePath("moveArea")
 
 [node name="hitRadius" type="Sprite2D" parent="."]
 z_index = -1
-material = SubResource("ShaderMaterial_ymimi")
+material = ExtResource("3_skk30")
 scale = Vector2(150, 150)
 texture = SubResource("GradientTexture2D_bvem0")
 
 [node name="moveArea" type="Sprite2D" parent="."]
 z_index = -1
-material = SubResource("ShaderMaterial_ti3bd")
+material = ExtResource("4_w055f")
+scale = Vector2(2550, 2550)
+texture = SubResource("GradientTexture2D_cd81e")
+
+[node name="moveArea2" type="Sprite2D" parent="."]
+z_index = -1
+material = SubResource("ShaderMaterial_s85oq")
 scale = Vector2(2550, 2550)
 texture = SubResource("GradientTexture2D_cd81e")

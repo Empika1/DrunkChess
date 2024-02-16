@@ -44,6 +44,6 @@ void fragment() {
 		else {
 			col.a *= 0.;
 		}
-		COLOR += col;
+		COLOR = mix(COLOR, col, col.a);
 	}
 }

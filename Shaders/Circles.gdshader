@@ -15,13 +15,23 @@ void fragment() {
 	
 	COLOR = vec4(0.);
 	for(int i = 0; i < numCircles; i++) {
-		vec4 col = vec4(circleColorsrg[i].xy, circleColorsba[i].xy);
+		vec4 lineCol = vec4(circleColorsrg[i].xy, circleColorsba[i].xy);
+		if(lineCol.a == 0.)
+			break;
+		vec4 col = lineCol;
 		float radiusSquared = circleRadii[i] * circleRadii[i];
 		float radiusBlurSquared = (circleRadii[i] + blur) * (circleRadii[i] + blur);
 		float distanceSquared = l2(UV - circleCenters[i]);
 		
 		if(distanceSquared <= radiusSquared) {
-			
+			col.a *= 1.;
 		}
+		else if(distanceSquared <= radiusBlurSquared) {
+			col.a *= 1. - (distanceSquared - radiusSquared) / (radiusBlurSquared - radiusSquared); 
+		}
+		else {
+			col.a *= 0.;
+		}
+		COLOR = mix(COLOR, col, col.a);
 	}
 }
