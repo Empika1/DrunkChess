@@ -2,6 +2,9 @@ extends Sprite2D
 class_name BoardRenderer
 
 @export var pieceHolder: Node2D
+@export var lines: Sprite2D
+@export var circles: Sprite2D
+@export var arcs: Sprite2D
 
 @onready var states: Array[BoardState] = [BoardState.newDefaultStartingState()]
 
@@ -135,11 +138,40 @@ func render() -> void:
 		usedPiecePool[piece.color][piece.type].append(sprite)
 		sprite.global_position = boardPosToGamePos(piece.pos)
 		sprite.global_scale = global_scale
-		sprite.hitSprite.visible = pieceDragging != null
-		
+	
+	if pieceDragging != null:
+		addHitRadii(stateToRender.pieces)
+	else:
+		removeHitRadii()
+	
 	for col in [Piece.PieceColor.BLACK, Piece.PieceColor.WHITE]:
 		for key in freePiecePool[col]:
 			var arr: Array = freePiecePool[col][key]
 			for piece in arr:
 				piece.global_position = shadowRealm
+
+@export var hitRadiusColor: Color
+func addHitRadii(pieces: Array[Piece]) -> void:
+	var centers: PackedVector2Array = PackedVector2Array()
+	var radii: PackedFloat32Array = PackedFloat32Array()
+	var colorsrg: PackedVector2Array = PackedVector2Array()
+	var colorsba: PackedVector2Array = PackedVector2Array()
 	
+	for piece in pieces:
+		centers.append(Vector2(piece.pos) / Vector2(piece.boardSize))
+		radii.append(float(piece.hitRadius) / float(piece.boardSize.x))
+		colorsrg.append(Vector2(hitRadiusColor.r, hitRadiusColor.g))
+		colorsba.append(Vector2(hitRadiusColor.b, hitRadiusColor.a))
+	
+	var mat: ShaderMaterial = circles.material as ShaderMaterial
+	mat.set_shader_parameter("circleCenters", centers)
+	mat.set_shader_parameter("circleRadii", radii)
+	mat.set_shader_parameter("circleColorsrg", colorsrg)
+	mat.set_shader_parameter("circleColorsba", colorsba)
+
+func removeHitRadii() -> void:
+	var mat: ShaderMaterial = circles.material as ShaderMaterial
+	mat.set_shader_parameter("circleCenters", PackedVector2Array())
+	mat.set_shader_parameter("circleRadii", PackedFloat32Array())
+	mat.set_shader_parameter("circleColorsrg", PackedVector2Array())
+	mat.set_shader_parameter("circleColorsba", PackedVector2Array())

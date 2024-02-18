@@ -12,7 +12,7 @@ float l2(vec2 vec) {
 }
 
 void fragment() {
-	float blur = 0.0002;
+	float blur = 0.0004;
 	
 	COLOR = vec4(0.);
 	for(int i = 0; i < numLines; i++)
@@ -44,6 +44,9 @@ void fragment() {
 		else {
 			col.a *= 0.;
 		}
-		COLOR = mix(COLOR, col, col.a);
+		vec4 linearColor = pow(COLOR, vec4(2.3));
+		vec4 linearCol = pow(col, vec4(2.3));
+		vec4 mixedColor = mix(linearColor, linearCol, col.a);
+		COLOR = pow(mixedColor, vec4(1.0 / 2.3));
 	}
 }

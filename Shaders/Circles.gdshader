@@ -11,14 +11,13 @@ float l2(vec2 vec) {
 }
 
 void fragment() {
-	float blur = 0.0002;
+	float blur = 0.0006;
 	
 	COLOR = vec4(0.);
 	for(int i = 0; i < numCircles; i++) {
-		vec4 lineCol = vec4(circleColorsrg[i].xy, circleColorsba[i].xy);
-		if(lineCol.a == 0.)
+		vec4 col = vec4(circleColorsrg[i].xy, circleColorsba[i].xy);
+		if(col.a == 0.)
 			break;
-		vec4 col = lineCol;
 		float radiusSquared = circleRadii[i] * circleRadii[i];
 		float radiusBlurSquared = (circleRadii[i] + blur) * (circleRadii[i] + blur);
 		float distanceSquared = l2(UV - circleCenters[i]);
@@ -27,11 +26,14 @@ void fragment() {
 			col.a *= 1.;
 		}
 		else if(distanceSquared <= radiusBlurSquared) {
-			col.a *= 1. - (distanceSquared - radiusSquared) / (radiusBlurSquared - radiusSquared); 
+			col.a *= sqrt(1. - (distanceSquared - radiusSquared) / (radiusBlurSquared - radiusSquared)); 
 		}
 		else {
 			col.a *= 0.;
 		}
-		COLOR = mix(COLOR, col, col.a);
+		vec4 linearColor = pow(COLOR, vec4(2.3));
+		vec4 linearCol = pow(col, vec4(2.3));
+		vec4 mixedColor = mix(linearColor, linearCol, col.a);
+		COLOR = pow(mixedColor, vec4(1.0 / 2.3));
 	}
 }

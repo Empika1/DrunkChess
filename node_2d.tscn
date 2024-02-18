@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://cudne81ew8j5r"]
+[gd_scene load_steps=24 format=3 uid="uid://cudne81ew8j5r"]
 
 [ext_resource type="Texture2D" uid="uid://16w6m1h0rk2" path="res://Images/board.png" id="1_qfrm1"]
 [ext_resource type="Material" uid="uid://bj8qkul1hm84t" path="res://test.tres" id="1_ra0je"]
@@ -15,8 +15,43 @@
 [ext_resource type="Texture2D" uid="uid://ddue0u57vas2h" path="res://Images/br.png" id="12_c24eo"]
 [ext_resource type="Texture2D" uid="uid://fu2ww1e6n4j5" path="res://Images/bq.png" id="13_2xtgc"]
 [ext_resource type="Texture2D" uid="uid://dp652nsgoaq33" path="res://Images/bk.png" id="14_v70io"]
+[ext_resource type="Shader" path="res://Shaders/Lines.gdshader" id="16_w0tu0"]
+[ext_resource type="Shader" path="res://Shaders/Circles.gdshader" id="17_8yfak"]
+[ext_resource type="Shader" path="res://Shaders/Arcs.gdshader" id="18_ybyj2"]
 
-[node name="BoardRenderer" type="Sprite2D" node_paths=PackedStringArray("pieceHolder")]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_onulv"]
+shader = ExtResource("16_w0tu0")
+shader_parameter/lineStarts = null
+shader_parameter/lineEnds = null
+shader_parameter/lineColorsrg = null
+shader_parameter/lineColorsba = null
+shader_parameter/lineThicknesses = null
+
+[sub_resource type="Gradient" id="Gradient_gbrg7"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_mwyaw"]
+gradient = SubResource("Gradient_gbrg7")
+width = 1
+height = 1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_p5r2d"]
+shader = ExtResource("17_8yfak")
+shader_parameter/circleCenters = PackedVector2Array()
+shader_parameter/circleRadii = PackedFloat32Array()
+shader_parameter/circleColorsrg = PackedVector2Array()
+shader_parameter/circleColorsba = PackedVector2Array()
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_w8c2w"]
+shader = ExtResource("18_ybyj2")
+shader_parameter/arcCenters = null
+shader_parameter/arcRadii = null
+shader_parameter/arcThicknesses = null
+shader_parameter/arcColorsrg = null
+shader_parameter/arcColorsba = null
+shader_parameter/arcStarts = null
+shader_parameter/arcEnds = null
+
+[node name="BoardRenderer" type="Sprite2D" node_paths=PackedStringArray("pieceHolder", "lines", "circles", "arcs")]
 material = ExtResource("1_ra0je")
 position = Vector2(230, 104)
 scale = Vector2(0.394167, 0.394167)
@@ -24,6 +59,9 @@ texture = ExtResource("1_qfrm1")
 centered = false
 script = ExtResource("2_snayh")
 pieceHolder = NodePath("PieceHolder")
+lines = NodePath("Lines")
+circles = NodePath("Circles")
+arcs = NodePath("Arcs")
 wp = ExtResource("3_tc1df")
 wn = ExtResource("4_nd67d")
 wb = ExtResource("5_gmvi3")
@@ -36,7 +74,30 @@ bb = ExtResource("11_v0t11")
 br = ExtResource("12_c24eo")
 bq = ExtResource("13_2xtgc")
 bk = ExtResource("14_v70io")
+hitRadiusColor = Color(0, 0, 0, 0.501961)
+
+[node name="Lines" type="Sprite2D" parent="."]
+z_index = 1
+material = SubResource("ShaderMaterial_onulv")
+scale = Vector2(1200, 1200)
+texture = SubResource("GradientTexture2D_mwyaw")
+centered = false
+
+[node name="Circles" type="Sprite2D" parent="."]
+z_index = 1
+material = SubResource("ShaderMaterial_p5r2d")
+scale = Vector2(1200, 1200)
+texture = SubResource("GradientTexture2D_mwyaw")
+centered = false
+
+[node name="Arcs" type="Sprite2D" parent="."]
+z_index = 1
+material = SubResource("ShaderMaterial_w8c2w")
+scale = Vector2(1200, 1200)
+texture = SubResource("GradientTexture2D_mwyaw")
+centered = false
 
 [node name="PieceHolder" type="Node2D" parent="."]
+z_index = 2
 position = Vector2(230, 104)
 scale = Vector2(0.771617, 0.771617)

@@ -1,54 +1,8 @@
-[gd_scene load_steps=11 format=3 uid="uid://dq5xhvo7d40h2"]
+[gd_scene load_steps=3 format=3 uid="uid://bgicbdvmmlput"]
 
 [ext_resource type="Texture2D" uid="uid://mdc8eqqlpbsf" path="res://Images/wk.png" id="1_1cmkb"]
-[ext_resource type="Script" path="res://Scripts/DraggablePiece.gd" id="2_qblmd"]
-[ext_resource type="Material" path="res://Shaders/DrawCircle.tres" id="3_skk30"]
-[ext_resource type="Material" uid="uid://bti4vwbsocp80" path="res://Shaders/Lines.tres" id="4_w055f"]
-[ext_resource type="Shader" path="res://Shaders/Circles.gdshader" id="5_lo84t"]
+[ext_resource type="Script" path="res://Scripts/DraggablePiece.gd" id="2_3k44e"]
 
-[sub_resource type="Gradient" id="Gradient_8rgwp"]
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_bvem0"]
-gradient = SubResource("Gradient_8rgwp")
-width = 1
-height = 1
-
-[sub_resource type="Gradient" id="Gradient_fgbif"]
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_cd81e"]
-gradient = SubResource("Gradient_fgbif")
-width = 1
-height = 1
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_s85oq"]
-shader = ExtResource("5_lo84t")
-shader_parameter/circleCenters = PackedVector2Array(0.5, 0.5, 0.4, 0.4)
-shader_parameter/circleRadii = PackedFloat32Array(0.14, 0.19)
-shader_parameter/circleColorsrg = PackedVector2Array(0.675, 0.685, 0.675, 0.685)
-shader_parameter/circleColorsba = PackedVector2Array(0.705, 0.72, 0.785, 0.865)
-
-[node name="DraggablePiece" type="Sprite2D" node_paths=PackedStringArray("hitSprite", "moveSprite")]
-z_index = 1
-z_as_relative = false
+[node name="DraggablePiece" type="Sprite2D"]
 texture = ExtResource("1_1cmkb")
-script = ExtResource("2_qblmd")
-hitSprite = NodePath("hitRadius")
-moveSprite = NodePath("moveArea")
-
-[node name="hitRadius" type="Sprite2D" parent="."]
-z_index = -1
-material = ExtResource("3_skk30")
-scale = Vector2(150, 150)
-texture = SubResource("GradientTexture2D_bvem0")
-
-[node name="moveArea" type="Sprite2D" parent="."]
-z_index = -1
-material = ExtResource("4_w055f")
-scale = Vector2(2550, 2550)
-texture = SubResource("GradientTexture2D_cd81e")
-
-[node name="moveArea2" type="Sprite2D" parent="."]
-z_index = -1
-material = SubResource("ShaderMaterial_s85oq")
-scale = Vector2(2550, 2550)
-texture = SubResource("GradientTexture2D_cd81e")
+script = ExtResource("2_3k44e")
