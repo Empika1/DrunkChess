@@ -274,6 +274,48 @@ class KnightMovePoints extends PieceMovePoints:
 		arcStarts = arcStarts_
 		arcEnds = arcEnds_
 
+static func calculateKnightMovePoints(knight: Piece, pieces: Array[Piece]) -> KnightMovePoints:
+	var arcStarts: Array[Vector2i]
+	var arcEnds: Array[Vector2i]
+	
+	for piece: Piece in pieces:
+		if piece.valueEquals(knight):
+			continue
+		if piece.color != knight.color:
+			continue
+		
+		var intersections: Array[Vector2i] = Geometry.circlesIntersectionInt(knight.pos, Piece.knightMoveRadius, piece.pos, knight.hitRadius + piece.hitRadius, false)
+		if intersections.size() == 1:
+			arcStarts.append(intersections[0])
+			arcEnds.append(intersections[0])
+		elif intersections.size() == 2:
+			var i1: Vector2i = intersections[0] - knight.pos
+			var i2: Vector2i = intersections[1] - knight.pos
+			if i1.x * i2.y > i2.x * i1.y: #i1 is counterclockwise from i2
+				arcStarts.append(intersections[1])
+				arcEnds.append(intersections[0])
+			else:
+				arcStarts.append(intersections[0])
+				arcEnds.append(intersections[1])
+		
+	#var topIntersections: Array[Vector2i] = Geometry.horizontalLineCircleIntersections(knight.hitRadius, knight.pos, Piece.knightMoveRadius, true)
+	#var topIntersectionsSnapped: Array[Vector2i] = []
+	#for intersection: Vector2i in topIntersections:
+		#topIntersectionsSnapped.append(Geometry.spiralizePoint(intersection, func(pos): return Geometry.isOnCircle(knight.pos, Piece.knightMoveRadius, pos) and pos.y >= knight.hitRadius))
+	#if topIntersections[0].x > topIntersections[1].x:
+		#arcStarts.append(topIntersections[0])
+		#arcEnds.append(topIntersections[1])
+	#else:
+		#arcStarts.append(topIntersections[1])
+		#arcEnds.append(topIntersections[0])
+	#
+	#var bottomIntersections: Array[Vector2i] = Geometry.horizontalLineCircleIntersections(knight.maxPos.y - knight.hitRadius, knight.pos, Piece.knightMoveRadius, true)
+	#var bottomIntersectionsSnapped: Array[Vector2i] = []
+	#for intersection: Vector2i in bottomIntersections:
+		#bottomIntersectionsSnapped.append(Geometry.spiralizePoint(intersection, func(pos): return Geometry.isOnCircle(knight.pos, Piece.knightMoveRadius, pos) and pos.y <= knight.maxPos.y - knight.hitRadius))
+	
+	return KnightMovePoints.new(arcStarts, arcEnds)
+
 static func closestPosKnightCanMoveTo(knight: Piece, pieces: Array[Piece], tryMovePos: Vector2i) -> Vector2i:
 	var scaledPos: Vector2 = Vector2(tryMovePos - knight.pos).normalized() * Piece.knightMoveRadius
 	var roundedScaledPos: Vector2i = Vector2i(roundi(scaledPos.x), roundi(scaledPos.y)) + knight.pos

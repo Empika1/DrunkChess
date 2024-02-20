@@ -43,13 +43,13 @@ shader_parameter/circleColorsba = PackedVector2Array()
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_w8c2w"]
 shader = ExtResource("18_ybyj2")
-shader_parameter/arcCenters = null
-shader_parameter/arcRadii = null
-shader_parameter/arcThicknesses = null
-shader_parameter/arcColorsrg = null
-shader_parameter/arcColorsba = null
-shader_parameter/arcStarts = null
-shader_parameter/arcEnds = null
+shader_parameter/arcCenters = PackedVector2Array(0.6, 0.6)
+shader_parameter/arcRadii = PackedFloat32Array(0.3)
+shader_parameter/arcThicknesses = PackedFloat32Array(0.1)
+shader_parameter/arcColorsrg = PackedVector2Array(0, 0)
+shader_parameter/arcColorsba = PackedVector2Array(0, 1)
+shader_parameter/arcStarts = PackedVector2Array(0, 0)
+shader_parameter/arcEnds = PackedVector2Array(1, 1)
 
 [node name="BoardRenderer" type="Sprite2D" node_paths=PackedStringArray("pieceHolder", "lines", "circles", "arcs")]
 material = ExtResource("1_ra0je")
@@ -75,6 +75,7 @@ br = ExtResource("12_c24eo")
 bq = ExtResource("13_2xtgc")
 bk = ExtResource("14_v70io")
 hitRadiusColor = Color(0, 0, 0, 0.501961)
+thickness = 0.1
 
 [node name="Lines" type="Sprite2D" parent="."]
 z_index = 1
