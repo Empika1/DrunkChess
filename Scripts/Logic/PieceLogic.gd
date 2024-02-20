@@ -355,52 +355,70 @@ class BishopMovePoints extends PieceMovePoints:
 		negativeDiagonalLowerBound = negativeDiagonalLowerBound_
 		negativeDiagonalUpperBound = negativeDiagonalUpperBound_
 
-static func closestPosBishopCanMoveTo(bishop: Piece, pieces: Array[Piece], tryMovePos: Vector2i) -> Vector2i:
-	var posOnPositiveDiagonal = Geometry.diagonalLinesIntersection(bishop.pos, tryMovePos, true, true)
+static func calculateBishopMovePoints(bishop: Piece, pieces: Array[Piece]) -> BishopMovePoints:
+	var positiveDiagonalLowerBoundX: int = maxi(Piece.hitRadius, Piece.hitRadius - bishop.pos.y + bishop.pos.x)
+	var positiveDiagonalLowerBound: Vector2i = Vector2i(positiveDiagonalLowerBoundX, bishop.pos.y - bishop.pos.x + positiveDiagonalLowerBoundX)
+	var positiveDiagonalUpperBoundX: int = mini(Piece.maxPos.x - Piece.hitRadius, bishop.pos.x - bishop.pos.y + Piece.maxPos.y - Piece.hitRadius)
+	var positiveDiagonalUpperBound: Vector2i = Vector2i(positiveDiagonalUpperBoundX, bishop.pos.y - bishop.pos.x + positiveDiagonalUpperBoundX)
 	for piece: Piece in pieces:
 		if piece.valueEquals(bishop):
 			continue
-	
+		
 		var intersections: Array[Vector2i] = Geometry.positiveDiagonalLineCircleIntersections(bishop.pos.y - bishop.pos.x, piece.pos, piece.hitRadius + bishop.hitRadius)
 		if piece.color == bishop.color:
 			for intersection: Vector2i in intersections:
-				if (intersection.x < posOnPositiveDiagonal.x and intersection.x > bishop.pos.x) or (intersection.x > posOnPositiveDiagonal.x and intersection.x < bishop.pos.x) or (intersection.x == bishop.pos.x and sign(posOnPositiveDiagonal.x - intersection.x) == sign(piece.pos.x - intersection.x)):
-					posOnPositiveDiagonal = intersection
+				if intersection.x > positiveDiagonalLowerBound.x and intersection.x <= bishop.pos.x:
+					positiveDiagonalLowerBound = intersection
+				if intersection.x < positiveDiagonalUpperBound.x and intersection.x >= bishop.pos.x:
+					positiveDiagonalUpperBound = intersection
 		else:
 			if intersections.size() > 0:
 				var intersectionPos: Vector2i = Geometry.diagonalLinesIntersection(bishop.pos, piece.pos, true, true)
-				if (posOnPositiveDiagonal - bishop.pos).length_squared() > (intersectionPos - bishop.pos).length_squared() and sign(posOnPositiveDiagonal.x - bishop.pos.x) == sign(intersectionPos.x - bishop.pos.x):
-					posOnPositiveDiagonal = intersectionPos
+				if intersectionPos.x > positiveDiagonalLowerBound.x and intersectionPos.x <= bishop.pos.x:
+					positiveDiagonalLowerBound = intersectionPos
+				if intersectionPos.x < positiveDiagonalUpperBound.x and intersectionPos.x >= bishop.pos.x:
+					positiveDiagonalUpperBound = intersectionPos
 	
-	var posOnPositiveDiagonalClampedX: int = clamp(posOnPositiveDiagonal.x, bishop.hitRadius, bishop.maxPos.x - bishop.hitRadius)
-	posOnPositiveDiagonal.y -= posOnPositiveDiagonal.x - posOnPositiveDiagonalClampedX
-	posOnPositiveDiagonal.x = posOnPositiveDiagonalClampedX
-	var posOnPositiveDiagonalClampedY: int = clamp(posOnPositiveDiagonal.y, bishop.hitRadius, bishop.maxPos.y - bishop.hitRadius)
-	posOnPositiveDiagonal.x -= posOnPositiveDiagonal.y - posOnPositiveDiagonalClampedY
-	posOnPositiveDiagonal.y = posOnPositiveDiagonalClampedY
-
-	var posOnNegativeDiagonal = Geometry.diagonalLinesIntersection(tryMovePos, bishop.pos, false, true)
+	var negativeDiagonalLowerBoundX: int = maxi(Piece.hitRadius, bishop.pos.y + bishop.pos.x - Piece.maxPos.y + Piece.hitRadius)
+	var negativeDiagonalLowerBound: Vector2i = Vector2i(negativeDiagonalLowerBoundX, bishop.pos.y - negativeDiagonalLowerBoundX + bishop.pos.x)
+	var negativeDiagonalUpperBoundX: int = mini(Piece.maxPos.x - Piece.hitRadius, bishop.pos.y + bishop.pos.x - Piece.hitRadius)
+	var negativeDiagonalUpperBound: Vector2i = Vector2i(negativeDiagonalUpperBoundX, bishop.pos.y - negativeDiagonalUpperBoundX + bishop.pos.x)
 	for piece: Piece in pieces:
 		if piece.valueEquals(bishop):
 			continue
-			
+		
 		var intersections: Array[Vector2i] = Geometry.negativeDiagonalLineCircleIntersections(bishop.pos.y + bishop.pos.x, piece.pos, piece.hitRadius + bishop.hitRadius)
 		if piece.color == bishop.color:
 			for intersection: Vector2i in intersections:
-				if (intersection.x < posOnNegativeDiagonal.x and intersection.x > bishop.pos.x) or (intersection.x > posOnNegativeDiagonal.x and intersection.x < bishop.pos.x) or (intersection.x == bishop.pos.x and sign(posOnNegativeDiagonal.x - intersection.x) == sign(piece.pos.x - intersection.x)):
-					posOnNegativeDiagonal = intersection
+				if intersection.x > negativeDiagonalLowerBound.x and intersection.x < bishop.pos.x:
+					negativeDiagonalLowerBound = intersection
+				if intersection.x < negativeDiagonalUpperBound.x and intersection.x > bishop.pos.x:
+					negativeDiagonalUpperBound = intersection
 		else:
 			if intersections.size() > 0:
-				var intersectionPos: Vector2i = Geometry.diagonalLinesIntersection(piece.pos, bishop.pos, false, true)
-				if (posOnNegativeDiagonal - bishop.pos).length_squared() > (intersectionPos - bishop.pos).length_squared() and sign(posOnNegativeDiagonal.x - bishop.pos.x) == sign(intersectionPos.x - bishop.pos.x):
-					posOnNegativeDiagonal = intersectionPos
+				var intersectionPos: Vector2i = Geometry.diagonalLinesIntersection(piece.pos, bishop.pos, true, true)
+				if intersectionPos.x > negativeDiagonalLowerBound.x and intersectionPos.x < bishop.pos.x:
+					negativeDiagonalLowerBound = intersectionPos
+				if intersectionPos.x < negativeDiagonalUpperBound.x and intersectionPos.x > bishop.pos.x:
+					negativeDiagonalUpperBound = intersectionPos
 	
-	var posOnNegativeDiagonalClampedX: int = clamp(posOnNegativeDiagonal.x, bishop.hitRadius, bishop.maxPos.x - bishop.hitRadius)
-	posOnNegativeDiagonal.y += posOnNegativeDiagonal.x - posOnNegativeDiagonalClampedX
-	posOnNegativeDiagonal.x = posOnNegativeDiagonalClampedX
-	var posOnNegativeDiagonalClampedY: int = clamp(posOnNegativeDiagonal.y, bishop.hitRadius, bishop.maxPos.y - bishop.hitRadius)
-	posOnNegativeDiagonal.x += posOnNegativeDiagonal.y - posOnNegativeDiagonalClampedY
-	posOnNegativeDiagonal.y = posOnNegativeDiagonalClampedY		
+	return BishopMovePoints.new(positiveDiagonalLowerBound, positiveDiagonalUpperBound, negativeDiagonalLowerBound, negativeDiagonalUpperBound)
+
+static func closestPosBishopCanMoveTo(bishop: Piece, pieces: Array[Piece], tryMovePos: Vector2i, movePoints: BishopMovePoints = null) -> Vector2i:
+	if movePoints == null:
+		movePoints = calculateBishopMovePoints(bishop, pieces)
+	var posOnPositiveDiagonal = Geometry.diagonalLinesIntersection(bishop.pos, tryMovePos, true, true)
+	if posOnPositiveDiagonal.x < movePoints.positiveDiagonalLowerBound.x:
+		posOnPositiveDiagonal = movePoints.positiveDiagonalLowerBound
+	if posOnPositiveDiagonal.x > movePoints.positiveDiagonalUpperBound.x:
+		posOnPositiveDiagonal = movePoints.positiveDiagonalUpperBound
+	
+	var posOnNegativeDiagonal = Geometry.diagonalLinesIntersection(tryMovePos, bishop.pos, false, true)
+	if posOnNegativeDiagonal.x < movePoints.negativeDiagonalLowerBound.x:
+		posOnNegativeDiagonal = movePoints.negativeDiagonalLowerBound
+	if posOnNegativeDiagonal.x > movePoints.negativeDiagonalUpperBound.x:
+		posOnNegativeDiagonal = movePoints.negativeDiagonalUpperBound
+	
 	return posOnPositiveDiagonal if (posOnPositiveDiagonal - tryMovePos).length_squared() < (posOnNegativeDiagonal - tryMovePos).length_squared() else posOnNegativeDiagonal
 
 class RookMovePoints extends PieceMovePoints:
@@ -415,40 +433,57 @@ class RookMovePoints extends PieceMovePoints:
 		horizontalLowerBound = horizontalLowerBound_
 		horizontalUpperBound = horizontalUpperBound_
 
-static func closestPosRookCanMoveTo(rook: Piece, pieces: Array[Piece], tryMovePos: Vector2i) -> Vector2i:
-	var posOnVertical: Vector2i = Vector2i(rook.pos.x, tryMovePos.y)
+static func calculateRookMovePoints(rook: Piece, pieces: Array[Piece]) -> RookMovePoints:
+	var verticalLowerBound: Vector2i = Vector2i(rook.pos.x, rook.hitRadius)
+	var verticalUpperBound: Vector2i = Vector2i(rook.pos.x, Piece.maxPos.y - rook.hitRadius)
 	for piece: Piece in pieces:
 		if piece.valueEquals(rook):
 			continue
 		
-		var intersections: Array[Vector2i] = Geometry.verticalLineCircleIntersections(posOnVertical.x, piece.pos, piece.hitRadius + rook.hitRadius)
+		var intersections: Array[Vector2i] = Geometry.verticalLineCircleIntersections(rook.pos.x, piece.pos, rook.hitRadius + piece.hitRadius, true)
 		if piece.color == rook.color:
 			for intersection: Vector2i in intersections:
-				if (intersection.y < posOnVertical.y and intersection.y > rook.pos.y) or (intersection.y > posOnVertical.y and intersection.y < rook.pos.y) or (intersection.y == rook.pos.y and sign(posOnVertical.y - intersection.y) == sign(piece.pos.y - intersection.y)):
-					posOnVertical.y = intersection.y
+				if intersection.y > verticalLowerBound.y and intersection.y <= rook.pos.y:
+					verticalLowerBound.y = intersection.y
+				if intersection.y < verticalUpperBound.y and intersection.y >= rook.pos.y:
+					verticalUpperBound.y = intersection.y
 		else:
 			if intersections.size() > 0:
-				if (piece.pos.y < posOnVertical.y and piece.pos.y > rook.pos.y) or (piece.pos.y > posOnVertical.y and piece.pos.y < rook.pos.y):
-					posOnVertical.y = piece.pos.y
-					
-	posOnVertical.y = clampi(posOnVertical.y, rook.hitRadius, rook.maxPos.y - rook.hitRadius)
+				if piece.pos.y > verticalLowerBound.y and piece.pos.y <= rook.pos.y:
+					verticalLowerBound.y = piece.pos.y
+				if piece.pos.y < verticalUpperBound.y and piece.pos.y >= rook.pos.y:
+					verticalUpperBound.y = piece.pos.y
+	
+	var horizontalLowerBound: Vector2i = Vector2i(rook.hitRadius, rook.pos.y)
+	var horizontalUpperBound: Vector2i = Vector2i(Piece.maxPos.x - rook.hitRadius, rook.pos.y)
+	for piece: Piece in pieces:
+		if piece.valueEquals(rook):
+			continue
+		
+		var intersections: Array[Vector2i] = Geometry.horizontalLineCircleIntersections(rook.pos.y, piece.pos, rook.hitRadius + piece.hitRadius, true)
+		if piece.color == rook.color:
+			for intersection: Vector2i in intersections:
+				if intersection.x > horizontalLowerBound.x and intersection.x <= rook.pos.x:
+					horizontalLowerBound.x = intersection.x
+				if intersection.x < horizontalUpperBound.x and intersection.x >= rook.pos.x:
+					horizontalUpperBound.x = intersection.x
+		else:
+			if intersections.size() > 0:
+				if piece.pos.x > horizontalLowerBound.x and piece.pos.x <= rook.pos.x:
+					horizontalLowerBound.x = piece.pos.x
+				if piece.pos.x < horizontalUpperBound.x and piece.pos.x >= rook.pos.x:
+					horizontalUpperBound.x = piece.pos.x
+	
+	return RookMovePoints.new(verticalLowerBound, verticalUpperBound, horizontalLowerBound, horizontalUpperBound)
+
+static func closestPosRookCanMoveTo(rook: Piece, pieces: Array[Piece], tryMovePos: Vector2i, movePoints: RookMovePoints = null) -> Vector2i:
+	if movePoints == null:
+		movePoints = calculateRookMovePoints(rook, pieces)
+	var posOnVertical: Vector2i = Vector2i(rook.pos.x, tryMovePos.y)
+	posOnVertical.y = clampi(posOnVertical.y, movePoints.verticalLowerBound.y, movePoints.verticalUpperBound.y)
 	
 	var posOnHorizontal: Vector2i = Vector2i(tryMovePos.x, rook.pos.y)
-	for piece: Piece in pieces:
-		if piece.valueEquals(rook):
-			continue
-		
-		var intersections: Array[Vector2i] = Geometry.horizontalLineCircleIntersections(posOnHorizontal.y, piece.pos, piece.hitRadius + rook.hitRadius)
-		if piece.color == rook.color:
-			for intersection: Vector2i in intersections:
-				if (intersection.x < posOnHorizontal.x and intersection.x > rook.pos.x) or (intersection.x > posOnHorizontal.x and intersection.x < rook.pos.x) or (intersection.x == rook.pos.x and sign(posOnHorizontal.x - intersection.x) == sign(piece.pos.x - intersection.x)):
-					posOnHorizontal.x = intersection.x
-		else:
-			if intersections.size() > 0:
-				if (piece.pos.x < posOnHorizontal.x and piece.pos.x > rook.pos.x) or (piece.pos.x > posOnHorizontal.x and piece.pos.x < rook.pos.x):
-					posOnHorizontal.x = piece.pos.x
-					
-	posOnHorizontal.x = clampi(posOnHorizontal.x, rook.hitRadius, rook.maxPos.x - rook.hitRadius)
+	posOnHorizontal.x = clampi(posOnHorizontal.x, movePoints.horizontalLowerBound.x, movePoints.horizontalUpperBound.x)
 	
 	return posOnVertical if (posOnVertical - tryMovePos).length_squared() < (posOnHorizontal - tryMovePos).length_squared() else posOnHorizontal
 
@@ -472,10 +507,47 @@ class QueenMovePoints extends PieceMovePoints:
 		horizontalLowerBound = horizontalLowerBound_
 		horizontalUpperBound = horizontalUpperBound_
 
-static func closestPosQueenCanMoveTo(queen: Piece, pieces: Array[Piece], tryMovePos: Vector2i) -> Vector2i:
-	var rookPos: Vector2i = closestPosRookCanMoveTo(queen, pieces, tryMovePos)
-	var bishopPos: Vector2i = closestPosBishopCanMoveTo(queen, pieces, tryMovePos)
-	return bishopPos if (bishopPos - tryMovePos).length_squared() < (rookPos - tryMovePos).length_squared() else rookPos
+static func calculateQueenMovePoints(queen: Piece, pieces: Array[Piece]):
+	var bishopPoints: BishopMovePoints = calculateBishopMovePoints(queen, pieces)
+	var rookPoints: RookMovePoints = calculateRookMovePoints(queen, pieces)
+	return QueenMovePoints.new(bishopPoints.positiveDiagonalLowerBound, bishopPoints.positiveDiagonalUpperBound, 
+							   bishopPoints.negativeDiagonalLowerBound, bishopPoints.negativeDiagonalUpperBound,
+							   rookPoints.verticalLowerBound, rookPoints.verticalUpperBound,
+							   rookPoints.horizontalLowerBound, rookPoints.horizontalUpperBound)
+
+static func closestPosQueenCanMoveTo(queen: Piece, pieces: Array[Piece], tryMovePos: Vector2i, movePoints: QueenMovePoints = null) -> Vector2i:
+	if movePoints == null:
+		movePoints = calculateQueenMovePoints(queen, pieces)
+	var posOnPositiveDiagonal = Geometry.diagonalLinesIntersection(queen.pos, tryMovePos, true, true)
+	if posOnPositiveDiagonal.x < movePoints.positiveDiagonalLowerBound.x:
+		posOnPositiveDiagonal = movePoints.positiveDiagonalLowerBound
+	if posOnPositiveDiagonal.x > movePoints.positiveDiagonalUpperBound.x:
+		posOnPositiveDiagonal = movePoints.positiveDiagonalUpperBound
+	
+	var posOnNegativeDiagonal = Geometry.diagonalLinesIntersection(tryMovePos, queen.pos, false, true)
+	if posOnNegativeDiagonal.x < movePoints.negativeDiagonalLowerBound.x:
+		posOnNegativeDiagonal = movePoints.negativeDiagonalLowerBound
+	if posOnNegativeDiagonal.x > movePoints.negativeDiagonalUpperBound.x:
+		posOnNegativeDiagonal = movePoints.negativeDiagonalUpperBound
+	
+	var posOnVertical: Vector2i = Vector2i(queen.pos.x, tryMovePos.y)
+	posOnVertical.y = clampi(posOnVertical.y, movePoints.verticalLowerBound.y, movePoints.verticalUpperBound.y)
+	
+	var posOnHorizontal: Vector2i = Vector2i(tryMovePos.x, queen.pos.y)
+	posOnHorizontal.x = clampi(posOnHorizontal.x, movePoints.horizontalLowerBound.x, movePoints.horizontalUpperBound.x)
+	
+	var positiveDiagonalDistanceSquared: int = (posOnPositiveDiagonal - tryMovePos).length_squared()
+	var negativeDiagonalDistanceSquared: int = (posOnNegativeDiagonal - tryMovePos).length_squared()
+	var verticalDistanceSquared: int = (posOnVertical - tryMovePos).length_squared()
+	var horizontalDistanceSquared: int = (posOnHorizontal - tryMovePos).length_squared()
+	var minDistanceSquared: int = mini(positiveDiagonalDistanceSquared, mini(negativeDiagonalDistanceSquared, mini(verticalDistanceSquared, horizontalDistanceSquared)))
+	if minDistanceSquared == positiveDiagonalDistanceSquared:
+		return posOnPositiveDiagonal
+	if minDistanceSquared == negativeDiagonalDistanceSquared:
+		return posOnNegativeDiagonal
+	if minDistanceSquared == verticalDistanceSquared:
+		return posOnVertical
+	return posOnHorizontal
 
 class KingMovePoints extends PieceMovePoints:
 	var positiveDiagonalLowerBound: Vector2i #positiveDiagonalLowerBound.x <= positiveDiagonalUpperBound.x
@@ -497,27 +569,62 @@ class KingMovePoints extends PieceMovePoints:
 		horizontalLowerBound = horizontalLowerBound_
 		horizontalUpperBound = horizontalUpperBound_
 
-static func closestPosKingCanMoveTo(king: Piece, pieces: Array[Piece], tryMovePos: Vector2i) -> Vector2i:
-	var rookPos: Vector2i = closestPosRookCanMoveTo(king, pieces, tryMovePos)
-	rookPos.x = clamp(rookPos.x, king.pos.x - (Piece.boardSize.x / 8), king.pos.x + (Piece.boardSize.x / 8))
-	rookPos.y = clamp(rookPos.y, king.pos.y - (Piece.boardSize.y / 8), king.pos.y + (Piece.boardSize.y / 8))
-	var bishopPos: Vector2i = closestPosBishopCanMoveTo(king, pieces, tryMovePos)
-	var bishopDiff: Vector2i = bishopPos - king.pos
-	if bishopDiff.x == bishopDiff.y:
-		var posOnPositiveDiagonalClampedX: int = clamp(bishopPos.x, king.pos.x - (Piece.boardSize.x / 8), king.pos.x + (Piece.boardSize.x / 8))
-		bishopPos.y -= bishopPos.x - posOnPositiveDiagonalClampedX
-		bishopPos.x = posOnPositiveDiagonalClampedX
-		var posOnPositiveDiagonalClampedY: int = clamp(bishopPos.y, king.pos.y - (Piece.boardSize.y / 8), king.pos.y + (Piece.boardSize.y / 8))
-		bishopPos.x -= bishopPos.y - posOnPositiveDiagonalClampedY
-		bishopPos.y = posOnPositiveDiagonalClampedY
-	else:
-		var posOnNegativeDiagonalClampedX: int = clamp(bishopPos.x, king.pos.x - (Piece.boardSize.x / 8), king.pos.x + (Piece.boardSize.x / 8))
-		bishopPos.y += bishopPos.x - posOnNegativeDiagonalClampedX
-		bishopPos.x = posOnNegativeDiagonalClampedX
-		var posOnNegativeDiagonalClampedY: int = clamp(bishopPos.y, king.pos.y - (Piece.boardSize.y / 8), king.pos.y + (Piece.boardSize.y / 8))
-		bishopPos.x += bishopPos.y - posOnNegativeDiagonalClampedY
-		bishopPos.y = posOnNegativeDiagonalClampedY
-	return bishopPos if (bishopPos - tryMovePos).length_squared() < (rookPos - tryMovePos).length_squared() else rookPos
+static func calculateKingMovePoints(king: Piece, pieces: Array[Piece]) -> KingMovePoints:
+	var bishopPoints: BishopMovePoints = calculateBishopMovePoints(king, pieces)
+	var rookPoints: RookMovePoints = calculateRookMovePoints(king, pieces)
+	
+	var positiveDiagonalLowerBoundX: int = maxi(bishopPoints.positiveDiagonalLowerBound.x, king.pos.x - (king.boardSize.x / 8))
+	bishopPoints.positiveDiagonalLowerBound = Vector2i(positiveDiagonalLowerBoundX, king.pos.y - king.pos.x + positiveDiagonalLowerBoundX)
+	var positiveDiagonalUpperBoundX: int = mini(bishopPoints.positiveDiagonalUpperBound.x, king.pos.x + (king.boardSize.x / 8))
+	bishopPoints.positiveDiagonalUpperBound = Vector2i(positiveDiagonalUpperBoundX, king.pos.y - king.pos.x + positiveDiagonalUpperBoundX)
+	var negativeDiagonalLowerBoundX: int = maxi(bishopPoints.negativeDiagonalLowerBound.x, king.pos.x - (king.boardSize.x / 8))
+	bishopPoints.negativeDiagonalLowerBound = Vector2i(negativeDiagonalLowerBoundX, king.pos.y - negativeDiagonalLowerBoundX + king.pos.x)
+	var negativeDiagonalUpperBoundX: int = mini(bishopPoints.negativeDiagonalUpperBound.x, king.pos.x + (king.boardSize.x / 8))
+	bishopPoints.negativeDiagonalUpperBound = Vector2i(negativeDiagonalUpperBoundX, king.pos.y - negativeDiagonalUpperBoundX + king.pos.x)
+	
+	rookPoints.verticalLowerBound.y = maxi(rookPoints.verticalLowerBound.y, king.pos.y - (king.boardSize.y / 8))
+	rookPoints.verticalUpperBound.y = maxi(rookPoints.verticalUpperBound.y, king.pos.y + (king.boardSize.y / 8))
+	rookPoints.horizontalLowerBound.x = maxi(rookPoints.horizontalLowerBound.x, king.pos.x - (king.boardSize.x / 8))
+	rookPoints.horizontalUpperBound.x = maxi(rookPoints.horizontalUpperBound.x, king.pos.x + (king.boardSize.x / 8))
+	
+	return KingMovePoints.new(bishopPoints.positiveDiagonalLowerBound, bishopPoints.positiveDiagonalUpperBound, 
+							  bishopPoints.negativeDiagonalLowerBound, bishopPoints.negativeDiagonalUpperBound,
+							  rookPoints.verticalLowerBound, rookPoints.verticalUpperBound,
+							  rookPoints.horizontalLowerBound, rookPoints.horizontalUpperBound)
+
+static func closestPosKingCanMoveTo(king: Piece, pieces: Array[Piece], tryMovePos: Vector2i, movePoints: KingMovePoints = null) -> Vector2i:
+	if movePoints == null:
+		movePoints = calculateKingMovePoints(king, pieces)
+	var posOnPositiveDiagonal = Geometry.diagonalLinesIntersection(king.pos, tryMovePos, true, true)
+	if posOnPositiveDiagonal.x < movePoints.positiveDiagonalLowerBound.x:
+		posOnPositiveDiagonal = movePoints.positiveDiagonalLowerBound
+	if posOnPositiveDiagonal.x > movePoints.positiveDiagonalUpperBound.x:
+		posOnPositiveDiagonal = movePoints.positiveDiagonalUpperBound
+	
+	var posOnNegativeDiagonal = Geometry.diagonalLinesIntersection(tryMovePos, king.pos, false, true)
+	if posOnNegativeDiagonal.x < movePoints.negativeDiagonalLowerBound.x:
+		posOnNegativeDiagonal = movePoints.negativeDiagonalLowerBound
+	if posOnNegativeDiagonal.x > movePoints.negativeDiagonalUpperBound.x:
+		posOnNegativeDiagonal = movePoints.negativeDiagonalUpperBound
+	
+	var posOnVertical: Vector2i = Vector2i(king.pos.x, tryMovePos.y)
+	posOnVertical.y = clampi(posOnVertical.y, movePoints.verticalLowerBound.y, movePoints.verticalUpperBound.y)
+	
+	var posOnHorizontal: Vector2i = Vector2i(tryMovePos.x, king.pos.y)
+	posOnHorizontal.x = clampi(posOnHorizontal.x, movePoints.horizontalLowerBound.x, movePoints.horizontalUpperBound.x)
+	
+	var positiveDiagonalDistanceSquared: int = (posOnPositiveDiagonal - tryMovePos).length_squared()
+	var negativeDiagonalDistanceSquared: int = (posOnNegativeDiagonal - tryMovePos).length_squared()
+	var verticalDistanceSquared: int = (posOnVertical - tryMovePos).length_squared()
+	var horizontalDistanceSquared: int = (posOnHorizontal - tryMovePos).length_squared()
+	var minDistanceSquared: int = mini(positiveDiagonalDistanceSquared, mini(negativeDiagonalDistanceSquared, mini(verticalDistanceSquared, horizontalDistanceSquared)))
+	if minDistanceSquared == positiveDiagonalDistanceSquared:
+		return posOnPositiveDiagonal
+	if minDistanceSquared == negativeDiagonalDistanceSquared:
+		return posOnNegativeDiagonal
+	if minDistanceSquared == verticalDistanceSquared:
+		return posOnVertical
+	return posOnHorizontal
 
 static func closestPosCanMoveTo(piece: Piece, pieces: Array[Piece], tryMovePos: Vector2i) -> Vector2i:
 	match piece.type:

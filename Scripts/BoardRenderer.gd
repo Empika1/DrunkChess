@@ -13,6 +13,9 @@ var pieceScene: PackedScene = preload("res://Prefabs/DraggablePiece.tscn")
 var usedPiecePool: Dictionary
 var freePiecePool: Dictionary
 func _ready() -> void:
+	var inter = Geometry.diagonalLinesIntersection(Vector2i(4096, 36864), Vector2i(-5992, 26775), true, true)
+	print(inter)
+	
 	usedPiecePool[Piece.PieceColor.WHITE] = Dictionary()
 	usedPiecePool[Piece.PieceColor.BLACK] = Dictionary()
 	freePiecePool[Piece.PieceColor.WHITE] = Dictionary()

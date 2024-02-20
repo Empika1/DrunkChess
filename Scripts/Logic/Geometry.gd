@@ -91,7 +91,7 @@ static func diagonalLinesIntersection(pointOnPositiveSlopeLine: Vector2i, pointO
 	var intersectionx2: Vector2i = Vector2i(pointOnPositiveSlopeLine.x - pointOnPositiveSlopeLine.y + pointOnNegativeSlopeLine.x + pointOnNegativeSlopeLine.y,
 											pointOnPositiveSlopeLine.y - pointOnPositiveSlopeLine.x + pointOnNegativeSlopeLine.x + pointOnNegativeSlopeLine.y)
 	
-	if intersectionx2.x % 2 == 1:
+	if intersectionx2.x % 2 != 0:
 		if roundToPositiveSlopeLine:
 			if (pointOnPositiveSlopeLine.x * 2 < intersectionx2.x) == towardsPoint:
 				intersectionx2.x -= 1
