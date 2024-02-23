@@ -35,21 +35,21 @@ height = 1
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_p5r2d"]
 shader = ExtResource("17_8yfak")
-shader_parameter/circleCenters = PackedVector2Array()
-shader_parameter/circleRadii = PackedFloat32Array()
-shader_parameter/circleColorsrg = PackedVector2Array()
-shader_parameter/circleColorsba = PackedVector2Array()
+shader_parameter/circleCenters = PackedVector2Array(0.614, 0.741, 0.536, 0.897)
+shader_parameter/circleRadii = PackedFloat32Array(0.03, 0.03)
+shader_parameter/circleColorsrg = PackedVector2Array(0, 1, 0, 1)
+shader_parameter/circleColorsba = PackedVector2Array(0, 1, 0, 1)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_w8c2w"]
 shader = ExtResource("18_143pt")
-shader_parameter/circleCenters = PackedVector2Array()
-shader_parameter/circleRadii = PackedFloat32Array()
+shader_parameter/circleCenters = PackedVector2Array(0.813, 0.938)
+shader_parameter/circleRadii = PackedFloat32Array(0.294)
 shader_parameter/circleThicknesses = PackedFloat32Array(0.05)
-shader_parameter/circleColorsrg = PackedVector2Array()
-shader_parameter/circleColorsba = PackedVector2Array()
-shader_parameter/arcEndIndices = PackedInt32Array()
-shader_parameter/arcStarts = PackedVector2Array()
-shader_parameter/arcEnds = PackedVector2Array()
+shader_parameter/circleColorsrg = PackedVector2Array(0, 0)
+shader_parameter/circleColorsba = PackedVector2Array(0, 1)
+shader_parameter/arcEndIndices = PackedInt32Array(1)
+shader_parameter/arcStarts = PackedVector2Array(0.536, 0.897)
+shader_parameter/arcEnds = PackedVector2Array(0.614, 0.741)
 
 [node name="BoardRenderer" type="Sprite2D" node_paths=PackedStringArray("pieceHolder", "lines", "circles", "circleArcs")]
 position = Vector2(230, 104)
@@ -74,7 +74,7 @@ br = ExtResource("12_c24eo")
 bq = ExtResource("13_2xtgc")
 bk = ExtResource("14_v70io")
 hitRadiusColor = Color(0, 0, 0, 0.501961)
-thickness = 0.005
+thickness = 0.03
 
 [node name="Lines" type="Sprite2D" parent="."]
 z_index = 1

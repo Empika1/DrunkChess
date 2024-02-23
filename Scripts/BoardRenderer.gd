@@ -12,10 +12,7 @@ const shadowRealm: Vector2 = Vector2(9999999, 9999999)
 var pieceScene: PackedScene = preload("res://Prefabs/DraggablePiece.tscn")
 var usedPiecePool: Dictionary
 var freePiecePool: Dictionary
-func _ready() -> void:
-	var inter = Geometry.diagonalLinesIntersection(Vector2i(4096, 36864), Vector2i(-5992, 26775), true, true)
-	print(inter)
-	
+func _ready() -> void:	
 	usedPiecePool[Piece.PieceColor.WHITE] = Dictionary()
 	usedPiecePool[Piece.PieceColor.BLACK] = Dictionary()
 	freePiecePool[Piece.PieceColor.WHITE] = Dictionary()
@@ -153,7 +150,7 @@ func render() -> void:
 			addKnightArcs(states[-1])
 	else:
 		removeHitRadii()
-		#removeKnightArcs()
+		removeKnightArcs()
 	
 	for col in [Piece.PieceColor.BLACK, Piece.PieceColor.WHITE]:
 		for key in freePiecePool[col]:
@@ -190,20 +187,16 @@ func removeHitRadii() -> void:
 @export var thickness: float
 func addKnightArcs(stateToRender: BoardState) -> void:	
 	var center: Vector2 = Vector2(pieceDraggingPreviousState.pos) / Vector2(Piece.maxPos)
-	print("c ", center)
 	var radius: float = float(pieceDraggingPreviousState.knightMoveRadius) / float(Piece.maxPos.x) + thickness / 2.
 	var colorrg: Vector2 = Vector2(hitRadiusColor.r, hitRadiusColor.g)
 	var colorba: Vector2 = Vector2(hitRadiusColor.b, hitRadiusColor.a)
 	
 	var knightPoints: PieceLogic.KnightMovePoints = PieceLogic.calculateKnightMovePoints(pieceDraggingPreviousState, stateToRender.pieces)
 	var arcEndIndex: int = knightPoints.arcEnds.size()
-	print(arcEndIndex)
 	var arcStarts: PackedVector2Array = PackedVector2Array()
 	var arcEnds: PackedVector2Array = PackedVector2Array()
 	for i in range(knightPoints.arcStarts.size()):
-		print("as ", Vector2(knightPoints.arcStarts[i]) / Vector2(Piece.boardSize))
 		arcStarts.append(Vector2(knightPoints.arcStarts[i]) / Vector2(Piece.boardSize))
-		print("ae ", Vector2(knightPoints.arcEnds[i]) / Vector2(Piece.boardSize))
 		arcEnds.append(Vector2(knightPoints.arcEnds[i]) / Vector2(Piece.boardSize))
 	
 	var mat: ShaderMaterial = circleArcs.material as ShaderMaterial
@@ -213,14 +206,10 @@ func addKnightArcs(stateToRender: BoardState) -> void:
 	mat.set_shader_parameter("circleColorsrg", PackedVector2Array([colorrg]))
 	mat.set_shader_parameter("circleColorsba", PackedVector2Array([colorba]))
 	
-	#mat.set_shader_parameter("arcEndIndices", PackedInt32Array([arcEndIndex]))
-	
-	#mat.set_shader_parameter("arcStarts", arcStarts)
-	#mat.set_shader_parameter("arcEnds", arcEnds)
-	
 	mat.set_shader_parameter("arcEndIndices", PackedInt32Array([arcEndIndex]))
-	mat.set_shader_parameter("arcStarts", PackedVector2Array([Vector2(0.54689, 0.85051), Vector2(0.614044, 0.740707)]))
-	mat.set_shader_parameter("arcEnds", PackedVector2Array([Vector2(0.54689, 1.02449), Vector2(0.535965, 0.896805)]))
+	
+	mat.set_shader_parameter("arcStarts", arcStarts)
+	mat.set_shader_parameter("arcEnds", arcEnds)
 
 func removeKnightArcs() -> void:
 	var mat: ShaderMaterial = circleArcs.material as ShaderMaterial

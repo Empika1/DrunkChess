@@ -42,25 +42,21 @@ shader_parameter/circleColorsba = PackedVector2Array()
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_w8c2w"]
 shader = ExtResource("18_143pt")
-shader_parameter/circleCenters = PackedVector2Array()
-shader_parameter/circleRadii = PackedFloat32Array()
+shader_parameter/circleCenters = PackedVector2Array(0.45, 0.5)
+shader_parameter/circleRadii = PackedFloat32Array(0.3)
 shader_parameter/circleThicknesses = PackedFloat32Array(0.05)
-shader_parameter/circleColorsrg = PackedVector2Array()
-shader_parameter/circleColorsba = PackedVector2Array()
-shader_parameter/arcEndIndices = PackedInt32Array()
-shader_parameter/arcStarts = PackedVector2Array()
-shader_parameter/arcEnds = PackedVector2Array()
+shader_parameter/circleColorsrg = PackedVector2Array(0, 0)
+shader_parameter/circleColorsba = PackedVector2Array(0, 1)
+shader_parameter/arcEndIndices = PackedInt32Array(1)
+shader_parameter/arcStarts = PackedVector2Array(0, 0)
+shader_parameter/arcEnds = PackedVector2Array(1, 1)
 
-[node name="BoardRenderer" type="Sprite2D" node_paths=PackedStringArray("pieceHolder", "lines", "circles", "circleArcs")]
+[node name="BoardRenderer" type="Sprite2D"]
 position = Vector2(230, 104)
 scale = Vector2(0.394167, 0.394167)
 texture = ExtResource("1_qfrm1")
 centered = false
 script = ExtResource("2_snayh")
-pieceHolder = NodePath("PieceHolder")
-lines = NodePath("Lines")
-circles = NodePath("Circles")
-circleArcs = NodePath("CircleArcs")
 wp = ExtResource("3_tc1df")
 wn = ExtResource("4_nd67d")
 wb = ExtResource("5_gmvi3")
@@ -74,7 +70,15 @@ br = ExtResource("12_c24eo")
 bq = ExtResource("13_2xtgc")
 bk = ExtResource("14_v70io")
 hitRadiusColor = Color(0, 0, 0, 0.501961)
-thickness = 0.005
+thickness = 0.03
+pieceHolder = Object(Node2D,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"editor_description":"","visible":true,"modulate":Color(1, 1, 1, 1),"self_modulate":Color(1, 1, 1, 1),"show_behind_parent":false,"top_level":false,"clip_children":0,"light_mask":1,"visibility_layer":1,"z_index":2,"z_as_relative":true,"y_sort_enabled":false,"texture_filter":0,"texture_repeat":0,"material":null,"use_parent_material":false,"position":Vector2(230, 104),"rotation":0.0,"scale":Vector2(0.771617, 0.771617),"skew":0.0,"script":null)
+
+lines = Object(Sprite2D,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"editor_description":"","visible":true,"modulate":Color(1, 1, 1, 1),"self_modulate":Color(1, 1, 1, 1),"show_behind_parent":false,"top_level":false,"clip_children":0,"light_mask":1,"visibility_layer":1,"z_index":1,"z_as_relative":true,"y_sort_enabled":false,"texture_filter":0,"texture_repeat":0,"material":SubResource("ShaderMaterial_onulv"),"use_parent_material":false,"position":Vector2(0, 0),"rotation":0.0,"scale":Vector2(1200, 1200),"skew":0.0,"texture":SubResource("GradientTexture2D_mwyaw"),"centered":false,"offset":Vector2(0, 0),"flip_h":false,"flip_v":false,"hframes":1,"vframes":1,"frame":0,"region_enabled":false,"region_rect":Rect2(0, 0, 0, 0),"region_filter_clip_enabled":false,"script":null)
+
+circles = Object(Sprite2D,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"editor_description":"","visible":true,"modulate":Color(1, 1, 1, 1),"self_modulate":Color(1, 1, 1, 1),"show_behind_parent":false,"top_level":false,"clip_children":0,"light_mask":1,"visibility_layer":1,"z_index":1,"z_as_relative":true,"y_sort_enabled":false,"texture_filter":0,"texture_repeat":0,"material":SubResource("ShaderMaterial_p5r2d"),"use_parent_material":false,"position":Vector2(0, 0),"rotation":0.0,"scale":Vector2(1200, 1200),"skew":0.0,"texture":SubResource("GradientTexture2D_mwyaw"),"centered":false,"offset":Vector2(0, 0),"flip_h":false,"flip_v":false,"hframes":1,"vframes":1,"frame":0,"region_enabled":false,"region_rect":Rect2(0, 0, 0, 0),"region_filter_clip_enabled":false,"script":null)
+
+circleArcs = Object(Sprite2D,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"editor_description":"","visible":true,"modulate":Color(1, 1, 1, 1),"self_modulate":Color(1, 1, 1, 1),"show_behind_parent":false,"top_level":false,"clip_children":0,"light_mask":1,"visibility_layer":1,"z_index":1,"z_as_relative":true,"y_sort_enabled":false,"texture_filter":0,"texture_repeat":0,"material":SubResource("ShaderMaterial_w8c2w"),"use_parent_material":false,"position":Vector2(0, 0),"rotation":0.0,"scale":Vector2(1200, 1200),"skew":0.0,"texture":SubResource("GradientTexture2D_mwyaw"),"centered":false,"offset":Vector2(0, 0),"flip_h":false,"flip_v":false,"hframes":1,"vframes":1,"frame":0,"region_enabled":false,"region_rect":Rect2(0, 0, 0, 0),"region_filter_clip_enabled":false,"script":null)
+
 
 [node name="Lines" type="Sprite2D" parent="."]
 z_index = 1

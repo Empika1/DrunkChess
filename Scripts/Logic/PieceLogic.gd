@@ -292,27 +292,71 @@ static func calculateKnightMovePoints(knight: Piece, pieces: Array[Piece]) -> Kn
 			var i1: Vector2i = intersections[0] - knight.pos
 			var i2: Vector2i = intersections[1] - knight.pos
 			if i1.x * i2.y > i2.x * i1.y: #i1 is counterclockwise from i2
-				arcStarts.append(intersections[1])
-				arcEnds.append(intersections[0])
-			else:
 				arcStarts.append(intersections[0])
 				arcEnds.append(intersections[1])
+			else:
+				arcStarts.append(intersections[1])
+				arcEnds.append(intersections[0])
 		
-	#var topIntersections: Array[Vector2i] = Geometry.horizontalLineCircleIntersections(knight.hitRadius, knight.pos, Piece.knightMoveRadius, true)
-	#var topIntersectionsSnapped: Array[Vector2i] = []
-	#for intersection: Vector2i in topIntersections:
-		#topIntersectionsSnapped.append(Geometry.spiralizePoint(intersection, func(pos): return Geometry.isOnCircle(knight.pos, Piece.knightMoveRadius, pos) and pos.y >= knight.hitRadius))
-	#if topIntersections[0].x > topIntersections[1].x:
-		#arcStarts.append(topIntersections[0])
-		#arcEnds.append(topIntersections[1])
-	#else:
-		#arcStarts.append(topIntersections[1])
-		#arcEnds.append(topIntersections[0])
-	#
-	#var bottomIntersections: Array[Vector2i] = Geometry.horizontalLineCircleIntersections(knight.maxPos.y - knight.hitRadius, knight.pos, Piece.knightMoveRadius, true)
-	#var bottomIntersectionsSnapped: Array[Vector2i] = []
-	#for intersection: Vector2i in bottomIntersections:
-		#bottomIntersectionsSnapped.append(Geometry.spiralizePoint(intersection, func(pos): return Geometry.isOnCircle(knight.pos, Piece.knightMoveRadius, pos) and pos.y <= knight.maxPos.y - knight.hitRadius))
+	var topIntersections: Array[Vector2i] = Geometry.horizontalLineCircleIntersections(knight.hitRadius, knight.pos, Piece.knightMoveRadius, true)
+	var topIntersectionsSnapped: Array[Vector2i] = []
+	for intersection: Vector2i in topIntersections:
+		topIntersectionsSnapped.append(Geometry.spiralizePoint(intersection, func(pos): return Geometry.isOnCircle(knight.pos, Piece.knightMoveRadius, pos) and pos.y >= knight.hitRadius))
+	if topIntersectionsSnapped.size() == 1:
+		arcStarts.append(topIntersectionsSnapped[0])
+		arcEnds.append(topIntersectionsSnapped[0])
+	elif topIntersectionsSnapped.size() == 2:
+		if topIntersectionsSnapped[0].x > topIntersectionsSnapped[1].x:
+			arcStarts.append(topIntersectionsSnapped[1])
+			arcEnds.append(topIntersectionsSnapped[0])
+		else:
+			arcStarts.append(topIntersectionsSnapped[0])
+			arcEnds.append(topIntersectionsSnapped[1])
+	
+	var bottomIntersections: Array[Vector2i] = Geometry.horizontalLineCircleIntersections(knight.maxPos.y - knight.hitRadius, knight.pos, Piece.knightMoveRadius, true)
+	var bottomIntersectionsSnapped: Array[Vector2i] = []
+	for intersection: Vector2i in bottomIntersections:
+		bottomIntersectionsSnapped.append(Geometry.spiralizePoint(intersection, func(pos): return Geometry.isOnCircle(knight.pos, Piece.knightMoveRadius, pos) and pos.y <= knight.maxPos.y - knight.hitRadius))
+	if bottomIntersectionsSnapped.size() == 1:
+		arcStarts.append(bottomIntersectionsSnapped[0])
+		arcEnds.append(bottomIntersectionsSnapped[0])
+	elif bottomIntersectionsSnapped.size() == 2:
+		if bottomIntersectionsSnapped[0].x < bottomIntersectionsSnapped[1].x:
+			arcStarts.append(bottomIntersectionsSnapped[1])
+			arcEnds.append(bottomIntersectionsSnapped[0])
+		else:
+			arcStarts.append(bottomIntersectionsSnapped[0])
+			arcEnds.append(bottomIntersectionsSnapped[1])
+			
+	var leftIntersections: Array[Vector2i] = Geometry.verticalLineCircleIntersections(knight.hitRadius, knight.pos, Piece.knightMoveRadius, true)
+	var leftIntersectionsSnapped: Array[Vector2i] = []
+	for intersection: Vector2i in leftIntersections:
+		leftIntersectionsSnapped.append(Geometry.spiralizePoint(intersection, func(pos): return Geometry.isOnCircle(knight.pos, Piece.knightMoveRadius, pos) and pos.x >= knight.hitRadius))
+	if leftIntersectionsSnapped.size() == 1:
+		arcStarts.append(leftIntersectionsSnapped[0])
+		arcEnds.append(leftIntersectionsSnapped[0])
+	elif leftIntersectionsSnapped.size() == 2:
+		if leftIntersectionsSnapped[0].y < leftIntersectionsSnapped[1].y:
+			arcStarts.append(leftIntersectionsSnapped[1])
+			arcEnds.append(leftIntersectionsSnapped[0])
+		else:
+			arcStarts.append(leftIntersectionsSnapped[0])
+			arcEnds.append(leftIntersectionsSnapped[1])
+	
+	var rightIntersections: Array[Vector2i] = Geometry.verticalLineCircleIntersections(knight.maxPos.x - knight.hitRadius, knight.pos, Piece.knightMoveRadius, true)
+	var rightIntersectionsSnapped: Array[Vector2i] = []
+	for intersection: Vector2i in rightIntersections:
+		rightIntersectionsSnapped.append(Geometry.spiralizePoint(intersection, func(pos): return Geometry.isOnCircle(knight.pos, Piece.knightMoveRadius, pos) and pos.x <= knight.maxPos.x - knight.hitRadius))
+	if rightIntersectionsSnapped.size() == 1:
+		arcStarts.append(rightIntersectionsSnapped[0])
+		arcEnds.append(rightIntersectionsSnapped[0])
+	elif rightIntersectionsSnapped.size() == 2:
+		if rightIntersectionsSnapped[0].y > rightIntersectionsSnapped[1].y:
+			arcStarts.append(rightIntersectionsSnapped[1])
+			arcEnds.append(rightIntersectionsSnapped[0])
+		else:
+			arcStarts.append(rightIntersectionsSnapped[0])
+			arcEnds.append(rightIntersectionsSnapped[1])
 	
 	return KnightMovePoints.new(arcStarts, arcEnds)
 
