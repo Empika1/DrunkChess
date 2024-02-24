@@ -22,27 +22,32 @@ void fragment() {
 			break;
 		vec2 a = lineStarts[i];
 		vec2 b = lineEnds[i];
-		vec2 c = UV;
-		float t = lineThicknesses[i];
-		
-		float val = (a.x-c.x) * (a.x-b.x) + (a.y-c.y) * (a.y-b.y);
-		float v1 = l2(a-b) * l2(a-c);
-		float v2 = t*t * l2(a-b) + pow((a.x-c.x)*(a.x-b.x) + (a.y-c.y)*(a.y-b.y), 2);
-		float v3 = (t+blur)*(t+blur) * l2(a-b) + pow((a.x-c.x)*(a.x-b.x) + (a.y-c.y)*(a.y-b.y), 2);
-		if(v1 <= v2) {
-			col.a *= 1.;
-		}
-		else if(v1 <= v3) {
-			col.a *= 1. - (v1 - v2) / (v3 - v2);
+		if(a == b) {
+			col *= 0.;
 		}
 		else {
-			col.a *= 0.;
-		}
-		if(0. <= val && val <= l2(a-b)) {
-			col.a *= 1.;
-		}
-		else {
-			col.a *= 0.;
+			vec2 c = UV;
+			float t = lineThicknesses[i];
+			
+			float val = (a.x-c.x) * (a.x-b.x) + (a.y-c.y) * (a.y-b.y);
+			float v1 = l2(a-b) * l2(a-c);
+			float v2 = t*t * l2(a-b) + pow((a.x-c.x)*(a.x-b.x) + (a.y-c.y)*(a.y-b.y), 2);
+			float v3 = (t+blur)*(t+blur) * l2(a-b) + pow((a.x-c.x)*(a.x-b.x) + (a.y-c.y)*(a.y-b.y), 2);
+			if(v1 <= v2) {
+				col.a *= 1.;
+			}
+			else if(v1 <= v3) {
+				col.a *= 1. - (v1 - v2) / (v3 - v2);
+			}
+			else {
+				col.a *= 0.;
+			}
+			if(0. <= val && val <= l2(a-b)) {
+				col.a *= 1.;
+			}
+			else {
+				col.a *= 0.;
+			}
 		}
 		vec4 linearColor = pow(COLOR, vec4(2.3));
 		vec4 linearCol = pow(col, vec4(2.3));

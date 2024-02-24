@@ -29,9 +29,9 @@ void fragment() {
 		vec4 col = vec4(circleColorsrg[i].xy, circleColorsba[i].xy);
 		if(col.a == 0.)
 			break;
-		float outerRadiusSquared = circleRadii[i] * circleRadii[i];
+		float outerRadiusSquared = (circleRadii[i] + circleThicknesses[i]) * (circleRadii[i] + circleThicknesses[i]);
 		float innerRadiusSquared = (circleRadii[i] - circleThicknesses[i]) * (circleRadii[i] - circleThicknesses[i]);
-		float outerRadiusBlurSquared = (circleRadii[i] + blur) * (circleRadii[i] + blur);
+		float outerRadiusBlurSquared = (circleRadii[i] + circleThicknesses[i] + blur) * (circleRadii[i] + circleThicknesses[i] + blur);
 		float innerRadiusBlurSquared = (circleRadii[i] - circleThicknesses[i] - blur) * (circleRadii[i] - circleThicknesses[i] - blur);
 		vec2 center = circleCenters[i];
 		float distanceSquared = l2(UV - center);

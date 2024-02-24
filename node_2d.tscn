@@ -20,11 +20,11 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_onulv"]
 shader = ExtResource("16_w0tu0")
-shader_parameter/lineStarts = null
-shader_parameter/lineEnds = null
-shader_parameter/lineColorsrg = null
-shader_parameter/lineColorsba = null
-shader_parameter/lineThicknesses = null
+shader_parameter/lineStarts = PackedVector2Array()
+shader_parameter/lineEnds = PackedVector2Array()
+shader_parameter/lineColorsrg = PackedVector2Array()
+shader_parameter/lineColorsba = PackedVector2Array()
+shader_parameter/lineThicknesses = PackedFloat32Array()
 
 [sub_resource type="Gradient" id="Gradient_gbrg7"]
 
@@ -44,7 +44,7 @@ shader_parameter/circleColorsba = PackedVector2Array()
 shader = ExtResource("18_143pt")
 shader_parameter/circleCenters = PackedVector2Array()
 shader_parameter/circleRadii = PackedFloat32Array()
-shader_parameter/circleThicknesses = PackedFloat32Array(0.05)
+shader_parameter/circleThicknesses = PackedFloat32Array()
 shader_parameter/circleColorsrg = PackedVector2Array()
 shader_parameter/circleColorsba = PackedVector2Array()
 shader_parameter/arcEndIndices = PackedInt32Array()

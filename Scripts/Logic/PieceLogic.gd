@@ -275,8 +275,8 @@ class KnightMovePoints extends PieceMovePoints:
 		arcEnds = arcEnds_
 
 static func calculateKnightMovePoints(knight: Piece, pieces: Array[Piece]) -> KnightMovePoints:
-	var arcStarts: Array[Vector2i]
-	var arcEnds: Array[Vector2i]
+	var arcStarts: Array[Vector2i] = []
+	var arcEnds: Array[Vector2i] = []
 	
 	for piece: Piece in pieces:
 		if piece.valueEquals(knight):
@@ -360,45 +360,13 @@ static func calculateKnightMovePoints(knight: Piece, pieces: Array[Piece]) -> Kn
 	
 	return KnightMovePoints.new(arcStarts, arcEnds)
 
-static func closestPosKnightCanMoveTo(knight: Piece, pieces: Array[Piece], tryMovePos: Vector2i) -> Vector2i:
+static func closestPosKnightCanMoveTo(knight: Piece, pieces: Array[Piece], tryMovePos: Vector2i, movePoints: KnightMovePoints = null) -> Vector2i:
 	var scaledPos: Vector2 = Vector2(tryMovePos - knight.pos).normalized() * Piece.knightMoveRadius
 	var roundedScaledPos: Vector2i = Vector2i(roundi(scaledPos.x), roundi(scaledPos.y)) + knight.pos
 	var wantedPos: Vector2i = Geometry.spiralizePoint(roundedScaledPos, func(pos): return Geometry.isOnCircle(knight.pos, Piece.knightMoveRadius, pos))
 	
-	var interestingPoints: Array[Vector2i] = []
-	
-	for piece: Piece in pieces:
-		if piece.valueEquals(knight):
-			continue
-		if piece.color != knight.color:
-			continue
-		
-		var intersections: Array[Vector2i] = Geometry.circlesIntersectionInt(knight.pos, Piece.knightMoveRadius, piece.pos, knight.hitRadius + piece.hitRadius, false)
-		interestingPoints.append_array(intersections)
-	
-	var topIntersections: Array[Vector2i] = Geometry.horizontalLineCircleIntersections(knight.hitRadius, knight.pos, Piece.knightMoveRadius, true)
-	var topIntersectionsSnapped: Array[Vector2i] = []
-	for intersection: Vector2i in topIntersections:
-		topIntersectionsSnapped.append(Geometry.spiralizePoint(intersection, func(pos): return Geometry.isOnCircle(knight.pos, Piece.knightMoveRadius, pos) and pos.y >= knight.hitRadius))
-	interestingPoints.append_array(topIntersectionsSnapped)
-	
-	var bottomIntersections: Array[Vector2i] = Geometry.horizontalLineCircleIntersections(knight.maxPos.y - knight.hitRadius, knight.pos, Piece.knightMoveRadius, true)
-	var bottomIntersectionsSnapped: Array[Vector2i] = []
-	for intersection: Vector2i in bottomIntersections:
-		bottomIntersectionsSnapped.append(Geometry.spiralizePoint(intersection, func(pos): return Geometry.isOnCircle(knight.pos, Piece.knightMoveRadius, pos) and pos.y <= knight.maxPos.y - knight.hitRadius))
-	interestingPoints.append_array(bottomIntersectionsSnapped)
-		
-	var leftIntersections: Array[Vector2i] = Geometry.verticalLineCircleIntersections(knight.hitRadius, knight.pos, Piece.knightMoveRadius, true)
-	var leftIntersectionsSnapped: Array[Vector2i] = []
-	for intersection: Vector2i in leftIntersections:
-		leftIntersectionsSnapped.append(Geometry.spiralizePoint(intersection, func(pos): return Geometry.isOnCircle(knight.pos, Piece.knightMoveRadius, pos) and pos.x >= knight.hitRadius))
-	interestingPoints.append_array(leftIntersectionsSnapped)
-		
-	var rightIntersections: Array[Vector2i] = Geometry.verticalLineCircleIntersections(knight.maxPos.x - knight.hitRadius, knight.pos, Piece.knightMoveRadius, true)
-	var rightIntersectionsSnapped: Array[Vector2i] = []
-	for intersection: Vector2i in rightIntersections:
-		rightIntersectionsSnapped.append(Geometry.spiralizePoint(intersection, func(pos): return Geometry.isOnCircle(knight.pos, Piece.knightMoveRadius, pos) and pos.x <= knight.maxPos.x - knight.hitRadius))
-	interestingPoints.append_array(rightIntersectionsSnapped)
+	if movePoints == null:
+		movePoints = calculateKnightMovePoints(knight, pieces)
 
 	var isKnightMovable: Callable = func(pos: Vector2i):
 		if isPieceOutsideBoard(pos, knight.hitRadius, knight.maxPos):
@@ -419,7 +387,7 @@ static func closestPosKnightCanMoveTo(knight: Piece, pieces: Array[Piece], tryMo
 		return wantedPos
 	
 	var closestValidPos = null
-	for point in interestingPoints:
+	for point in movePoints.arcStarts + movePoints.arcEnds:
 		if closestValidPos != null and (tryMovePos - point).length_squared() >= (tryMovePos - closestValidPos).length_squared():
 			continue
 		if isKnightMovable.call(point):

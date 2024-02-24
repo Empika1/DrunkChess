@@ -103,7 +103,9 @@ var pieceDraggingPreviousState: Piece
 var pieceDraggingNextState: Piece
 var dragOffset: Vector2i
 var attemptedNextState: BoardState
+var stateToRender: BoardState
 func render() -> void:
+	deleteCircles(); deleteLines(); deleteArcs();
 	var mousePos: Vector2i = get_viewport().get_mouse_position()
 	if pieceDraggingPreviousState == null && Input.is_action_just_pressed("lmb"):
 		pieceDraggingPreviousState = getHoveredPiece(mousePos)
@@ -124,8 +126,7 @@ func render() -> void:
 			pieceDraggingPreviousState = null
 			pieceDraggingNextState = null
 			dragOffset = Vector2i.ZERO
-			
-	var stateToRender: BoardState
+
 	if attemptedNextState != null:
 		stateToRender = attemptedNextState
 	else:
@@ -146,80 +147,169 @@ func render() -> void:
 	
 	if pieceDraggingPreviousState != null:
 		addHitRadii(stateToRender.pieces)
-		if pieceDraggingPreviousState.type == Piece.PieceType.KNIGHT:
-			addKnightArcs(states[-1])
-	else:
-		removeHitRadii()
-		removeKnightArcs()
+		addMoveIndicators(states[-1])
 	
 	for col in [Piece.PieceColor.BLACK, Piece.PieceColor.WHITE]:
 		for key in freePiecePool[col]:
 			var arr: Array = freePiecePool[col][key]
 			for piece in arr:
 				piece.global_position = shadowRealm
+	
+	setCircles(); setLines(); setArcs();
+
+var lineStarts: PackedVector2Array
+var lineEnds: PackedVector2Array
+var lineColorsrg: PackedVector2Array
+var lineColorsba: PackedVector2Array
+var lineThicknesses: PackedFloat32Array
+func setLines() -> void:
+	var mat = lines.material as ShaderMaterial
+	mat.set_shader_parameter("lineStarts", lineStarts)
+	mat.set_shader_parameter("lineEnds", lineEnds)
+	mat.set_shader_parameter("lineColorsrg", lineColorsrg)
+	mat.set_shader_parameter("lineColorsba", lineColorsba)
+	mat.set_shader_parameter("lineThicknesses", lineThicknesses)
+func deleteLines() -> void:
+	lineStarts = PackedVector2Array(); lineEnds = PackedVector2Array(); lineColorsrg = PackedVector2Array()
+	lineColorsba = PackedVector2Array(); lineThicknesses = PackedFloat32Array()
+	setLines()
+
+var circleCenters: PackedVector2Array
+var circleRadii: PackedFloat32Array
+var circleColorsrg: PackedVector2Array
+var circleColorsba: PackedVector2Array
+func setCircles() -> void:
+	var mat = circles.material as ShaderMaterial
+	mat.set_shader_parameter("circleCenters", circleCenters)
+	mat.set_shader_parameter("circleRadii", circleRadii)
+	mat.set_shader_parameter("circleColorsrg", circleColorsrg)
+	mat.set_shader_parameter("circleColorsba", circleColorsba)
+func deleteCircles() -> void:
+	circleCenters = PackedVector2Array(); circleRadii = PackedFloat32Array()
+	circleColorsrg = PackedVector2Array(); circleColorsba = PackedVector2Array()
+	setCircles()
+
+var arcCenters: PackedVector2Array
+var arcRadii: PackedFloat32Array
+var arcThicknesses: PackedFloat32Array
+var arcColorsrg: PackedVector2Array
+var arcColorsba: PackedVector2Array
+var arcEndIndices: PackedInt32Array
+var arcStarts: PackedVector2Array
+var arcEnds: PackedVector2Array
+func setArcs() -> void:
+	var mat = circleArcs.material as ShaderMaterial
+	mat.set_shader_parameter("circleCenters", arcCenters)
+	mat.set_shader_parameter("circleRadii", arcRadii)
+	mat.set_shader_parameter("circleThicknesses", arcThicknesses)
+	mat.set_shader_parameter("circleColorsrg", arcColorsrg)
+	mat.set_shader_parameter("circleColorsba", arcColorsba)
+	mat.set_shader_parameter("arcEndIndices", arcEndIndices)
+	mat.set_shader_parameter("arcStarts", arcStarts)
+	mat.set_shader_parameter("arcEnds", arcEnds)
+func deleteArcs() -> void:
+	arcCenters = PackedVector2Array(); arcRadii = PackedFloat32Array(); arcThicknesses = PackedFloat32Array()
+	arcColorsrg = PackedVector2Array(); arcColorsba = PackedVector2Array(); arcEndIndices = PackedInt32Array()
+	arcStarts = PackedVector2Array(); arcEnds = PackedVector2Array()
+	setArcs()
 
 @export var hitRadiusColor: Color
 func addHitRadii(pieces: Array[Piece]) -> void:
-	var centers: PackedVector2Array = PackedVector2Array()
-	var radii: PackedFloat32Array = PackedFloat32Array()
-	var colorsrg: PackedVector2Array = PackedVector2Array()
-	var colorsba: PackedVector2Array = PackedVector2Array()
-	
 	for piece in pieces:
-		centers.append(Vector2(piece.pos) / Vector2(Piece.boardSize))
-		radii.append(float(piece.hitRadius) / float(Piece.boardSize.x))
-		colorsrg.append(Vector2(hitRadiusColor.r, hitRadiusColor.g))
-		colorsba.append(Vector2(hitRadiusColor.b, hitRadiusColor.a))
-	
-	var mat: ShaderMaterial = circles.material as ShaderMaterial
-	mat.set_shader_parameter("circleCenters", centers)
-	mat.set_shader_parameter("circleRadii", radii)
-	mat.set_shader_parameter("circleColorsrg", colorsrg)
-	mat.set_shader_parameter("circleColorsba", colorsba)
-
-func removeHitRadii() -> void:
-	var mat: ShaderMaterial = circles.material as ShaderMaterial
-	mat.set_shader_parameter("circleCenters", PackedVector2Array())
-	mat.set_shader_parameter("circleRadii", PackedFloat32Array())
-	mat.set_shader_parameter("circleColorsrg", PackedVector2Array())
-	mat.set_shader_parameter("circleColorsba", PackedVector2Array())
+		circleCenters.append(Vector2(piece.pos) / Vector2(Piece.boardSize))
+		circleRadii.append(float(piece.hitRadius) / float(Piece.boardSize.x))
+		circleColorsrg.append(Vector2(hitRadiusColor.r, hitRadiusColor.g))
+		circleColorsba.append(Vector2(hitRadiusColor.b, hitRadiusColor.a))
 
 @export var thickness: float
-func addKnightArcs(stateToRender: BoardState) -> void:	
-	var center: Vector2 = Vector2(pieceDraggingPreviousState.pos) / Vector2(Piece.maxPos)
-	var radius: float = float(pieceDraggingPreviousState.knightMoveRadius) / float(Piece.maxPos.x) + thickness / 2.
-	var colorrg: Vector2 = Vector2(hitRadiusColor.r, hitRadiusColor.g)
-	var colorba: Vector2 = Vector2(hitRadiusColor.b, hitRadiusColor.a)
-	
-	var knightPoints: PieceLogic.KnightMovePoints = PieceLogic.calculateKnightMovePoints(pieceDraggingPreviousState, stateToRender.pieces)
-	var arcEndIndex: int = knightPoints.arcEnds.size()
-	var arcStarts: PackedVector2Array = PackedVector2Array()
-	var arcEnds: PackedVector2Array = PackedVector2Array()
+func addMoveIndicators(state: BoardState) -> void:
+	match pieceDraggingPreviousState.type:
+		Piece.PieceType.PAWN:
+			addPawnLines(state)
+		Piece.PieceType.KNIGHT:
+			addKnightArcs(state)
+		Piece.PieceType.BISHOP:
+			addBishopLines(state)
+		Piece.PieceType.ROOK:
+			addRookLines(state)
+		Piece.PieceType.QUEEN:
+			addQueenLines(state)
+		_:
+			addKingLines(state)
+
+func addPawnLines(state: BoardState) -> void:
+	var pawnPoints: PieceLogic.PawnMovePoints = PieceLogic.calculatePawnMovePoints(pieceDraggingPreviousState, state.pieces)
+	lineStarts.append(Vector2(pawnPoints.verticalLowerBound) / Vector2(Piece.maxPos))
+	lineEnds.append(Vector2(pawnPoints.verticalUpperBound) / Vector2(Piece.maxPos))
+	lineStarts.append(Vector2(pawnPoints.positiveDiagonalLowerBound) / Vector2(Piece.maxPos))
+	lineEnds.append(Vector2(pawnPoints.positiveDiagonalUpperBound) / Vector2(Piece.maxPos))
+	lineStarts.append(Vector2(pawnPoints.negativeDiagonalLowerBound) / Vector2(Piece.maxPos))
+	lineEnds.append(Vector2(pawnPoints.negativeDiagonalUpperBound) / Vector2(Piece.maxPos))
+	for i in range(3):
+		lineThicknesses.append(thickness)
+		lineColorsrg.append(Vector2(hitRadiusColor.r, hitRadiusColor.g))
+		lineColorsba.append(Vector2(hitRadiusColor.b, hitRadiusColor.a))
+
+func addKnightArcs(state: BoardState) -> void:
+	var knightPoints: PieceLogic.KnightMovePoints = PieceLogic.calculateKnightMovePoints(pieceDraggingPreviousState, state.pieces)
+	arcCenters.append(Vector2(pieceDraggingPreviousState.pos) / Vector2(Piece.maxPos))
+	arcRadii.append(float(pieceDraggingPreviousState.knightMoveRadius) / float(Piece.maxPos.x))
+	arcColorsrg.append(Vector2(hitRadiusColor.r, hitRadiusColor.g))
+	arcColorsba.append(Vector2(hitRadiusColor.b, hitRadiusColor.a))
+	arcThicknesses.append(thickness)
+	arcEndIndices.append(knightPoints.arcEnds.size())
 	for i in range(knightPoints.arcStarts.size()):
 		arcStarts.append(Vector2(knightPoints.arcStarts[i]) / Vector2(Piece.boardSize))
 		arcEnds.append(Vector2(knightPoints.arcEnds[i]) / Vector2(Piece.boardSize))
-	
-	var mat: ShaderMaterial = circleArcs.material as ShaderMaterial
-	mat.set_shader_parameter("circleCenters", PackedVector2Array([center]))
-	mat.set_shader_parameter("circleRadii", PackedFloat32Array([radius]))
-	mat.set_shader_parameter("circleThicknesses", PackedFloat32Array([thickness]))
-	mat.set_shader_parameter("circleColorsrg", PackedVector2Array([colorrg]))
-	mat.set_shader_parameter("circleColorsba", PackedVector2Array([colorba]))
-	
-	mat.set_shader_parameter("arcEndIndices", PackedInt32Array([arcEndIndex]))
-	
-	mat.set_shader_parameter("arcStarts", arcStarts)
-	mat.set_shader_parameter("arcEnds", arcEnds)
+		
+func addBishopLines(state: BoardState) -> void:
+	var bishopPoints: PieceLogic.BishopMovePoints = PieceLogic.calculateBishopMovePoints(pieceDraggingPreviousState, state.pieces)
+	lineStarts.append(Vector2(bishopPoints.positiveDiagonalLowerBound) / Vector2(Piece.maxPos))
+	lineEnds.append(Vector2(bishopPoints.positiveDiagonalUpperBound) / Vector2(Piece.maxPos))
+	lineStarts.append(Vector2(bishopPoints.negativeDiagonalLowerBound) / Vector2(Piece.maxPos))
+	lineEnds.append(Vector2(bishopPoints.negativeDiagonalUpperBound) / Vector2(Piece.maxPos))
+	for i in range(2):
+		lineThicknesses.append(thickness)
+		lineColorsrg.append(Vector2(hitRadiusColor.r, hitRadiusColor.g))
+		lineColorsba.append(Vector2(hitRadiusColor.b, hitRadiusColor.a))
 
-func removeKnightArcs() -> void:
-	var mat: ShaderMaterial = circleArcs.material as ShaderMaterial
-	mat.set_shader_parameter("circleCenters", PackedVector2Array())
-	mat.set_shader_parameter("circleRadii", PackedFloat32Array())
-	mat.set_shader_parameter("circleThicknesses", PackedFloat32Array())
-	mat.set_shader_parameter("circleColorsrg", PackedVector2Array())
-	mat.set_shader_parameter("circleColorsba", PackedVector2Array())
-	
-	mat.set_shader_parameter("arcEndIndices", PackedInt32Array())
-	
-	mat.set_shader_parameter("arcStarts", PackedVector2Array())
-	mat.set_shader_parameter("arcEnds", PackedVector2Array())
+func addRookLines(state: BoardState) -> void:
+	var rookPoints: PieceLogic.RookMovePoints = PieceLogic.calculateRookMovePoints(pieceDraggingPreviousState, state.pieces)
+	lineStarts.append(Vector2(rookPoints.horizontalLowerBound) / Vector2(Piece.maxPos))
+	lineEnds.append(Vector2(rookPoints.horizontalUpperBound) / Vector2(Piece.maxPos))
+	lineStarts.append(Vector2(rookPoints.verticalLowerBound) / Vector2(Piece.maxPos))
+	lineEnds.append(Vector2(rookPoints.verticalUpperBound) / Vector2(Piece.maxPos))
+	for i in range(2):
+		lineThicknesses.append(thickness)
+		lineColorsrg.append(Vector2(hitRadiusColor.r, hitRadiusColor.g))
+		lineColorsba.append(Vector2(hitRadiusColor.b, hitRadiusColor.a))
+
+func addQueenLines(state: BoardState) -> void:
+	var queenPoints: PieceLogic.QueenMovePoints = PieceLogic.calculateQueenMovePoints(pieceDraggingPreviousState, state.pieces)
+	lineStarts.append(Vector2(queenPoints.positiveDiagonalLowerBound) / Vector2(Piece.maxPos))
+	lineEnds.append(Vector2(queenPoints.positiveDiagonalUpperBound) / Vector2(Piece.maxPos))
+	lineStarts.append(Vector2(queenPoints.negativeDiagonalLowerBound) / Vector2(Piece.maxPos))
+	lineEnds.append(Vector2(queenPoints.negativeDiagonalUpperBound) / Vector2(Piece.maxPos))
+	lineStarts.append(Vector2(queenPoints.horizontalLowerBound) / Vector2(Piece.maxPos))
+	lineEnds.append(Vector2(queenPoints.horizontalUpperBound) / Vector2(Piece.maxPos))
+	lineStarts.append(Vector2(queenPoints.verticalLowerBound) / Vector2(Piece.maxPos))
+	lineEnds.append(Vector2(queenPoints.verticalUpperBound) / Vector2(Piece.maxPos))
+	for i in range(4):
+		lineThicknesses.append(thickness)
+		lineColorsrg.append(Vector2(hitRadiusColor.r, hitRadiusColor.g))
+		lineColorsba.append(Vector2(hitRadiusColor.b, hitRadiusColor.a))
+
+func addKingLines(state: BoardState) -> void:
+	var kingPoints: PieceLogic.KingMovePoints = PieceLogic.calculateKingMovePoints(pieceDraggingPreviousState, state.pieces)
+	lineStarts.append(Vector2(kingPoints.positiveDiagonalLowerBound) / Vector2(Piece.maxPos))
+	lineEnds.append(Vector2(kingPoints.positiveDiagonalUpperBound) / Vector2(Piece.maxPos))
+	lineStarts.append(Vector2(kingPoints.negativeDiagonalLowerBound) / Vector2(Piece.maxPos))
+	lineEnds.append(Vector2(kingPoints.negativeDiagonalUpperBound) / Vector2(Piece.maxPos))
+	lineStarts.append(Vector2(kingPoints.horizontalLowerBound) / Vector2(Piece.maxPos))
+	lineEnds.append(Vector2(kingPoints.horizontalUpperBound) / Vector2(Piece.maxPos))
+	lineStarts.append(Vector2(kingPoints.verticalLowerBound) / Vector2(Piece.maxPos))
+	lineEnds.append(Vector2(kingPoints.verticalUpperBound) / Vector2(Piece.maxPos))
+	for i in range(4):
+		lineThicknesses.append(thickness)
+		lineColorsrg.append(Vector2(hitRadiusColor.r, hitRadiusColor.g))
+		lineColorsba.append(Vector2(hitRadiusColor.b, hitRadiusColor.a))
