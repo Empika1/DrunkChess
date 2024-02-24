@@ -47,10 +47,10 @@ static func calculatePawnMovePoints(pawn: Piece, pieces: Array[Piece]) -> PawnMo
 		var intersections: Array[Vector2i] = Geometry.verticalLineCircleIntersections(pawn.pos.x, piece.pos, piece.hitRadius + pawn.hitRadius)
 		for intersection: Vector2i in intersections:
 			if pawn.color == Piece.PieceColor.WHITE:
-				if intersection.y <= pawn.pos.y:
+				if intersection.y <= pawn.pos.y && piece.pos.y < pawn.pos.y:
 					verticalLowerBound.y = maxi(verticalLowerBound.y, intersection.y)
 			else:
-				if intersection.y >= pawn.pos.y:
+				if intersection.y >= pawn.pos.y && piece.pos.y > pawn.pos.y:
 					verticalUpperBound.y = mini(verticalUpperBound.y, intersection.y)
 		
 	var positiveDiagonalLowerBound: Vector2i
@@ -77,7 +77,7 @@ static func calculatePawnMovePoints(pawn: Piece, pieces: Array[Piece]) -> PawnMo
 					largerX = intersections[0].x
 				else:
 					largerX = maxi(intersections[0].x, intersections[1].x)
-				if largerX <= pawn.pos.x:
+				if largerX <= pawn.pos.x and piece.pos.x < pawn.pos.x:
 					positiveDiagonalLowerBoundX = maxi(positiveDiagonalLowerBoundX, largerX)
 			else:
 				intersections = Geometry.positiveDiagonalLineCircleIntersections(pawn.pos.y - pawn.pos.x, piece.pos, piece.hitRadius + pawn.hitRadius, false)
@@ -122,7 +122,7 @@ static func calculatePawnMovePoints(pawn: Piece, pieces: Array[Piece]) -> PawnMo
 					smallerX = intersections[0].x
 				else:
 					smallerX = mini(intersections[0].x, intersections[1].x)
-				if smallerX >= pawn.pos.x:
+				if smallerX >= pawn.pos.x and piece.pos.x > pawn.pos.x:
 					negativeDiagonalUpperBoundX = mini(negativeDiagonalUpperBoundX, smallerX)
 			else:
 				intersections = Geometry.negativeDiagonalLineCircleIntersections(pawn.pos.y + pawn.pos.x, piece.pos, piece.hitRadius + pawn.hitRadius, false)
@@ -167,7 +167,7 @@ static func calculatePawnMovePoints(pawn: Piece, pieces: Array[Piece]) -> PawnMo
 					smallerX = intersections[0].x
 				else:
 					smallerX = mini(intersections[0].x, intersections[1].x)
-				if smallerX >= pawn.pos.x:
+				if smallerX >= pawn.pos.x and piece.pos.x > pawn.pos.x:
 					positiveDiagonalUpperBoundX = mini(positiveDiagonalUpperBoundX, smallerX)
 			else:
 				intersections = Geometry.positiveDiagonalLineCircleIntersections(pawn.pos.y - pawn.pos.x, piece.pos, piece.hitRadius + pawn.hitRadius, false)
@@ -212,7 +212,7 @@ static func calculatePawnMovePoints(pawn: Piece, pieces: Array[Piece]) -> PawnMo
 					largerX = intersections[0].x
 				else:
 					largerX = maxi(intersections[0].x, intersections[1].x)
-				if largerX <= pawn.pos.x:
+				if largerX <= pawn.pos.x and piece.pos.x < pawn.pos.x:
 					negativeDiagonalLowerBoundX = maxi(negativeDiagonalLowerBoundX, largerX)
 			else:
 				intersections = Geometry.negativeDiagonalLineCircleIntersections(pawn.pos.y + pawn.pos.x, piece.pos, piece.hitRadius + pawn.hitRadius, false)
