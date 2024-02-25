@@ -80,13 +80,13 @@ func getScaledRectSize():
 	return get_rect().size * global_scale
 
 func boardLengthToGameLength(boardLength: Vector2i) -> Vector2:
-	return Vector2(boardLength) / Vector2(Piece.maxPos) * getScaledRectSize()
+	return Vector2(boardLength) / Vector2(Piece.boardSize, Piece.boardSize) * getScaledRectSize()
 
 func boardPosToGamePos(boardPos: Vector2i) -> Vector2:
 	return boardLengthToGameLength(boardPos) + global_position
 
 func gameLengthToBoardLength(gameLength: Vector2) -> Vector2i:
-	return Vector2i(gameLength * Vector2(Piece.maxPos) / getScaledRectSize())
+	return Vector2i(gameLength * Vector2(Piece.boardSize, Piece.boardSize) / getScaledRectSize())
 
 func gamePosToBoardPos(gamePos: Vector2) -> Vector2i:
 	return gameLengthToBoardLength(gamePos - global_position)
@@ -95,7 +95,7 @@ func getHoveredPiece(mousePos: Vector2i) -> Piece:
 	for c in pieceHolder.get_children():
 		var cs = c as DraggablePiece
 		var distanceSquared = (cs.global_position.x - mousePos.x) ** 2 + (cs.global_position.y - mousePos.y) ** 2
-		if distanceSquared < (float(c.piece.hitRadius) / Piece.maxPos.x * getScaledRectSize().x) ** 2:
+		if distanceSquared < (float(c.piece.hitRadius) / Piece.boardSize * getScaledRectSize().x) ** 2:
 			return cs.piece
 	return null
 
@@ -216,8 +216,8 @@ func deleteArcs() -> void:
 @export var hitRadiusColor: Color
 func addHitRadii(pieces: Array[Piece]) -> void:
 	for piece in pieces:
-		circleCenters.append(Vector2(piece.pos) / Vector2(Piece.boardSize))
-		circleRadii.append(float(piece.hitRadius) / float(Piece.boardSize.x))
+		circleCenters.append(Vector2(piece.pos) / Vector2(Piece.boardSize, Piece.boardSize))
+		circleRadii.append(float(piece.hitRadius) / float(Piece.boardSize))
 		circleColorsrg.append(Vector2(hitRadiusColor.r, hitRadiusColor.g))
 		circleColorsba.append(Vector2(hitRadiusColor.b, hitRadiusColor.a))
 
@@ -239,12 +239,12 @@ func addMoveIndicators(state: BoardState) -> void:
 
 func addPawnLines(state: BoardState) -> void:
 	var pawnPoints: PieceLogic.PawnMovePoints = PieceLogic.calculatePawnMovePoints(pieceDraggingPreviousState, state.pieces)
-	lineStarts.append(Vector2(pawnPoints.verticalLowerBound) / Vector2(Piece.maxPos))
-	lineEnds.append(Vector2(pawnPoints.verticalUpperBound) / Vector2(Piece.maxPos))
-	lineStarts.append(Vector2(pawnPoints.positiveDiagonalLowerBound) / Vector2(Piece.maxPos))
-	lineEnds.append(Vector2(pawnPoints.positiveDiagonalUpperBound) / Vector2(Piece.maxPos))
-	lineStarts.append(Vector2(pawnPoints.negativeDiagonalLowerBound) / Vector2(Piece.maxPos))
-	lineEnds.append(Vector2(pawnPoints.negativeDiagonalUpperBound) / Vector2(Piece.maxPos))
+	lineStarts.append(Vector2(pawnPoints.verticalLowerBound) / Vector2(Piece.boardSize, Piece.boardSize))
+	lineEnds.append(Vector2(pawnPoints.verticalUpperBound) / Vector2(Piece.boardSize, Piece.boardSize))
+	lineStarts.append(Vector2(pawnPoints.positiveDiagonalLowerBound) / Vector2(Piece.boardSize, Piece.boardSize))
+	lineEnds.append(Vector2(pawnPoints.positiveDiagonalUpperBound) / Vector2(Piece.boardSize, Piece.boardSize))
+	lineStarts.append(Vector2(pawnPoints.negativeDiagonalLowerBound) / Vector2(Piece.boardSize, Piece.boardSize))
+	lineEnds.append(Vector2(pawnPoints.negativeDiagonalUpperBound) / Vector2(Piece.boardSize, Piece.boardSize))
 	for i in range(3):
 		lineThicknesses.append(thickness)
 		lineColorsrg.append(Vector2(hitRadiusColor.r, hitRadiusColor.g))
@@ -252,22 +252,22 @@ func addPawnLines(state: BoardState) -> void:
 
 func addKnightArcs(state: BoardState) -> void:
 	var knightPoints: PieceLogic.KnightMovePoints = PieceLogic.calculateKnightMovePoints(pieceDraggingPreviousState, state.pieces)
-	arcCenters.append(Vector2(pieceDraggingPreviousState.pos) / Vector2(Piece.maxPos))
-	arcRadii.append(float(pieceDraggingPreviousState.knightMoveRadius) / float(Piece.maxPos.x))
+	arcCenters.append(Vector2(pieceDraggingPreviousState.pos) / Vector2(Piece.boardSize, Piece.boardSize))
+	arcRadii.append(float(pieceDraggingPreviousState.knightMoveRadius) / float(Piece.boardSize))
 	arcColorsrg.append(Vector2(hitRadiusColor.r, hitRadiusColor.g))
 	arcColorsba.append(Vector2(hitRadiusColor.b, hitRadiusColor.a))
 	arcThicknesses.append(thickness)
 	arcEndIndices.append(knightPoints.arcEnds.size())
 	for i in range(knightPoints.arcStarts.size()):
-		arcStarts.append(Vector2(knightPoints.arcStarts[i]) / Vector2(Piece.boardSize))
-		arcEnds.append(Vector2(knightPoints.arcEnds[i]) / Vector2(Piece.boardSize))
+		arcStarts.append(Vector2(knightPoints.arcStarts[i]) / Vector2(Piece.boardSize, Piece.boardSize))
+		arcEnds.append(Vector2(knightPoints.arcEnds[i]) / Vector2(Piece.boardSize, Piece.boardSize))
 		
 func addBishopLines(state: BoardState) -> void:
 	var bishopPoints: PieceLogic.BishopMovePoints = PieceLogic.calculateBishopMovePoints(pieceDraggingPreviousState, state.pieces)
-	lineStarts.append(Vector2(bishopPoints.positiveDiagonalLowerBound) / Vector2(Piece.maxPos))
-	lineEnds.append(Vector2(bishopPoints.positiveDiagonalUpperBound) / Vector2(Piece.maxPos))
-	lineStarts.append(Vector2(bishopPoints.negativeDiagonalLowerBound) / Vector2(Piece.maxPos))
-	lineEnds.append(Vector2(bishopPoints.negativeDiagonalUpperBound) / Vector2(Piece.maxPos))
+	lineStarts.append(Vector2(bishopPoints.positiveDiagonalLowerBound) / Vector2(Piece.boardSize, Piece.boardSize))
+	lineEnds.append(Vector2(bishopPoints.positiveDiagonalUpperBound) / Vector2(Piece.boardSize, Piece.boardSize))
+	lineStarts.append(Vector2(bishopPoints.negativeDiagonalLowerBound) / Vector2(Piece.boardSize, Piece.boardSize))
+	lineEnds.append(Vector2(bishopPoints.negativeDiagonalUpperBound) / Vector2(Piece.boardSize, Piece.boardSize))
 	for i in range(2):
 		lineThicknesses.append(thickness)
 		lineColorsrg.append(Vector2(hitRadiusColor.r, hitRadiusColor.g))
@@ -275,10 +275,10 @@ func addBishopLines(state: BoardState) -> void:
 
 func addRookLines(state: BoardState) -> void:
 	var rookPoints: PieceLogic.RookMovePoints = PieceLogic.calculateRookMovePoints(pieceDraggingPreviousState, state.pieces)
-	lineStarts.append(Vector2(rookPoints.horizontalLowerBound) / Vector2(Piece.maxPos))
-	lineEnds.append(Vector2(rookPoints.horizontalUpperBound) / Vector2(Piece.maxPos))
-	lineStarts.append(Vector2(rookPoints.verticalLowerBound) / Vector2(Piece.maxPos))
-	lineEnds.append(Vector2(rookPoints.verticalUpperBound) / Vector2(Piece.maxPos))
+	lineStarts.append(Vector2(rookPoints.horizontalLowerBound) / Vector2(Piece.boardSize, Piece.boardSize))
+	lineEnds.append(Vector2(rookPoints.horizontalUpperBound) / Vector2(Piece.boardSize, Piece.boardSize))
+	lineStarts.append(Vector2(rookPoints.verticalLowerBound) / Vector2(Piece.boardSize, Piece.boardSize))
+	lineEnds.append(Vector2(rookPoints.verticalUpperBound) / Vector2(Piece.boardSize, Piece.boardSize))
 	for i in range(2):
 		lineThicknesses.append(thickness)
 		lineColorsrg.append(Vector2(hitRadiusColor.r, hitRadiusColor.g))
@@ -286,14 +286,14 @@ func addRookLines(state: BoardState) -> void:
 
 func addQueenLines(state: BoardState) -> void:
 	var queenPoints: PieceLogic.QueenMovePoints = PieceLogic.calculateQueenMovePoints(pieceDraggingPreviousState, state.pieces)
-	lineStarts.append(Vector2(queenPoints.positiveDiagonalLowerBound) / Vector2(Piece.maxPos))
-	lineEnds.append(Vector2(queenPoints.positiveDiagonalUpperBound) / Vector2(Piece.maxPos))
-	lineStarts.append(Vector2(queenPoints.negativeDiagonalLowerBound) / Vector2(Piece.maxPos))
-	lineEnds.append(Vector2(queenPoints.negativeDiagonalUpperBound) / Vector2(Piece.maxPos))
-	lineStarts.append(Vector2(queenPoints.horizontalLowerBound) / Vector2(Piece.maxPos))
-	lineEnds.append(Vector2(queenPoints.horizontalUpperBound) / Vector2(Piece.maxPos))
-	lineStarts.append(Vector2(queenPoints.verticalLowerBound) / Vector2(Piece.maxPos))
-	lineEnds.append(Vector2(queenPoints.verticalUpperBound) / Vector2(Piece.maxPos))
+	lineStarts.append(Vector2(queenPoints.positiveDiagonalLowerBound) / Vector2(Piece.boardSize, Piece.boardSize))
+	lineEnds.append(Vector2(queenPoints.positiveDiagonalUpperBound) / Vector2(Piece.boardSize, Piece.boardSize))
+	lineStarts.append(Vector2(queenPoints.negativeDiagonalLowerBound) / Vector2(Piece.boardSize, Piece.boardSize))
+	lineEnds.append(Vector2(queenPoints.negativeDiagonalUpperBound) / Vector2(Piece.boardSize, Piece.boardSize))
+	lineStarts.append(Vector2(queenPoints.horizontalLowerBound) / Vector2(Piece.boardSize, Piece.boardSize))
+	lineEnds.append(Vector2(queenPoints.horizontalUpperBound) / Vector2(Piece.boardSize, Piece.boardSize))
+	lineStarts.append(Vector2(queenPoints.verticalLowerBound) / Vector2(Piece.boardSize, Piece.boardSize))
+	lineEnds.append(Vector2(queenPoints.verticalUpperBound) / Vector2(Piece.boardSize, Piece.boardSize))
 	for i in range(4):
 		lineThicknesses.append(thickness)
 		lineColorsrg.append(Vector2(hitRadiusColor.r, hitRadiusColor.g))
@@ -301,14 +301,14 @@ func addQueenLines(state: BoardState) -> void:
 
 func addKingLines(state: BoardState) -> void:
 	var kingPoints: PieceLogic.KingMovePoints = PieceLogic.calculateKingMovePoints(pieceDraggingPreviousState, state.pieces)
-	lineStarts.append(Vector2(kingPoints.positiveDiagonalLowerBound) / Vector2(Piece.maxPos))
-	lineEnds.append(Vector2(kingPoints.positiveDiagonalUpperBound) / Vector2(Piece.maxPos))
-	lineStarts.append(Vector2(kingPoints.negativeDiagonalLowerBound) / Vector2(Piece.maxPos))
-	lineEnds.append(Vector2(kingPoints.negativeDiagonalUpperBound) / Vector2(Piece.maxPos))
-	lineStarts.append(Vector2(kingPoints.horizontalLowerBound) / Vector2(Piece.maxPos))
-	lineEnds.append(Vector2(kingPoints.horizontalUpperBound) / Vector2(Piece.maxPos))
-	lineStarts.append(Vector2(kingPoints.verticalLowerBound) / Vector2(Piece.maxPos))
-	lineEnds.append(Vector2(kingPoints.verticalUpperBound) / Vector2(Piece.maxPos))
+	lineStarts.append(Vector2(kingPoints.positiveDiagonalLowerBound) / Vector2(Piece.boardSize, Piece.boardSize))
+	lineEnds.append(Vector2(kingPoints.positiveDiagonalUpperBound) / Vector2(Piece.boardSize, Piece.boardSize))
+	lineStarts.append(Vector2(kingPoints.negativeDiagonalLowerBound) / Vector2(Piece.boardSize, Piece.boardSize))
+	lineEnds.append(Vector2(kingPoints.negativeDiagonalUpperBound) / Vector2(Piece.boardSize, Piece.boardSize))
+	lineStarts.append(Vector2(kingPoints.horizontalLowerBound) / Vector2(Piece.boardSize, Piece.boardSize))
+	lineEnds.append(Vector2(kingPoints.horizontalUpperBound) / Vector2(Piece.boardSize, Piece.boardSize))
+	lineStarts.append(Vector2(kingPoints.verticalLowerBound) / Vector2(Piece.boardSize, Piece.boardSize))
+	lineEnds.append(Vector2(kingPoints.verticalUpperBound) / Vector2(Piece.boardSize, Piece.boardSize))
 	for i in range(4):
 		lineThicknesses.append(thickness)
 		lineColorsrg.append(Vector2(hitRadiusColor.r, hitRadiusColor.g))

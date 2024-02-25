@@ -30,7 +30,7 @@ static func calculatePawnMovePoints(pawn: Piece, pieces: Array[Piece]) -> PawnMo
 	var verticalLowerBound: Vector2i
 	var verticalUpperBound: Vector2i
 	
-	var moveLength: int = Piece.boardSize.y / 8
+	var moveLength: int = Piece.boardSize / 8
 	if !pawn.hasMoved:
 		moveLength *= 2
 	if pawn.color == Piece.PieceColor.WHITE:
@@ -38,7 +38,7 @@ static func calculatePawnMovePoints(pawn: Piece, pieces: Array[Piece]) -> PawnMo
 		verticalUpperBound = pawn.pos
 	else:
 		verticalLowerBound = pawn.pos
-		verticalUpperBound = Vector2i(pawn.pos.x, mini(pawn.pos.y + moveLength, Piece.maxPos.y - pawn.hitRadius))
+		verticalUpperBound = Vector2i(pawn.pos.x, mini(pawn.pos.y + moveLength, Piece.boardSize - pawn.hitRadius))
 	
 	for piece: Piece in pieces:
 		if piece.valueEquals(pawn):
@@ -58,7 +58,7 @@ static func calculatePawnMovePoints(pawn: Piece, pieces: Array[Piece]) -> PawnMo
 	var negativeDiagonalLowerBound: Vector2i
 	var negativeDiagonalUpperBound: Vector2i
 	if pawn.color == Piece.PieceColor.WHITE:
-		var positiveDiagonalLowerBoundX: int = maxi(maxi(Piece.hitRadius, pawn.pos.x - Piece.squareSize.x), Piece.hitRadius - pawn.pos.y + pawn.pos.x)
+		var positiveDiagonalLowerBoundX: int = maxi(maxi(Piece.hitRadius, pawn.pos.x - Piece.squareSize), Piece.hitRadius - pawn.pos.y + pawn.pos.x)
 		var positiveDiagonalUpperBoundX: int = pawn.pos.x
 		var positiveDiagonalLowerBoundCaptureX: int = 0
 		var positiveDiagonalUpperBoundCaptureX: int = 0
@@ -104,9 +104,9 @@ static func calculatePawnMovePoints(pawn: Piece, pieces: Array[Piece]) -> PawnMo
 		positiveDiagonalUpperBound = Vector2i(positiveDiagonalUpperX, positiveDiagonalUpperX - pawn.pos.x + pawn.pos.y)
 		
 		var negativeDiagonalLowerBoundX: int = pawn.pos.x
-		var negativeDiagonalUpperBoundX: int = mini(mini(Piece.maxPos.x - Piece.hitRadius, pawn.pos.x + Piece.squareSize.x), pawn.pos.y + pawn.pos.x - Piece.hitRadius)
-		var negativeDiagonalLowerBoundCaptureX: int = Piece.maxPos.x
-		var negativeDiagonalUpperBoundCaptureX: int = Piece.maxPos.x
+		var negativeDiagonalUpperBoundX: int = mini(mini(Piece.boardSize - Piece.hitRadius, pawn.pos.x + Piece.squareSize), pawn.pos.y + pawn.pos.x - Piece.hitRadius)
+		var negativeDiagonalLowerBoundCaptureX: int = Piece.boardSize
+		var negativeDiagonalUpperBoundCaptureX: int = Piece.boardSize
 		var capturingPieceOnNegativeDiagonal: bool = false
 		for piece: Piece in pieces:
 			if piece.valueEquals(pawn):
@@ -149,9 +149,9 @@ static func calculatePawnMovePoints(pawn: Piece, pieces: Array[Piece]) -> PawnMo
 		negativeDiagonalUpperBound = Vector2i(negativeDiagonalUpperX, pawn.pos.x - negativeDiagonalUpperX + pawn.pos.y)
 	else:
 		var positiveDiagonalLowerBoundX: int = pawn.pos.x
-		var positiveDiagonalUpperBoundX: int = mini(mini(Piece.maxPos.x - Piece.hitRadius, pawn.pos.x + Piece.squareSize.x), pawn.pos.x - pawn.pos.y + Piece.maxPos.y - Piece.hitRadius)
-		var positiveDiagonalLowerBoundCaptureX: int = Piece.maxPos.x
-		var positiveDiagonalUpperBoundCaptureX: int = Piece.maxPos.x
+		var positiveDiagonalUpperBoundX: int = mini(mini(Piece.boardSize - Piece.hitRadius, pawn.pos.x + Piece.squareSize), pawn.pos.x - pawn.pos.y + Piece.boardSize - Piece.hitRadius)
+		var positiveDiagonalLowerBoundCaptureX: int = Piece.boardSize
+		var positiveDiagonalUpperBoundCaptureX: int = Piece.boardSize
 		var capturingPieceOnPositiveDiagonal: bool = false
 		for piece: Piece in pieces:
 			if piece.valueEquals(pawn):
@@ -193,7 +193,7 @@ static func calculatePawnMovePoints(pawn: Piece, pieces: Array[Piece]) -> PawnMo
 		positiveDiagonalLowerBound = Vector2i(positiveDiagonalLowerX, positiveDiagonalLowerX - pawn.pos.x + pawn.pos.y)
 		positiveDiagonalUpperBound = Vector2i(positiveDiagonalUpperX, positiveDiagonalUpperX - pawn.pos.x + pawn.pos.y)
 		
-		var negativeDiagonalLowerBoundX: int = maxi(maxi(Piece.hitRadius, pawn.pos.x - Piece.squareSize.x), pawn.pos.y + pawn.pos.x - Piece.maxPos.y + Piece.hitRadius)
+		var negativeDiagonalLowerBoundX: int = maxi(maxi(Piece.hitRadius, pawn.pos.x - Piece.squareSize), pawn.pos.y + pawn.pos.x - Piece.boardSize + Piece.hitRadius)
 		var negativeDiagonalUpperBoundX: int = pawn.pos.x
 		var negativeDiagonalLowerBoundCaptureX: int = 0
 		var negativeDiagonalUpperBoundCaptureX: int = 0
@@ -313,10 +313,10 @@ static func calculateKnightMovePoints(knight: Piece, pieces: Array[Piece]) -> Kn
 			arcStarts.append(topIntersectionsSnapped[0])
 			arcEnds.append(topIntersectionsSnapped[1])
 	
-	var bottomIntersections: Array[Vector2i] = Geometry.horizontalLineCircleIntersections(knight.maxPos.y - knight.hitRadius, knight.pos, Piece.knightMoveRadius, true)
+	var bottomIntersections: Array[Vector2i] = Geometry.horizontalLineCircleIntersections(Piece.boardSize - knight.hitRadius, knight.pos, Piece.knightMoveRadius, true)
 	var bottomIntersectionsSnapped: Array[Vector2i] = []
 	for intersection: Vector2i in bottomIntersections:
-		bottomIntersectionsSnapped.append(Geometry.spiralizePoint(intersection, func(pos): return Geometry.isOnCircle(knight.pos, Piece.knightMoveRadius, pos) and pos.y <= knight.maxPos.y - knight.hitRadius))
+		bottomIntersectionsSnapped.append(Geometry.spiralizePoint(intersection, func(pos): return Geometry.isOnCircle(knight.pos, Piece.knightMoveRadius, pos) and pos.y <= Piece.boardSize - knight.hitRadius))
 	if bottomIntersectionsSnapped.size() == 1:
 		arcStarts.append(bottomIntersectionsSnapped[0])
 		arcEnds.append(bottomIntersectionsSnapped[0])
@@ -343,10 +343,10 @@ static func calculateKnightMovePoints(knight: Piece, pieces: Array[Piece]) -> Kn
 			arcStarts.append(leftIntersectionsSnapped[0])
 			arcEnds.append(leftIntersectionsSnapped[1])
 	
-	var rightIntersections: Array[Vector2i] = Geometry.verticalLineCircleIntersections(knight.maxPos.x - knight.hitRadius, knight.pos, Piece.knightMoveRadius, true)
+	var rightIntersections: Array[Vector2i] = Geometry.verticalLineCircleIntersections(Piece.boardSize - knight.hitRadius, knight.pos, Piece.knightMoveRadius, true)
 	var rightIntersectionsSnapped: Array[Vector2i] = []
 	for intersection: Vector2i in rightIntersections:
-		rightIntersectionsSnapped.append(Geometry.spiralizePoint(intersection, func(pos): return Geometry.isOnCircle(knight.pos, Piece.knightMoveRadius, pos) and pos.x <= knight.maxPos.x - knight.hitRadius))
+		rightIntersectionsSnapped.append(Geometry.spiralizePoint(intersection, func(pos): return Geometry.isOnCircle(knight.pos, Piece.knightMoveRadius, pos) and pos.x <= Piece.boardSize - knight.hitRadius))
 	if rightIntersectionsSnapped.size() == 1:
 		arcStarts.append(rightIntersectionsSnapped[0])
 		arcEnds.append(rightIntersectionsSnapped[0])
@@ -369,7 +369,7 @@ static func closestPosKnightCanMoveTo(knight: Piece, pieces: Array[Piece], tryMo
 		movePoints = calculateKnightMovePoints(knight, pieces)
 
 	var isKnightMovable: Callable = func(pos: Vector2i):
-		if isPieceOutsideBoard(pos, knight.hitRadius, knight.maxPos):
+		if isPieceOutsideBoard(pos, knight.hitRadius, Vector2i(Piece.boardSize, Piece.boardSize)):
 			return false
 		
 		var overlapsWithPiece: bool = false
@@ -412,7 +412,7 @@ class BishopMovePoints extends PieceMovePoints:
 static func calculateBishopMovePoints(bishop: Piece, pieces: Array[Piece]) -> BishopMovePoints:
 	var positiveDiagonalLowerBoundX: int = maxi(Piece.hitRadius, Piece.hitRadius - bishop.pos.y + bishop.pos.x)
 	var positiveDiagonalLowerBound: Vector2i = Vector2i(positiveDiagonalLowerBoundX, bishop.pos.y - bishop.pos.x + positiveDiagonalLowerBoundX)
-	var positiveDiagonalUpperBoundX: int = mini(Piece.maxPos.x - Piece.hitRadius, bishop.pos.x - bishop.pos.y + Piece.maxPos.y - Piece.hitRadius)
+	var positiveDiagonalUpperBoundX: int = mini(Piece.boardSize - Piece.hitRadius, bishop.pos.x - bishop.pos.y + Piece.boardSize - Piece.hitRadius)
 	var positiveDiagonalUpperBound: Vector2i = Vector2i(positiveDiagonalUpperBoundX, bishop.pos.y - bishop.pos.x + positiveDiagonalUpperBoundX)
 	for piece: Piece in pieces:
 		if piece.valueEquals(bishop):
@@ -428,14 +428,14 @@ static func calculateBishopMovePoints(bishop: Piece, pieces: Array[Piece]) -> Bi
 		else:
 			if intersections.size() > 0:
 				var intersectionPos: Vector2i = Geometry.diagonalLinesIntersection(bishop.pos, piece.pos, true, true)
-				if intersectionPos.x > positiveDiagonalLowerBound.x and intersectionPos.x <= bishop.pos.x:
+				if intersectionPos.x > positiveDiagonalLowerBound.x and intersectionPos.x < bishop.pos.x:
 					positiveDiagonalLowerBound = intersectionPos
-				if intersectionPos.x < positiveDiagonalUpperBound.x and intersectionPos.x >= bishop.pos.x:
+				if intersectionPos.x < positiveDiagonalUpperBound.x and intersectionPos.x > bishop.pos.x:
 					positiveDiagonalUpperBound = intersectionPos
 	
-	var negativeDiagonalLowerBoundX: int = maxi(Piece.hitRadius, bishop.pos.y + bishop.pos.x - Piece.maxPos.y + Piece.hitRadius)
+	var negativeDiagonalLowerBoundX: int = maxi(Piece.hitRadius, bishop.pos.y + bishop.pos.x - Piece.boardSize + Piece.hitRadius)
 	var negativeDiagonalLowerBound: Vector2i = Vector2i(negativeDiagonalLowerBoundX, bishop.pos.y - negativeDiagonalLowerBoundX + bishop.pos.x)
-	var negativeDiagonalUpperBoundX: int = mini(Piece.maxPos.x - Piece.hitRadius, bishop.pos.y + bishop.pos.x - Piece.hitRadius)
+	var negativeDiagonalUpperBoundX: int = mini(Piece.boardSize - Piece.hitRadius, bishop.pos.y + bishop.pos.x - Piece.hitRadius)
 	var negativeDiagonalUpperBound: Vector2i = Vector2i(negativeDiagonalUpperBoundX, bishop.pos.y - negativeDiagonalUpperBoundX + bishop.pos.x)
 	for piece: Piece in pieces:
 		if piece.valueEquals(bishop):
@@ -444,9 +444,9 @@ static func calculateBishopMovePoints(bishop: Piece, pieces: Array[Piece]) -> Bi
 		var intersections: Array[Vector2i] = Geometry.negativeDiagonalLineCircleIntersections(bishop.pos.y + bishop.pos.x, piece.pos, piece.hitRadius + bishop.hitRadius)
 		if piece.color == bishop.color:
 			for intersection: Vector2i in intersections:
-				if intersection.x > negativeDiagonalLowerBound.x and intersection.x < bishop.pos.x:
+				if intersection.x > negativeDiagonalLowerBound.x and intersection.x <= bishop.pos.x:
 					negativeDiagonalLowerBound = intersection
-				if intersection.x < negativeDiagonalUpperBound.x and intersection.x > bishop.pos.x:
+				if intersection.x < negativeDiagonalUpperBound.x and intersection.x >= bishop.pos.x:
 					negativeDiagonalUpperBound = intersection
 		else:
 			if intersections.size() > 0:
@@ -489,7 +489,7 @@ class RookMovePoints extends PieceMovePoints:
 
 static func calculateRookMovePoints(rook: Piece, pieces: Array[Piece]) -> RookMovePoints:
 	var verticalLowerBound: Vector2i = Vector2i(rook.pos.x, rook.hitRadius)
-	var verticalUpperBound: Vector2i = Vector2i(rook.pos.x, Piece.maxPos.y - rook.hitRadius)
+	var verticalUpperBound: Vector2i = Vector2i(rook.pos.x, Piece.boardSize - rook.hitRadius)
 	for piece: Piece in pieces:
 		if piece.valueEquals(rook):
 			continue
@@ -509,7 +509,7 @@ static func calculateRookMovePoints(rook: Piece, pieces: Array[Piece]) -> RookMo
 					verticalUpperBound.y = piece.pos.y
 	
 	var horizontalLowerBound: Vector2i = Vector2i(rook.hitRadius, rook.pos.y)
-	var horizontalUpperBound: Vector2i = Vector2i(Piece.maxPos.x - rook.hitRadius, rook.pos.y)
+	var horizontalUpperBound: Vector2i = Vector2i(Piece.boardSize - rook.hitRadius, rook.pos.y)
 	for piece: Piece in pieces:
 		if piece.valueEquals(rook):
 			continue
@@ -627,19 +627,19 @@ static func calculateKingMovePoints(king: Piece, pieces: Array[Piece]) -> KingMo
 	var bishopPoints: BishopMovePoints = calculateBishopMovePoints(king, pieces)
 	var rookPoints: RookMovePoints = calculateRookMovePoints(king, pieces)
 	
-	var positiveDiagonalLowerBoundX: int = maxi(bishopPoints.positiveDiagonalLowerBound.x, king.pos.x - (king.boardSize.x / 8))
+	var positiveDiagonalLowerBoundX: int = maxi(bishopPoints.positiveDiagonalLowerBound.x, king.pos.x - (Piece.boardSize / 8))
 	bishopPoints.positiveDiagonalLowerBound = Vector2i(positiveDiagonalLowerBoundX, king.pos.y - king.pos.x + positiveDiagonalLowerBoundX)
-	var positiveDiagonalUpperBoundX: int = mini(bishopPoints.positiveDiagonalUpperBound.x, king.pos.x + (king.boardSize.x / 8))
+	var positiveDiagonalUpperBoundX: int = mini(bishopPoints.positiveDiagonalUpperBound.x, king.pos.x + (Piece.boardSize / 8))
 	bishopPoints.positiveDiagonalUpperBound = Vector2i(positiveDiagonalUpperBoundX, king.pos.y - king.pos.x + positiveDiagonalUpperBoundX)
-	var negativeDiagonalLowerBoundX: int = maxi(bishopPoints.negativeDiagonalLowerBound.x, king.pos.x - (king.boardSize.x / 8))
+	var negativeDiagonalLowerBoundX: int = maxi(bishopPoints.negativeDiagonalLowerBound.x, king.pos.x - (Piece.boardSize / 8))
 	bishopPoints.negativeDiagonalLowerBound = Vector2i(negativeDiagonalLowerBoundX, king.pos.y - negativeDiagonalLowerBoundX + king.pos.x)
-	var negativeDiagonalUpperBoundX: int = mini(bishopPoints.negativeDiagonalUpperBound.x, king.pos.x + (king.boardSize.x / 8))
+	var negativeDiagonalUpperBoundX: int = mini(bishopPoints.negativeDiagonalUpperBound.x, king.pos.x + (Piece.boardSize / 8))
 	bishopPoints.negativeDiagonalUpperBound = Vector2i(negativeDiagonalUpperBoundX, king.pos.y - negativeDiagonalUpperBoundX + king.pos.x)
 	
-	rookPoints.verticalLowerBound.y = maxi(rookPoints.verticalLowerBound.y, king.pos.y - (king.boardSize.y / 8))
-	rookPoints.verticalUpperBound.y = maxi(rookPoints.verticalUpperBound.y, king.pos.y + (king.boardSize.y / 8))
-	rookPoints.horizontalLowerBound.x = maxi(rookPoints.horizontalLowerBound.x, king.pos.x - (king.boardSize.x / 8))
-	rookPoints.horizontalUpperBound.x = maxi(rookPoints.horizontalUpperBound.x, king.pos.x + (king.boardSize.x / 8))
+	rookPoints.verticalLowerBound.y = maxi(rookPoints.verticalLowerBound.y, king.pos.y - (Piece.boardSize / 8))
+	rookPoints.verticalUpperBound.y = maxi(rookPoints.verticalUpperBound.y, king.pos.y + (Piece.boardSize / 8))
+	rookPoints.horizontalLowerBound.x = maxi(rookPoints.horizontalLowerBound.x, king.pos.x - (Piece.boardSize / 8))
+	rookPoints.horizontalUpperBound.x = maxi(rookPoints.horizontalUpperBound.x, king.pos.x + (Piece.boardSize / 8))
 	
 	return KingMovePoints.new(bishopPoints.positiveDiagonalLowerBound, bishopPoints.positiveDiagonalUpperBound, 
 							  bishopPoints.negativeDiagonalLowerBound, bishopPoints.negativeDiagonalUpperBound,

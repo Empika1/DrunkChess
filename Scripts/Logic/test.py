@@ -1,4 +1,3 @@
-def isAClockwiseFromB(x1, y1, x2, y2):
-    return x1*y2 < x2*y1
-
-print(isAClockwiseFromB(1, 1, 0, 1))
+import math
+for i in range(64):
+    print(2**128 > math.factorial(64) / math.factorial(64-i), i)

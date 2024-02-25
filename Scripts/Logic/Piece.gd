@@ -21,12 +21,11 @@ var pos: Vector2i
 var type: PieceType
 var color: PieceColor
 var hasMoved: bool
-const boardSize: Vector2i = Vector2i(2 ** 16, 2 ** 16)
-const squareSize: Vector2i = boardSize / 8
-const maxPos: Vector2i = boardSize - Vector2i(1, 1)
-const hitRadius: int = int(float(boardSize.x) / 8. / 2. * sqrt(2) / 2.)
+const boardSize: int = 2 ** 16
+const squareSize: int = boardSize / 8
+const hitRadius: int = int(float(boardSize) / 8. / 2. * sqrt(2) / 2.)
 
-const knightMoveRadius: int = int(sqrt(2 ** 2 + 1 ** 2) * boardSize.x / 8)
+const knightMoveRadius: int = int(sqrt(2 ** 2 + 1 ** 2) * boardSize / 8)
 
 func getHitRadius(_pieceType: PieceType):
 	return hitRadius

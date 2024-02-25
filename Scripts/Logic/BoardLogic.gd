@@ -16,7 +16,7 @@ static func isPieceOutsideBoard(pos: Vector2i, radius: int, maxPos: Vector2i) ->
 
 static func validateStartingState(state: BoardState) -> BoardState.StateResult:
 	for piece: Piece in state.pieces:
-		if isPieceOutsideBoard(piece.pos, piece.hitRadius, Piece.maxPos):
+		if isPieceOutsideBoard(piece.pos, piece.hitRadius, Vector2i(Piece.boardSize, Piece.boardSize)):
 			return BoardState.StateResult.START_PIECE_OUTSIDE_BOARD
 			
 	for i in range(state.pieces.size()):
@@ -51,7 +51,7 @@ static func validateNormalMove(state: BoardState, move: Move) -> BoardState.Stat
 	if move.movedPiece.color != state.turnToMove:
 		return BoardState.StateResult.MOVE_ONE_PIECE_MOVED_PIECE_WRONG_COLOR
 		
-	if isPieceOutsideBoard(move.posMovedTo, move.movedPiece.hitRadius, Piece.maxPos):
+	if isPieceOutsideBoard(move.posMovedTo, move.movedPiece.hitRadius, Vector2i(Piece.boardSize, Piece.boardSize)):
 		return BoardState.StateResult.MOVE_ONE_PIECE_MOVED_PIECE_OUTSIDE_BOARD
 	
 	var pieceFound: bool = false

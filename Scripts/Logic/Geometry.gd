@@ -39,7 +39,6 @@ static func positiveDiagonalLineCircleIntersections(lineYIntercept: int, circleP
 		return []
 	#discr can not be 0 because of the irrationality of sqrt(2), therefore here discr > 0
 	var nonDiscr: int = circlePos.x - lineYIntercept + circlePos.y
-	#return [Vector2i(nonDiscr/2, nonDiscr/2 + lineYIntercept)]
 	var sqrtDiscr: int = ceilSqrt(discr) if outside else floorSqrt(discr)
 	var twoX1: int = nonDiscr + sqrtDiscr
 	var twoX2: int = nonDiscr - sqrtDiscr
@@ -66,7 +65,6 @@ static func negativeDiagonalLineCircleIntersections(lineYIntercept: int, circleP
 		return []
 	#discr can not be 0 because of the irrationality of sqrt(2), therefore here discr > 0
 	var nonDiscr: int = circlePos.x + lineYIntercept - circlePos.y
-	#return [Vector2i(nonDiscr/2, nonDiscr/2 + lineYIntercept)]
 	var sqrtDiscr: int = ceilSqrt(discr) if outside else floorSqrt(discr)
 	var twoX1: int = nonDiscr + sqrtDiscr
 	var twoX2: int = nonDiscr - sqrtDiscr
