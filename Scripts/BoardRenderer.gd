@@ -113,19 +113,37 @@ func render() -> void:
 			dragOffset = boardPosToGamePos(pieceDraggingPreviousState.pos) - Vector2(mousePos)
 	
 	if pieceDraggingPreviousState != null:
-		var movePos: Vector2i = PieceLogic.closestPosCanMoveTo(pieceDraggingPreviousState, states[-1].pieces, gamePosToBoardPos(mousePos + dragOffset))
-		var move: Move = Move.newNormal(pieceDraggingPreviousState, movePos)
-		pieceDraggingNextState = pieceDraggingPreviousState.duplicate()
-		pieceDraggingNextState.pos = movePos
+		var move: Move = null
+		
+		var castlePieces: PieceLogic.CastlePieces = PieceLogic.availableCastlePieces(states[-1].pieces, states[-1].turnToMove)
+		var castlePoints: PieceLogic.CastlePoints = PieceLogic.availableCastlePoints(states[-1].pieces, states[-1].turnToMove, castlePieces)
+		if castlePoints.canCastleLeft:
+			addCastleArea(castlePoints.kingPointLeft)
+			if (gamePosToBoardPos(mousePos) - castlePoints.kingPointLeft).length_squared() < castleRadius ** 2:
+				move = Move.newCastle(castlePieces.king, castlePieces.leftRook)
+		if castlePoints.canCastleRight:
+			addCastleArea(castlePoints.kingPointRight)
+			if (gamePosToBoardPos(mousePos) - castlePoints.kingPointRight).length_squared() < castleRadius ** 2:
+				move = Move.newCastle(castlePieces.king, castlePieces.rightRook)
+		
+		if move == null:
+			var movePos: Vector2i = PieceLogic.closestPosCanMoveTo(pieceDraggingPreviousState, states[-1].pieces, gamePosToBoardPos(mousePos + dragOffset))
+			move = Move.newNormal(pieceDraggingPreviousState, movePos)
+			pieceDraggingNextState = pieceDraggingPreviousState.duplicate()
+			pieceDraggingNextState.pos = movePos
+
 		attemptedNextState = states[-1].makeMove(move)
 		
 		if Input.is_action_just_released("lmb"):
-			if attemptedNextState.result == BoardState.StateResult.VALID:
+			if attemptedNextState.result in [BoardState.StateResult.VALID, BoardState.StateResult.WIN_BLACK, BoardState.StateResult.WIN_WHITE]:
 				states.append(attemptedNextState)
 			attemptedNextState = null
 			pieceDraggingPreviousState = null
 			pieceDraggingNextState = null
 			dragOffset = Vector2i.ZERO
+	
+	if states[-1].result in [BoardState.StateResult.WIN_BLACK, BoardState.StateResult.WIN_WHITE]:
+		print("hhhhhhhhhhhhhhhhhhhhhhhhhhhhh")
 
 	if attemptedNextState != null:
 		stateToRender = attemptedNextState
@@ -313,3 +331,10 @@ func addKingLines(state: BoardState) -> void:
 		lineThicknesses.append(thickness)
 		lineColorsrg.append(Vector2(hitRadiusColor.r, hitRadiusColor.g))
 		lineColorsba.append(Vector2(hitRadiusColor.b, hitRadiusColor.a))
+
+var castleRadius: int = Piece.boardSize / 16
+func addCastleArea(center: Vector2i) -> void:
+	circleCenters.append(Vector2(center) / Vector2(Piece.boardSize, Piece.boardSize))
+	circleRadii.append(float(castleRadius) / float(Piece.boardSize))
+	circleColorsrg.append(Vector2(hitRadiusColor.r, hitRadiusColor.g))
+	circleColorsba.append(Vector2(hitRadiusColor.b, hitRadiusColor.a))

@@ -48,6 +48,9 @@ static func validateStartingState(state: BoardState) -> BoardState.StateResult:
 	return BoardState.StateResult.VALID
 
 static func validateNormalMove(state: BoardState, move: Move) -> BoardState.StateResult:
+	if state.result != BoardState.StateResult.VALID:
+		return state.result
+
 	if move.movedPiece.color != state.turnToMove:
 		return BoardState.StateResult.MOVE_ONE_PIECE_MOVED_PIECE_WRONG_COLOR
 		
@@ -68,10 +71,80 @@ static func validateNormalMove(state: BoardState, move: Move) -> BoardState.Stat
 		if piece.color == move.movedPiece.color:
 			if doPiecesOverlap(piece.pos, piece.hitRadius, move.posMovedTo, move.movedPiece.hitRadius):
 				return BoardState.StateResult.MOVE_ONE_PIECE_MOVED_PIECE_OVERLAPS_PIECE_OF_SAME_COLOR
+	
+	for piece: Piece in state.pieces:
+		if piece.color != move.movedPiece.color && piece.type == Piece.PieceType.KING:
+			if doPiecesOverlap(piece.pos, piece.hitRadius, move.posMovedTo, move.movedPiece.hitRadius):
+				if move.movedPiece.color == Piece.PieceColor.WHITE:
+					return BoardState.StateResult.WIN_WHITE
+				else:
+					return BoardState.StateResult.WIN_BLACK
 
 	return BoardState.StateResult.VALID
 
+static func validateCastleMove(state: BoardState, move: Move) -> BoardState.StateResult:
+	if state.result != BoardState.StateResult.VALID:
+		return state.result
+	
+	if move.movedKing.color != state.turnToMove:
+		return BoardState.StateResult.MOVE_CASTLE_KING_WRONG_COLOR
+	if move.movedRook.color != state.turnToMove:
+		return BoardState.StateResult.MOVE_CASTLE_ROOK_WRONG_COLOR
+	if move.movedKing.hasMoved:
+		return BoardState.StateResult.MOVE_CASTLE_KING_ALREADY_MOVED
+	if move.movedRook.hasMoved:
+		return BoardState.StateResult.MOVE_CASTLE_ROOK_ALREADY_MOVED
+	if move.movedKing.type != Piece.PieceType.KING:
+		return BoardState.StateResult.MOVE_CASTLE_KING_IS_NOT_KING
+	if move.movedRook.type != Piece.PieceType.ROOK:
+		return BoardState.StateResult.MOVE_CASTLE_ROOK_IS_NOT_ROOK
+	
+	if move.movedKing.color == Piece.PieceColor.BLACK:
+		if move.movedKing.pos != Vector2i(Piece.boardSize / 16 + Piece.boardSize * 4 / 8, Piece.boardSize / 16):
+			return BoardState.StateResult.MOVE_CASTLE_KING_NOT_AT_DEFAULT_START_POS
+		if not move.movedRook.pos in [Vector2i(Piece.boardSize / 16, Piece.boardSize / 16), Vector2i(Piece.boardSize / 16 + Piece.boardSize * 7 / 8, Piece.boardSize / 16)]:
+			return BoardState.StateResult.MOVE_CASTLE_ROOK_NOT_AT_DEFAULT_START_POS
+	else:
+		if move.movedKing.pos != Vector2i(Piece.boardSize / 16 + Piece.boardSize * 4 / 8, Piece.boardSize - Piece.boardSize / 16):
+			return BoardState.StateResult.MOVE_CASTLE_KING_NOT_AT_DEFAULT_START_POS
+		if not move.movedRook.pos in [Vector2i(Piece.boardSize / 16, Piece.boardSize - Piece.boardSize / 16), Vector2i(Piece.boardSize / 16 + Piece.boardSize * 7 / 8, Piece.boardSize - Piece.boardSize / 16)]:
+			return BoardState.StateResult.MOVE_CASTLE_ROOK_NOT_AT_DEFAULT_START_POS
+
+	var kingFound: bool = false
+	for piece: Piece in state.pieces:
+		if piece.valueEquals(move.movedKing):
+			kingFound = true
+			break
+	if not kingFound:
+		return BoardState.StateResult.MOVE_CASTLE_MOVED_KING_DOESNT_EXIST
+
+	var rookFound: bool = false
+	for piece: Piece in state.pieces:
+		if piece.valueEquals(move.movedRook):
+			rookFound = true
+			break
+	if not rookFound:
+		return BoardState.StateResult.MOVE_CASTLE_MOVED_ROOK_DOESNT_EXIST
+	
+	var lowerBound: int = min(move.movedKing.pos.x, move.movedRook.pos.x);
+	var upperBound: int = max(move.movedKing.pos.x, move.movedRook.pos.x);
+	for piece: Piece in state.pieces:
+		if piece.valueEquals(move.movedKing) or piece.valueEquals(move.movedRook):
+			continue
+		var pieceIntersections: Array[Vector2i] = Geometry.horizontalLineCircleIntersections(move.movedKing.pos.y, piece.pos, Piece.hitRadius * 2, true)
+		for intersection: Vector2i in pieceIntersections:
+			if intersection.x > lowerBound and intersection.x < upperBound:
+				if piece.color == move.movedKing.color:
+					return BoardState.StateResult.MOVE_CASTLE_CASTLING_THROUGH_SAME_COLOR_PIECE
+				else:
+					return BoardState.StateResult.MOVE_CASTLE_CASTLING_THROUGH_OPPOSITE_COLOR_PIECE
+
+	return BoardState.StateResult.VALID
+		
 static func makeMove(state: BoardState, move: Move) -> BoardState:
+	if state.result != BoardState.StateResult.VALID:
+		return state
+	
 	var newState: BoardState = state.duplicate()
 	newState.previousState = state
 	match move.moveType:
@@ -96,6 +169,33 @@ static func makeMove(state: BoardState, move: Move) -> BoardState:
 				newState.pieces.pop_at(pieceIndex)
 			
 			newState.turnToMove = (1 - newState.turnToMove) as Piece.PieceColor
+			return newState
+		Move.MoveType.CASTLE:
+			var result: BoardState.StateResult = validateCastleMove(state, move)
+			newState.result = result
+			
+			var newKingPos: Vector2i = Vector2i.ZERO
+			newKingPos.y = Piece.boardSize / 16 if move.movedKing.color == Piece.PieceColor.BLACK else Piece.boardSize - Piece.boardSize / 16
+			var newRookPos: Vector2i = Vector2i.ZERO
+			newRookPos.y = Piece.boardSize / 16 if move.movedRook.color == Piece.PieceColor.BLACK else Piece.boardSize - Piece.boardSize / 16
+			
+			if move.movedRook.pos.x > move.movedKing.pos.x:
+				newKingPos.x = Piece.boardSize / 16 + Piece.boardSize * 6 / 8
+				newRookPos.x = Piece.boardSize / 16 + Piece.boardSize * 5 / 8
+			else:
+				newKingPos.x = Piece.boardSize / 16 + Piece.boardSize * 2 / 8
+				newRookPos.x = Piece.boardSize / 16 + Piece.boardSize * 3 / 8
+				
+			for piece: Piece in newState.pieces:
+				if piece.valueEquals(move.movedKing):
+					piece.pos = newKingPos
+					piece.hasMoved = true
+			
+			for piece: Piece in newState.pieces:
+				if piece.valueEquals(move.movedRook):
+					piece.pos = newRookPos
+					piece.hasMoved = true
+
 			return newState
 		_:
 			return newState

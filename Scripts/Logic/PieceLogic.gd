@@ -421,9 +421,9 @@ static func calculateBishopMovePoints(bishop: Piece, pieces: Array[Piece]) -> Bi
 		var intersections: Array[Vector2i] = Geometry.positiveDiagonalLineCircleIntersections(bishop.pos.y - bishop.pos.x, piece.pos, piece.hitRadius + bishop.hitRadius)
 		if piece.color == bishop.color:
 			for intersection: Vector2i in intersections:
-				if intersection.x > positiveDiagonalLowerBound.x and intersection.x <= bishop.pos.x:
+				if intersection.x > positiveDiagonalLowerBound.x and intersection.x <= bishop.pos.x and piece.pos.x < bishop.pos.x:
 					positiveDiagonalLowerBound = intersection
-				if intersection.x < positiveDiagonalUpperBound.x and intersection.x >= bishop.pos.x:
+				if intersection.x < positiveDiagonalUpperBound.x and intersection.x >= bishop.pos.x and piece.pos.x > bishop.pos.x:
 					positiveDiagonalUpperBound = intersection
 		else:
 			if intersections.size() > 0:
@@ -444,9 +444,9 @@ static func calculateBishopMovePoints(bishop: Piece, pieces: Array[Piece]) -> Bi
 		var intersections: Array[Vector2i] = Geometry.negativeDiagonalLineCircleIntersections(bishop.pos.y + bishop.pos.x, piece.pos, piece.hitRadius + bishop.hitRadius)
 		if piece.color == bishop.color:
 			for intersection: Vector2i in intersections:
-				if intersection.x > negativeDiagonalLowerBound.x and intersection.x <= bishop.pos.x:
+				if intersection.x > negativeDiagonalLowerBound.x and intersection.x <= bishop.pos.x and piece.pos.x < bishop.pos.x:
 					negativeDiagonalLowerBound = intersection
-				if intersection.x < negativeDiagonalUpperBound.x and intersection.x >= bishop.pos.x:
+				if intersection.x < negativeDiagonalUpperBound.x and intersection.x >= bishop.pos.x and piece.pos.x > bishop.pos.x:
 					negativeDiagonalUpperBound = intersection
 		else:
 			if intersections.size() > 0:
@@ -497,9 +497,9 @@ static func calculateRookMovePoints(rook: Piece, pieces: Array[Piece]) -> RookMo
 		var intersections: Array[Vector2i] = Geometry.verticalLineCircleIntersections(rook.pos.x, piece.pos, rook.hitRadius + piece.hitRadius, true)
 		if piece.color == rook.color:
 			for intersection: Vector2i in intersections:
-				if intersection.y > verticalLowerBound.y and intersection.y <= rook.pos.y:
+				if intersection.y > verticalLowerBound.y and intersection.y <= rook.pos.y and piece.pos.y < rook.pos.y:
 					verticalLowerBound.y = intersection.y
-				if intersection.y < verticalUpperBound.y and intersection.y >= rook.pos.y:
+				if intersection.y < verticalUpperBound.y and intersection.y >= rook.pos.y and piece.pos.y > rook.pos.y:
 					verticalUpperBound.y = intersection.y
 		else:
 			if intersections.size() > 0:
@@ -517,9 +517,9 @@ static func calculateRookMovePoints(rook: Piece, pieces: Array[Piece]) -> RookMo
 		var intersections: Array[Vector2i] = Geometry.horizontalLineCircleIntersections(rook.pos.y, piece.pos, rook.hitRadius + piece.hitRadius, true)
 		if piece.color == rook.color:
 			for intersection: Vector2i in intersections:
-				if intersection.x > horizontalLowerBound.x and intersection.x <= rook.pos.x:
+				if intersection.x > horizontalLowerBound.x and intersection.x <= rook.pos.x and piece.pos.x < rook.pos.x:
 					horizontalLowerBound.x = intersection.x
-				if intersection.x < horizontalUpperBound.x and intersection.x >= rook.pos.x:
+				if intersection.x < horizontalUpperBound.x and intersection.x >= rook.pos.x and piece.pos.x > rook.pos.x:
 					horizontalUpperBound.x = intersection.x
 		else:
 			if intersections.size() > 0:
@@ -637,9 +637,9 @@ static func calculateKingMovePoints(king: Piece, pieces: Array[Piece]) -> KingMo
 	bishopPoints.negativeDiagonalUpperBound = Vector2i(negativeDiagonalUpperBoundX, king.pos.y - negativeDiagonalUpperBoundX + king.pos.x)
 	
 	rookPoints.verticalLowerBound.y = maxi(rookPoints.verticalLowerBound.y, king.pos.y - (Piece.boardSize / 8))
-	rookPoints.verticalUpperBound.y = maxi(rookPoints.verticalUpperBound.y, king.pos.y + (Piece.boardSize / 8))
+	rookPoints.verticalUpperBound.y = mini(rookPoints.verticalUpperBound.y, king.pos.y + (Piece.boardSize / 8))
 	rookPoints.horizontalLowerBound.x = maxi(rookPoints.horizontalLowerBound.x, king.pos.x - (Piece.boardSize / 8))
-	rookPoints.horizontalUpperBound.x = maxi(rookPoints.horizontalUpperBound.x, king.pos.x + (Piece.boardSize / 8))
+	rookPoints.horizontalUpperBound.x = mini(rookPoints.horizontalUpperBound.x, king.pos.x + (Piece.boardSize / 8))
 	
 	return KingMovePoints.new(bishopPoints.positiveDiagonalLowerBound, bishopPoints.positiveDiagonalUpperBound, 
 							  bishopPoints.negativeDiagonalLowerBound, bishopPoints.negativeDiagonalUpperBound,
@@ -697,3 +697,98 @@ static func closestPosCanMoveTo(piece: Piece, pieces: Array[Piece], tryMovePos: 
 			
 static func canPieceMoveTo(piece: Piece, pieces: Array[Piece], tryMovePos: Vector2i) -> bool:
 	return closestPosCanMoveTo(piece, pieces, tryMovePos) == tryMovePos
+
+class CastlePieces:
+	var king: Piece
+	var leftRook: Piece
+	var rightRook: Piece
+	func _init(king_: Piece, leftRook_: Piece, rightRook_: Piece):
+		king = king_
+		leftRook = leftRook_
+		rightRook = rightRook_
+
+static func availableCastlePieces(pieces: Array[Piece], turn: Piece.PieceColor) -> CastlePieces: #always returns an array of length 2, king, leftRook, rightRook
+	var kingPos: Vector2i = Vector2i(Piece.boardSize / 16 + Piece.boardSize * 4 / 8, (Piece.boardSize / 16) if turn == Piece.PieceColor.BLACK else (Piece.boardSize - Piece.boardSize / 16))
+	var king: Piece = null
+	for piece: Piece in pieces:
+		if piece.type == Piece.PieceType.KING && piece.hasMoved == false && piece.color == turn && piece.pos == kingPos:
+			king = piece
+	if king == null:
+		return CastlePieces.new(null, null, null)
+	
+	var leftRookPos: Vector2i = Vector2i(Piece.boardSize / 16, (Piece.boardSize / 16) if turn == Piece.PieceColor.BLACK else (Piece.boardSize - Piece.boardSize / 16))
+	var leftRook: Piece = null
+	for piece: Piece in pieces:
+		if piece.type == Piece.PieceType.ROOK && piece.hasMoved == false && piece.color == turn && piece.pos == leftRookPos:
+			leftRook = piece
+			break
+	
+	var rightRookPos: Vector2i = Vector2i(Piece.boardSize / 16 + Piece.boardSize * 7 / 8, (Piece.boardSize / 16) if turn == Piece.PieceColor.BLACK else (Piece.boardSize - Piece.boardSize / 16))
+	var rightRook: Piece = null
+	for piece: Piece in pieces:
+		if piece.type == Piece.PieceType.ROOK && piece.hasMoved == false && piece.color == turn && piece.pos == rightRookPos:
+			rightRook = piece
+			break
+	
+	return CastlePieces.new(king, leftRook, rightRook)
+
+class CastlePoints:
+	var canCastleLeft: bool
+	var kingPointLeft: Vector2i
+	var rookPointLeft: Vector2i
+	var canCastleRight: bool
+	var kingPointRight: Vector2i
+	var rookPointRight: Vector2i
+	func _init(canCastleLeft_, kingPointLeft_, rookPointLeft_, canCastleRight_, kingPointRight_, rookPointRight_):
+		canCastleLeft = canCastleLeft_
+		kingPointLeft = kingPointLeft_
+		rookPointLeft = rookPointLeft_
+		canCastleRight = canCastleRight_
+		kingPointRight = kingPointRight_
+		rookPointRight = rookPointRight_
+
+static func availableCastlePoints(pieces: Array[Piece], turn: Piece.PieceColor, castlePieces: CastlePieces = null) -> CastlePoints: #inner arrays have king pos 1st, rook pos 2nd
+	var king: Piece = null	
+	var leftRook: Piece = null	
+	var rightRook: Piece = null
+	if castlePieces == null:
+		castlePieces = availableCastlePieces(pieces, turn)
+	king = castlePieces.king
+	leftRook = castlePieces.leftRook
+	rightRook = castlePieces.rightRook
+	
+	var points: CastlePoints = CastlePoints.new(false, Vector2i(0, 0), Vector2i(0, 0), false, Vector2i(0, 0), Vector2i(0, 0))
+	if king == null:
+		return points
+
+	var canCastleLeft: bool = true
+	if leftRook != null:
+		for piece: Piece in pieces:
+			if piece.valueEquals(leftRook) or piece.valueEquals(king):
+				continue
+			var pieceIntersections: Array[Vector2i] = Geometry.horizontalLineCircleIntersections(king.pos.y, piece.pos, Piece.hitRadius * 2, true)
+			for intersection in pieceIntersections:
+				if intersection.x > leftRook.pos.x && intersection.x < king.pos.x:
+					canCastleLeft = false
+					break
+		if canCastleLeft:
+			points.canCastleLeft = true
+			points.kingPointLeft = Vector2i(Piece.boardSize / 16 + Piece.boardSize * 2 / 8, king.pos.y)
+			points.rookPointLeft = Vector2i(Piece.boardSize / 16 + Piece.boardSize * 3 / 8, king.pos.y)
+	
+	var canCastleRight: bool = true
+	if rightRook != null:
+		for piece: Piece in pieces:
+			if piece.valueEquals(rightRook) or piece.valueEquals(king):
+				continue
+			var pieceIntersections: Array[Vector2i] = Geometry.horizontalLineCircleIntersections(king.pos.y, piece.pos, Piece.hitRadius * 2, true)
+			for intersection in pieceIntersections:
+				if intersection.x > king.pos.x && intersection.x < rightRook.pos.x:
+					canCastleRight = false
+					break
+		if canCastleRight:
+			points.canCastleRight = true
+			points.kingPointRight = Vector2i(Piece.boardSize / 16 + Piece.boardSize * 6 / 8, king.pos.y)
+			points.rookPointRight = Vector2i(Piece.boardSize / 16 + Piece.boardSize * 5 / 8, king.pos.y)
+	return points
+	
