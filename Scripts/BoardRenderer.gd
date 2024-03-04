@@ -12,6 +12,14 @@ const shadowRealm: Vector2 = Vector2(9999999, 9999999)
 var pieceScene: PackedScene = preload("res://Prefabs/DraggablePiece.tscn")
 var usedPiecePool: Dictionary
 var freePiecePool: Dictionary
+
+func addPieceToFreePool(piece) -> DraggablePiece:
+	var sprite: DraggablePiece = pieceScene.instantiate()
+	freePiecePool[piece.color][piece.type].append(sprite)
+	pieceHolder.add_child(sprite)
+	sprite.init(self, piece)
+	return sprite
+
 func _ready() -> void:	
 	usedPiecePool[Piece.PieceColor.WHITE] = Dictionary()
 	usedPiecePool[Piece.PieceColor.BLACK] = Dictionary()
@@ -23,10 +31,7 @@ func _ready() -> void:
 		freePiecePool[Piece.PieceColor.WHITE][type] = []
 		freePiecePool[Piece.PieceColor.BLACK][type] = []
 	for piece in states[-1].pieces:
-		var sprite: DraggablePiece = pieceScene.instantiate()
-		freePiecePool[piece.color][piece.type].append(sprite)
-		pieceHolder.add_child(sprite)
-		sprite.init(self, piece)
+		addPieceToFreePool(piece)
 	
 func _process(_delta) -> void:
 	render()
@@ -128,7 +133,11 @@ func render() -> void:
 		
 		if move == null:
 			var movePos: Vector2i = PieceLogic.closestPosCanMoveTo(pieceDraggingPreviousState, states[-1].pieces, gamePosToBoardPos(mousePos + dragOffset))
-			move = Move.newNormal(pieceDraggingPreviousState, movePos)
+			
+			if pieceDraggingPreviousState.type == Piece.PieceType.PAWN and Piece.isPromotionPosition(movePos, states[-1].turnToMove):
+				move = Move.newPromotion(pieceDraggingPreviousState, movePos, Piece.PieceType.QUEEN)
+			else:
+				move = Move.newNormal(pieceDraggingPreviousState, movePos)
 			pieceDraggingNextState = pieceDraggingPreviousState.duplicate()
 			pieceDraggingNextState.pos = movePos
 
@@ -158,6 +167,10 @@ func render() -> void:
 				freePiecePool[col][key].append(piece)
 	for piece in stateToRender.pieces:
 		var sprite: DraggablePiece = freePiecePool[piece.color][piece.type].pop_back()
+		if sprite == null:
+			sprite = addPieceToFreePool(piece)
+			sprite = freePiecePool[piece.color][piece.type].pop_back()
+			
 		sprite.piece = piece
 		usedPiecePool[piece.color][piece.type].append(sprite)
 		sprite.global_position = boardPosToGamePos(piece.pos)

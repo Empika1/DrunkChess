@@ -141,6 +141,17 @@ static func validateCastleMove(state: BoardState, move: Move) -> BoardState.Stat
 
 	return BoardState.StateResult.VALID
 		
+static func validatePromotionMove(state: BoardState, move: Move) -> BoardState.StateResult:
+	if move.movedPiece.type != Piece.PieceType.PAWN:
+		return BoardState.StateResult.MOVE_PROMOTION_PROMOTED_FROM_INVALID_TYPE
+	if not move.promotingTo in Piece.promotableTo:
+		return BoardState.StateResult.MOVE_PROMOTION_PROMOTED_TO_INVALID_TYPE
+	if not Piece.isPromotionPosition(move.posMovedTo, state.turnToMove):
+		return BoardState.StateResult.MOVE_PROMOTION_PROMOTED_IN_INVALID_POSITION
+	
+	var normalResult: BoardState.StateResult = validateNormalMove(state, move)
+	return normalResult
+
 static func makeMove(state: BoardState, move: Move) -> BoardState:
 	if state.result != BoardState.StateResult.VALID:
 		return state
@@ -196,6 +207,28 @@ static func makeMove(state: BoardState, move: Move) -> BoardState:
 					piece.pos = newRookPos
 					piece.hasMoved = true
 
+			newState.turnToMove = (1 - newState.turnToMove) as Piece.PieceColor
 			return newState
 		_:
+			var result: BoardState.StateResult = validatePromotionMove(newState, move)
+			newState.result = result
+			for piece: Piece in newState.pieces:
+				if piece.valueEquals(move.movedPiece):
+					piece.type = Piece.PieceType.QUEEN
+					piece.pos = move.posMovedTo
+					piece.hasMoved = true
+			
+			var capturedPieceIndices: Array[int] = []
+			for i: int in range(newState.pieces.size()):
+				var piece: Piece = newState.pieces[i]
+				if piece.color != move.movedPiece.color:
+					if doPiecesOverlap(piece.pos, piece.hitRadius, move.posMovedTo, move.movedPiece.hitRadius):
+						capturedPieceIndices.append(i)
+			
+			for i: int in range(capturedPieceIndices.size() - 1, -1, -1):
+				var pieceIndex: int = capturedPieceIndices[i]
+				newState.capturedPieces.append(newState.pieces[pieceIndex])
+				newState.pieces.pop_at(pieceIndex)
+			
+			newState.turnToMove = (1 - newState.turnToMove) as Piece.PieceColor
 			return newState

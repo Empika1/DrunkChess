@@ -6,14 +6,15 @@ enum PieceType {
 	PAWN, KNIGHT, BISHOP, ROOK, QUEEN, KING, NULL_PIECE
 }
 
-func isPromotableTo(pieceType: PieceType) -> bool:
-	match pieceType:
-		PieceType.PAWN:
+const promotableTo: Array[PieceType] = [PieceType.KNIGHT, PieceType.BISHOP, PieceType.ROOK, PieceType.QUEEN]
+static func isPromotionPosition(pos_: Vector2i, turnToMove_: PieceColor):
+	if turnToMove_ == Piece.PieceColor.WHITE:
+		if pos_.y > Piece.boardSize / 16:
 			return false
-		PieceType.KING:
+	else:
+		if pos_.y < Piece.boardSize - Piece.boardSize / 16:
 			return false
-		_:
-			return true
+	return true
 			
 enum PieceColor {WHITE, BLACK}
 
