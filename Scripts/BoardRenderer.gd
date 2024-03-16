@@ -1,13 +1,13 @@
-extends Sprite2D
+extends Node
 class_name BoardRenderer
 
+@export var board: Sprite2D
 @export var pieceHolder: Node2D
 @export var lines: Sprite2D
 @export var circles: Sprite2D
 @export var circleArcs: Sprite2D
 @export var arrows: Sprite2D
-
-@onready var states: Array[BoardState] = [BoardState.newDefaultStartingState()]
+@export var gameManager: GameManager
 
 const shadowRealm: Vector2 = Vector2(9999999, 9999999)
 var pieceScene: PackedScene = preload("res://Prefabs/DraggablePiece.tscn")
@@ -31,7 +31,7 @@ func _ready() -> void:
 		usedPiecePool[Piece.PieceColor.BLACK][type] = []
 		freePiecePool[Piece.PieceColor.WHITE][type] = []
 		freePiecePool[Piece.PieceColor.BLACK][type] = []
-	for piece in states[-1].pieces:
+	for piece in gameManager.states[-1].pieces:
 		addPieceToFreePool(piece)
 	
 func _process(_delta) -> void:
@@ -83,19 +83,19 @@ func getPieceTexture(pieceType: Piece.PieceType, pieceColor: Piece.PieceColor) -
 					return bk
 
 func getScaledRectSize():
-	return get_rect().size * global_scale
+	return board.get_rect().size * board.global_scale
 
 func boardLengthToGameLength(boardLength: Vector2i) -> Vector2:
 	return Vector2(boardLength) / Vector2(Piece.boardSize, Piece.boardSize) * getScaledRectSize()
 
 func boardPosToGamePos(boardPos: Vector2i) -> Vector2:
-	return boardLengthToGameLength(boardPos) + global_position
+	return boardLengthToGameLength(boardPos) + board.global_position
 
 func gameLengthToBoardLength(gameLength: Vector2) -> Vector2i:
 	return Vector2i(gameLength * Vector2(Piece.boardSize, Piece.boardSize) / getScaledRectSize())
 
 func gamePosToBoardPos(gamePos: Vector2) -> Vector2i:
-	return gameLengthToBoardLength(gamePos - global_position)
+	return gameLengthToBoardLength(gamePos - board.global_position)
 
 func getHoveredPiece(mousePos: Vector2i) -> Piece:
 	for c in pieceHolder.get_children():
@@ -105,61 +105,13 @@ func getHoveredPiece(mousePos: Vector2i) -> Piece:
 			return cs.piece
 	return null
 
-var pieceDraggingPreviousState: Piece
-var pieceDraggingNextState: Piece
-var dragOffset: Vector2i
-var attemptedNextState: BoardState
 var stateToRender: BoardState
 func render() -> void:
 	deleteCircles(); deleteLines(); deleteArcs(); deleteArrows();
-	var mousePos: Vector2i = get_viewport().get_mouse_position()
-	if pieceDraggingPreviousState == null && Input.is_action_just_pressed("lmb"):
-		pieceDraggingPreviousState = getHoveredPiece(mousePos)
-		if pieceDraggingPreviousState != null:
-			dragOffset = boardPosToGamePos(pieceDraggingPreviousState.pos) - Vector2(mousePos)
-	
-	if pieceDraggingPreviousState != null:
-		var move: Move = null
-		
-		var castlePieces: PieceLogic.CastlePieces = states[-1].castlePieces
-		var castlePoints: PieceLogic.CastlePoints = states[-1].castlePoints
-		if castlePoints.canCastleLeft:
-			addCastleArea(castlePoints.kingPointLeft)
-			if (gamePosToBoardPos(mousePos) - castlePoints.kingPointLeft).length_squared() < castleRadius ** 2:
-				move = Move.newCastle(castlePieces.king, castlePieces.leftRook)
-		if castlePoints.canCastleRight:
-			addCastleArea(castlePoints.kingPointRight)
-			if (gamePosToBoardPos(mousePos) - castlePoints.kingPointRight).length_squared() < castleRadius ** 2:
-				move = Move.newCastle(castlePieces.king, castlePieces.rightRook)
-		
-		if move == null:
-			var movePos: Vector2i = PieceLogic.closestPosCanMoveTo(pieceDraggingPreviousState, states[-1].pieces, gamePosToBoardPos(mousePos + dragOffset), 
-				states[-1].movePoints[states[-1].findPieceIndex(pieceDraggingPreviousState)])
-			
-			if pieceDraggingPreviousState.type == Piece.PieceType.PAWN and Piece.isPromotionPosition(movePos, states[-1].turnToMove):
-				move = Move.newPromotion(pieceDraggingPreviousState, movePos, Piece.PieceType.QUEEN)
-			else:
-				move = Move.newNormal(pieceDraggingPreviousState, movePos)
-			pieceDraggingNextState = pieceDraggingPreviousState.duplicate()
-			pieceDraggingNextState.pos = movePos
-
-		attemptedNextState = states[-1].makeMove(move)
-		
-		if Input.is_action_just_released("lmb"):
-			if attemptedNextState.result in [BoardState.StateResult.VALID, BoardState.StateResult.WIN_BLACK, BoardState.StateResult.WIN_WHITE]:
-				states.append(attemptedNextState)
-			attemptedNextState = null
-			pieceDraggingPreviousState = null
-			pieceDraggingNextState = null
-			dragOffset = Vector2i.ZERO
-	
-	if states[-1].result in [BoardState.StateResult.WIN_BLACK, BoardState.StateResult.WIN_WHITE]:
-		print("hhhhhhhhhhhhhhhhhhhhhhhhhhhhh")
-
-	if attemptedNextState != null:
-		stateToRender = attemptedNextState
+	if gameManager.attemptedNextState != null:
+		stateToRender = gameManager.attemptedNextState
 	else:
-		stateToRender = states[-1]
+		stateToRender = gameManager.states[-1]
 
 	for col in [Piece.PieceColor.BLACK, Piece.PieceColor.WHITE]:
 		for key in usedPiecePool[col]:
@@ -176,11 +128,11 @@ func render() -> void:
 		sprite.piece = piece
 		usedPiecePool[piece.color][piece.type].append(sprite)
 		sprite.global_position = boardPosToGamePos(piece.pos)
-		sprite.global_scale = global_scale
+		sprite.global_scale = board.global_scale
 	
-	if pieceDraggingPreviousState != null:
-		addHitRadii(stateToRender.pieces)
-		addMoveIndicators(states[-1])
+	if gameManager.pieceDragging != null:
+		addHitRadii(gameManager.attemptedNextState.pieces)
+		addMoveIndicators(gameManager.states[-1], gameManager.pieceDragging)
 	addCaptureArrows(stateToRender)
 	
 	for col in [Piece.PieceColor.BLACK, Piece.PieceColor.WHITE]:
@@ -256,23 +208,23 @@ func addHitRadii(pieces: Array[Piece]) -> void:
 		circleColorsba.append(Vector2(hitRadiusColor.b, hitRadiusColor.a))
 
 @export var thickness: float
-func addMoveIndicators(state: BoardState) -> void:
-	match pieceDraggingPreviousState.type:
+func addMoveIndicators(state: BoardState, pieceDragging: Piece) -> void:
+	match gameManager.pieceDragging.type:
 		Piece.PieceType.PAWN:
-			addPawnLines(state)
+			addPawnLines(state, pieceDragging)
 		Piece.PieceType.KNIGHT:
-			addKnightArcs(state)
+			addKnightArcs(state, pieceDragging)
 		Piece.PieceType.BISHOP:
-			addBishopLines(state)
+			addBishopLines(state, pieceDragging)
 		Piece.PieceType.ROOK:
-			addRookLines(state)
+			addRookLines(state, pieceDragging)
 		Piece.PieceType.QUEEN:
-			addQueenLines(state)
+			addQueenLines(state, pieceDragging)
 		_:
-			addKingLines(state)
+			addKingLines(state, pieceDragging)
 
-func addPawnLines(state: BoardState) -> void:
-	var pawnPoints: PieceLogic.PawnMovePoints = state.movePoints[state.findPieceIndex(pieceDraggingPreviousState)] as PieceLogic.PawnMovePoints
+func addPawnLines(state: BoardState, pieceDragging: Piece) -> void:
+	var pawnPoints: PieceLogic.PawnMovePoints = state.movePoints[state.findPieceIndex(pieceDragging)] as PieceLogic.PawnMovePoints
 	lineStarts.append(Vector2(pawnPoints.verticalLowerBound) / Piece.boardSize)
 	lineEnds.append(Vector2(pawnPoints.verticalUpperBound) / Piece.boardSize)
 	lineStarts.append(Vector2(pawnPoints.positiveDiagonalLowerBound) / Piece.boardSize)
@@ -284,10 +236,10 @@ func addPawnLines(state: BoardState) -> void:
 		lineColorsrg.append(Vector2(hitRadiusColor.r, hitRadiusColor.g))
 		lineColorsba.append(Vector2(hitRadiusColor.b, hitRadiusColor.a))
 
-func addKnightArcs(state: BoardState) -> void:
-	var knightPoints: PieceLogic.KnightMovePoints = state.movePoints[state.findPieceIndex(pieceDraggingPreviousState)] as PieceLogic.KnightMovePoints
-	arcCenters.append(Vector2(pieceDraggingPreviousState.pos) / Piece.boardSize)
-	arcRadii.append(float(pieceDraggingPreviousState.knightMoveRadius) / Piece.boardSize)
+func addKnightArcs(state: BoardState, pieceDragging: Piece) -> void:
+	var knightPoints: PieceLogic.KnightMovePoints = state.movePoints[state.findPieceIndex(pieceDragging)] as PieceLogic.KnightMovePoints
+	arcCenters.append(Vector2(gameManager.pieceDragging.pos) / Piece.boardSize)
+	arcRadii.append(float(Piece.knightMoveRadius) / Piece.boardSize)
 	arcColorsrg.append(Vector2(hitRadiusColor.r, hitRadiusColor.g))
 	arcColorsba.append(Vector2(hitRadiusColor.b, hitRadiusColor.a))
 	arcThicknesses.append(thickness)
@@ -296,8 +248,8 @@ func addKnightArcs(state: BoardState) -> void:
 		arcStarts.append(Vector2(knightPoints.arcStarts[i]) / Piece.boardSize)
 		arcEnds.append(Vector2(knightPoints.arcEnds[i]) / Piece.boardSize)
 		
-func addBishopLines(state: BoardState) -> void:
-	var bishopPoints: PieceLogic.BishopMovePoints = state.movePoints[state.findPieceIndex(pieceDraggingPreviousState)] as PieceLogic.BishopMovePoints
+func addBishopLines(state: BoardState, pieceDragging: Piece) -> void:
+	var bishopPoints: PieceLogic.BishopMovePoints = state.movePoints[state.findPieceIndex(pieceDragging)] as PieceLogic.BishopMovePoints
 	lineStarts.append(Vector2(bishopPoints.positiveDiagonalLowerBound) / Piece.boardSize)
 	lineEnds.append(Vector2(bishopPoints.positiveDiagonalUpperBound) / Piece.boardSize)
 	lineStarts.append(Vector2(bishopPoints.negativeDiagonalLowerBound) / Piece.boardSize)
@@ -307,8 +259,8 @@ func addBishopLines(state: BoardState) -> void:
 		lineColorsrg.append(Vector2(hitRadiusColor.r, hitRadiusColor.g))
 		lineColorsba.append(Vector2(hitRadiusColor.b, hitRadiusColor.a))
 
-func addRookLines(state: BoardState) -> void:
-	var rookPoints: PieceLogic.RookMovePoints = state.movePoints[state.findPieceIndex(pieceDraggingPreviousState)] as PieceLogic.RookMovePoints
+func addRookLines(state: BoardState, pieceDragging: Piece) -> void:
+	var rookPoints: PieceLogic.RookMovePoints = state.movePoints[state.findPieceIndex(pieceDragging)] as PieceLogic.RookMovePoints
 	lineStarts.append(Vector2(rookPoints.horizontalLowerBound) / Piece.boardSize)
 	lineEnds.append(Vector2(rookPoints.horizontalUpperBound) / Piece.boardSize)
 	lineStarts.append(Vector2(rookPoints.verticalLowerBound) / Piece.boardSize)
@@ -318,8 +270,8 @@ func addRookLines(state: BoardState) -> void:
 		lineColorsrg.append(Vector2(hitRadiusColor.r, hitRadiusColor.g))
 		lineColorsba.append(Vector2(hitRadiusColor.b, hitRadiusColor.a))
 
-func addQueenLines(state: BoardState) -> void:
-	var queenPoints: PieceLogic.QueenMovePoints = state.movePoints[state.findPieceIndex(pieceDraggingPreviousState)] as PieceLogic.QueenMovePoints
+func addQueenLines(state: BoardState, pieceDragging: Piece) -> void:
+	var queenPoints: PieceLogic.QueenMovePoints = state.movePoints[state.findPieceIndex(pieceDragging)] as PieceLogic.QueenMovePoints
 	lineStarts.append(Vector2(queenPoints.positiveDiagonalLowerBound) / Piece.boardSize)
 	lineEnds.append(Vector2(queenPoints.positiveDiagonalUpperBound) / Piece.boardSize)
 	lineStarts.append(Vector2(queenPoints.negativeDiagonalLowerBound) / Piece.boardSize)
@@ -333,8 +285,8 @@ func addQueenLines(state: BoardState) -> void:
 		lineColorsrg.append(Vector2(hitRadiusColor.r, hitRadiusColor.g))
 		lineColorsba.append(Vector2(hitRadiusColor.b, hitRadiusColor.a))
 
-func addKingLines(state: BoardState) -> void:
-	var kingPoints: PieceLogic.KingMovePoints = state.movePoints[state.findPieceIndex(pieceDraggingPreviousState)] as PieceLogic.KingMovePoints
+func addKingLines(state: BoardState, pieceDragging: Piece) -> void:
+	var kingPoints: PieceLogic.KingMovePoints = state.movePoints[state.findPieceIndex(pieceDragging)] as PieceLogic.KingMovePoints
 	lineStarts.append(Vector2(kingPoints.positiveDiagonalLowerBound) / Piece.boardSize)
 	lineEnds.append(Vector2(kingPoints.positiveDiagonalUpperBound) / Piece.boardSize)
 	lineStarts.append(Vector2(kingPoints.negativeDiagonalLowerBound) / Piece.boardSize)
@@ -378,12 +330,10 @@ func deleteArrows() -> void:
 @export var blackCapturerArrowColor: Color
 @export var arrowThickness: float
 func addCaptureArrows(state: BoardState) -> void:
-	var totalCaptures = 0
 	for i in range(len(state.pieces)):
 		var capturer: Piece = state.pieces[i]
 		var piecesCanCapture: Array[Piece] = state.piecesCanCapture[i]
 		for capturee: Piece in piecesCanCapture:
-			totalCaptures += 1
 			arrowStarts.append(Vector2(capturer.pos) / Piece.boardSize)
 			arrowEnds.append(Vector2(capturee.pos) / Piece.boardSize)
 			if capturer.color == Piece.PieceColor.WHITE:
@@ -393,6 +343,10 @@ func addCaptureArrows(state: BoardState) -> void:
 				arrowColorsrg.append(Vector2(blackCapturerArrowColor.r, blackCapturerArrowColor.g))
 				arrowColorsba.append(Vector2(blackCapturerArrowColor.b, blackCapturerArrowColor.a))
 			arrowThicknesses.append(arrowThickness)
-			arrowDistortPoints.append(((Vector2(capturer.pos) + Vector2(capturee.pos)) / 2 - Vector2(0, Piece.hitRadius) * (0.333 if capturer.color == Piece.PieceColor.WHITE else 0.666)) / Piece.boardSize)
-	print(totalCaptures)
+			var arrowMidpoint: Vector2 = (arrowStarts[-1] + arrowEnds[-1]) / 2
+			const lengthMultiplier: float = 0.1
+			var arrowDisplace: Vector2 = arrowEnds[-1] - arrowStarts[-1]
+			arrowDisplace = Vector2(arrowDisplace.y, -arrowDisplace.x)
+			arrowDisplace *= lengthMultiplier
+			arrowDistortPoints.append(arrowMidpoint + arrowDisplace)
 		
