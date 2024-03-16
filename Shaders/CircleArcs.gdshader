@@ -1,4 +1,6 @@
 shader_type canvas_item;
+#include "LSquared.gdshaderinc"
+#include "AClockwise.gdshaderinc"
 
 const int numCircles = 32;
 uniform vec2[numCircles] circleCenters;
@@ -12,14 +14,6 @@ const int numArcs = 128;
 uniform vec2[numArcs] arcStarts;
 uniform vec2[numArcs] arcEnds;
 
-float l2(vec2 vec) {
-	return vec.x * vec.x + vec.y * vec.y;
-}
-
-bool aClockwise(vec2 a, vec2 b) {
-	return a.x * b.y > a.y * b.x;
-}
-
 void fragment() {
 	float blur = 0.0006;
 	
@@ -29,10 +23,10 @@ void fragment() {
 		vec4 col = vec4(circleColorsrg[i].xy, circleColorsba[i].xy);
 		if(col.a == 0.)
 			break;
-		float outerRadiusSquared = (circleRadii[i] + circleThicknesses[i]) * (circleRadii[i] + circleThicknesses[i]);
-		float innerRadiusSquared = (circleRadii[i] - circleThicknesses[i]) * (circleRadii[i] - circleThicknesses[i]);
-		float outerRadiusBlurSquared = (circleRadii[i] + circleThicknesses[i] + blur) * (circleRadii[i] + circleThicknesses[i] + blur);
-		float innerRadiusBlurSquared = (circleRadii[i] - circleThicknesses[i] - blur) * (circleRadii[i] - circleThicknesses[i] - blur);
+		float outerRadiusSquared = (circleRadii[i] + circleThicknesses[i] / 2.) * (circleRadii[i] + circleThicknesses[i] / 2.);
+		float innerRadiusSquared = (circleRadii[i] - circleThicknesses[i] / 2.) * (circleRadii[i] - circleThicknesses[i] / 2.);
+		float outerRadiusBlurSquared = (circleRadii[i] + circleThicknesses[i] / 2. + blur) * (circleRadii[i] + circleThicknesses[i] / 2. + blur);
+		float innerRadiusBlurSquared = (circleRadii[i] - circleThicknesses[i] / 2. - blur) * (circleRadii[i] - circleThicknesses[i] / 2. - blur);
 		vec2 center = circleCenters[i];
 		float distanceSquared = l2(UV - center);
 		

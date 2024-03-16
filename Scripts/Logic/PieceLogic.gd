@@ -9,6 +9,7 @@ static func isPieceOutsideBoard(pos: Vector2i, radius: int, maxPos: Vector2i) ->
 
 class PieceMovePoints:
 	var pieceType: Piece.PieceType
+	var piecesCanCapture: Array[Piece]
 
 class PawnMovePoints extends PieceMovePoints:
 	var verticalLowerBound: Vector2i #verticalLowerBound.y <= verticalUpperBound.y
@@ -57,12 +58,13 @@ static func calculatePawnMovePoints(pawn: Piece, pieces: Array[Piece]) -> PawnMo
 	var positiveDiagonalUpperBound: Vector2i
 	var negativeDiagonalLowerBound: Vector2i
 	var negativeDiagonalUpperBound: Vector2i
+	var capturingPieceOnPositiveDiagonal: bool = false
+	var capturingPieceOnNegativeDiagonal: bool = false
 	if pawn.color == Piece.PieceColor.WHITE:
 		var positiveDiagonalLowerBoundX: int = maxi(maxi(Piece.hitRadius, pawn.pos.x - Piece.squareSize), Piece.hitRadius - pawn.pos.y + pawn.pos.x)
 		var positiveDiagonalUpperBoundX: int = pawn.pos.x
 		var positiveDiagonalLowerBoundCaptureX: int = 0
 		var positiveDiagonalUpperBoundCaptureX: int = 0
-		var capturingPieceOnPositiveDiagonal: bool = false
 		for piece: Piece in pieces:
 			if piece.valueEquals(pawn):
 				continue
@@ -107,7 +109,6 @@ static func calculatePawnMovePoints(pawn: Piece, pieces: Array[Piece]) -> PawnMo
 		var negativeDiagonalUpperBoundX: int = mini(mini(Piece.boardSize - Piece.hitRadius, pawn.pos.x + Piece.squareSize), pawn.pos.y + pawn.pos.x - Piece.hitRadius)
 		var negativeDiagonalLowerBoundCaptureX: int = Piece.boardSize
 		var negativeDiagonalUpperBoundCaptureX: int = Piece.boardSize
-		var capturingPieceOnNegativeDiagonal: bool = false
 		for piece: Piece in pieces:
 			if piece.valueEquals(pawn):
 				continue
@@ -152,7 +153,6 @@ static func calculatePawnMovePoints(pawn: Piece, pieces: Array[Piece]) -> PawnMo
 		var positiveDiagonalUpperBoundX: int = mini(mini(Piece.boardSize - Piece.hitRadius, pawn.pos.x + Piece.squareSize), pawn.pos.x - pawn.pos.y + Piece.boardSize - Piece.hitRadius)
 		var positiveDiagonalLowerBoundCaptureX: int = Piece.boardSize
 		var positiveDiagonalUpperBoundCaptureX: int = Piece.boardSize
-		var capturingPieceOnPositiveDiagonal: bool = false
 		for piece: Piece in pieces:
 			if piece.valueEquals(pawn):
 				continue
@@ -197,7 +197,6 @@ static func calculatePawnMovePoints(pawn: Piece, pieces: Array[Piece]) -> PawnMo
 		var negativeDiagonalUpperBoundX: int = pawn.pos.x
 		var negativeDiagonalLowerBoundCaptureX: int = 0
 		var negativeDiagonalUpperBoundCaptureX: int = 0
-		var capturingPieceOnNegativeDiagonal: bool = false
 		for piece: Piece in pieces:
 			if piece.valueEquals(pawn):
 				continue
@@ -239,6 +238,29 @@ static func calculatePawnMovePoints(pawn: Piece, pieces: Array[Piece]) -> PawnMo
 		negativeDiagonalUpperBound = Vector2i(negativeDiagonalUpperX, pawn.pos.x - negativeDiagonalUpperX + pawn.pos.y)
 	
 	return PawnMovePoints.new(verticalLowerBound, verticalUpperBound, positiveDiagonalLowerBound, positiveDiagonalUpperBound, negativeDiagonalLowerBound, negativeDiagonalUpperBound)
+
+static func piecesPawnCanCapture(pawn: Piece, pieces: Array[Piece], movePoints: PawnMovePoints = null) -> Array[Piece]: #borked
+	if movePoints == null:
+		movePoints = calculatePawnMovePoints(pawn, pieces)
+	
+	var piecesCanCapture_: Array[Piece] = []
+	if !(movePoints.negativeDiagonalLowerBound == pawn.pos and movePoints.negativeDiagonalUpperBound == pawn.pos):
+		for piece: Piece in pieces:
+			if piece.color == pawn.color:
+				continue
+			if BoardLogic.doPiecesOverlap(movePoints.negativeDiagonalLowerBound, Piece.hitRadius, piece.pos, Piece.hitRadius):
+				piecesCanCapture_.append(piece)
+			if BoardLogic.doPiecesOverlap(movePoints.negativeDiagonalUpperBound, Piece.hitRadius, piece.pos, Piece.hitRadius):
+				piecesCanCapture_.append(piece)
+	if !(movePoints.positiveDiagonalLowerBound == pawn.pos and movePoints.positiveDiagonalUpperBound == pawn.pos):
+		for piece: Piece in pieces:
+			if piece.color == pawn.color:
+				continue
+			if BoardLogic.doPiecesOverlap(movePoints.positiveDiagonalLowerBound, Piece.hitRadius, piece.pos, Piece.hitRadius):
+				piecesCanCapture_.append(piece)
+			if BoardLogic.doPiecesOverlap(movePoints.positiveDiagonalUpperBound, Piece.hitRadius, piece.pos, Piece.hitRadius):
+				piecesCanCapture_.append(piece)
+	return piecesCanCapture_
 
 static func closestPosPawnCanMoveTo(pawn: Piece, pieces: Array[Piece], tryMovePos: Vector2i, movePoints: PawnMovePoints = null) -> Vector2i:
 	var posOnVertical: Vector2i = Vector2i(pawn.pos.x, tryMovePos.y)
@@ -357,8 +379,31 @@ static func calculateKnightMovePoints(knight: Piece, pieces: Array[Piece]) -> Kn
 		else:
 			arcStarts.append(rightIntersectionsSnapped[0])
 			arcEnds.append(rightIntersectionsSnapped[1])
-	
+
 	return KnightMovePoints.new(arcStarts, arcEnds)
+
+static func piecesKnightCanCapture(knight: Piece, pieces: Array[Piece], movePoints: KnightMovePoints = null) -> Array[Piece]: #borked
+	if movePoints == null:
+		movePoints = calculateKnightMovePoints(knight, pieces)
+	
+	var piecesCanCapture_: Array[Piece] = []
+	for piece: Piece in pieces:
+		if piece.color == knight.color:
+			continue
+		var capturePoints: Array[Vector2i] = Geometry.circlesIntersectionInt(piece.pos, Piece.hitRadius * 2, knight.pos, Piece.knightMoveRadius, true)
+		for point: Vector2i in capturePoints:
+			var invalid: bool = false
+			for i: int in range(len(movePoints.arcStarts)):
+				var arcStart: Vector2i = movePoints.arcStarts[i]
+				var arcEnd: Vector2i = movePoints.arcEnds[i]
+				if Geometry.acbOrientation(point, arcStart, knight.pos) == 1 and Geometry.acbOrientation(point, arcEnd, knight.pos) == -1:
+					invalid = true
+					break
+			if invalid == false:
+				piecesCanCapture_.append(piece)
+				break
+	
+	return piecesCanCapture_
 
 static func closestPosKnightCanMoveTo(knight: Piece, pieces: Array[Piece], tryMovePos: Vector2i, movePoints: KnightMovePoints = null) -> Vector2i:
 	var scaledPos: Vector2 = Vector2(tryMovePos - knight.pos).normalized() * Piece.knightMoveRadius
@@ -458,6 +503,24 @@ static func calculateBishopMovePoints(bishop: Piece, pieces: Array[Piece]) -> Bi
 	
 	return BishopMovePoints.new(positiveDiagonalLowerBound, positiveDiagonalUpperBound, negativeDiagonalLowerBound, negativeDiagonalUpperBound)
 
+static func piecesBishopCanCapture(bishop: Piece, pieces: Array[Piece], movePoints: BishopMovePoints = null) -> Array[Piece]:
+	if movePoints == null:
+		movePoints = calculateBishopMovePoints(bishop, pieces)
+		
+	var piecesCanCapture_: Array[Piece] = []
+	for piece: Piece in pieces:
+		if piece.color == bishop.color:
+			continue
+		if BoardLogic.doPiecesOverlap(movePoints.negativeDiagonalLowerBound, Piece.hitRadius, piece.pos, Piece.hitRadius):
+			piecesCanCapture_.append(piece)
+		if BoardLogic.doPiecesOverlap(movePoints.negativeDiagonalUpperBound, Piece.hitRadius, piece.pos, Piece.hitRadius):
+			piecesCanCapture_.append(piece)
+		if BoardLogic.doPiecesOverlap(movePoints.positiveDiagonalLowerBound, Piece.hitRadius, piece.pos, Piece.hitRadius):
+			piecesCanCapture_.append(piece)
+		if BoardLogic.doPiecesOverlap(movePoints.positiveDiagonalUpperBound, Piece.hitRadius, piece.pos, Piece.hitRadius):
+			piecesCanCapture_.append(piece)
+	return piecesCanCapture_
+
 static func closestPosBishopCanMoveTo(bishop: Piece, pieces: Array[Piece], tryMovePos: Vector2i, movePoints: BishopMovePoints = null) -> Vector2i:
 	if movePoints == null:
 		movePoints = calculateBishopMovePoints(bishop, pieces)
@@ -530,6 +593,24 @@ static func calculateRookMovePoints(rook: Piece, pieces: Array[Piece]) -> RookMo
 	
 	return RookMovePoints.new(verticalLowerBound, verticalUpperBound, horizontalLowerBound, horizontalUpperBound)
 
+static func piecesRookCanCapture(rook: Piece, pieces: Array[Piece], movePoints: RookMovePoints = null) -> Array[Piece]:
+	if movePoints == null:
+		movePoints = calculateRookMovePoints(rook, pieces)
+		
+	var piecesCanCapture_: Array[Piece] = []
+	for piece: Piece in pieces:
+		if piece.color == rook.color:
+			continue
+		if BoardLogic.doPiecesOverlap(movePoints.verticalLowerBound, Piece.hitRadius, piece.pos, Piece.hitRadius):
+			piecesCanCapture_.append(piece)
+		if BoardLogic.doPiecesOverlap(movePoints.verticalUpperBound, Piece.hitRadius, piece.pos, Piece.hitRadius):
+			piecesCanCapture_.append(piece)
+		if BoardLogic.doPiecesOverlap(movePoints.horizontalLowerBound, Piece.hitRadius, piece.pos, Piece.hitRadius):
+			piecesCanCapture_.append(piece)
+		if BoardLogic.doPiecesOverlap(movePoints.horizontalUpperBound, Piece.hitRadius, piece.pos, Piece.hitRadius):
+			piecesCanCapture_.append(piece)
+	return piecesCanCapture_
+
 static func closestPosRookCanMoveTo(rook: Piece, pieces: Array[Piece], tryMovePos: Vector2i, movePoints: RookMovePoints = null) -> Vector2i:
 	if movePoints == null:
 		movePoints = calculateRookMovePoints(rook, pieces)
@@ -568,6 +649,32 @@ static func calculateQueenMovePoints(queen: Piece, pieces: Array[Piece]):
 							   bishopPoints.negativeDiagonalLowerBound, bishopPoints.negativeDiagonalUpperBound,
 							   rookPoints.verticalLowerBound, rookPoints.verticalUpperBound,
 							   rookPoints.horizontalLowerBound, rookPoints.horizontalUpperBound)
+
+static func piecesQueenCanCapture(queen: Piece, pieces: Array[Piece], movePoints: QueenMovePoints = null) -> Array[Piece]:
+	if movePoints == null:
+		movePoints = calculateQueenMovePoints(queen, pieces)
+		
+	var piecesCanCapture_: Array[Piece] = []
+	for piece: Piece in pieces:
+		if piece.color == queen.color:
+			continue
+		if BoardLogic.doPiecesOverlap(movePoints.negativeDiagonalLowerBound, Piece.hitRadius, piece.pos, Piece.hitRadius):
+			piecesCanCapture_.append(piece)
+		if BoardLogic.doPiecesOverlap(movePoints.negativeDiagonalUpperBound, Piece.hitRadius, piece.pos, Piece.hitRadius):
+			piecesCanCapture_.append(piece)
+		if BoardLogic.doPiecesOverlap(movePoints.positiveDiagonalLowerBound, Piece.hitRadius, piece.pos, Piece.hitRadius):
+			piecesCanCapture_.append(piece)
+		if BoardLogic.doPiecesOverlap(movePoints.positiveDiagonalUpperBound, Piece.hitRadius, piece.pos, Piece.hitRadius):
+			piecesCanCapture_.append(piece)
+		if BoardLogic.doPiecesOverlap(movePoints.verticalLowerBound, Piece.hitRadius, piece.pos, Piece.hitRadius):
+			piecesCanCapture_.append(piece)
+		if BoardLogic.doPiecesOverlap(movePoints.verticalUpperBound, Piece.hitRadius, piece.pos, Piece.hitRadius):
+			piecesCanCapture_.append(piece)
+		if BoardLogic.doPiecesOverlap(movePoints.horizontalLowerBound, Piece.hitRadius, piece.pos, Piece.hitRadius):
+			piecesCanCapture_.append(piece)
+		if BoardLogic.doPiecesOverlap(movePoints.horizontalUpperBound, Piece.hitRadius, piece.pos, Piece.hitRadius):
+			piecesCanCapture_.append(piece)
+	return piecesCanCapture_
 
 static func closestPosQueenCanMoveTo(queen: Piece, pieces: Array[Piece], tryMovePos: Vector2i, movePoints: QueenMovePoints = null) -> Vector2i:
 	if movePoints == null:
@@ -646,6 +753,32 @@ static func calculateKingMovePoints(king: Piece, pieces: Array[Piece]) -> KingMo
 							  rookPoints.verticalLowerBound, rookPoints.verticalUpperBound,
 							  rookPoints.horizontalLowerBound, rookPoints.horizontalUpperBound)
 
+static func piecesKingCanCapture(king: Piece, pieces: Array[Piece], movePoints: KingMovePoints = null) -> Array[Piece]:
+	if movePoints == null:
+		movePoints = calculateKingMovePoints(king, pieces)
+		
+	var piecesCanCapture_: Array[Piece] = []
+	for piece: Piece in pieces:
+		if piece.color == king.color:
+			continue
+		if BoardLogic.doPiecesOverlap(movePoints.negativeDiagonalLowerBound, Piece.hitRadius, piece.pos, Piece.hitRadius):
+			piecesCanCapture_.append(piece)
+		if BoardLogic.doPiecesOverlap(movePoints.negativeDiagonalUpperBound, Piece.hitRadius, piece.pos, Piece.hitRadius):
+			piecesCanCapture_.append(piece)
+		if BoardLogic.doPiecesOverlap(movePoints.positiveDiagonalLowerBound, Piece.hitRadius, piece.pos, Piece.hitRadius):
+			piecesCanCapture_.append(piece)
+		if BoardLogic.doPiecesOverlap(movePoints.positiveDiagonalUpperBound, Piece.hitRadius, piece.pos, Piece.hitRadius):
+			piecesCanCapture_.append(piece)
+		if BoardLogic.doPiecesOverlap(movePoints.verticalLowerBound, Piece.hitRadius, piece.pos, Piece.hitRadius):
+			piecesCanCapture_.append(piece)
+		if BoardLogic.doPiecesOverlap(movePoints.verticalUpperBound, Piece.hitRadius, piece.pos, Piece.hitRadius):
+			piecesCanCapture_.append(piece)
+		if BoardLogic.doPiecesOverlap(movePoints.horizontalLowerBound, Piece.hitRadius, piece.pos, Piece.hitRadius):
+			piecesCanCapture_.append(piece)
+		if BoardLogic.doPiecesOverlap(movePoints.horizontalUpperBound, Piece.hitRadius, piece.pos, Piece.hitRadius):
+			piecesCanCapture_.append(piece)
+	return piecesCanCapture_
+
 static func closestPosKingCanMoveTo(king: Piece, pieces: Array[Piece], tryMovePos: Vector2i, movePoints: KingMovePoints = null) -> Vector2i:
 	if movePoints == null:
 		movePoints = calculateKingMovePoints(king, pieces)
@@ -680,23 +813,53 @@ static func closestPosKingCanMoveTo(king: Piece, pieces: Array[Piece], tryMovePo
 		return posOnVertical
 	return posOnHorizontal
 
-static func closestPosCanMoveTo(piece: Piece, pieces: Array[Piece], tryMovePos: Vector2i) -> Vector2i:
+static func calculateMovePoints(piece: Piece, pieces: Array[Piece]) -> PieceMovePoints:
 	match piece.type:
 		Piece.PieceType.PAWN:
-			return closestPosPawnCanMoveTo(piece, pieces, tryMovePos)
+			return calculatePawnMovePoints(piece, pieces)
 		Piece.PieceType.KNIGHT:
-			return closestPosKnightCanMoveTo(piece, pieces, tryMovePos)
+			return calculateKnightMovePoints(piece, pieces)
 		Piece.PieceType.BISHOP:
-			return closestPosBishopCanMoveTo(piece, pieces, tryMovePos)
+			return calculateBishopMovePoints(piece, pieces)
 		Piece.PieceType.ROOK:
-			return closestPosRookCanMoveTo(piece, pieces, tryMovePos)
+			return calculateRookMovePoints(piece, pieces)
 		Piece.PieceType.QUEEN:
-			return closestPosQueenCanMoveTo(piece, pieces, tryMovePos)
+			return calculateQueenMovePoints(piece, pieces)
 		_:
-			return closestPosKingCanMoveTo(piece, pieces, tryMovePos)
+			return calculateKingMovePoints(piece, pieces)
+
+static func piecesCanCapture(piece: Piece, pieces: Array[Piece], movePoints: PieceMovePoints = null) -> Array[Piece]:
+	match piece.type:
+		Piece.PieceType.PAWN:
+			return piecesPawnCanCapture(piece, pieces, movePoints as PawnMovePoints)
+		Piece.PieceType.KNIGHT:
+			return piecesKnightCanCapture(piece, pieces, movePoints as KnightMovePoints)
+		Piece.PieceType.BISHOP:
+			return piecesBishopCanCapture(piece, pieces, movePoints as BishopMovePoints)
+		Piece.PieceType.ROOK:
+			return piecesRookCanCapture(piece, pieces, movePoints as RookMovePoints)
+		Piece.PieceType.QUEEN:
+			return piecesQueenCanCapture(piece, pieces, movePoints as QueenMovePoints)
+		_:
+			return piecesKingCanCapture(piece, pieces, movePoints as KingMovePoints)
+
+static func closestPosCanMoveTo(piece: Piece, pieces: Array[Piece], tryMovePos: Vector2i, movePoints: PieceMovePoints = null) -> Vector2i:
+	match piece.type:
+		Piece.PieceType.PAWN:
+			return closestPosPawnCanMoveTo(piece, pieces, tryMovePos, movePoints as PawnMovePoints)
+		Piece.PieceType.KNIGHT:
+			return closestPosKnightCanMoveTo(piece, pieces, tryMovePos, movePoints as KnightMovePoints)
+		Piece.PieceType.BISHOP:
+			return closestPosBishopCanMoveTo(piece, pieces, tryMovePos, movePoints as BishopMovePoints)
+		Piece.PieceType.ROOK:
+			return closestPosRookCanMoveTo(piece, pieces, tryMovePos, movePoints as RookMovePoints)
+		Piece.PieceType.QUEEN:
+			return closestPosQueenCanMoveTo(piece, pieces, tryMovePos, movePoints as QueenMovePoints)
+		_:
+			return closestPosKingCanMoveTo(piece, pieces, tryMovePos, movePoints as KingMovePoints)
 			
-static func canPieceMoveTo(piece: Piece, pieces: Array[Piece], tryMovePos: Vector2i) -> bool:
-	return closestPosCanMoveTo(piece, pieces, tryMovePos) == tryMovePos
+static func canPieceMoveTo(piece: Piece, pieces: Array[Piece], tryMovePos: Vector2i, movePoints: PieceMovePoints = null) -> bool:
+	return closestPosCanMoveTo(piece, pieces, tryMovePos, movePoints) == tryMovePos
 
 class CastlePieces:
 	var king: Piece
@@ -791,4 +954,3 @@ static func availableCastlePoints(pieces: Array[Piece], turn: Piece.PieceColor, 
 			points.kingPointRight = Vector2i(Piece.boardSize / 16 + Piece.boardSize * 6 / 8, king.pos.y)
 			points.rookPointRight = Vector2i(Piece.boardSize / 16 + Piece.boardSize * 5 / 8, king.pos.y)
 	return points
-	

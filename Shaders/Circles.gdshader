@@ -1,14 +1,11 @@
 shader_type canvas_item;
+#include "LSquared.gdshaderinc"
 
 const int numCircles = 64;
 uniform vec2[numCircles] circleCenters;
 uniform float[numCircles] circleRadii;
 uniform vec2[numCircles] circleColorsrg;
 uniform vec2[numCircles] circleColorsba;
-
-float l2(vec2 vec) {
-	return vec.x * vec.x + vec.y * vec.y;
-}
 
 void fragment() {
 	float blur = 0.0006;

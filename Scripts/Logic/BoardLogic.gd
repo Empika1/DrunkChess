@@ -156,7 +156,7 @@ static func makeMove(state: BoardState, move: Move) -> BoardState:
 	if state.result != BoardState.StateResult.VALID:
 		return state
 	
-	var newState: BoardState = state.duplicate()
+	var newState: BoardState = state.prepareForNext()
 	newState.previousState = state
 	match move.moveType:
 		Move.MoveType.NORMAL:

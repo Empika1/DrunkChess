@@ -1,4 +1,6 @@
 shader_type canvas_item;
+#include "LSquared.gdshaderinc"
+#include "AClockwise.gdshaderinc"
 
 const int numArcs = 64;
 uniform vec2[numArcs] arcCenters;
@@ -9,14 +11,6 @@ uniform vec2[numArcs] arcColorsba;
 uniform vec2[numArcs] arcStarts;
 uniform vec2[numArcs] arcEnds;
 
-float l2(vec2 vec) {
-	return vec.x * vec.x + vec.y * vec.y;
-}
-
-bool aClockwise(vec2 a, vec2 b) {
-	return a.x * b.y > a.y * b.x;
-}
-
 void fragment() {
 	float blur = 0.0006;
 	
@@ -26,9 +20,9 @@ void fragment() {
 		if(col.a == 0.)
 			break;
 		float outerRadiusSquared = arcRadii[i] * arcRadii[i];
-		float innerRadiusSquared = (arcRadii[i] - arcThicknesses[i]) * (arcRadii[i] - arcThicknesses[i]);
+		float innerRadiusSquared = (arcRadii[i] - arcThicknesses[i] / 2.) * (arcRadii[i] - arcThicknesses[i] / 2.);
 		float outerRadiusBlurSquared = (arcRadii[i] + blur) * (arcRadii[i] + blur);
-		float innerRadiusBlurSquared = (arcRadii[i] - arcThicknesses[i] - blur) * (arcRadii[i] - arcThicknesses[i] - blur);
+		float innerRadiusBlurSquared = (arcRadii[i] - arcThicknesses[i] / 2. - blur) * (arcRadii[i] - arcThicknesses[i] / 2. - blur);
 		vec2 center = arcCenters[i];
 		float distanceSquared = l2(UV - center);
 		

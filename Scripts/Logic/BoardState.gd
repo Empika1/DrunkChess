@@ -40,16 +40,39 @@ var turnToMove: Piece.PieceColor
 var result: StateResult
 var previousState: BoardState
 
-func _init(pieces_: Array[Piece], capturedPieces_: Array[Piece], turnToMove_: Piece.PieceColor, result_: StateResult, previousState_: BoardState):
+var movePoints: Array[PieceLogic.PieceMovePoints]
+var piecesCanCapture: Array[Array]
+var castlePieces: PieceLogic.CastlePieces
+var castlePoints: PieceLogic.CastlePoints
+
+func _init(pieces_: Array[Piece], capturedPieces_: Array[Piece], turnToMove_: Piece.PieceColor, result_: StateResult, previousState_: BoardState, movePoints_: Array[PieceLogic.PieceMovePoints], piecesCanCapture_: Array[Array], castlePieces_: PieceLogic.CastlePieces, castlePoints_: PieceLogic.CastlePoints):
 	pieces = pieces_
 	capturedPieces = capturedPieces_
 	turnToMove = turnToMove_
 	result = result_
 	previousState = previousState_
+	movePoints = movePoints_
+	piecesCanCapture = piecesCanCapture_
+	castlePieces = castlePieces_
+	castlePoints = castlePoints_
+
+func addMoveInfo():
+	movePoints = []
+	piecesCanCapture = []
 	
+	for piece: Piece in pieces:
+		var movePoints_: PieceLogic.PieceMovePoints = PieceLogic.calculateMovePoints(piece, pieces)
+		var piecesCanCapture_: Array[Piece] = PieceLogic.piecesCanCapture(piece, pieces, movePoints_)
+		movePoints.append(movePoints_)
+		piecesCanCapture.append(piecesCanCapture_)
+	
+	castlePieces = PieceLogic.availableCastlePieces(pieces, turnToMove)
+	castlePoints = PieceLogic.availableCastlePoints(pieces, turnToMove, castlePieces)
+
 static func newStartingState(pieces_: Array[Piece]) -> BoardState:
-	var state: BoardState = BoardState.new(pieces_, [], Piece.PieceColor.WHITE, StateResult.VALID, null)
+	var state: BoardState = BoardState.new(pieces_, [], Piece.PieceColor.WHITE, StateResult.VALID, null, [], [], null, null)
 	state.result = BoardLogic.validateStartingState(state)
+	state.addMoveInfo()
 	return state
 	
 static func newDefaultStartingState() -> BoardState:
@@ -71,9 +94,11 @@ static func newDefaultStartingState() -> BoardState:
 	return state
 
 func makeMove(move_: Move) -> BoardState:
-	return BoardLogic.makeMove(self, move_)
+	var state: BoardState = BoardLogic.makeMove(self, move_)
+	state.addMoveInfo()
+	return state
 	
-func duplicate() -> BoardState:
+func prepareForNext() -> BoardState:
 	var newPieces: Array[Piece] = []
 	for piece in pieces:
 		newPieces.append(piece.duplicate())
@@ -81,8 +106,14 @@ func duplicate() -> BoardState:
 	var newCapturedPieces: Array[Piece] = []
 	for piece in capturedPieces:
 		newCapturedPieces.append(piece.duplicate())
-		
-	return BoardState.new(newPieces, newCapturedPieces, turnToMove, result, previousState)
+	
+	return BoardState.new(newPieces, newCapturedPieces, turnToMove, result, previousState, [], [], null, null)
+
+func findPieceIndex(piece: Piece) -> int:
+	for i in range(len(pieces)):
+		if pieces[i].valueEquals(piece):
+			return i
+	return -1
 
 func toString() -> String:
 	var strn = "State:\nPieces:\n"
