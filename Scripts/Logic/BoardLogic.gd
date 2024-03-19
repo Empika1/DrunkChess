@@ -79,6 +79,9 @@ static func validateNormalMove(state: BoardState, move: Move) -> BoardState.Stat
 					return BoardState.StateResult.WIN_WHITE
 				else:
 					return BoardState.StateResult.WIN_BLACK
+	
+	if !PieceLogic.canPieceMoveTo(move.movedPiece, state.previousState.pieces, move.posMovedTo, state.previousState.movePoints[state.previousState.findPieceIndex(move.movedPiece)]):
+		return BoardState.StateResult.MOVE_ONE_PIECE_MOVED_PIECE_TO_INVALID_POSITION
 
 	return BoardState.StateResult.VALID
 

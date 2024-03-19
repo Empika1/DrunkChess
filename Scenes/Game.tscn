@@ -79,23 +79,23 @@ size_flags_stretch_ratio = 0.5
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Control" type="Control" parent="HBoxContainer" node_paths=PackedStringArray("board")]
+[node name="BoardHolder" type="Control" parent="HBoxContainer" node_paths=PackedStringArray("board")]
 layout_mode = 2
 size_flags_horizontal = 3
 script = ExtResource("1_nri7l")
 board = NodePath("Board")
 
-[node name="Board" type="Sprite2D" parent="HBoxContainer/Control"]
+[node name="Board" type="Sprite2D" parent="HBoxContainer/BoardHolder"]
 scale = Vector2(0.394167, 0.394167)
 texture = ExtResource("1_4ypo3")
 centered = false
 
-[node name="GameManager" type="Node" parent="HBoxContainer/Control/Board" node_paths=PackedStringArray("board", "pieceHolder")]
+[node name="GameManager" type="Node" parent="HBoxContainer/BoardHolder/Board" node_paths=PackedStringArray("board", "pieceHolder")]
 script = ExtResource("15_uqtdi")
 board = NodePath("..")
 pieceHolder = NodePath("../PieceHolder")
 
-[node name="BoardRenderer" type="Node" parent="HBoxContainer/Control/Board" node_paths=PackedStringArray("board", "pieceHolder", "lines", "circles", "circleArcs", "arrows", "gameManager")]
+[node name="BoardRenderer" type="Node" parent="HBoxContainer/BoardHolder/Board" node_paths=PackedStringArray("board", "pieceHolder", "lines", "circles", "circleArcs", "arrows", "gameManager")]
 script = ExtResource("2_ern7e")
 board = NodePath("..")
 pieceHolder = NodePath("../PieceHolder")
@@ -122,32 +122,32 @@ whiteCapturerArrowColor = Color(1, 0, 0, 1)
 blackCapturerArrowColor = Color(0, 1, 1, 1)
 arrowThickness = 0.005
 
-[node name="Lines" type="Sprite2D" parent="HBoxContainer/Control/Board"]
+[node name="Lines" type="Sprite2D" parent="HBoxContainer/BoardHolder/Board"]
 z_index = 1
 material = SubResource("ShaderMaterial_onulv")
 scale = Vector2(1200, 1200)
 texture = SubResource("GradientTexture2D_mwyaw")
 centered = false
 
-[node name="Circles" type="Sprite2D" parent="HBoxContainer/Control/Board"]
+[node name="Circles" type="Sprite2D" parent="HBoxContainer/BoardHolder/Board"]
 z_index = 1
 material = SubResource("ShaderMaterial_p5r2d")
 scale = Vector2(1200, 1200)
 texture = SubResource("GradientTexture2D_mwyaw")
 centered = false
 
-[node name="CircleArcs" type="Sprite2D" parent="HBoxContainer/Control/Board"]
+[node name="CircleArcs" type="Sprite2D" parent="HBoxContainer/BoardHolder/Board"]
 z_index = 1
 material = SubResource("ShaderMaterial_w8c2w")
 scale = Vector2(1200, 1200)
 texture = SubResource("GradientTexture2D_mwyaw")
 centered = false
 
-[node name="PieceHolder" type="Node2D" parent="HBoxContainer/Control/Board"]
+[node name="PieceHolder" type="Node2D" parent="HBoxContainer/BoardHolder/Board"]
 z_index = 2
 scale = Vector2(0.771617, 0.771617)
 
-[node name="Arrows" type="Sprite2D" parent="HBoxContainer/Control/Board"]
+[node name="Arrows" type="Sprite2D" parent="HBoxContainer/BoardHolder/Board"]
 z_index = 3
 material = SubResource("ShaderMaterial_inrhf")
 scale = Vector2(1200, 1200)

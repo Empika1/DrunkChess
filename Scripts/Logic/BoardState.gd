@@ -16,6 +16,7 @@ enum StateResult {
 	MOVE_ONE_PIECE_MOVED_PIECE_OUTSIDE_BOARD,
 	MOVE_ONE_PIECE_MOVED_PIECE_OVERLAPS_PIECE_OF_SAME_COLOR,
 	MOVE_ONE_PIECE_MOVED_PIECE_OVERLAPS_PIECE_OF_OPPOSITE_COLOR,
+	MOVE_ONE_PIECE_MOVED_PIECE_TO_INVALID_POSITION,
 	MOVE_PROMOTION_PROMOTED_FROM_INVALID_TYPE,
 	MOVE_PROMOTION_PROMOTED_TO_INVALID_TYPE,
 	MOVE_PROMOTION_PROMOTED_IN_INVALID_POSITION,
@@ -56,10 +57,7 @@ func _init(pieces_: Array[Piece], capturedPieces_: Array[Piece], turnToMove_: Pi
 	castlePieces = castlePieces_
 	castlePoints = castlePoints_
 
-func addMoveInfo():
-	movePoints = []
-	piecesCanCapture = []
-	
+func addMoveInfo():	
 	for piece: Piece in pieces:
 		var movePoints_: PieceLogic.PieceMovePoints = PieceLogic.calculateMovePoints(piece, pieces)
 		var piecesCanCapture_: Array[Piece] = PieceLogic.piecesCanCapture(piece, pieces, movePoints_)
