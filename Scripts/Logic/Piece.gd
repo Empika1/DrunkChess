@@ -24,7 +24,7 @@ var color: PieceColor
 var hasMoved: bool
 const boardSize: int = 2 ** 16
 const squareSize: int = boardSize / 8
-const hitRadius: int = int(float(boardSize) / 8. / 2. * sqrt(2) / 2.)
+const hitRadius: int = int(float(boardSize) / 8. / 2. * sqrt(2) / 2.) - squareSize / 32
 
 const knightMoveRadius: int = int(sqrt(2 ** 2 + 1 ** 2) * boardSize / 8)
 

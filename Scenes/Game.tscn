@@ -70,32 +70,64 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="ColorRect3" type="HBoxContainer" parent="."]
 layout_mode = 2
 size_flags_vertical = 3
-size_flags_stretch_ratio = 0.5
+size_flags_stretch_ratio = 0.1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="Label" type="Label" parent="ColorRect3"]
+custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
-size_flags_vertical = 3
+text = "black player clock"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="BoardHolder" type="Control" parent="HBoxContainer" node_paths=PackedStringArray("board")]
+[node name="ColorRect3" type="HBoxContainer" parent="ColorRect3"]
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.1
+alignment = 1
+
+[node name="Button" type="Button" parent="ColorRect3/ColorRect3"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Discard"
+
+[node name="Button2" type="Button" parent="ColorRect3/ColorRect3"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Confirm"
+
+[node name="Label2" type="Label" parent="ColorRect3"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+text = "black player captures"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BoardHolder" type="Control" parent="." node_paths=PackedStringArray("board")]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 script = ExtResource("1_nri7l")
 board = NodePath("Board")
 
-[node name="Board" type="Sprite2D" parent="HBoxContainer/BoardHolder"]
+[node name="Board" type="Sprite2D" parent="BoardHolder"]
 scale = Vector2(0.394167, 0.394167)
 texture = ExtResource("1_4ypo3")
 centered = false
 
-[node name="GameManager" type="Node" parent="HBoxContainer/BoardHolder/Board" node_paths=PackedStringArray("board", "pieceHolder")]
+[node name="GameManager" type="Node" parent="BoardHolder/Board" node_paths=PackedStringArray("board", "pieceHolder", "blackDiscard", "blackConfirm", "whiteDiscard", "whiteConfirm")]
 script = ExtResource("15_uqtdi")
 board = NodePath("..")
 pieceHolder = NodePath("../PieceHolder")
+blackDiscard = NodePath("../../../ColorRect3/ColorRect3/Button")
+blackConfirm = NodePath("../../../ColorRect3/ColorRect3/Button2")
+whiteDiscard = NodePath("../../../ColorRect2/ColorRect3/Button")
+whiteConfirm = NodePath("../../../ColorRect2/ColorRect3/Button2")
 
-[node name="BoardRenderer" type="Node" parent="HBoxContainer/BoardHolder/Board" node_paths=PackedStringArray("board", "pieceHolder", "lines", "circles", "circleArcs", "arrows", "gameManager")]
+[node name="BoardRenderer" type="Node" parent="BoardHolder/Board" node_paths=PackedStringArray("board", "pieceHolder", "lines", "circles", "circleArcs", "arrows", "gameManager")]
 script = ExtResource("2_ern7e")
 board = NodePath("..")
 pieceHolder = NodePath("../PieceHolder")
@@ -122,39 +154,70 @@ whiteCapturerArrowColor = Color(1, 0, 0, 1)
 blackCapturerArrowColor = Color(0, 1, 1, 1)
 arrowThickness = 0.005
 
-[node name="Lines" type="Sprite2D" parent="HBoxContainer/BoardHolder/Board"]
+[node name="Lines" type="Sprite2D" parent="BoardHolder/Board"]
 z_index = 1
 material = SubResource("ShaderMaterial_onulv")
 scale = Vector2(1200, 1200)
 texture = SubResource("GradientTexture2D_mwyaw")
 centered = false
 
-[node name="Circles" type="Sprite2D" parent="HBoxContainer/BoardHolder/Board"]
+[node name="Circles" type="Sprite2D" parent="BoardHolder/Board"]
 z_index = 1
 material = SubResource("ShaderMaterial_p5r2d")
 scale = Vector2(1200, 1200)
 texture = SubResource("GradientTexture2D_mwyaw")
 centered = false
 
-[node name="CircleArcs" type="Sprite2D" parent="HBoxContainer/BoardHolder/Board"]
+[node name="CircleArcs" type="Sprite2D" parent="BoardHolder/Board"]
 z_index = 1
 material = SubResource("ShaderMaterial_w8c2w")
 scale = Vector2(1200, 1200)
 texture = SubResource("GradientTexture2D_mwyaw")
 centered = false
 
-[node name="PieceHolder" type="Node2D" parent="HBoxContainer/BoardHolder/Board"]
+[node name="PieceHolder" type="Node2D" parent="BoardHolder/Board"]
 z_index = 2
 scale = Vector2(0.771617, 0.771617)
 
-[node name="Arrows" type="Sprite2D" parent="HBoxContainer/BoardHolder/Board"]
+[node name="Arrows" type="Sprite2D" parent="BoardHolder/Board"]
 z_index = 3
 material = SubResource("ShaderMaterial_inrhf")
 scale = Vector2(1200, 1200)
 texture = SubResource("GradientTexture2D_mwyaw")
 centered = false
 
-[node name="ColorRect2" type="ColorRect" parent="."]
+[node name="ColorRect2" type="HBoxContainer" parent="."]
 layout_mode = 2
 size_flags_vertical = 3
-size_flags_stretch_ratio = 0.5
+size_flags_stretch_ratio = 0.1
+
+[node name="Label" type="Label" parent="ColorRect2"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+text = "white player clock"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ColorRect3" type="HBoxContainer" parent="ColorRect2"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.1
+alignment = 1
+
+[node name="Button" type="Button" parent="ColorRect2/ColorRect3"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Discard"
+
+[node name="Button2" type="Button" parent="ColorRect2/ColorRect3"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Confirm"
+
+[node name="Label2" type="Label" parent="ColorRect2"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+text = "white player captures"
+horizontal_alignment = 1
+vertical_alignment = 1

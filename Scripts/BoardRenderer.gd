@@ -300,7 +300,7 @@ func addKingLines(state: BoardState, pieceDragging: Piece) -> void:
 		lineColorsrg.append(Vector2(hitRadiusColor.r, hitRadiusColor.g))
 		lineColorsba.append(Vector2(hitRadiusColor.b, hitRadiusColor.a))
 
-var castleRadius: int = Piece.boardSize / 16
+static var castleRadius: int = Piece.boardSize / 16
 func addCastleArea(center: Vector2i) -> void:
 	circleCenters.append(Vector2(center) / Vector2(Piece.boardSize, Piece.boardSize))
 	circleRadii.append(float(castleRadius) / float(Piece.boardSize))
