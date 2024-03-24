@@ -4,11 +4,6 @@ class_name GameManager
 @export var board: Sprite2D
 @export var pieceHolder: Node2D
 
-@export var blackDiscard: Button
-@export var blackConfirm: Button
-@export var whiteDiscard: Button
-@export var whiteConfirm: Button
-
 @onready var states: Array[BoardState] = [BoardState.newDefaultStartingState()]
 
 func getScaledRectSize():
@@ -29,37 +24,49 @@ func gamePosToBoardPos(gamePos: Vector2) -> Vector2i:
 func getHoveredPiece(mousePos: Vector2i) -> Piece:
 	for c in pieceHolder.get_children():
 		var cs = c as DraggablePiece
-		var distanceSquared = (cs.global_position.x - mousePos.x) ** 2 + (cs.global_position.y - mousePos.y) ** 2
-		if distanceSquared < (float(c.piece.hitRadius) / Piece.boardSize * getScaledRectSize()) ** 2:
+		var distanceSquared = (cs.global_position - Vector2(mousePos)).length_squared()
+		if cs.piece != null and distanceSquared < boardLengthToGameLength(cs.piece.hitRadius) ** 2:
 			return cs.piece
 	return null
 
-var pieceDragging: Piece #a reference to the piece in the previous state
-var piecePlaced: bool
-var dragOffset: Vector2i
-var attemptedNextState: BoardState
+var pieceHovering: Piece = null #a reference to the piece in the previous state
+var pieceDragging: Piece = null #a reference to the piece in the previous state
+var dragOffset: Vector2i = Vector2i(0, 0)
+var dragPos: Vector2i = Vector2i(0, 0)
+var isPiecePlaced: bool = false
+var attemptedNextState: BoardState = null
+const dragBorder: Vector2i = Vector2i(Piece.squareSize, Piece.squareSize)
 func _process(_delta):
-	var mousePos: Vector2i = get_viewport().get_mouse_position()
-	if pieceDragging == null && Input.is_action_just_pressed("lmb"):
-		var hoveredPiece: Piece = getHoveredPiece(mousePos)
-		if hoveredPiece != null and hoveredPiece.color == states[-1].turnToMove:
-			pieceDragging = getHoveredPiece(mousePos)
-		if pieceDragging != null:
-			dragOffset = boardPosToGamePos(pieceDragging.pos) - Vector2(mousePos)
-		piecePlaced = false
+	#determine hovered piece
+	var mousePosGame: Vector2i = get_viewport().get_mouse_position()
+	var mousePosBoard: Vector2i = gamePosToBoardPos(mousePosGame)
+	pieceHovering = getHoveredPiece(mousePosGame)
+	if pieceHovering != null and pieceHovering.color != states[-1].turnToMove:
+		pieceHovering = null
 	
+	#determine piece being dragged
+	if pieceHovering != null and pieceDragging == null && Input.is_action_just_pressed("lmb"):
+		pieceDragging = pieceHovering
+		dragOffset = pieceDragging.pos - mousePosBoard
+		isPiecePlaced = false
+	
+	#make move with piece being dragged
 	if pieceDragging != null:
+		dragPos = mousePosBoard + dragOffset
 		var move: Move = null
 		
+		#find if the move is a castle move
 		var castlePieces: PieceLogic.CastlePieces = states[-1].castlePieces
 		var castlePoints: PieceLogic.CastlePoints = states[-1].castlePoints
-		if castlePoints.canCastleLeft and (Vector2(mousePos) - boardPosToGamePos(castlePoints.kingPointLeft)).length_squared() <= boardLengthToGameLength(BoardRenderer.castleRadius) ** 2:
+		if castlePoints.canCastleLeft and (mousePosBoard - castlePoints.kingPointLeft).length_squared() <= BoardRenderer.castleRadius ** 2:
 			move = Move.newCastle(castlePieces.king, castlePieces.leftRook)
-		if castlePoints.canCastleRight and (Vector2(mousePos) - boardPosToGamePos(castlePoints.kingPointRight)).length_squared() <= boardLengthToGameLength(BoardRenderer.castleRadius) ** 2:
+		if castlePoints.canCastleRight and (mousePosBoard - castlePoints.kingPointRight).length_squared() <= BoardRenderer.castleRadius ** 2:
 			move = Move.newCastle(castlePieces.king, castlePieces.rightRook)
 		
+		#if not castle, make normal or promotion move
 		if move == null:
-			var movePos: Vector2i = PieceLogic.closestPosCanMoveTo(pieceDragging, states[-1].pieces, gamePosToBoardPos(mousePos + dragOffset), 
+			print(dragOffset, " ", dragPos, " ", pieceDragging.pos)
+			var movePos: Vector2i = PieceLogic.closestPosCanMoveTo(pieceDragging, states[-1].pieces, dragPos, 
 				states[-1].movePoints[states[-1].findPieceIndex(pieceDragging)])
 			
 			if pieceDragging.type == Piece.PieceType.PAWN and Piece.isPromotionPosition(movePos, states[-1].turnToMove):
@@ -67,18 +74,24 @@ func _process(_delta):
 			else:
 				move = Move.newNormal(pieceDragging, movePos)
 		
-		attemptedNextState = states[-1].makeMove(move)
+		#check to see if the player is cancelling the move
+		if mousePosBoard.x < -dragBorder.x or mousePosBoard.y < -dragBorder.y or mousePosBoard.x > Piece.boardSize + dragBorder.x or mousePosBoard.y > Piece.boardSize + dragBorder.y:
+			attemptedNextState = null
+		else:
+			attemptedNextState = states[-1].makeMove(move)
 		
 		if Input.is_action_just_released("lmb"):
-			piecePlaced = true
+			if attemptedNextState != null:
+				isPiecePlaced = true
+			else:
+				pieceDragging = null
 		
-		if Input.is_action_just_pressed("lmb") and piecePlaced:
-			if (!(whiteDiscard.is_hovered() or blackDiscard.is_hovered()) and 
+		if Input.is_action_just_pressed("lmb") and isPiecePlaced:
+			if (attemptedNextState != null and 
 				attemptedNextState.result in [BoardState.StateResult.VALID, BoardState.StateResult.WIN_BLACK, BoardState.StateResult.WIN_WHITE]):
 				states.append(attemptedNextState)
 			attemptedNextState = null
 			pieceDragging = null
-			dragOffset = Vector2i.ZERO	
 	
 	if states[-1].result in [BoardState.StateResult.WIN_BLACK, BoardState.StateResult.WIN_WHITE]:
 		print("hhhhhhhhhhhhhhhhhhhhhhhhhhhhh")

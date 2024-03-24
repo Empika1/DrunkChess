@@ -1,8 +1,11 @@
 [gd_scene load_steps=3 format=3 uid="uid://bgicbdvmmlput"]
 
-[ext_resource type="Texture2D" uid="uid://mdc8eqqlpbsf" path="res://Images/wk.png" id="1_1cmkb"]
+[ext_resource type="Texture2D" uid="uid://bchoq8kvi7fty" path="res://Images/Pieces.svg" id="1_rrj2i"]
 [ext_resource type="Script" path="res://Scripts/DraggablePiece.gd" id="2_3k44e"]
 
 [node name="DraggablePiece" type="Sprite2D"]
-texture = ExtResource("1_1cmkb")
+texture_filter = 2
+texture = ExtResource("1_rrj2i")
+hframes = 6
+vframes = 2
 script = ExtResource("2_3k44e")

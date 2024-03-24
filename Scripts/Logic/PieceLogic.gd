@@ -407,6 +407,8 @@ static func piecesKnightCanCapture(knight: Piece, pieces: Array[Piece], movePoin
 
 static func closestPosKnightCanMoveTo(knight: Piece, pieces: Array[Piece], tryMovePos: Vector2i, movePoints: KnightMovePoints = null) -> Vector2i:
 	var scaledPos: Vector2 = Vector2(tryMovePos - knight.pos).normalized() * Piece.knightMoveRadius
+	if scaledPos == Vector2(0, 0):
+		scaledPos = Vector2(Piece.knightMoveRadius, 0)
 	var roundedScaledPos: Vector2i = Vector2i(roundi(scaledPos.x), roundi(scaledPos.y)) + knight.pos
 	var wantedPos: Vector2i = Geometry.spiralizePoint(roundedScaledPos, func(pos): return Geometry.isOnCircle(knight.pos, Piece.knightMoveRadius, pos))
 	

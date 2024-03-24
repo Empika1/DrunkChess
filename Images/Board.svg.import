@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://16w6m1h0rk2"
-path="res://.godot/imported/board.png-32b55e21aa20a32ab9151afce6cff0bf.ctex"
+uid="uid://ypsrekatbbsx"
+path="res://.godot/imported/Board.svg-6a030271203ad73132fc7fbcd9f57dfe.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Images/board.png"
-dest_files=["res://.godot/imported/board.png-32b55e21aa20a32ab9151afce6cff0bf.ctex"]
+source_file="res://Images/Board.svg"
+dest_files=["res://.godot/imported/Board.svg-6a030271203ad73132fc7fbcd9f57dfe.ctex"]
 
 [params]
 
@@ -32,3 +32,6 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
+svg/scale=1.0
+editor/scale_with_editor_scale=false
+editor/convert_colors_with_editor_theme=false

@@ -11,97 +11,31 @@ class_name BoardRenderer
 
 const shadowRealm: Vector2 = Vector2(9999999, 9999999)
 var pieceScene: PackedScene = preload("res://Prefabs/DraggablePiece.tscn")
-var usedPiecePool: Dictionary
-var freePiecePool: Dictionary
+var usedPiecePool: Array[DraggablePiece]
+var freePiecePool: Array[DraggablePiece]
 
-func addPieceToFreePool(piece) -> DraggablePiece:
+func addPieceToFreePool(piece) -> void:
 	var sprite: DraggablePiece = pieceScene.instantiate()
-	freePiecePool[piece.color][piece.type].append(sprite)
+	freePiecePool.append(sprite)
 	pieceHolder.add_child(sprite)
-	sprite.init(self, piece)
-	return sprite
+	sprite.init(piece)
 
-func _ready() -> void:	
-	usedPiecePool[Piece.PieceColor.WHITE] = Dictionary()
-	usedPiecePool[Piece.PieceColor.BLACK] = Dictionary()
-	freePiecePool[Piece.PieceColor.WHITE] = Dictionary()
-	freePiecePool[Piece.PieceColor.BLACK] = Dictionary()
-	for type in Piece.PieceType.values():
-		usedPiecePool[Piece.PieceColor.WHITE][type] = []
-		usedPiecePool[Piece.PieceColor.BLACK][type] = []
-		freePiecePool[Piece.PieceColor.WHITE][type] = []
-		freePiecePool[Piece.PieceColor.BLACK][type] = []
+func _ready() -> void:
 	for piece in gameManager.states[-1].pieces:
 		addPieceToFreePool(piece)
 	
 func _process(_delta) -> void:
 	render()
 
-@export var wp: Texture2D
-@export var wn: Texture2D
-@export var wb: Texture2D
-@export var wr: Texture2D
-@export var wq: Texture2D
-@export var wk: Texture2D
-
-@export var bp: Texture2D
-@export var bn: Texture2D
-@export var bb: Texture2D
-@export var br: Texture2D
-@export var bq: Texture2D
-@export var bk: Texture2D
-
-func getPieceTexture(pieceType: Piece.PieceType, pieceColor: Piece.PieceColor) -> Texture2D:
-	match pieceColor:
-		Piece.PieceColor.WHITE:
-			match pieceType:
-				Piece.PieceType.PAWN:
-					return wp
-				Piece.PieceType.KNIGHT:
-					return wn
-				Piece.PieceType.BISHOP:
-					return wb
-				Piece.PieceType.ROOK:
-					return wr
-				Piece.PieceType.QUEEN:
-					return wq
-				_:
-					return wk
-		_:
-			match pieceType:
-				Piece.PieceType.PAWN:
-					return bp
-				Piece.PieceType.KNIGHT:
-					return bn
-				Piece.PieceType.BISHOP:
-					return bb
-				Piece.PieceType.ROOK:
-					return br
-				Piece.PieceType.QUEEN:
-					return bq
-				_:
-					return bk
-
-func getScaledRectSize():
-	return board.get_rect().size * board.global_scale
-
-func boardLengthToGameLength(boardLength: Vector2i) -> Vector2:
-	return Vector2(boardLength) / Vector2(Piece.boardSize, Piece.boardSize) * getScaledRectSize()
-
-func boardPosToGamePos(boardPos: Vector2i) -> Vector2:
-	return boardLengthToGameLength(boardPos) + board.global_position
-
-func gameLengthToBoardLength(gameLength: Vector2) -> Vector2i:
-	return Vector2i(gameLength * Vector2(Piece.boardSize, Piece.boardSize) / getScaledRectSize())
-
-func gamePosToBoardPos(gamePos: Vector2) -> Vector2i:
-	return gameLengthToBoardLength(gamePos - board.global_position)
+func getPieceFrame(col: Piece.PieceColor, type: Piece.PieceType) -> int:
+	return int(col) * 6 + int(type)
 
 func getHoveredPiece(mousePos: Vector2i) -> Piece:
 	for c in pieceHolder.get_children():
 		var cs = c as DraggablePiece
-		var distanceSquared = (cs.global_position.x - mousePos.x) ** 2 + (cs.global_position.y - mousePos.y) ** 2
-		if distanceSquared < (float(c.piece.hitRadius) / Piece.boardSize * getScaledRectSize().x) ** 2:
+		if cs.piece == null:
+			continue
+		if (gameManager.gamePosToBoardPos(Vector2(mousePos)) - cs.piece.pos).length_squared() <= Piece.hitRadius ** 2:
 			return cs.piece
 	return null
 
@@ -113,33 +47,29 @@ func render() -> void:
 	else:
 		stateToRender = gameManager.states[-1]
 
-	for col in [Piece.PieceColor.BLACK, Piece.PieceColor.WHITE]:
-		for key in usedPiecePool[col]:
-			var arr: Array = usedPiecePool[col][key]
-			while arr.size() > 0:
-				var piece = arr.pop_back()
-				freePiecePool[col][key].append(piece)
+	while len(usedPiecePool) > 0:
+		var sprite: DraggablePiece = usedPiecePool.pop_back()
+		freePiecePool.append(sprite)
+
 	for piece in stateToRender.pieces:
-		var sprite: DraggablePiece = freePiecePool[piece.color][piece.type].pop_back()
-		if sprite == null:
-			sprite = addPieceToFreePool(piece)
-			sprite = freePiecePool[piece.color][piece.type].pop_back()
-			
+		var sprite: DraggablePiece = freePiecePool.pop_back()
+		usedPiecePool.append(sprite)
+		
 		sprite.piece = piece
-		usedPiecePool[piece.color][piece.type].append(sprite)
-		sprite.global_position = boardPosToGamePos(piece.pos)
+		
+		sprite.frame = getPieceFrame(piece.color, piece.type)
+		sprite.global_position = gameManager.boardPosToGamePos(piece.pos)
 		sprite.global_scale = board.global_scale
 	
-	if gameManager.pieceDragging != null:
+	for sprite in freePiecePool:
+		sprite.global_position = shadowRealm
+		sprite.piece = null
+	
+	if gameManager.attemptedNextState != null:
 		addHitRadii(gameManager.attemptedNextState.pieces)
 		addMoveIndicators(gameManager.states[-1], gameManager.pieceDragging)
+		addCastleAreas(gameManager.states[-1].castlePoints)
 	addCaptureArrows(stateToRender)
-	
-	for col in [Piece.PieceColor.BLACK, Piece.PieceColor.WHITE]:
-		for key in freePiecePool[col]:
-			var arr: Array = freePiecePool[col][key]
-			for piece in arr:
-				piece.global_position = shadowRealm
 	
 	setCircles(); setLines(); setArcs(); setArrows();
 
@@ -306,6 +236,11 @@ func addCastleArea(center: Vector2i) -> void:
 	circleRadii.append(float(castleRadius) / float(Piece.boardSize))
 	circleColorsrg.append(Vector2(hitRadiusColor.r, hitRadiusColor.g))
 	circleColorsba.append(Vector2(hitRadiusColor.b, hitRadiusColor.a))
+func addCastleAreas(castlePoints: PieceLogic.CastlePoints):
+	if castlePoints.canCastleLeft:
+		addCastleArea(castlePoints.kingPointLeft)
+	if castlePoints.canCastleRight:
+		addCastleArea(castlePoints.kingPointRight)
 
 var arrowStarts: PackedVector2Array
 var arrowEnds: PackedVector2Array
@@ -349,4 +284,3 @@ func addCaptureArrows(state: BoardState) -> void:
 			arrowDisplace = Vector2(arrowDisplace.y, -arrowDisplace.x)
 			arrowDisplace *= lengthMultiplier
 			arrowDistortPoints.append(arrowMidpoint + arrowDisplace)
-		
