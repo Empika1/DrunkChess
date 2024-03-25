@@ -1,0 +1,7 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://bhkvphjy5bskn"]
+
+[ext_resource type="FontFile" uid="uid://cb86t7rteqkst" path="res://Fonts/COMICSANS.TTF" id="1_itxlt"]
+
+[resource]
+default_font = ExtResource("1_itxlt")
+default_font_size = 30

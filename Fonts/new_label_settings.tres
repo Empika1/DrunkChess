@@ -1,0 +1,8 @@
+[gd_resource type="LabelSettings" load_steps=2 format=3 uid="uid://c20ftb7egkx3q"]
+
+[ext_resource type="FontFile" uid="uid://cb86t7rteqkst" path="res://Fonts/COMICSANS.TTF" id="1_lg68u"]
+
+[resource]
+font = ExtResource("1_lg68u")
+font_size = 45
+font_color = Color(0, 0, 0, 1)

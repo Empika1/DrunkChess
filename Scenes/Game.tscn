@@ -1,5 +1,6 @@
-[gd_scene load_steps=16 format=3 uid="uid://cudne81ew8j5r"]
+[gd_scene load_steps=17 format=3 uid="uid://cudne81ew8j5r"]
 
+[ext_resource type="Theme" uid="uid://bhkvphjy5bskn" path="res://Themes/Main.tres" id="1_gldiy"]
 [ext_resource type="Script" path="res://Scripts/UI/BoardHolder.gd" id="1_nri7l"]
 [ext_resource type="Texture2D" uid="uid://ypsrekatbbsx" path="res://Images/Board.svg" id="2_7sewj"]
 [ext_resource type="Script" path="res://Scripts/BoardRenderer.gd" id="2_ern7e"]
@@ -58,6 +59,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_gldiy")
+theme_override_constants/separation = 12
 
 [node name="ColorRect3" type="HBoxContainer" parent="."]
 layout_mode = 2
