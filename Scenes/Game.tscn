@@ -1,8 +1,9 @@
-[gd_scene load_steps=15 format=3 uid="uid://cudne81ew8j5r"]
+[gd_scene load_steps=16 format=3 uid="uid://cudne81ew8j5r"]
 
 [ext_resource type="Script" path="res://Scripts/UI/BoardHolder.gd" id="1_nri7l"]
 [ext_resource type="Texture2D" uid="uid://ypsrekatbbsx" path="res://Images/Board.svg" id="2_7sewj"]
 [ext_resource type="Script" path="res://Scripts/BoardRenderer.gd" id="2_ern7e"]
+[ext_resource type="Texture2D" uid="uid://bqu4ssikxl5ej" path="res://Images/BoardBorder.svg" id="9_wubqd"]
 [ext_resource type="Shader" path="res://Shaders/Lines.gdshader" id="15_g2q5n"]
 [ext_resource type="Script" path="res://Scripts/GameManager.gd" id="15_uqtdi"]
 [ext_resource type="Shader" path="res://Shaders/Circles.gdshader" id="16_fxt88"]
@@ -114,8 +115,8 @@ arrows = NodePath("../Arrows")
 gameManager = NodePath("../GameManager")
 hitRadiusColor = Color(0, 0, 0, 0.5)
 thickness = 0.01
-whiteCapturerArrowColor = Color(1, 1, 1, 0.501961)
-blackCapturerArrowColor = Color(1, 1, 1, 0.501961)
+whiteCapturerArrowColor = Color(1, 0.278431, 0.278431, 1)
+blackCapturerArrowColor = Color(1, 0.278431, 0.278431, 1)
 arrowThickness = 0.005
 
 [node name="Lines" type="Sprite2D" parent="BoardHolder/Board"]
@@ -149,6 +150,11 @@ material = SubResource("ShaderMaterial_inrhf")
 scale = Vector2(2048, 2048)
 texture = SubResource("GradientTexture2D_mwyaw")
 centered = false
+
+[node name="BoardBorder" type="Sprite2D" parent="BoardHolder/Board"]
+texture = ExtResource("9_wubqd")
+centered = false
+offset = Vector2(-56, -56)
 
 [node name="ColorRect2" type="HBoxContainer" parent="."]
 layout_mode = 2
