@@ -48,7 +48,7 @@ class StartSettings:
 	var startingTime: float
 	var assistMode: AssistMode
 	
-	func _init(isTimed_: bool, startingTime_: float, assistMode_: AssistMode):
+	func _init(assistMode_: AssistMode, isTimed_: bool, startingTime_: float = -1):
 		isTimed = isTimed_
 		startingTime = startingTime_
 		assistMode = assistMode_
@@ -59,8 +59,8 @@ var turnToMove: Piece.PieceColor
 var result: StateResult
 var previousState: BoardState
 var startSettings: StartSettings
-var whiteTime: float
-var blackTime: float
+var whiteTime: float #the latest time that white has, updated mutably
+var blackTime: float #same
 
 var movePoints: Array[PieceLogic.PieceMovePoints]
 var piecesCanCapture: Array[Array]
@@ -68,10 +68,11 @@ var castlePieces: PieceLogic.CastlePieces
 var castlePoints: PieceLogic.CastlePoints
 
 func _init(pieces_: Array[Piece], capturedPieces_: Array[Piece], turnToMove_: Piece.PieceColor, 
-	result_: StateResult, previousState_: BoardState, startSettings_: StartSettings, whiteTime_: float, 
-	blackTime_: float, movePoints_: Array[PieceLogic.PieceMovePoints], piecesCanCapture_: Array[Array], 
-	castlePieces_: PieceLogic.CastlePieces, castlePoints_: PieceLogic.CastlePoints):
-	
+	result_: StateResult, previousState_: BoardState, movePoints_: Array[PieceLogic.PieceMovePoints], 
+	piecesCanCapture_: Array[Array], castlePieces_: PieceLogic.CastlePieces, 
+	castlePoints_: PieceLogic.CastlePoints, startSettings_: StartSettings, whiteTime_: float,
+	blackTime_: float):
+		
 	pieces = pieces_
 	capturedPieces = capturedPieces_
 	turnToMove = turnToMove_
@@ -84,6 +85,9 @@ func _init(pieces_: Array[Piece], capturedPieces_: Array[Piece], turnToMove_: Pi
 	piecesCanCapture = piecesCanCapture_
 	castlePieces = castlePieces_
 	castlePoints = castlePoints_
+	startSettings = startSettings_
+	whiteTime = whiteTime_
+	blackTime = blackTime_
 
 func addMoveInfo():	
 	for piece: Piece in pieces:
@@ -96,8 +100,8 @@ func addMoveInfo():
 	castlePoints = PieceLogic.availableCastlePoints(pieces, turnToMove, castlePieces)
 
 static func newStartingState(pieces_: Array[Piece], startSettings_: StartSettings) -> BoardState:
-	var state: BoardState = BoardState.new(pieces_, [], Piece.PieceColor.WHITE, StateResult.VALID, null, 
-		startSettings_, startSettings_.startingTime, startSettings_. startingTime, [], [], null, null)
+	var state: BoardState = BoardState.new(pieces_, [], Piece.PieceColor.WHITE, StateResult.VALID, 
+		null, [], [], null, null, startSettings_, startSettings_.startingTime, startSettings_.startingTime)
 	state.result = BoardLogic.validateStartingState(state)
 	state.addMoveInfo()
 	return state
@@ -125,6 +129,19 @@ func makeMove(move_: Move) -> BoardState:
 	var state: BoardState = BoardLogic.makeMove(self, move_)
 	state.addMoveInfo()
 	return state
+
+func updateTimer(newTime: float) -> void: #JANK: this is logic but isnt in boardlogic
+	if result != StateResult.VALID:
+		return
+	
+	if turnToMove == Piece.PieceColor.WHITE:
+		whiteTime = maxf(newTime, 0)
+		if whiteTime == 0:
+			result = StateResult.WIN_BLACK
+	else:
+		blackTime = maxf(newTime, 0)
+		if blackTime == 0:
+			result = StateResult.WIN_WHITE
 	
 func prepareForNext() -> BoardState:
 	var newPieces: Array[Piece] = []
@@ -135,8 +152,8 @@ func prepareForNext() -> BoardState:
 	for piece in capturedPieces:
 		newCapturedPieces.append(piece.duplicate())
 	
-	return BoardState.new(newPieces, newCapturedPieces, turnToMove, result, previousState, 
-		startSettings, whiteTime, blackTime, [], [], null, null)
+	return BoardState.new(newPieces, newCapturedPieces, turnToMove, result, previousState, [], [], 
+		null, null, startSettings, whiteTime, blackTime)
 
 func findPieceIndex(piece: Piece) -> int:
 	for i in range(len(pieces)):
