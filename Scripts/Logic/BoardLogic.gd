@@ -14,15 +14,6 @@ static func doPiecesOverlap(pos1: Vector2i, radius1: int, pos2: Vector2i, radius
 static func isPieceOutsideBoard(pos: Vector2i, radius: int, maxPos: Vector2i) -> bool:
 	return pos.x - radius < 0 or pos.y - radius < 0 or pos.x + radius > maxPos.x or pos.y + radius > maxPos.y
 
-static func validateTime(state: BoardState, move: Move) -> BoardState.StateResult: #checks if a player lost on time
-	if move.movedPiece.color == Piece.PieceColor.WHITE:
-		if state.whiteTime <= move.moveTime:
-			return BoardState.StateResult.WIN_BLACK
-	else:
-		if state.blackTime <= move.moveTime:
-			return BoardState.StateResult.WIN_WHITE
-	return BoardState.StateResult.VALID
-
 static func validateStartingState(state: BoardState) -> BoardState.StateResult:
 	if state.whiteTime <= 0:
 		return BoardState.StateResult.START_NONPOSITIVE_WHITE_TIME
@@ -96,10 +87,6 @@ static func validateNormalMove(state: BoardState, move: Move) -> BoardState.Stat
 	
 	if !PieceLogic.canPieceMoveTo(move.movedPiece, state.previousState.pieces, move.posMovedTo, state.previousState.movePoints[state.previousState.findPieceIndex(move.movedPiece)]):
 		return BoardState.StateResult.MOVE_ONE_PIECE_MOVED_PIECE_TO_INVALID_POSITION
-	
-	var timeValidation: BoardState.StateResult = validateTime(state, move)
-	if timeValidation != BoardState.StateResult.VALID:
-		return timeValidation
 
 	return BoardState.StateResult.VALID
 
@@ -159,10 +146,6 @@ static func validateCastleMove(state: BoardState, move: Move) -> BoardState.Stat
 					return BoardState.StateResult.MOVE_CASTLE_CASTLING_THROUGH_SAME_COLOR_PIECE
 				else:
 					return BoardState.StateResult.MOVE_CASTLE_CASTLING_THROUGH_OPPOSITE_COLOR_PIECE
-	
-	var timeValidation: BoardState.StateResult = validateTime(state, move)
-	if timeValidation != BoardState.StateResult.VALID:
-		return timeValidation
 	
 	return BoardState.StateResult.VALID
 		

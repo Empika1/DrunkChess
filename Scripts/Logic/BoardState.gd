@@ -142,6 +142,18 @@ func updateTimer(newTime: float) -> void: #JANK: this is logic but isnt in board
 		blackTime = maxf(newTime, 0)
 		if blackTime == 0:
 			result = StateResult.WIN_WHITE
+			
+func getPreviousWhiteTime() -> float:
+	if previousState == null:
+		return startSettings.startingTime
+	else:
+		return previousState.whiteTime
+
+func getPreviousBlackTime() -> float:
+	if previousState == null:
+		return startSettings.startingTime
+	else:
+		return previousState.blackTime
 	
 func prepareForNext() -> BoardState:
 	var newPieces: Array[Piece] = []
