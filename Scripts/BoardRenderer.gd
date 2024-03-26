@@ -3,6 +3,10 @@ class_name BoardRenderer
 
 @export var board: Sprite2D
 @export var pieceHolder: Node2D
+@export var blackTimer: Label
+@export var whiteTimer: Label
+@export var timerDecimals: int = 0
+
 @export var lines: Sprite2D
 @export var circles: Sprite2D
 @export var circleArcs: Sprite2D
@@ -23,9 +27,6 @@ func addPieceToFreePool(piece) -> void:
 func _ready() -> void:
 	for piece in gameManager.states[-1].pieces:
 		addPieceToFreePool(piece)
-	
-func _process(_delta) -> void:
-	render()
 
 func getPieceFrame(col: Piece.PieceColor, type: Piece.PieceType) -> int:
 	return int(col) * 6 + int(type)
@@ -40,7 +41,7 @@ func getHoveredPiece(mousePos: Vector2i) -> Piece:
 	return null
 
 var stateToRender: BoardState
-func render() -> void:
+func _process(_delta) -> void:
 	deleteCircles(); deleteLines(); deleteArcs(); deleteArrows();
 	if gameManager.attemptedNextState != null:
 		stateToRender = gameManager.attemptedNextState
@@ -70,6 +71,9 @@ func render() -> void:
 		addMoveIndicators(gameManager.states[-1], gameManager.pieceDragging)
 		addCastleAreas(gameManager.states[-1].castlePoints)
 	addCaptureArrows(stateToRender)
+	
+	whiteTimer.text = str(floorf(gameManager.states[-1].whiteTime * 10 ** timerDecimals) / 10 ** timerDecimals)
+	blackTimer.text = str(floorf(gameManager.states[-1].blackTime * 10 ** timerDecimals) / 10 ** timerDecimals)
 	
 	setCircles(); setLines(); setArcs(); setArrows();
 

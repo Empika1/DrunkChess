@@ -35,8 +35,9 @@ var dragOffset: Vector2i = Vector2i(0, 0)
 var dragPos: Vector2i = Vector2i(0, 0)
 var isPiecePlaced: bool = false
 var attemptedNextState: BoardState = null
+@onready var timeAtStartOfTurn: float = float(Time.get_ticks_msec()) / 1000
 const dragBorder: Vector2i = Vector2i(Piece.squareSize, Piece.squareSize)
-func _process(_delta):
+func _process(_delta):		
 	#determine hovered piece
 	var mousePosGame: Vector2i = get_viewport().get_mouse_position()
 	var mousePosBoard: Vector2i = gamePosToBoardPos(mousePosGame)
@@ -90,7 +91,14 @@ func _process(_delta):
 				attemptedNextState.result in [BoardState.StateResult.VALID, BoardState.StateResult.WIN_BLACK, BoardState.StateResult.WIN_WHITE]):
 				states.append(attemptedNextState)
 			attemptedNextState = null
+			timeAtStartOfTurn = float(Time.get_ticks_msec()) / 1000
 			pieceDragging = null
+			
+	#update timer
+	if states[-1].turnToMove == Piece.PieceColor.WHITE:
+		states[-1].updateTimer(states[-1].getPreviousWhiteTime() - (float(Time.get_ticks_msec()) / 1000 - timeAtStartOfTurn))
+	else:
+		states[-1].updateTimer(states[-1].getPreviousBlackTime() - (float(Time.get_ticks_msec()) / 1000 - timeAtStartOfTurn))
 	
 	if states[-1].result in [BoardState.StateResult.WIN_BLACK, BoardState.StateResult.WIN_WHITE]:
 		print("hhhhhhhhhhhhhhhhhhhhhhhhhhhhh")

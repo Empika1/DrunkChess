@@ -107,10 +107,12 @@ script = ExtResource("15_uqtdi")
 board = NodePath("..")
 pieceHolder = NodePath("../PieceHolder")
 
-[node name="BoardRenderer" type="Node" parent="BoardHolder/Board" node_paths=PackedStringArray("board", "pieceHolder", "lines", "circles", "circleArcs", "arrows", "gameManager")]
+[node name="BoardRenderer" type="Node" parent="BoardHolder/Board" node_paths=PackedStringArray("board", "pieceHolder", "blackTimer", "whiteTimer", "lines", "circles", "circleArcs", "arrows", "gameManager")]
 script = ExtResource("2_ern7e")
 board = NodePath("..")
 pieceHolder = NodePath("../PieceHolder")
+blackTimer = NodePath("../../../ColorRect3/Label")
+whiteTimer = NodePath("../../../ColorRect2/Label")
 lines = NodePath("../Lines")
 circles = NodePath("../Circles")
 circleArcs = NodePath("../CircleArcs")
