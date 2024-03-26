@@ -11,6 +11,8 @@ enum StateResult {
 	START_NO_BLACK_KING,
 	START_MULTIPLE_WHITE_KINGS,
 	START_MULTIPLE_BLACK_KINGS,
+	START_NONPOSITIVE_WHITE_TIME,
+	START_NONPOSITIVE_BLACK_TIME,
 	MOVE_ONE_PIECE_MOVED_PIECE_DOESNT_EXIST,
 	MOVE_ONE_PIECE_MOVED_PIECE_WRONG_COLOR,
 	MOVE_ONE_PIECE_MOVED_PIECE_OUTSIDE_BOARD,
@@ -35,23 +37,49 @@ enum StateResult {
 	NULL_STATE_RESULT,
 }
 
+class StartSettings:
+	enum AssistMode {
+		NONE,
+		MOVE_ARROWS,
+		ANALYSIS
+	}
+	
+	var isTimed: bool
+	var startingTime: float
+	var assistMode: AssistMode
+	
+	func _init(isTimed_: bool, startingTime_: float, assistMode_: AssistMode):
+		isTimed = isTimed_
+		startingTime = startingTime_
+		assistMode = assistMode_
+
 var pieces: Array[Piece]
 var capturedPieces: Array[Piece]
 var turnToMove: Piece.PieceColor
 var result: StateResult
 var previousState: BoardState
+var startSettings: StartSettings
+var whiteTime: float
+var blackTime: float
 
 var movePoints: Array[PieceLogic.PieceMovePoints]
 var piecesCanCapture: Array[Array]
 var castlePieces: PieceLogic.CastlePieces
 var castlePoints: PieceLogic.CastlePoints
 
-func _init(pieces_: Array[Piece], capturedPieces_: Array[Piece], turnToMove_: Piece.PieceColor, result_: StateResult, previousState_: BoardState, movePoints_: Array[PieceLogic.PieceMovePoints], piecesCanCapture_: Array[Array], castlePieces_: PieceLogic.CastlePieces, castlePoints_: PieceLogic.CastlePoints):
+func _init(pieces_: Array[Piece], capturedPieces_: Array[Piece], turnToMove_: Piece.PieceColor, 
+	result_: StateResult, previousState_: BoardState, startSettings_: StartSettings, whiteTime_: float, 
+	blackTime_: float, movePoints_: Array[PieceLogic.PieceMovePoints], piecesCanCapture_: Array[Array], 
+	castlePieces_: PieceLogic.CastlePieces, castlePoints_: PieceLogic.CastlePoints):
+	
 	pieces = pieces_
 	capturedPieces = capturedPieces_
 	turnToMove = turnToMove_
 	result = result_
 	previousState = previousState_
+	startSettings = startSettings_
+	whiteTime = whiteTime_
+	blackTime = blackTime_
 	movePoints = movePoints_
 	piecesCanCapture = piecesCanCapture_
 	castlePieces = castlePieces_
@@ -67,20 +95,22 @@ func addMoveInfo():
 	castlePieces = PieceLogic.availableCastlePieces(pieces, turnToMove)
 	castlePoints = PieceLogic.availableCastlePoints(pieces, turnToMove, castlePieces)
 
-static func newStartingState(pieces_: Array[Piece]) -> BoardState:
-	var state: BoardState = BoardState.new(pieces_, [], Piece.PieceColor.WHITE, StateResult.VALID, null, [], [], null, null)
+static func newStartingState(pieces_: Array[Piece], startSettings_: StartSettings) -> BoardState:
+	var state: BoardState = BoardState.new(pieces_, [], Piece.PieceColor.WHITE, StateResult.VALID, null, 
+		startSettings_, startSettings_.startingTime, startSettings_. startingTime, [], [], null, null)
 	state.result = BoardLogic.validateStartingState(state)
 	state.addMoveInfo()
 	return state
 	
-static func newDefaultStartingState() -> BoardState:
+static func newDefaultStartingState(startSettings_: StartSettings) -> BoardState:
 	var startPieces: Array[Piece] = []
 	
 	var firstRowBlackY: int = Piece.boardSize / 16
 	var secondRowBlackY: int = Piece.boardSize * 3 / 16
 	var firstRowWhiteY: int = Piece.boardSize - firstRowBlackY
 	var secondRowWhiteY: int = Piece.boardSize - secondRowBlackY
-	var pieceOrder: Array[Piece.PieceType] = [Piece.PieceType.ROOK, Piece.PieceType.KNIGHT, Piece.PieceType.BISHOP, Piece.PieceType.QUEEN, Piece.PieceType.KING, Piece.PieceType.BISHOP, Piece.PieceType.KNIGHT, Piece.PieceType.ROOK]
+	var pieceOrder: Array[Piece.PieceType] = [Piece.PieceType.ROOK, Piece.PieceType.KNIGHT, Piece.PieceType.BISHOP, Piece.PieceType.QUEEN, 
+											  Piece.PieceType.KING, Piece.PieceType.BISHOP, Piece.PieceType.KNIGHT, Piece.PieceType.ROOK]
 	for i: int in range(8):
 		var x: int = Piece.boardSize / 16 + Piece.boardSize * i / 8
 		startPieces.append(Piece.new(Vector2i(x, firstRowBlackY), pieceOrder[i], Piece.PieceColor.BLACK))
@@ -88,7 +118,7 @@ static func newDefaultStartingState() -> BoardState:
 		
 		startPieces.append(Piece.new(Vector2i(x, secondRowBlackY), Piece.PieceType.PAWN, Piece.PieceColor.BLACK))
 		startPieces.append(Piece.new(Vector2i(x, secondRowWhiteY), Piece.PieceType.PAWN, Piece.PieceColor.WHITE))
-	var state: BoardState = BoardState.newStartingState(startPieces)
+	var state: BoardState = BoardState.newStartingState(startPieces, startSettings_)
 	return state
 
 func makeMove(move_: Move) -> BoardState:
@@ -105,7 +135,8 @@ func prepareForNext() -> BoardState:
 	for piece in capturedPieces:
 		newCapturedPieces.append(piece.duplicate())
 	
-	return BoardState.new(newPieces, newCapturedPieces, turnToMove, result, previousState, [], [], null, null)
+	return BoardState.new(newPieces, newCapturedPieces, turnToMove, result, previousState, 
+		startSettings, whiteTime, blackTime, [], [], null, null)
 
 func findPieceIndex(piece: Piece) -> int:
 	for i in range(len(pieces)):
