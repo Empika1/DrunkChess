@@ -4,7 +4,7 @@ class_name GameManager
 @export var board: Sprite2D
 @export var pieceHolder: Node2D
 
-@onready var states: Array[BoardState] = [BoardState.newDefaultStartingState()]
+@onready var states: Array[BoardState] = [BoardState.newDefaultStartingState(BoardState.StartSettings.new(BoardState.StartSettings.AssistMode.MOVE_ARROWS, true, 300))]
 
 func getScaledRectSize():
 	return (board.get_rect().size * board.global_scale).x
@@ -65,7 +65,6 @@ func _process(_delta):
 		
 		#if not castle, make normal or promotion move
 		if move == null:
-			print(dragOffset, " ", dragPos, " ", pieceDragging.pos)
 			var movePos: Vector2i = PieceLogic.closestPosCanMoveTo(pieceDragging, states[-1].pieces, dragPos, 
 				states[-1].movePoints[states[-1].findPieceIndex(pieceDragging)])
 			
