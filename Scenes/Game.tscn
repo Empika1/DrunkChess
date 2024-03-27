@@ -67,7 +67,7 @@ layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.1
 
-[node name="Label" type="Label" parent="ColorRect3"]
+[node name="BlackTimerLabel" type="Label" parent="ColorRect3"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 text = "black player clock"
@@ -111,8 +111,8 @@ pieceHolder = NodePath("../PieceHolder")
 script = ExtResource("2_ern7e")
 board = NodePath("..")
 pieceHolder = NodePath("../PieceHolder")
-blackTimer = NodePath("../../../ColorRect3/Label")
-whiteTimer = NodePath("../../../ColorRect2/Label")
+blackTimer = NodePath("../../../ColorRect3/BlackTimerLabel")
+whiteTimer = NodePath("../../../ColorRect2/WhiteTimerLabel")
 lines = NodePath("../Lines")
 circles = NodePath("../Circles")
 circleArcs = NodePath("../CircleArcs")
@@ -166,7 +166,7 @@ layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.1
 
-[node name="Label" type="Label" parent="ColorRect2"]
+[node name="WhiteTimerLabel" type="Label" parent="ColorRect2"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 text = "white player clock"
