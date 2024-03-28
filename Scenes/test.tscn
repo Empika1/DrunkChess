@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://bv8hqm40vann2"]
+[gd_scene load_steps=3 format=3 uid="uid://6ybrga46cr3v"]
 
 [ext_resource type="Texture2D" uid="uid://ypsrekatbbsx" path="res://Images/Board.svg" id="1_0cuj6"]
+[ext_resource type="Texture2D" uid="uid://bqu4ssikxl5ej" path="res://Images/BoardBorder.svg" id="1_yll8w"]
 
 [node name="Control" type="AspectRatioContainer"]
 anchors_preset = 15
@@ -9,38 +10,23 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="BoardSquare" type="AspectRatioContainer" parent="."]
 layout_mode = 2
-theme_override_constants/separation = 0
 
-[node name="Control" type="Control" parent="HBoxContainer"]
+[node name="BoardBorder" type="TextureRect" parent="BoardSquare"]
+z_index = 1
 layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_stretch_ratio = 36.24
-theme_override_constants/separation = 0
-
-[node name="Control" type="Control" parent="HBoxContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="TextureRect" type="TextureRect" parent="HBoxContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-size_flags_stretch_ratio = 36.24
-texture = ExtResource("1_0cuj6")
+texture = ExtResource("1_yll8w")
 expand_mode = 1
 
-[node name="Control2" type="Control" parent="HBoxContainer/VBoxContainer"]
+[node name="Aspect" type="AspectRatioContainer" parent="BoardSquare"]
 layout_mode = 2
-size_flags_vertical = 3
+ratio = 0.947
 
-[node name="Control3" type="Control" parent="HBoxContainer"]
+[node name="SmallerBoardSquare" type="AspectRatioContainer" parent="BoardSquare/Aspect"]
 layout_mode = 2
-size_flags_horizontal = 3
 
-[node name="CenterContainer" type="CenterContainer" parent="."]
+[node name="Board" type="TextureRect" parent="BoardSquare/Aspect/SmallerBoardSquare"]
 layout_mode = 2
+texture = ExtResource("1_0cuj6")
+expand_mode = 1

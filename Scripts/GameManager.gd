@@ -1,7 +1,7 @@
 extends Node
 class_name GameManager
 
-@export var board: Sprite2D
+@export var board: TextureRect
 @export var pieceHolder: Node2D
 
 @onready var states: Array[BoardState] = [BoardState.newDefaultStartingState(BoardState.StartSettings.new(BoardState.StartSettings.AssistMode.MOVE_ARROWS, true, 300))]
