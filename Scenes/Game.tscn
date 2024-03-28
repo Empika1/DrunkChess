@@ -1,10 +1,57 @@
-[gd_scene load_steps=6 format=3 uid="uid://cudne81ew8j5r"]
+[gd_scene load_steps=18 format=3 uid="uid://cudne81ew8j5r"]
 
 [ext_resource type="Theme" uid="uid://bhkvphjy5bskn" path="res://Themes/Main.tres" id="1_gldiy"]
 [ext_resource type="Texture2D" uid="uid://ypsrekatbbsx" path="res://Images/Board.svg" id="2_7sewj"]
 [ext_resource type="Script" path="res://Scripts/BoardRenderer.gd" id="2_ern7e"]
+[ext_resource type="Shader" path="res://Shaders/Lines.gdshader" id="4_uql85"]
+[ext_resource type="Shader" path="res://Shaders/Circles.gdshader" id="5_xsicv"]
+[ext_resource type="Shader" path="res://Shaders/CircleArcs.gdshader" id="6_uw84t"]
+[ext_resource type="Shader" path="res://Shaders/Arrows.gdshader" id="7_pwngt"]
 [ext_resource type="Texture2D" uid="uid://bqu4ssikxl5ej" path="res://Images/BoardBorder.svg" id="9_wubqd"]
 [ext_resource type="Script" path="res://Scripts/GameManager.gd" id="15_uqtdi"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_76xl3"]
+shader = ExtResource("4_uql85")
+shader_parameter/lineStarts = PackedVector2Array()
+shader_parameter/lineEnds = PackedVector2Array()
+shader_parameter/lineColorsrg = PackedVector2Array()
+shader_parameter/lineColorsba = PackedVector2Array()
+shader_parameter/lineThicknesses = PackedFloat32Array()
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_4pcoh"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5isd6"]
+shader = ExtResource("5_xsicv")
+shader_parameter/circleCenters = null
+shader_parameter/circleRadii = null
+shader_parameter/circleColorsrg = null
+shader_parameter/circleColorsba = null
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_d5phv"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_y1348"]
+shader = ExtResource("6_uw84t")
+shader_parameter/circleCenters = null
+shader_parameter/circleRadii = null
+shader_parameter/circleThicknesses = null
+shader_parameter/circleColorsrg = null
+shader_parameter/circleColorsba = null
+shader_parameter/arcEndIndices = null
+shader_parameter/arcStarts = null
+shader_parameter/arcEnds = null
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_xcd1x"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yx8dn"]
+shader = ExtResource("7_pwngt")
+shader_parameter/arrowStarts = null
+shader_parameter/arrowEnds = null
+shader_parameter/arrowColorsrg = null
+shader_parameter/arrowColorsba = null
+shader_parameter/arrowThicknesses = null
+shader_parameter/arrowDistortPoints = null
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_kb1m1"]
 
 [node name="VBoxContainer" type="VBoxContainer"]
 anchors_preset = 15
@@ -70,25 +117,44 @@ layout_mode = 2
 
 [node name="Lines" type="TextureRect" parent="BoardSquare/Aspect/SmallerBoardSquare"]
 z_index = 1
+material = SubResource("ShaderMaterial_76xl3")
 layout_mode = 2
+texture = SubResource("PlaceholderTexture2D_4pcoh")
 
 [node name="Circles" type="TextureRect" parent="BoardSquare/Aspect/SmallerBoardSquare"]
 z_index = 1
+material = SubResource("ShaderMaterial_5isd6")
 layout_mode = 2
+texture = SubResource("PlaceholderTexture2D_d5phv")
 
 [node name="CircleArcs" type="TextureRect" parent="BoardSquare/Aspect/SmallerBoardSquare"]
 z_index = 1
+material = SubResource("ShaderMaterial_y1348")
 layout_mode = 2
+texture = SubResource("PlaceholderTexture2D_xcd1x")
 
 [node name="Arrows" type="TextureRect" parent="BoardSquare/Aspect/SmallerBoardSquare"]
 z_index = 3
+material = SubResource("ShaderMaterial_yx8dn")
 layout_mode = 2
+texture = SubResource("PlaceholderTexture2D_kb1m1")
 
-[node name="GameManager" type="Node" parent="BoardSquare/Aspect/SmallerBoardSquare"]
+[node name="GameManager" type="Node" parent="BoardSquare/Aspect/SmallerBoardSquare" node_paths=PackedStringArray("board", "pieceHolder")]
 script = ExtResource("15_uqtdi")
+board = NodePath("../Board")
+pieceHolder = NodePath("../PieceHolder")
 
-[node name="BoardRenderer" type="Node" parent="BoardSquare/Aspect/SmallerBoardSquare"]
+[node name="BoardRenderer" type="Node" parent="BoardSquare/Aspect/SmallerBoardSquare" node_paths=PackedStringArray("board", "pieceHolder", "blackTimer", "whiteTimer", "lines", "circles", "circleArcs", "arrows", "gameManager")]
 script = ExtResource("2_ern7e")
+board = NodePath("../Board")
+pieceHolder = NodePath("../PieceHolder")
+blackTimer = NodePath("../../../../ColorRect3/BlackTimerLabel")
+whiteTimer = NodePath("../../../../ColorRect2/WhiteTimerLabel")
+lines = NodePath("../Lines")
+circles = NodePath("../Circles")
+circleArcs = NodePath("../CircleArcs")
+arrows = NodePath("../Arrows")
+gameManager = NodePath("../GameManager")
 hitRadiusColor = Color(0, 0, 0, 0.501961)
 thickness = 0.01
 whiteCapturerArrowColor = Color(1, 0.356863, 0.290196, 1)

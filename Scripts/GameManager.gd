@@ -2,12 +2,12 @@ extends Node
 class_name GameManager
 
 @export var board: TextureRect
-@export var pieceHolder: Node2D
+@export var pieceHolder: Control
 
 @onready var states: Array[BoardState] = [BoardState.newDefaultStartingState(BoardState.StartSettings.new(BoardState.StartSettings.AssistMode.MOVE_ARROWS, true, 300))]
 
-func getScaledRectSize():
-	return (board.get_rect().size * board.global_scale).x
+func getScaledRectSize() -> float:
+	return board.get_rect().size.x
 
 func boardLengthToGameLength(boardLength: int) -> float:
 	return boardLength * getScaledRectSize() / float(Piece.boardSize)
@@ -24,8 +24,9 @@ func gamePosToBoardPos(gamePos: Vector2) -> Vector2i:
 func getHoveredPiece(mousePos: Vector2i) -> Piece:
 	for c in pieceHolder.get_children():
 		var cs = c as DraggablePiece
-		var distanceSquared = (cs.global_position - Vector2(mousePos)).length_squared()
-		if cs.piece != null and distanceSquared < boardLengthToGameLength(cs.piece.hitRadius) ** 2:
+		if cs.piece == null:
+			continue
+		if (gamePosToBoardPos(Vector2(mousePos)) - cs.piece.pos).length_squared() <= Piece.hitRadius ** 2:
 			return cs.piece
 	return null
 

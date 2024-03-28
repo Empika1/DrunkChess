@@ -1,16 +1,16 @@
 extends Node
 class_name BoardRenderer
 
-@export var board: Sprite2D
-@export var pieceHolder: Node2D
+@export var board: TextureRect
+@export var pieceHolder: Control
 @export var blackTimer: Label
 @export var whiteTimer: Label
 @export var timerDecimals: int = 0
 
-@export var lines: Sprite2D
-@export var circles: Sprite2D
-@export var circleArcs: Sprite2D
-@export var arrows: Sprite2D
+@export var lines: TextureRect
+@export var circles: TextureRect
+@export var circleArcs: TextureRect
+@export var arrows: TextureRect
 @export var gameManager: GameManager
 
 const shadowRealm: Vector2 = Vector2(9999999, 9999999)
@@ -20,6 +20,7 @@ var freePiecePool: Array[DraggablePiece]
 
 func addPieceToFreePool(piece) -> void:
 	var sprite: DraggablePiece = pieceScene.instantiate()
+	sprite.material = sprite.material.duplicate()
 	freePiecePool.append(sprite)
 	pieceHolder.add_child(sprite)
 	sprite.init(piece)
@@ -30,15 +31,6 @@ func _ready() -> void:
 
 func getPieceFrame(col: Piece.PieceColor, type: Piece.PieceType) -> int:
 	return int(col) * 6 + int(type)
-
-func getHoveredPiece(mousePos: Vector2i) -> Piece:
-	for c in pieceHolder.get_children():
-		var cs = c as DraggablePiece
-		if cs.piece == null:
-			continue
-		if (gameManager.gamePosToBoardPos(Vector2(mousePos)) - cs.piece.pos).length_squared() <= Piece.hitRadius ** 2:
-			return cs.piece
-	return null
 
 var stateToRender: BoardState
 func _process(_delta) -> void:
@@ -57,10 +49,9 @@ func _process(_delta) -> void:
 		usedPiecePool.append(sprite)
 		
 		sprite.piece = piece
-		
-		sprite.frame = getPieceFrame(piece.color, piece.type)
-		sprite.global_position = gameManager.boardPosToGamePos(piece.pos)
-		sprite.global_scale = board.global_scale
+		(sprite.material as ShaderMaterial).set_shader_parameter("frame", getPieceFrame(piece.color, piece.type))
+		sprite.scale = board.size / board.texture.get_size()
+		sprite.global_position = gameManager.boardPosToGamePos(piece.pos) - (sprite.size * sprite.scale / 2)
 	
 	for sprite in freePiecePool:
 		sprite.global_position = shadowRealm
@@ -70,6 +61,8 @@ func _process(_delta) -> void:
 		addHitRadii(gameManager.attemptedNextState.pieces)
 		addMoveIndicators(gameManager.states[-1], gameManager.pieceDragging)
 		addCastleAreas(gameManager.states[-1].castlePoints)
+	elif gameManager.pieceHovering != null:
+		addHitRadius(gameManager.pieceHovering)
 	addCaptureArrows(stateToRender)
 	
 	whiteTimer.text = str(floorf(gameManager.states[-1].whiteTime * 10 ** timerDecimals) / 10 ** timerDecimals)
@@ -136,10 +129,12 @@ func deleteArcs() -> void:
 @export var hitRadiusColor: Color
 func addHitRadii(pieces: Array[Piece]) -> void:
 	for piece in pieces:
-		circleCenters.append(Vector2(piece.pos) / Piece.boardSize)
-		circleRadii.append(float(piece.hitRadius) / Piece.boardSize)
-		circleColorsrg.append(Vector2(hitRadiusColor.r, hitRadiusColor.g))
-		circleColorsba.append(Vector2(hitRadiusColor.b, hitRadiusColor.a))
+		addHitRadius(piece)
+func addHitRadius(piece: Piece) -> void:
+	circleCenters.append(Vector2(piece.pos) / Piece.boardSize)
+	circleRadii.append(float(piece.hitRadius) / Piece.boardSize)
+	circleColorsrg.append(Vector2(hitRadiusColor.r, hitRadiusColor.g))
+	circleColorsba.append(Vector2(hitRadiusColor.b, hitRadiusColor.a))
 
 @export var thickness: float
 func addMoveIndicators(state: BoardState, pieceDragging: Piece) -> void:

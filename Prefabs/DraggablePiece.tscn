@@ -1,14 +1,19 @@
-[gd_scene load_steps=3 format=3 uid="uid://bgicbdvmmlput"]
+[gd_scene load_steps=5 format=3 uid="uid://bgicbdvmmlput"]
 
 [ext_resource type="Shader" path="res://Shaders/SpriteSheetSlicer.gdshader" id="1_1ygfp"]
+[ext_resource type="Texture2D" uid="uid://bchoq8kvi7fty" path="res://Images/Pieces.svg" id="2_7o78c"]
+[ext_resource type="Script" path="res://Scripts/DraggablePiece.gd" id="3_7k8si"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_5ru4c"]
 shader = ExtResource("1_1ygfp")
-shader_parameter/width = null
-shader_parameter/height = null
-shader_parameter/frame = null
+shader_parameter/width = 6
+shader_parameter/height = 2
+shader_parameter/frame = 0
 
 [node name="TextureRect" type="TextureRect"]
 material = SubResource("ShaderMaterial_5ru4c")
-offset_right = 40.0
-offset_bottom = 40.0
+offset_right = 256.0
+offset_bottom = 256.0
+texture = ExtResource("2_7o78c")
+expand_mode = 1
+script = ExtResource("3_7k8si")
