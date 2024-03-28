@@ -1,6 +1,7 @@
-[gd_scene load_steps=18 format=3 uid="uid://cudne81ew8j5r"]
+[gd_scene load_steps=20 format=3 uid="uid://cudne81ew8j5r"]
 
 [ext_resource type="Theme" uid="uid://bhkvphjy5bskn" path="res://Themes/Main.tres" id="1_gldiy"]
+[ext_resource type="Script" path="res://Scripts/UI/BoardContainerResizer.gd" id="1_u4wqa"]
 [ext_resource type="Texture2D" uid="uid://ypsrekatbbsx" path="res://Images/Board.svg" id="2_7sewj"]
 [ext_resource type="Script" path="res://Scripts/BoardRenderer.gd" id="2_ern7e"]
 [ext_resource type="Shader" path="res://Shaders/Lines.gdshader" id="4_uql85"]
@@ -9,6 +10,8 @@
 [ext_resource type="Shader" path="res://Shaders/Arrows.gdshader" id="7_pwngt"]
 [ext_resource type="Texture2D" uid="uid://bqu4ssikxl5ej" path="res://Images/BoardBorder.svg" id="9_wubqd"]
 [ext_resource type="Script" path="res://Scripts/GameManager.gd" id="15_uqtdi"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_ujew3"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_76xl3"]
 shader = ExtResource("4_uql85")
@@ -53,103 +56,137 @@ shader_parameter/arrowDistortPoints = null
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_kb1m1"]
 
-[node name="VBoxContainer" type="VBoxContainer"]
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("PlaceholderTexture2D_ujew3")
+expand_mode = 2
+
+[node name="BoardContainerResizer" type="Node" parent="." node_paths=PackedStringArray("boardSquare", "mainContainer")]
+script = ExtResource("1_u4wqa")
+boardSquare = NodePath("../MainContainer/VBoxContainer/BoardSquare")
+mainContainer = NodePath("../MainContainer")
+r = 0.785
+
+[node name="MainContainer" type="AspectRatioContainer" parent="."]
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_gldiy")
-theme_override_constants/separation = 12
+ratio = 0.785
 
-[node name="ColorRect3" type="HBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="MainContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="BlackUIContainer" type="HBoxContainer" parent="MainContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-size_flags_stretch_ratio = 0.1
+theme_override_constants/separation = 0
 
-[node name="BlackTimerLabel" type="Label" parent="ColorRect3"]
-custom_minimum_size = Vector2(200, 0)
+[node name="BlackTimerLabel" type="Label" parent="MainContainer/VBoxContainer/BlackUIContainer"]
 layout_mode = 2
-text = "black player clock"
-horizontal_alignment = 1
-vertical_alignment = 1
+text = "black timer"
 
-[node name="ColorRect3" type="HBoxContainer" parent="ColorRect3"]
+[node name="Control" type="Control" parent="MainContainer/VBoxContainer/BlackUIContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BlackCaptures" type="Label" parent="MainContainer/VBoxContainer/BlackUIContainer"]
+layout_mode = 2
+text = "black captures"
+
+[node name="BoardSquare" type="Control" parent="MainContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-size_flags_stretch_ratio = 0.1
-alignment = 1
+size_flags_stretch_ratio = 7.30233
 
-[node name="PanelContainer" type="PanelContainer" parent="ColorRect3"]
-layout_mode = 2
-
-[node name="Panel" type="Panel" parent="ColorRect3/PanelContainer"]
-custom_minimum_size = Vector2(200, 0)
-layout_mode = 2
-
-[node name="BoardSquare" type="AspectRatioContainer" parent="."]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="BoardBorder" type="TextureRect" parent="BoardSquare"]
+[node name="BoardBorder" type="TextureRect" parent="MainContainer/VBoxContainer/BoardSquare"]
 z_index = 1
-layout_mode = 2
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 texture = ExtResource("9_wubqd")
 expand_mode = 1
 
-[node name="Aspect" type="AspectRatioContainer" parent="BoardSquare"]
-layout_mode = 2
+[node name="Aspect" type="AspectRatioContainer" parent="MainContainer/VBoxContainer/BoardSquare"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 ratio = 0.947
 
-[node name="SmallerBoardSquare" type="AspectRatioContainer" parent="BoardSquare/Aspect"]
+[node name="SmallerBoardSquare" type="AspectRatioContainer" parent="MainContainer/VBoxContainer/BoardSquare/Aspect"]
 layout_mode = 2
 
-[node name="Board" type="TextureRect" parent="BoardSquare/Aspect/SmallerBoardSquare"]
+[node name="Board" type="TextureRect" parent="MainContainer/VBoxContainer/BoardSquare/Aspect/SmallerBoardSquare"]
 self_modulate = Color(1, 0.898039, 0.819608, 1)
 layout_mode = 2
 texture = ExtResource("2_7sewj")
 expand_mode = 1
 
-[node name="PieceHolder" type="Control" parent="BoardSquare/Aspect/SmallerBoardSquare"]
+[node name="PieceHolder" type="Control" parent="MainContainer/VBoxContainer/BoardSquare/Aspect/SmallerBoardSquare"]
 z_index = 2
 layout_mode = 2
 
-[node name="Lines" type="TextureRect" parent="BoardSquare/Aspect/SmallerBoardSquare"]
+[node name="Lines" type="TextureRect" parent="MainContainer/VBoxContainer/BoardSquare/Aspect/SmallerBoardSquare"]
 z_index = 1
 material = SubResource("ShaderMaterial_76xl3")
 layout_mode = 2
 texture = SubResource("PlaceholderTexture2D_4pcoh")
 
-[node name="Circles" type="TextureRect" parent="BoardSquare/Aspect/SmallerBoardSquare"]
+[node name="Circles" type="TextureRect" parent="MainContainer/VBoxContainer/BoardSquare/Aspect/SmallerBoardSquare"]
 z_index = 1
 material = SubResource("ShaderMaterial_5isd6")
 layout_mode = 2
 texture = SubResource("PlaceholderTexture2D_d5phv")
 
-[node name="CircleArcs" type="TextureRect" parent="BoardSquare/Aspect/SmallerBoardSquare"]
+[node name="CircleArcs" type="TextureRect" parent="MainContainer/VBoxContainer/BoardSquare/Aspect/SmallerBoardSquare"]
 z_index = 1
 material = SubResource("ShaderMaterial_y1348")
 layout_mode = 2
 texture = SubResource("PlaceholderTexture2D_xcd1x")
 
-[node name="Arrows" type="TextureRect" parent="BoardSquare/Aspect/SmallerBoardSquare"]
+[node name="Arrows" type="TextureRect" parent="MainContainer/VBoxContainer/BoardSquare/Aspect/SmallerBoardSquare"]
 z_index = 3
 material = SubResource("ShaderMaterial_yx8dn")
 layout_mode = 2
 texture = SubResource("PlaceholderTexture2D_kb1m1")
 
-[node name="GameManager" type="Node" parent="BoardSquare/Aspect/SmallerBoardSquare" node_paths=PackedStringArray("board", "pieceHolder")]
+[node name="GameManager" type="Node" parent="MainContainer/VBoxContainer/BoardSquare/Aspect/SmallerBoardSquare" node_paths=PackedStringArray("board", "pieceHolder")]
 script = ExtResource("15_uqtdi")
 board = NodePath("../Board")
 pieceHolder = NodePath("../PieceHolder")
 
-[node name="BoardRenderer" type="Node" parent="BoardSquare/Aspect/SmallerBoardSquare" node_paths=PackedStringArray("board", "pieceHolder", "blackTimer", "whiteTimer", "lines", "circles", "circleArcs", "arrows", "gameManager")]
+[node name="BoardRenderer" type="Node" parent="MainContainer/VBoxContainer/BoardSquare/Aspect/SmallerBoardSquare" node_paths=PackedStringArray("board", "pieceHolder", "blackTimer", "whiteTimer", "lines", "circles", "circleArcs", "arrows", "gameManager")]
 script = ExtResource("2_ern7e")
 board = NodePath("../Board")
 pieceHolder = NodePath("../PieceHolder")
-blackTimer = NodePath("../../../../ColorRect3/BlackTimerLabel")
-whiteTimer = NodePath("../../../../ColorRect2/WhiteTimerLabel")
+blackTimer = NodePath("../../../../BlackUIContainer/BlackTimerLabel")
+whiteTimer = NodePath("../../../../WhiteUIContainer/WhiteTimerLabel")
 lines = NodePath("../Lines")
 circles = NodePath("../Circles")
 circleArcs = NodePath("../CircleArcs")
@@ -161,28 +198,21 @@ whiteCapturerArrowColor = Color(1, 0.356863, 0.290196, 1)
 blackCapturerArrowColor = Color(1, 0.356863, 0.290196, 1)
 arrowThickness = 0.005
 
-[node name="ColorRect2" type="HBoxContainer" parent="."]
+[node name="WhiteUIContainer" type="HBoxContainer" parent="MainContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-size_flags_stretch_ratio = 0.1
+theme_override_constants/separation = 0
 
-[node name="WhiteTimerLabel" type="Label" parent="ColorRect2"]
-custom_minimum_size = Vector2(200, 0)
+[node name="WhiteTimerLabel" type="Label" parent="MainContainer/VBoxContainer/WhiteUIContainer"]
 layout_mode = 2
-text = "white player clock"
-horizontal_alignment = 1
-vertical_alignment = 1
+text = "white timer
+"
 
-[node name="ColorRect3" type="HBoxContainer" parent="ColorRect2"]
+[node name="Control2" type="Control" parent="MainContainer/VBoxContainer/WhiteUIContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 3
-size_flags_stretch_ratio = 0.1
-alignment = 1
 
-[node name="PanelContainer" type="PanelContainer" parent="ColorRect2"]
+[node name="WhiteCaptures" type="Label" parent="MainContainer/VBoxContainer/WhiteUIContainer"]
 layout_mode = 2
-
-[node name="Panel" type="Panel" parent="ColorRect2/PanelContainer"]
-custom_minimum_size = Vector2(200, 0)
-layout_mode = 2
+text = "white captures
+"

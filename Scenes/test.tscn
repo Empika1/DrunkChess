@@ -1,7 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://6ybrga46cr3v"]
+[gd_scene load_steps=2 format=3 uid="uid://6ybrga46cr3v"]
 
 [ext_resource type="Texture2D" uid="uid://ypsrekatbbsx" path="res://Images/Board.svg" id="1_0cuj6"]
-[ext_resource type="Texture2D" uid="uid://bqu4ssikxl5ej" path="res://Images/BoardBorder.svg" id="1_yll8w"]
 
 [node name="Control" type="AspectRatioContainer"]
 anchors_preset = 15
@@ -10,23 +9,51 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="BoardSquare" type="AspectRatioContainer" parent="."]
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="."]
 layout_mode = 2
+ratio = 0.8
 
-[node name="BoardBorder" type="TextureRect" parent="BoardSquare"]
-z_index = 1
+[node name="VBoxContainer" type="VBoxContainer" parent="AspectRatioContainer"]
 layout_mode = 2
-texture = ExtResource("1_yll8w")
-expand_mode = 1
+theme_override_constants/separation = 0
 
-[node name="Aspect" type="AspectRatioContainer" parent="BoardSquare"]
+[node name="Control" type="HBoxContainer" parent="AspectRatioContainer/VBoxContainer"]
 layout_mode = 2
-ratio = 0.947
+size_flags_vertical = 3
+theme_override_constants/separation = 0
 
-[node name="SmallerBoardSquare" type="AspectRatioContainer" parent="BoardSquare/Aspect"]
+[node name="Label" type="Label" parent="AspectRatioContainer/VBoxContainer/Control"]
 layout_mode = 2
+text = "ghgggggggggg"
 
-[node name="Board" type="TextureRect" parent="BoardSquare/Aspect/SmallerBoardSquare"]
+[node name="Control" type="Control" parent="AspectRatioContainer/VBoxContainer/Control"]
 layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label2" type="Label" parent="AspectRatioContainer/VBoxContainer/Control"]
+layout_mode = 2
+text = "ghgggggggggg"
+
+[node name="Control2" type="TextureRect" parent="AspectRatioContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 8.0
 texture = ExtResource("1_0cuj6")
 expand_mode = 1
+
+[node name="Control3" type="HBoxContainer" parent="AspectRatioContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 0
+
+[node name="Label" type="Label" parent="AspectRatioContainer/VBoxContainer/Control3"]
+layout_mode = 2
+text = "ghgggggggggg"
+
+[node name="Control" type="Control" parent="AspectRatioContainer/VBoxContainer/Control3"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label2" type="Label" parent="AspectRatioContainer/VBoxContainer/Control3"]
+layout_mode = 2
+text = "ghgggggggggg"
