@@ -1,59 +1,21 @@
-[gd_scene load_steps=2 format=3 uid="uid://6ybrga46cr3v"]
+[gd_scene load_steps=4 format=3 uid="uid://6ybrga46cr3v"]
 
-[ext_resource type="Texture2D" uid="uid://ypsrekatbbsx" path="res://Images/Board.svg" id="1_0cuj6"]
+[ext_resource type="Shader" path="res://Shaders/RoundedRectangle.gdshader" id="1_3peu0"]
 
-[node name="Control" type="AspectRatioContainer"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3x0sm"]
+shader = ExtResource("1_3peu0")
+shader_parameter/innerDistance = 0.045
+shader_parameter/outerDistance = 0.01
+shader_parameter/outerRadius = 0.075
+shader_parameter/aspectRatio = 3.0
+shader_parameter/bgCol = null
+shader_parameter/lineCol = Vector4(0, 0, 0, 1)
 
-[node name="AspectRatioContainer" type="AspectRatioContainer" parent="."]
-layout_mode = 2
-ratio = 0.8
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_mtti4"]
 
-[node name="VBoxContainer" type="VBoxContainer" parent="AspectRatioContainer"]
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="Control" type="HBoxContainer" parent="AspectRatioContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_constants/separation = 0
-
-[node name="Label" type="Label" parent="AspectRatioContainer/VBoxContainer/Control"]
-layout_mode = 2
-text = "ghgggggggggg"
-
-[node name="Control" type="Control" parent="AspectRatioContainer/VBoxContainer/Control"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="Label2" type="Label" parent="AspectRatioContainer/VBoxContainer/Control"]
-layout_mode = 2
-text = "ghgggggggggg"
-
-[node name="Control2" type="TextureRect" parent="AspectRatioContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-size_flags_stretch_ratio = 8.0
-texture = ExtResource("1_0cuj6")
-expand_mode = 1
-
-[node name="Control3" type="HBoxContainer" parent="AspectRatioContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_constants/separation = 0
-
-[node name="Label" type="Label" parent="AspectRatioContainer/VBoxContainer/Control3"]
-layout_mode = 2
-text = "ghgggggggggg"
-
-[node name="Control" type="Control" parent="AspectRatioContainer/VBoxContainer/Control3"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="Label2" type="Label" parent="AspectRatioContainer/VBoxContainer/Control3"]
-layout_mode = 2
-text = "ghgggggggggg"
+[node name="Control" type="TextureRect"]
+material = SubResource("ShaderMaterial_3x0sm")
+offset_right = 1.0
+offset_bottom = 1.0
+scale = Vector2(1536, 512)
+texture = SubResource("PlaceholderTexture2D_mtti4")
