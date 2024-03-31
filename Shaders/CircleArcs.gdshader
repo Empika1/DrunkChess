@@ -1,6 +1,7 @@
 shader_type canvas_item;
 #include "LSquared.gdshaderinc"
 #include "AClockwise.gdshaderinc"
+#include "Constants.gdshaderinc"
 
 const int numCircles = 32;
 uniform vec2[numCircles] circleCenters;
@@ -14,8 +15,13 @@ const int numArcs = 128;
 uniform vec2[numArcs] arcStarts;
 uniform vec2[numArcs] arcEnds;
 
+varying float canvas11;
+void vertex() {
+	canvas11 = CANVAS_MATRIX[1][1];
+}
+
 void fragment() {
-	float blur = 0.0006;
+	float blur = blurC / canvas11;
 	
 	COLOR = vec4(0.);
 	

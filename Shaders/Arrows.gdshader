@@ -1,6 +1,7 @@
 shader_type canvas_item;
 #include "LineBlur.gdshaderinc"
 #include "Distort.gdshaderinc"
+#include "Constants.gdshaderinc"
 
 const int numArrows = 128;
 uniform vec2[numArrows] arrowStarts;
@@ -10,8 +11,13 @@ uniform vec2[numArrows] arrowColorsba;
 uniform float[numArrows] arrowThicknesses;
 uniform vec2[numArrows] arrowDistortPoints;
 
+varying float canvas11;
+void vertex() {
+	canvas11 = CANVAS_MATRIX[1][1];
+}
+
 void fragment() {
-	float blur = 0.0006;
+	float blur = blurC / canvas11;
 	COLOR = vec4(0.);
 	for(int i = 0; i < numArrows; i++) {
 		vec4 col1 = vec4(arrowColorsrg[i].xy, arrowColorsba[i].xy);

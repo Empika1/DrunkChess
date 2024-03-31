@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://cudne81ew8j5r"]
+[gd_scene load_steps=23 format=3 uid="uid://cudne81ew8j5r"]
 
 [ext_resource type="Theme" uid="uid://bhkvphjy5bskn" path="res://Themes/Main.tres" id="1_gldiy"]
 [ext_resource type="Script" path="res://Scripts/UI/BoardContainerResizer.gd" id="1_u4wqa"]
@@ -9,6 +9,7 @@
 [ext_resource type="Shader" path="res://Shaders/CircleArcs.gdshader" id="6_uw84t"]
 [ext_resource type="Shader" path="res://Shaders/Arrows.gdshader" id="7_pwngt"]
 [ext_resource type="Texture2D" uid="uid://bqu4ssikxl5ej" path="res://Images/BoardBorder.svg" id="9_wubqd"]
+[ext_resource type="Shader" path="res://Shaders/RoundedBorder.gdshader" id="11_6jtdc"]
 [ext_resource type="Script" path="res://Scripts/GameManager.gd" id="15_uqtdi"]
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_ujew3"]
@@ -55,6 +56,20 @@ shader_parameter/arrowThicknesses = null
 shader_parameter/arrowDistortPoints = null
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_kb1m1"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_uhl4r"]
+shader = ExtResource("11_6jtdc")
+shader_parameter/innerDistance = 0.03
+shader_parameter/outerDistance = 0.014
+shader_parameter/outerRadius = 0.045
+shader_parameter/noDistortLength = 0.035
+shader_parameter/bgCol = null
+shader_parameter/lineCol = Vector4(0, 0, 0, 1)
+shader_parameter/noiseMean = 0.695
+shader_parameter/noiseScale = Vector2(2.175, 0.054)
+shader_parameter/noiseSeed = 0.66
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_dkrfx"]
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -172,7 +187,7 @@ gameManager = NodePath("../GameManager")
 hitRadiusColor = Color(0, 0, 0, 0.501961)
 thickness = 0.01
 whiteCapturerArrowColor = Color(1, 0.356863, 0.290196, 1)
-blackCapturerArrowColor = Color(1, 0.356863, 0.290196, 1)
+blackCapturerArrowColor = Color(0, 0.72549, 0.4, 1)
 arrowThickness = 0.005
 
 [node name="Aspect" type="AspectRatioContainer" parent="MainContainer/VBoxContainer/BoardSquare"]
@@ -185,10 +200,17 @@ layout_mode = 2
 stretch_mode = 3
 
 [node name="BoardBorder" type="TextureRect" parent="MainContainer/VBoxContainer/BoardSquare/Aspect/SmallerBoardSquare"]
+visible = false
 z_index = 1
 layout_mode = 2
 texture = ExtResource("9_wubqd")
 expand_mode = 1
+
+[node name="TextureRect" type="TextureRect" parent="MainContainer/VBoxContainer/BoardSquare/Aspect/SmallerBoardSquare"]
+z_index = 1
+material = SubResource("ShaderMaterial_uhl4r")
+layout_mode = 2
+texture = SubResource("PlaceholderTexture2D_dkrfx")
 
 [node name="WhiteUIContainer" type="HBoxContainer" parent="MainContainer/VBoxContainer"]
 layout_mode = 2

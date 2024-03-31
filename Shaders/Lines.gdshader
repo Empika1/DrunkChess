@@ -1,5 +1,6 @@
 shader_type canvas_item;
 #include "LineBlur.gdshaderinc"
+#include "Constants.gdshaderinc"
 
 const int numlines = 16;
 uniform vec2[numlines] lineStarts;
@@ -8,8 +9,13 @@ uniform vec2[numlines] lineColorsrg;
 uniform vec2[numlines] lineColorsba;
 uniform float[numlines] lineThicknesses;
 
+varying float canvas11;
+void vertex() {
+	canvas11 = CANVAS_MATRIX[1][1];
+}
+
 void fragment() {
-	float blur = 0.0006;
+	float blur = blurC / canvas11;
 	COLOR = vec4(0.);
 	for(int i = 0; i < numlines; i++) {
 		vec4 col1 = vec4(lineColorsrg[i].xy, lineColorsba[i].xy);

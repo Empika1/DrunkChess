@@ -1,15 +1,10 @@
 [gd_scene load_steps=4 format=3 uid="uid://6ybrga46cr3v"]
 
-[ext_resource type="Shader" path="res://Shaders/RoundedRectangle.gdshader" id="1_3peu0"]
+[ext_resource type="Shader" path="res://Shaders/test.gdshader" id="2_b0pak"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_3x0sm"]
-shader = ExtResource("1_3peu0")
-shader_parameter/innerDistance = 0.045
-shader_parameter/outerDistance = 0.01
-shader_parameter/outerRadius = 0.075
-shader_parameter/aspectRatio = 3.0
-shader_parameter/bgCol = null
-shader_parameter/lineCol = Vector4(0, 0, 0, 1)
+shader = ExtResource("2_b0pak")
+shader_parameter/slice = 0.545
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_mtti4"]
 
@@ -17,5 +12,5 @@ shader_parameter/lineCol = Vector4(0, 0, 0, 1)
 material = SubResource("ShaderMaterial_3x0sm")
 offset_right = 1.0
 offset_bottom = 1.0
-scale = Vector2(1536, 512)
+scale = Vector2(512, 512)
 texture = SubResource("PlaceholderTexture2D_mtti4")

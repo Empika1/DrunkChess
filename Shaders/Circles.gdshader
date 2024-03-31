@@ -1,5 +1,6 @@
 shader_type canvas_item;
 #include "LSquared.gdshaderinc"
+#include "Constants.gdshaderinc"
 
 const int numCircles = 64;
 uniform vec2[numCircles] circleCenters;
@@ -7,8 +8,13 @@ uniform float[numCircles] circleRadii;
 uniform vec2[numCircles] circleColorsrg;
 uniform vec2[numCircles] circleColorsba;
 
+varying float canvas11;
+void vertex() {
+	canvas11 = CANVAS_MATRIX[1][1];
+}
+
 void fragment() {
-	float blur = 0.0006;
+	float blur = blurC / canvas11;
 	
 	COLOR = vec4(0.);
 	for(int i = 0; i < numCircles; i++) {

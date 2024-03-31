@@ -1,5 +1,9 @@
 shader_type canvas_item;
 
+uniform float slice;
+
+#include "Noise.gdshaderinc"
+
 void fragment() {
-	COLOR = vec4(vec3(TEXTURE_PIXEL_SIZE.y / TEXTURE_PIXEL_SIZE.x), 1.);
+	COLOR = vec4(vec3(0.5 * sNoise1D(UV.x * 5.) + 0.5), 1.);
 }
