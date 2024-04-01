@@ -5,6 +5,8 @@ class_name Piece
 enum PieceType {
 	PAWN, KNIGHT, BISHOP, ROOK, QUEEN, KING, NULL_PIECE
 }
+static func sortByType(a: Piece, b: Piece) -> bool:
+	return int(a.type) < int(b.type)
 
 const promotableTo: Array[PieceType] = [PieceType.KNIGHT, PieceType.BISHOP, PieceType.ROOK, PieceType.QUEEN]
 static func isPromotionPosition(pos_: Vector2i, turnToMove_: PieceColor):

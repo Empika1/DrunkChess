@@ -4,15 +4,17 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qfate"]
 shader = ExtResource("1_mbcxu")
-shader_parameter/innerDistance = 0.065
-shader_parameter/outerDistance = 0.035
+shader_parameter/outerDistances = Vector4(0, 0.03, 0, 0.03)
+shader_parameter/thickness = 0.04
 shader_parameter/outerRadius = 0.145
 shader_parameter/noDistortLength = 0.151
-shader_parameter/bgCol = null
-shader_parameter/lineCol = Vector4(0, 0, 0, 1)
-shader_parameter/noiseMean = 0.695
-shader_parameter/noiseScale = Vector2(2.175, 0.015)
+shader_parameter/insideBgCol = null
+shader_parameter/outsideBgCol = null
+shader_parameter/lineCol = null
+shader_parameter/noiseScale = Vector2(2.175, 0.15)
 shader_parameter/noiseSeed = 0.435
+shader_parameter/realWidth = 991.813
+shader_parameter/realHeight = 632.32
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_rqdx4"]
 

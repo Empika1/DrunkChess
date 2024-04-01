@@ -5,7 +5,8 @@ class_name BoardRenderer
 @export var pieceHolder: Control
 @export var blackTimer: Label
 @export var whiteTimer: Label
-@export var timerDecimals: int = 0
+@export var blackCaptures: HBoxContainer
+@export var whiteCaptures: HBoxContainer
 
 @export var lines: TextureRect
 @export var circles: TextureRect
@@ -18,6 +19,9 @@ var pieceScene: PackedScene = preload("res://Prefabs/DraggablePiece.tscn")
 var usedPiecePool: Array[DraggablePiece]
 var freePiecePool: Array[DraggablePiece]
 
+var whiteCapturesContainers: Array[AspectRatioContainer]
+var blackCapturesContainers: Array[AspectRatioContainer]
+
 func addPieceToFreePool(piece) -> void:
 	var sprite: DraggablePiece = pieceScene.instantiate()
 	sprite.material = sprite.material.duplicate()
@@ -28,9 +32,44 @@ func addPieceToFreePool(piece) -> void:
 func _ready() -> void:
 	for piece in gameManager.states[-1].pieces:
 		addPieceToFreePool(piece)
+		
+		var container: AspectRatioContainer = AspectRatioContainer.new()
+		container.stretch_mode = AspectRatioContainer.STRETCH_HEIGHT_CONTROLS_WIDTH
+		if piece.color == Piece.PieceColor.WHITE:
+			whiteCaptures.add_child(container)
+			whiteCapturesContainers.append(container)
+		else:
+			blackCaptures.add_child(container)
+			blackCapturesContainers.append(container)
+	
+	for i in range(5):
+		var container: AspectRatioContainer = AspectRatioContainer.new()
+		container.stretch_mode = AspectRatioContainer.STRETCH_HEIGHT_CONTROLS_WIDTH
+		whiteCaptures.add_child(container)
+		whiteCapturesContainers.append(container)
+	
+	for i in range(5):
+		var container: AspectRatioContainer = AspectRatioContainer.new()
+		container.stretch_mode = AspectRatioContainer.STRETCH_HEIGHT_CONTROLS_WIDTH
+		blackCaptures.add_child(container)
+		blackCapturesContainers.append(container)
 
 func getPieceFrame(col: Piece.PieceColor, type: Piece.PieceType) -> int:
 	return int(col) * 6 + int(type)
+
+func formatTime(seconds_: float) -> String:
+	var totalTenths: int = int(seconds_ * 10)
+	var tenths: int = totalTenths
+	var hours: int = tenths / 36000
+	tenths %= 36000
+	var minutes: int = tenths / 600
+	tenths %= 600
+	var seconds: int = tenths / 10
+	tenths %= 10
+	return ((str(hours) + ":" if hours > 0 else "") +
+			(str(minutes) + ":" if minutes > 0 else "") +
+			(("0" if seconds < 10 else "") + str(seconds)) +
+			("." + str(tenths) if totalTenths <= 300 else ""))
 
 var stateToRender: BoardState
 func _process(_delta) -> void:
@@ -42,8 +81,9 @@ func _process(_delta) -> void:
 
 	while len(usedPiecePool) > 0:
 		var sprite: DraggablePiece = usedPiecePool.pop_back()
+		sprite.reparent(pieceHolder)
 		freePiecePool.append(sprite)
-
+	
 	for piece in stateToRender.pieces:
 		var sprite: DraggablePiece = freePiecePool.pop_back()
 		usedPiecePool.append(sprite)
@@ -51,7 +91,50 @@ func _process(_delta) -> void:
 		sprite.piece = piece
 		(sprite.material as ShaderMaterial).set_shader_parameter("frame", getPieceFrame(piece.color, piece.type))
 		sprite.scale = board.size / board.texture.get_size()
+		sprite.size = Vector2i(256, 256)
 		sprite.global_position = gameManager.boardPosToGamePos(piece.pos) - (sprite.size * sprite.scale / 2)
+	
+	var whiteCapturedPiecesSorted: Array[Piece] = []
+	var blackCapturedPiecesSorted: Array[Piece] = []
+	for piece in stateToRender.capturedPieces:
+		if piece.color == Piece.PieceColor.WHITE:
+			whiteCapturedPiecesSorted.append(piece)
+		else:
+			blackCapturedPiecesSorted.append(piece)
+	whiteCapturedPiecesSorted.sort_custom(Piece.sortByType)
+	blackCapturedPiecesSorted.sort_custom(Piece.sortByType)
+	var i: int = 0
+	while i < len(whiteCapturedPiecesSorted):
+		var piece: Piece = whiteCapturedPiecesSorted[i]
+		var sprite: DraggablePiece = freePiecePool.pop_back()
+		usedPiecePool.append(sprite)
+		sprite.piece = piece
+		(sprite.material as ShaderMaterial).set_shader_parameter("frame", getPieceFrame(piece.color, piece.type))
+		if i > 0 and piece.type != whiteCapturedPiecesSorted[i - 1].type:
+			whiteCapturesContainers[i].size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			i += 1
+		sprite.reparent(whiteCapturesContainers[i])
+		whiteCapturesContainers[i].size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		i += 1
+	while i < len(whiteCapturesContainers):
+		whiteCapturesContainers[i].size_flags_horizontal = Control.SIZE_FILL
+		i += 1
+	i = 0
+	while i < len(blackCapturedPiecesSorted):
+		var piece: Piece = blackCapturedPiecesSorted[i]
+		var sprite: DraggablePiece = freePiecePool.pop_back()
+		usedPiecePool.append(sprite)
+		sprite.piece = piece
+		(sprite.material as ShaderMaterial).set_shader_parameter("frame", getPieceFrame(piece.color, piece.type))
+		if i > 0 and piece.type != blackCapturedPiecesSorted[i - 1].type:
+			blackCapturesContainers[i].size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			i += 1
+		sprite.reparent(blackCapturesContainers[i])
+		blackCapturesContainers[i].size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		i += 1
+	while i < len(blackCapturesContainers):
+		blackCapturesContainers[i].size_flags_horizontal = Control.SIZE_FILL
+		i += 1
 	
 	for sprite in freePiecePool:
 		sprite.global_position = shadowRealm
@@ -65,8 +148,8 @@ func _process(_delta) -> void:
 		addHitRadius(gameManager.pieceHovering)
 	addCaptureArrows(stateToRender)
 	
-	whiteTimer.text = str(floorf(gameManager.states[-1].whiteTime * 10 ** timerDecimals) / 10 ** timerDecimals)
-	blackTimer.text = str(floorf(gameManager.states[-1].blackTime * 10 ** timerDecimals) / 10 ** timerDecimals)
+	whiteTimer.text = formatTime(gameManager.states[-1].whiteTime)
+	blackTimer.text = formatTime(gameManager.states[-1].blackTime)
 	
 	setCircles(); setLines(); setArcs(); setArrows();
 

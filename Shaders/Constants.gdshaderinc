@@ -1,1 +1,1 @@
-const float blurC = 0.0005;
+const float blurC = 0.001;

@@ -1,16 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://6ybrga46cr3v"]
+[gd_scene format=3 uid="uid://6ybrga46cr3v"]
 
-[ext_resource type="Shader" path="res://Shaders/test.gdshader" id="2_b0pak"]
+[node name="Node2D" type="Node2D"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_3x0sm"]
-shader = ExtResource("2_b0pak")
-shader_parameter/slice = 0.545
-
-[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_mtti4"]
-
-[node name="Control" type="TextureRect"]
-material = SubResource("ShaderMaterial_3x0sm")
-offset_right = 1.0
-offset_bottom = 1.0
-scale = Vector2(512, 512)
-texture = SubResource("PlaceholderTexture2D_mtti4")
+[node name="Label" type="Label" parent="."]
+offset_right = 286.0
+offset_bottom = 23.0
+text = "ghghghghghghghghghghghghghghgh"
