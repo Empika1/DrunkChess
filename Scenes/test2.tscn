@@ -1,32 +1,28 @@
-[gd_scene load_steps=4 format=3 uid="uid://b42l4w2003jao"]
+[gd_scene load_steps=2 format=3 uid="uid://b42l4w2003jao"]
 
-[ext_resource type="Shader" path="res://Shaders/RoundedBorder.gdshader" id="1_mbcxu"]
+[ext_resource type="Script" path="res://Scripts/UI/LabelScaler.gd" id="1_20k15"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_qfate"]
-shader = ExtResource("1_mbcxu")
-shader_parameter/outerDistances = Vector4(0, 0.03, 0, 0.03)
-shader_parameter/thickness = 0.04
-shader_parameter/outerRadius = 0.145
-shader_parameter/noDistortLength = 0.151
-shader_parameter/insideBgCol = null
-shader_parameter/outsideBgCol = null
-shader_parameter/lineCol = null
-shader_parameter/noiseScale = Vector2(2.175, 0.15)
-shader_parameter/noiseSeed = 0.435
-shader_parameter/realWidth = 991.813
-shader_parameter/realHeight = 632.32
-
-[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_rqdx4"]
-
-[node name="Control" type="TextureRect"]
-material = SubResource("ShaderMaterial_qfate")
+[node name="Control" type="Control" node_paths=PackedStringArray("label")]
+layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -639.435
-offset_bottom = -136.0
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(1.935, 1.235)
-texture = SubResource("PlaceholderTexture2D_rqdx4")
-expand_mode = 1
+script = ExtResource("1_20k15")
+fontSize = 127.985
+fitType = 2
+label = NodePath("Label")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.999827, 0.999827)
+theme_override_font_sizes/font_size = 127
+text = "hiiiiiiiiiiii"
+horizontal_alignment = 1
+vertical_alignment = 1
