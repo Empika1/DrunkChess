@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://cudne81ew8j5r"]
+[gd_scene load_steps=36 format=3 uid="uid://cudne81ew8j5r"]
 
 [ext_resource type="Script" path="res://Scripts/UI/SetBorderRatio.gd" id="1_8omxs"]
 [ext_resource type="Theme" uid="uid://bhkvphjy5bskn" path="res://Themes/Main.tres" id="1_gldiy"]
@@ -12,6 +12,7 @@
 [ext_resource type="Script" path="res://Scripts/UI/LabelScaler.gd" id="6_v8qg6"]
 [ext_resource type="Shader" path="res://Shaders/Arrows.gdshader" id="7_pwngt"]
 [ext_resource type="Shader" path="res://Shaders/RoundedBorder.gdshader" id="11_6jtdc"]
+[ext_resource type="Script" path="res://Scripts/UI/ProceduralTextureButton.gd" id="14_oywxq"]
 [ext_resource type="Script" path="res://Scripts/GameManager.gd" id="15_uqtdi"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_yxwyt"]
@@ -25,6 +26,43 @@ shader_parameter/layer1Col1 = Color(0.231373, 0.231373, 1, 1)
 shader_parameter/layer1Col2 = Color(1, 0.921569, 0.929412, 1)
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_ujew3"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_w84sv"]
+shader = ExtResource("11_6jtdc")
+shader_parameter/outerDistances = Vector4(0.02, 0.02, 0.02, 0.02)
+shader_parameter/thickness = 0.075
+shader_parameter/outerRadius = 0.105
+shader_parameter/noDistortLength = 0.245
+shader_parameter/insideBgCol = Color(0.619608, 0.541176, 0.482353, 1)
+shader_parameter/outsideBgCol = Color(0, 0, 0, 0)
+shader_parameter/lineCol = null
+shader_parameter/noiseScale = Vector2(1.745, 0.195)
+shader_parameter/noiseSeed = 0.955
+shader_parameter/realWidth = 89.0
+shader_parameter/realHeight = 89.0
+
+[sub_resource type="Gradient" id="Gradient_w0ct7"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_mxgtm"]
+gradient = SubResource("Gradient_w0ct7")
+width = 1
+height = 1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_u4uj4"]
+shader = ExtResource("11_6jtdc")
+shader_parameter/outerDistances = Vector4(0.02, 0.02, 0.02, 0.02)
+shader_parameter/thickness = 0.075
+shader_parameter/outerRadius = 0.11
+shader_parameter/noDistortLength = 0.245
+shader_parameter/insideBgCol = Color(0.619608, 0.541176, 0.482353, 1)
+shader_parameter/outsideBgCol = Color(0, 0, 0, 0)
+shader_parameter/lineCol = null
+shader_parameter/noiseScale = Vector2(1.745, 0.195)
+shader_parameter/noiseSeed = 1.63
+shader_parameter/realWidth = 89.0
+shader_parameter/realHeight = 89.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_lw55w"]
 shader = ExtResource("11_6jtdc")
@@ -65,8 +103,8 @@ shader_parameter/outsideBgCol = Color(0, 0, 0, 0)
 shader_parameter/lineCol = null
 shader_parameter/noiseScale = Vector2(3.355, 0.05)
 shader_parameter/noiseSeed = 1.165
-shader_parameter/realWidth = 521.269
-shader_parameter/realHeight = 521.269
+shader_parameter/realWidth = 523.379
+shader_parameter/realHeight = 523.379
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_dkrfx"]
 
@@ -124,7 +162,7 @@ shader_parameter/outsideBgCol = Color(0, 0, 0, 0)
 shader_parameter/lineCol = null
 shader_parameter/noiseScale = Vector2(0.54, 0.435)
 shader_parameter/noiseSeed = 2.44
-shader_parameter/realWidth = 197.0
+shader_parameter/realWidth = 198.0
 shader_parameter/realHeight = 68.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_gfptd"]
@@ -138,10 +176,10 @@ shader_parameter/outsideBgCol = Color(0, 0, 0, 0)
 shader_parameter/lineCol = null
 shader_parameter/noiseScale = Vector2(0.54, 0.435)
 shader_parameter/noiseSeed = 1.465
-shader_parameter/realWidth = 198.0
+shader_parameter/realWidth = 199.0
 shader_parameter/realHeight = 68.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_w84sv"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_e8xod"]
 shader = ExtResource("11_6jtdc")
 shader_parameter/outerDistances = Vector4(0.02, 0.02, 0.02, 0.02)
 shader_parameter/thickness = 0.075
@@ -149,34 +187,11 @@ shader_parameter/outerRadius = 0.105
 shader_parameter/noDistortLength = 0.245
 shader_parameter/insideBgCol = Color(0.619608, 0.541176, 0.482353, 1)
 shader_parameter/outsideBgCol = Color(0, 0, 0, 0)
-shader_parameter/lineCol = null
-shader_parameter/noiseScale = Vector2(1.745, 0.195)
-shader_parameter/noiseSeed = 0.955
-shader_parameter/realWidth = 1.0
-shader_parameter/realHeight = 1.0
-
-[sub_resource type="Gradient" id="Gradient_w0ct7"]
-offsets = PackedFloat32Array(0)
-colors = PackedColorArray(0, 0, 0, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_mxgtm"]
-gradient = SubResource("Gradient_w0ct7")
-width = 1
-height = 1
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_u4uj4"]
-shader = ExtResource("11_6jtdc")
-shader_parameter/outerDistances = Vector4(0.02, 0.02, 0.02, 0.02)
-shader_parameter/thickness = 0.075
-shader_parameter/outerRadius = 0.11
-shader_parameter/noDistortLength = 0.245
-shader_parameter/insideBgCol = Color(0.619608, 0.541176, 0.482353, 1)
-shader_parameter/outsideBgCol = Color(0, 0, 0, 0)
-shader_parameter/lineCol = null
-shader_parameter/noiseScale = Vector2(1.745, 0.195)
-shader_parameter/noiseSeed = 1.63
-shader_parameter/realWidth = 1.0
-shader_parameter/realHeight = 1.0
+shader_parameter/lineCol = Color(0, 0, 0, 1)
+shader_parameter/noiseScale = Vector2(1.745, 0.155)
+shader_parameter/noiseSeed = -3.88
+shader_parameter/realWidth = 89.076
+shader_parameter/realHeight = 88.543
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -199,44 +214,86 @@ expand_mode = 2
 
 [node name="BorderRatioSetter" type="Node" parent="." node_paths=PackedStringArray("mats")]
 script = ExtResource("1_8omxs")
-mats = [NodePath("../MainContainer/VBoxContainer/WhiteUIContainer/WhiteCaptures"), NodePath("../MainContainer/VBoxContainer/WhiteUIContainer/WhiteTimer"), NodePath("../MainContainer/VBoxContainer/BoardSquare/Board/BoardBorder2"), NodePath("../TextureRect")]
+mats = [NodePath("../AspectRatioContainer/Control/MainContainer/VBoxContainer/WhiteUIContainer/WhiteCaptures"), NodePath("../AspectRatioContainer/Control/MainContainer/VBoxContainer/WhiteUIContainer/WhiteTimer"), NodePath("../AspectRatioContainer/Control/MainContainer/VBoxContainer/BoardSquare/Board/BoardBorder2"), NodePath("../TextureRect")]
 
 [node name="BoardContainerResizer" type="Node" parent="." node_paths=PackedStringArray("boardSquare", "mainContainer")]
 script = ExtResource("1_u4wqa")
-boardSquare = NodePath("../MainContainer/VBoxContainer/BoardSquare")
-mainContainer = NodePath("../MainContainer")
+boardSquare = NodePath("../AspectRatioContainer/Control/MainContainer/VBoxContainer/BoardSquare")
+mainContainer = NodePath("../AspectRatioContainer/Control/MainContainer")
 r = 0.785
 
-[node name="MainContainer" type="AspectRatioContainer" parent="."]
-custom_minimum_size = Vector2(46.045, 74.02)
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="."]
 layout_mode = 1
 anchors_preset = -1
-anchor_top = 0.0123457
+anchor_left = 0.012
+anchor_top = 0.012
+anchor_right = 0.988
+anchor_bottom = 0.988
+grow_horizontal = 2
+grow_vertical = 2
+ratio = 1.109
+metadata/_edit_use_anchors_ = true
+
+[node name="Control" type="Control" parent="AspectRatioContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="AspectRatioContainer/Control"]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.355
+anchor_right = 0.128247
+anchor_bottom = 0.645
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureButton" type="TextureButton" parent="AspectRatioContainer/Control/VBoxContainer"]
+material = SubResource("ShaderMaterial_w84sv")
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture_normal = SubResource("GradientTexture2D_mxgtm")
+stretch_mode = 0
+metadata/_edit_use_anchors_ = true
+
+[node name="TextureButton2" type="TextureButton" parent="AspectRatioContainer/Control/VBoxContainer"]
+material = SubResource("ShaderMaterial_u4uj4")
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture_normal = SubResource("GradientTexture2D_mxgtm")
+stretch_mode = 0
+metadata/_edit_use_anchors_ = true
+
+[node name="MainContainer" type="AspectRatioContainer" parent="AspectRatioContainer/Control"]
+custom_minimum_size = Vector2(46.045, 74.02)
+layout_mode = 1
+anchors_preset = 15
 anchor_right = 1.0
-anchor_bottom = 0.984568
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 70.0
 theme = ExtResource("1_gldiy")
 ratio = 0.785
-metadata/_edit_use_anchors_ = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MainContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="AspectRatioContainer/Control/MainContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 0
 
-[node name="BlackUIContainer" type="HBoxContainer" parent="MainContainer/VBoxContainer"]
+[node name="BlackUIContainer" type="HBoxContainer" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 0
 
-[node name="BlackTimer" type="Panel" parent="MainContainer/VBoxContainer/BlackUIContainer"]
+[node name="BlackTimer" type="Panel" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/BlackUIContainer"]
 material = SubResource("ShaderMaterial_lw55w")
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Control" type="Control" parent="MainContainer/VBoxContainer/BlackUIContainer/BlackTimer" node_paths=PackedStringArray("label")]
+[node name="Control" type="Control" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/BlackUIContainer/BlackTimer" node_paths=PackedStringArray("label")]
 layout_mode = 1
 anchor_top = 0.0149254
 anchor_right = 1.0
@@ -249,7 +306,7 @@ fitType = 2
 label = NodePath("Label")
 metadata/_edit_use_anchors_ = true
 
-[node name="Label" type="Label" parent="MainContainer/VBoxContainer/BlackUIContainer/BlackTimer/Control"]
+[node name="Label" type="Label" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/BlackUIContainer/BlackTimer/Control"]
 texture_filter = 1
 layout_mode = 1
 anchors_preset = 15
@@ -257,23 +314,23 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_font_sizes/font_size = 34
+theme_override_font_sizes/font_size = 35
 text = "5:00
 "
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Control2" type="Control" parent="MainContainer/VBoxContainer/BlackUIContainer"]
+[node name="Control2" type="Control" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/BlackUIContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.5
 
-[node name="BlackCaptures" type="Panel" parent="MainContainer/VBoxContainer/BlackUIContainer"]
+[node name="BlackCaptures" type="Panel" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/BlackUIContainer"]
 material = SubResource("ShaderMaterial_2aubl")
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="BlackCapturesContainer" type="HBoxContainer" parent="MainContainer/VBoxContainer/BlackUIContainer/BlackCaptures"]
+[node name="BlackCapturesContainer" type="HBoxContainer" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/BlackUIContainer/BlackCaptures"]
 layout_mode = 2
 anchor_left = 0.0808081
 anchor_top = 0.149254
@@ -284,20 +341,20 @@ size_flags_stretch_ratio = 10.2
 theme_override_constants/separation = 0
 metadata/_edit_use_anchors_ = true
 
-[node name="BoardSquare" type="AspectRatioContainer" parent="MainContainer/VBoxContainer"]
+[node name="BoardSquare" type="AspectRatioContainer" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer"]
 z_index = 1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 7.30233
 
-[node name="Board" type="TextureRect" parent="MainContainer/VBoxContainer/BoardSquare"]
+[node name="Board" type="TextureRect" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/BoardSquare"]
 self_modulate = Color(1, 0.898039, 0.819608, 1)
 layout_mode = 2
 texture = ExtResource("2_7sewj")
 expand_mode = 1
 
-[node name="BoardBorder2" type="TextureRect" parent="MainContainer/VBoxContainer/BoardSquare/Board"]
+[node name="BoardBorder2" type="TextureRect" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/BoardSquare/Board"]
 z_index = 1
 material = SubResource("ShaderMaterial_uhl4r")
 layout_mode = 2
@@ -310,40 +367,40 @@ offset_bottom = -3.05176e-05
 texture = SubResource("PlaceholderTexture2D_dkrfx")
 metadata/_edit_use_anchors_ = true
 
-[node name="PieceHolder" type="Control" parent="MainContainer/VBoxContainer/BoardSquare"]
+[node name="PieceHolder" type="Control" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/BoardSquare"]
 z_index = 2
 layout_mode = 2
 
-[node name="Lines" type="TextureRect" parent="MainContainer/VBoxContainer/BoardSquare"]
+[node name="Lines" type="TextureRect" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/BoardSquare"]
 z_index = 1
 material = SubResource("ShaderMaterial_76xl3")
 layout_mode = 2
 texture = SubResource("PlaceholderTexture2D_4pcoh")
 
-[node name="Circles" type="TextureRect" parent="MainContainer/VBoxContainer/BoardSquare"]
+[node name="Circles" type="TextureRect" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/BoardSquare"]
 z_index = 1
 material = SubResource("ShaderMaterial_5isd6")
 layout_mode = 2
 texture = SubResource("PlaceholderTexture2D_d5phv")
 
-[node name="CircleArcs" type="TextureRect" parent="MainContainer/VBoxContainer/BoardSquare"]
+[node name="CircleArcs" type="TextureRect" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/BoardSquare"]
 z_index = 1
 material = SubResource("ShaderMaterial_y1348")
 layout_mode = 2
 texture = SubResource("PlaceholderTexture2D_xcd1x")
 
-[node name="Arrows" type="TextureRect" parent="MainContainer/VBoxContainer/BoardSquare"]
+[node name="Arrows" type="TextureRect" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/BoardSquare"]
 z_index = 3
 material = SubResource("ShaderMaterial_yx8dn")
 layout_mode = 2
 texture = SubResource("PlaceholderTexture2D_kb1m1")
 
-[node name="GameManager" type="Node" parent="MainContainer/VBoxContainer/BoardSquare" node_paths=PackedStringArray("board", "pieceHolder")]
+[node name="GameManager" type="Node" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/BoardSquare" node_paths=PackedStringArray("board", "pieceHolder")]
 script = ExtResource("15_uqtdi")
 board = NodePath("../Board")
 pieceHolder = NodePath("../PieceHolder")
 
-[node name="BoardRenderer" type="Node" parent="MainContainer/VBoxContainer/BoardSquare" node_paths=PackedStringArray("board", "pieceHolder", "blackTimer", "whiteTimer", "blackCaptures", "whiteCaptures", "lines", "circles", "circleArcs", "arrows", "gameManager")]
+[node name="BoardRenderer" type="Node" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/BoardSquare" node_paths=PackedStringArray("board", "pieceHolder", "blackTimer", "whiteTimer", "blackCaptures", "whiteCaptures", "lines", "circles", "circleArcs", "arrows", "gameManager")]
 script = ExtResource("2_ern7e")
 board = NodePath("../Board")
 pieceHolder = NodePath("../PieceHolder")
@@ -362,17 +419,17 @@ whiteCapturerArrowColor = Color(1, 0.356863, 0.290196, 1)
 blackCapturerArrowColor = Color(0, 0.72549, 0.4, 1)
 arrowThickness = 0.005
 
-[node name="WhiteUIContainer" type="HBoxContainer" parent="MainContainer/VBoxContainer"]
+[node name="WhiteUIContainer" type="HBoxContainer" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 0
 
-[node name="WhiteTimer" type="Panel" parent="MainContainer/VBoxContainer/WhiteUIContainer"]
+[node name="WhiteTimer" type="Panel" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/WhiteUIContainer"]
 material = SubResource("ShaderMaterial_xyrx8")
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Control" type="Control" parent="MainContainer/VBoxContainer/WhiteUIContainer/WhiteTimer" node_paths=PackedStringArray("label")]
+[node name="Control" type="Control" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/WhiteUIContainer/WhiteTimer" node_paths=PackedStringArray("label")]
 layout_mode = 1
 anchor_top = -0.0441176
 anchor_right = 1.0
@@ -385,7 +442,7 @@ fitType = 2
 label = NodePath("Label")
 metadata/_edit_use_anchors_ = true
 
-[node name="Label" type="Label" parent="MainContainer/VBoxContainer/WhiteUIContainer/WhiteTimer/Control"]
+[node name="Label" type="Label" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/WhiteUIContainer/WhiteTimer/Control"]
 texture_filter = 1
 layout_mode = 1
 anchors_preset = -1
@@ -399,17 +456,17 @@ horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
 
-[node name="Control2" type="Control" parent="MainContainer/VBoxContainer/WhiteUIContainer"]
+[node name="Control2" type="Control" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/WhiteUIContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.5
 
-[node name="WhiteCaptures" type="Panel" parent="MainContainer/VBoxContainer/WhiteUIContainer"]
+[node name="WhiteCaptures" type="Panel" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/WhiteUIContainer"]
 material = SubResource("ShaderMaterial_gfptd")
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="WhiteCaptures" type="HBoxContainer" parent="MainContainer/VBoxContainer/WhiteUIContainer/WhiteCaptures"]
+[node name="WhiteCaptures" type="HBoxContainer" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/WhiteUIContainer/WhiteCaptures"]
 layout_mode = 2
 anchor_left = 0.0808081
 anchor_top = 0.147059
@@ -420,33 +477,37 @@ size_flags_stretch_ratio = 10.2
 theme_override_constants/separation = 0
 metadata/_edit_use_anchors_ = true
 
-[node name="AspectRatioContainer" type="AspectRatioContainer" parent="."]
+[node name="TextureButton3" type="TextureButton" parent="AspectRatioContainer/Control"]
+material = SubResource("ShaderMaterial_e8xod")
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.0121528
-anchor_top = 0.0123457
-anchor_right = 0.147569
-anchor_bottom = 0.134259
-ratio = 2.0
-stretch_mode = 3
-alignment_horizontal = 0
-alignment_vertical = 0
+anchor_left = 0.873
+anchor_top = 0.43
+anchor_right = 1.0
+anchor_bottom = 0.57
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture_normal = SubResource("GradientTexture2D_mxgtm")
+stretch_mode = 0
+script = ExtResource("14_oywxq")
+outerDistancesDefault = Vector4(0.06, 0.06, 0.06, 0.06)
+outerDistancesHovered = Vector4(0.04, 0.04, 0.04, 0.04)
+outerDistancesPressed = Vector4(0.02, 0.02, 0.02, 0.02)
+thicknessDefault = 0.075
+thicknessHovered = 0.075
+thicknessPressed = 0.075
+outerRadiusDefault = 0.105
+outerRadiusHovered = 0.105
+outerRadiusPressed = 0.105
+noDistortLengthDefault = 0.245
+noDistortLengthHovered = 0.245
+noDistortLengthPressed = 0.245
+insideBgColDefault = Color(0.619608, 0.541176, 0.482353, 1)
+insideBgColHovered = Color(0.737255, 0.662745, 0.607843, 1)
+insideBgColPressed = Color(0.847059, 0.792157, 0.756863, 1)
+outsideBgColDefault = Color(0, 0, 0, 0)
+outsideBgColHovered = Color(0, 0, 0, 0)
+outsideBgColPressed = Color(0, 0, 0, 0)
 metadata/_edit_use_anchors_ = true
-
-[node name="HBoxContainer" type="HBoxContainer" parent="AspectRatioContainer"]
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="TextureButton" type="TextureButton" parent="AspectRatioContainer/HBoxContainer"]
-material = SubResource("ShaderMaterial_w84sv")
-layout_mode = 2
-size_flags_horizontal = 3
-texture_normal = SubResource("GradientTexture2D_mxgtm")
-stretch_mode = 0
-
-[node name="TextureButton2" type="TextureButton" parent="AspectRatioContainer/HBoxContainer"]
-material = SubResource("ShaderMaterial_u4uj4")
-layout_mode = 2
-size_flags_horizontal = 3
-texture_normal = SubResource("GradientTexture2D_mxgtm")
-stretch_mode = 0

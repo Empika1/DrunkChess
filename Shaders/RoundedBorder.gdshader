@@ -111,7 +111,7 @@ void fragment() {
 		circleCenter = bottomRightCircleCenter;
 	}
 	
-	float newBlur = blurC / canvas11;
+	float newBlur = blurC / canvas11/ realHeight * 500.;
 	if(circleCenter != vec2(-9999.)) {
 		float dist = length(newUV - circleCenter);
 		float innerRadius = outerRadius - thickness;
