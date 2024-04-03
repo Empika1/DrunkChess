@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://cudne81ew8j5r"]
+[gd_scene load_steps=39 format=3 uid="uid://cudne81ew8j5r"]
 
 [ext_resource type="Script" path="res://Scripts/UI/SetBorderRatio.gd" id="1_8omxs"]
 [ext_resource type="Theme" uid="uid://bhkvphjy5bskn" path="res://Themes/Main.tres" id="1_gldiy"]
@@ -12,8 +12,10 @@
 [ext_resource type="Script" path="res://Scripts/UI/LabelScaler.gd" id="6_v8qg6"]
 [ext_resource type="Shader" path="res://Shaders/Arrows.gdshader" id="7_pwngt"]
 [ext_resource type="Shader" path="res://Shaders/RoundedBorder.gdshader" id="11_6jtdc"]
-[ext_resource type="Script" path="res://Scripts/UI/ProceduralTextureButton.gd" id="14_oywxq"]
+[ext_resource type="Script" path="res://Scripts/UI/ScaleProceduralTextureButton.gd" id="14_tqa0o"]
+[ext_resource type="Shader" path="res://Shaders/SpriteSheetSlicer.gdshader" id="15_iubm0"]
 [ext_resource type="Script" path="res://Scripts/GameManager.gd" id="15_uqtdi"]
+[ext_resource type="Texture2D" uid="uid://bchoq8kvi7fty" path="res://Images/Pieces.svg" id="16_rcxgq"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_yxwyt"]
 shader = ExtResource("1_gn3e1")
@@ -181,7 +183,7 @@ shader_parameter/realHeight = 68.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_e8xod"]
 shader = ExtResource("11_6jtdc")
-shader_parameter/outerDistances = Vector4(0.02, 0.02, 0.02, 0.02)
+shader_parameter/outerDistances = Vector4(0.06, 0.06, 0.06, 0.06)
 shader_parameter/thickness = 0.075
 shader_parameter/outerRadius = 0.105
 shader_parameter/noDistortLength = 0.245
@@ -192,6 +194,12 @@ shader_parameter/noiseScale = Vector2(1.745, 0.155)
 shader_parameter/noiseSeed = -3.88
 shader_parameter/realWidth = 89.076
 shader_parameter/realHeight = 88.543
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_udemn"]
+shader = ExtResource("15_iubm0")
+shader_parameter/width = 6
+shader_parameter/height = 2
+shader_parameter/frame = null
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -477,21 +485,35 @@ size_flags_stretch_ratio = 10.2
 theme_override_constants/separation = 0
 metadata/_edit_use_anchors_ = true
 
-[node name="TextureButton3" type="TextureButton" parent="AspectRatioContainer/Control"]
-material = SubResource("ShaderMaterial_e8xod")
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="AspectRatioContainer/Control"]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.873
 anchor_top = 0.43
 anchor_right = 1.0
 anchor_bottom = 0.57
+offset_right = -0.0758667
+offset_bottom = 0.457275
 grow_horizontal = 2
 grow_vertical = 2
+stretch_mode = 3
+
+[node name="AspectRatioContainer2" type="AspectRatioContainer" parent="AspectRatioContainer/Control/AspectRatioContainer"]
+layout_mode = 2
+stretch_mode = 3
+
+[node name="TextureButton3" type="TextureButton" parent="AspectRatioContainer/Control/AspectRatioContainer/AspectRatioContainer2" node_paths=PackedStringArray("outerAspectRatioContainer")]
+material = SubResource("ShaderMaterial_e8xod")
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 texture_normal = SubResource("GradientTexture2D_mxgtm")
 stretch_mode = 0
-script = ExtResource("14_oywxq")
+script = ExtResource("14_tqa0o")
+outerAspectRatioContainer = NodePath("../..")
+scaleDefault = 1.0
+scaleHovered = 1.1
+scalePressed = 1.2
 outerDistancesDefault = Vector4(0.06, 0.06, 0.06, 0.06)
 outerDistancesHovered = Vector4(0.04, 0.04, 0.04, 0.04)
 outerDistancesPressed = Vector4(0.02, 0.02, 0.02, 0.02)
@@ -511,3 +533,16 @@ outsideBgColDefault = Color(0, 0, 0, 0)
 outsideBgColHovered = Color(0, 0, 0, 0)
 outsideBgColPressed = Color(0, 0, 0, 0)
 metadata/_edit_use_anchors_ = true
+
+[node name="TextureRect" type="TextureRect" parent="AspectRatioContainer/Control/AspectRatioContainer/AspectRatioContainer2/TextureButton3"]
+material = SubResource("ShaderMaterial_udemn")
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.15
+anchor_top = 0.15
+anchor_right = 0.85
+anchor_bottom = 0.85
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("16_rcxgq")
+expand_mode = 1

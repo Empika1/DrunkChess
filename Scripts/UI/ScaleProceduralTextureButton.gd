@@ -1,6 +1,11 @@
 @tool
 
 extends TextureButton
+@export var outerAspectRatioContainer: AspectRatioContainer
+@export var scaleDefault: float
+@export var scaleHovered: float
+@export var scalePressed: float
+
 @export var outerDistancesDefault: Vector4
 @export var outerDistancesHovered: Vector4
 @export var outerDistancesPressed: Vector4
@@ -36,6 +41,8 @@ func _ready():
 										null, null, [showDefault], [showHovered], [showPressed], [])
 
 func showDefault():
+	outerAspectRatioContainer.ratio = scaleDefault
+	
 	var mat: ShaderMaterial = material as ShaderMaterial
 	mat.set_shader_parameter("outerDistances", outerDistancesDefault)
 	mat.set_shader_parameter("thickness", thicknessDefault)
@@ -45,6 +52,8 @@ func showDefault():
 	mat.set_shader_parameter("lineCol", lineColDefault)
 
 func showHovered():
+	outerAspectRatioContainer.ratio = scaleHovered
+	
 	var mat: ShaderMaterial = material as ShaderMaterial
 	mat.set_shader_parameter("outerDistances", outerDistancesHovered)
 	mat.set_shader_parameter("thickness", thicknessHovered)
@@ -54,6 +63,8 @@ func showHovered():
 	mat.set_shader_parameter("lineCol", lineColHovered)
 
 func showPressed():
+	outerAspectRatioContainer.ratio = scalePressed
+	
 	var mat: ShaderMaterial = material as ShaderMaterial
 	mat.set_shader_parameter("outerDistances", outerDistancesPressed)
 	mat.set_shader_parameter("thickness", thicknessPressed)
