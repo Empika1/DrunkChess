@@ -3,8 +3,9 @@ class_name GameManager
 
 @export var board: TextureRect
 @export var pieceHolder: Control
+@export var trashButton: ScaleProceduralButton
 
-@onready var states: Array[BoardState] = [BoardState.newDefaultStartingState(BoardState.StartSettings.new(BoardState.StartSettings.AssistMode.MOVE_ARROWS, true, 300))]
+@onready var states: Array[BoardState] = [BoardState.newDefaultStartingState(BoardState.StartSettings.new(BoardState.StartSettings.AssistMode.MOVE_ARROWS, true, 3000))]
 
 func getScaledRectSize() -> float:
 	return board.get_rect().size.x
@@ -30,6 +31,13 @@ func getHoveredPiece(mousePos: Vector2i) -> Piece:
 			return cs.piece
 	return null
 
+func isMouseInCancelPosition(mousePosBoard: Vector2i) -> bool:
+	if mousePosBoard.x < -dragBorder.x or mousePosBoard.y < -dragBorder.y or mousePosBoard.x > Piece.boardSize + dragBorder.x or mousePosBoard.y > Piece.boardSize + dragBorder.y:
+		return true
+	if trashButton.buttonImprover.buttonIsHovered:
+		return true
+	return false
+
 var pieceHovering: Piece = null #a reference to the piece in the previous state
 var pieceDragging: Piece = null #a reference to the piece in the previous state
 var dragOffset: Vector2i = Vector2i(0, 0)
@@ -38,7 +46,7 @@ var isPiecePlaced: bool = false
 var attemptedNextState: BoardState = null
 @onready var timeAtStartOfTurn: float = float(Time.get_ticks_msec()) / 1000
 const dragBorder: Vector2i = Vector2i(Piece.squareSize, Piece.squareSize)
-func _process(_delta):		
+func _process(_delta):
 	#determine hovered piece
 	var mousePosGame: Vector2i = get_viewport().get_mouse_position()
 	var mousePosBoard: Vector2i = gamePosToBoardPos(mousePosGame)
@@ -54,6 +62,9 @@ func _process(_delta):
 	
 	#make move with piece being dragged
 	if pieceDragging != null:
+		#enable cancel button
+		trashButton.enable()
+		
 		dragPos = mousePosBoard + dragOffset
 		var move: Move = null
 		
@@ -76,7 +87,7 @@ func _process(_delta):
 				move = Move.newNormal(pieceDragging, movePos)
 		
 		#check to see if the player is cancelling the move
-		if mousePosBoard.x < -dragBorder.x or mousePosBoard.y < -dragBorder.y or mousePosBoard.x > Piece.boardSize + dragBorder.x or mousePosBoard.y > Piece.boardSize + dragBorder.y:
+		if isMouseInCancelPosition(mousePosBoard):
 			attemptedNextState = null
 		else:
 			attemptedNextState = states[-1].makeMove(move)
@@ -94,7 +105,9 @@ func _process(_delta):
 			attemptedNextState = null
 			timeAtStartOfTurn = float(Time.get_ticks_msec()) / 1000
 			pieceDragging = null
-			
+	else:
+		trashButton.disable()
+
 	#update timer
 	if states[-1].turnToMove == Piece.PieceColor.WHITE:
 		states[-1].updateTimer(states[-1].getPreviousWhiteTime() - (float(Time.get_ticks_msec()) / 1000 - timeAtStartOfTurn))
