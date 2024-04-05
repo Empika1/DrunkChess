@@ -5,6 +5,10 @@ var buttonIsHovered: bool = false
 var buttonIsPressed: bool = false
 var buttonIsDisabled: bool = false
 
+var toggleOnPress: bool = false
+var buttonIsToggledOn: bool = false
+var buttonJustToggled: bool = false #jank and bad but oh well
+
 func hoverButton():
 	if !buttonIsHovered:
 		buttonIsHovered = true
@@ -18,11 +22,17 @@ func unhoverButton():
 func pressButton():
 	if !buttonIsPressed:
 		buttonIsPressed = true
+		if toggleOnPress:
+			buttonIsToggledOn = not buttonIsToggledOn
+			buttonJustToggled = true
 		updateState()
 
 func unpressButton():
 	if buttonIsPressed:
 		buttonIsPressed = false
+		if not toggleOnPress:
+			buttonIsToggledOn = not buttonIsToggledOn
+			buttonJustToggled = true
 		updateState()
 
 func disableButton():
@@ -39,6 +49,8 @@ var defaultFuncs: Array[Callable] = []
 var hoverFuncs: Array[Callable] = []
 var pressFuncs: Array[Callable] = []
 var disableFuncs: Array[Callable] = []
+var toggleOnFuncs: Array[Callable] = []
+var toggleOffFuncs: Array[Callable] = []
 
 func updateState():
 	if buttonIsDisabled:
@@ -53,10 +65,20 @@ func updateState():
 	else:
 		for i: Callable in defaultFuncs:
 			i.call()
+	
+	if buttonJustToggled:
+		if buttonIsToggledOn:
+			for i: Callable in toggleOnFuncs:
+				i.call()
+		else:
+			for i: Callable in toggleOffFuncs:
+				i.call()
+		buttonJustToggled = false
 
 func _init(hoverSignal, unhoverSignal, pressSignal, unpressSignal, disableSignal, 
 		   enableSignal, defaultFuncs_: Array[Callable], hoverFuncs_: Array[Callable], 
-		   pressFuncs_: Array[Callable], disableFuncs_: Array[Callable]):
+		   pressFuncs_: Array[Callable], disableFuncs_: Array[Callable], toggleOnFuncs_: Array[Callable], 
+		   toggleOffFuncs_: Array[Callable], toggleOnPress_: bool):
 	if hoverSignal != null: hoverSignal.connect(hoverButton)
 	if unhoverSignal != null: unhoverSignal.connect(unhoverButton)
 	if pressSignal != null: pressSignal.connect(pressButton)
@@ -67,3 +89,6 @@ func _init(hoverSignal, unhoverSignal, pressSignal, unpressSignal, disableSignal
 	hoverFuncs = hoverFuncs_
 	pressFuncs = pressFuncs_
 	disableFuncs = disableFuncs_
+	toggleOnFuncs = toggleOnFuncs_
+	toggleOffFuncs = toggleOffFuncs_
+	toggleOnPress = toggleOnPress_
