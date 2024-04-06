@@ -7,6 +7,7 @@ class_name BoardRenderer
 @export var whiteTimer: Label
 @export var blackCaptures: HBoxContainer
 @export var whiteCaptures: HBoxContainer
+@export var disableCapturesButton: ScaleProceduralButton
 
 @export var lines: TextureRect
 @export var circles: TextureRect
@@ -146,7 +147,9 @@ func _process(_delta) -> void:
 		addCastleAreas(gameManager.states[-1].castlePoints)
 	elif gameManager.pieceHovering != null:
 		addHitRadius(gameManager.pieceHovering)
-	addCaptureArrows(stateToRender)
+	
+	if not disableCapturesButton.buttonImprover.buttonIsToggledOn:
+		addCaptureArrows(stateToRender)
 	
 	whiteTimer.text = formatTime(gameManager.states[-1].whiteTime)
 	blackTimer.text = formatTime(gameManager.states[-1].blackTime)

@@ -160,12 +160,12 @@ shader_parameter/noiseSeed = -3.88
 shader_parameter/realWidth = 89.076
 shader_parameter/realHeight = 88.543
 
-[sub_resource type="Gradient" id="Gradient_w0ct7"]
+[sub_resource type="Gradient" id="Gradient_q25m6"]
 offsets = PackedFloat32Array(0)
 colors = PackedColorArray(0, 0, 0, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_mxgtm"]
-gradient = SubResource("Gradient_w0ct7")
+gradient = SubResource("Gradient_q25m6")
 width = 1
 height = 1
 
@@ -378,7 +378,7 @@ board = NodePath("../Board")
 pieceHolder = NodePath("../PieceHolder")
 trashButton = NodePath("../../../../TrashButtonContainer/AspectRatioContainer2/TrashButton")
 
-[node name="BoardRenderer" type="Node" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/BoardSquare" node_paths=PackedStringArray("board", "pieceHolder", "blackTimer", "whiteTimer", "blackCaptures", "whiteCaptures", "lines", "circles", "circleArcs", "arrows", "gameManager")]
+[node name="BoardRenderer" type="Node" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/BoardSquare" node_paths=PackedStringArray("board", "pieceHolder", "blackTimer", "whiteTimer", "blackCaptures", "whiteCaptures", "disableCapturesButton", "lines", "circles", "circleArcs", "arrows", "gameManager")]
 script = ExtResource("2_ern7e")
 board = NodePath("../Board")
 pieceHolder = NodePath("../PieceHolder")
@@ -386,6 +386,7 @@ blackTimer = NodePath("../../BlackUIContainer/BlackTimer/Control/Label")
 whiteTimer = NodePath("../../WhiteUIContainer/WhiteTimer/Control/Label")
 blackCaptures = NodePath("../../WhiteUIContainer/WhiteCaptures/WhiteCaptures")
 whiteCaptures = NodePath("../../BlackUIContainer/BlackCaptures/BlackCapturesContainer")
+disableCapturesButton = NodePath("../../../../VBoxContainer/DisableCapturesButtonContainer/AspectRatioContainer/DisableCapturesButton")
 lines = NodePath("../Lines")
 circles = NodePath("../Circles")
 circleArcs = NodePath("../CircleArcs")
@@ -477,6 +478,7 @@ material = SubResource("ShaderMaterial_e8xod")
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+mouse_filter = 2
 texture_normal = SubResource("GradientTexture2D_mxgtm")
 stretch_mode = 0
 script = ExtResource("14_tqa0o")
@@ -643,39 +645,43 @@ modulateHovered = Color(1, 1, 1, 1)
 modulatePressed = Color(1, 1, 1, 1)
 modulateDisabled = Color(0.65098, 0.65098, 0.65098, 1)
 useNonToggledModulate = true
-spriteDefault = NodePath("Control")
-spriteHovered = NodePath("Control")
-spritePressed = NodePath("Control")
-spriteDisabled = NodePath("Control")
-spriteDefaultToggled = NodePath("TextureRect2")
-spriteHoveredToggled = NodePath("TextureRect2")
-spritePressedToggled = NodePath("TextureRect2")
-spriteDisabledToggled = NodePath("TextureRect2")
+spriteDefault = NodePath("TextureRect2")
+spriteHovered = NodePath("TextureRect2")
+spritePressed = NodePath("TextureRect2")
+spriteDisabled = NodePath("TextureRect2")
+spriteDefaultToggled = NodePath("Control")
+spriteHoveredToggled = NodePath("Control")
+spritePressedToggled = NodePath("Control")
+spriteDisabledToggled = NodePath("Control")
 metadata/_edit_use_anchors_ = true
 
 [node name="TextureRect" type="TextureRect" parent="AspectRatioContainer/Control/VBoxContainer/DisableCapturesButtonContainer/AspectRatioContainer/DisableCapturesButton"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.120435
-anchor_top = 0.134239
-anchor_right = 0.881304
-anchor_bottom = 0.895109
+anchor_left = 0.156033
+anchor_top = 0.148859
+anchor_right = 0.826983
+anchor_bottom = 0.868365
+offset_right = 2.27255
+offset_bottom = -2.19458
+rotation = 0.0349066
+mouse_filter = 2
 texture = ExtResource("6_47nvh")
 expand_mode = 1
-metadata/_edit_use_anchors_ = true
 
 [node name="TextureRect2" type="TextureRect" parent="AspectRatioContainer/Control/VBoxContainer/DisableCapturesButtonContainer/AspectRatioContainer/DisableCapturesButton"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.120435
-anchor_top = 0.134239
-anchor_right = 0.881304
-anchor_bottom = 0.895109
+anchor_left = 0.14625
+anchor_top = 0.148859
+anchor_right = 0.841902
+anchor_bottom = 0.844511
+mouse_filter = 2
 texture = ExtResource("8_f2ix7")
 expand_mode = 1
-metadata/_edit_use_anchors_ = true
 
 [node name="Control" type="Control" parent="AspectRatioContainer/Control/VBoxContainer/DisableCapturesButtonContainer/AspectRatioContainer/DisableCapturesButton"]
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
+mouse_filter = 2

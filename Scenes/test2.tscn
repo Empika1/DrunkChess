@@ -1,28 +1,116 @@
-[gd_scene load_steps=2 format=3 uid="uid://b42l4w2003jao"]
+[gd_scene load_steps=8 format=3 uid="uid://b42l4w2003jao"]
 
-[ext_resource type="Script" path="res://Scripts/UI/LabelScaler.gd" id="1_20k15"]
+[ext_resource type="Shader" path="res://Shaders/RoundedBorder.gdshader" id="1_8i288"]
+[ext_resource type="Script" path="res://Scripts/UI/ScaleProceduralButton.gd" id="2_icw0q"]
+[ext_resource type="Texture2D" uid="uid://8c1new0pr75s" path="res://Images/Captures.svg" id="3_odf45"]
+[ext_resource type="Texture2D" uid="uid://djbftsjqt8lpg" path="res://Images/NoBar.svg" id="4_c27eo"]
 
-[node name="Control" type="Control" node_paths=PackedStringArray("label")]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-script = ExtResource("1_20k15")
-fontSize = 127.985
-fitType = 2
-label = NodePath("Label")
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8gneh"]
+shader = ExtResource("1_8i288")
+shader_parameter/outerDistances = Vector4(0.06, 0.06, 0.06, 0.06)
+shader_parameter/thickness = 0.075
+shader_parameter/outerRadius = 0.105
+shader_parameter/noDistortLength = 0.245
+shader_parameter/insideBgCol = Color(0.619608, 0.541176, 0.482353, 1)
+shader_parameter/outsideBgCol = Color(0, 0, 0, 0)
+shader_parameter/lineCol = Color(0, 0, 0, 1)
+shader_parameter/noiseScale = Vector2(1.745, 0.155)
+shader_parameter/noiseSeed = -3.88
+shader_parameter/realWidth = 89.076
+shader_parameter/realHeight = 88.543
 
-[node name="Label" type="Label" parent="."]
+[sub_resource type="Gradient" id="Gradient_7va5e"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_gxbeh"]
+gradient = SubResource("Gradient_7va5e")
+width = 1
+height = 1
+
+[node name="DisableCapturesButtonContainer" type="AspectRatioContainer"]
+offset_right = 177.0
+offset_bottom = 177.0
+size_flags_vertical = 3
+stretch_mode = 3
+
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="."]
+layout_mode = 2
+size_flags_vertical = 3
+stretch_mode = 3
+
+[node name="DisableCapturesButton" type="TextureButton" parent="AspectRatioContainer" node_paths=PackedStringArray("outerAspectRatioContainer", "spriteDefault", "spriteHovered", "spritePressed", "spriteDisabled", "spriteDefaultToggled", "spriteHoveredToggled", "spritePressedToggled", "spriteDisabledToggled")]
+material = SubResource("ShaderMaterial_8gneh")
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture_normal = SubResource("GradientTexture2D_gxbeh")
+stretch_mode = 0
+script = ExtResource("2_icw0q")
+outerAspectRatioContainer = NodePath("../..")
+scaleDefault = 1.0
+scaleHovered = 1.1
+scalePressed = 1.2
+scaleDisabled = 1.0
+useNonToggledScale = true
+useDefaultOuterDistances = true
+outerDistancesDefault = Vector4(0.06, 0.06, 0.06, 0.06)
+useDefaultThickness = true
+thicknessDefault = 0.075
+useDefaultOuterRadius = true
+outerRadiusDefault = 0.105
+useDefaultNoDistortLength = true
+noDistortLengthDefault = 0.245
+insideBgColDefault = Color(0.619608, 0.541176, 0.482353, 1)
+insideBgColHovered = Color(0.737255, 0.662745, 0.607843, 1)
+insideBgColPressed = Color(0.847059, 0.792157, 0.756863, 1)
+insideBgColDisabled = Color(0.454902, 0.419608, 0.396078, 1)
+useNonToggledInsideBgCol = true
+useDefaultOutsideBgCol = true
+outsideBgColDefault = Color(0, 0, 0, 0)
+useDefaultLineCol = true
+modulateDefault = Color(1, 1, 1, 1)
+modulateHovered = Color(1, 1, 1, 1)
+modulatePressed = Color(1, 1, 1, 1)
+modulateDisabled = Color(0.65098, 0.65098, 0.65098, 1)
+useNonToggledModulate = true
+spriteDefault = NodePath("TextureRect2")
+spriteHovered = NodePath("TextureRect2")
+spritePressed = NodePath("TextureRect2")
+spriteDisabled = NodePath("TextureRect2")
+spriteDefaultToggled = NodePath("Control")
+spriteHoveredToggled = NodePath("Control")
+spritePressedToggled = NodePath("Control")
+spriteDisabledToggled = NodePath("Control")
+metadata/_edit_use_anchors_ = true
+
+[node name="TextureRect" type="TextureRect" parent="AspectRatioContainer/DisableCapturesButton"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-scale = Vector2(0.999827, 0.999827)
-theme_override_font_sizes/font_size = 127
-text = "hiiiiiiiiiiii"
-horizontal_alignment = 1
-vertical_alignment = 1
+anchors_preset = -1
+anchor_left = 0.156033
+anchor_top = 0.148859
+anchor_right = 0.826983
+anchor_bottom = 0.868365
+offset_right = 2.27255
+offset_bottom = -2.19458
+rotation = 0.0349066
+mouse_filter = 2
+texture = ExtResource("3_odf45")
+expand_mode = 1
+
+[node name="TextureRect2" type="TextureRect" parent="AspectRatioContainer/DisableCapturesButton"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.14625
+anchor_top = 0.148859
+anchor_right = 0.841902
+anchor_bottom = 0.844511
+mouse_filter = 2
+texture = ExtResource("4_c27eo")
+expand_mode = 1
+
+[node name="Control" type="Control" parent="AspectRatioContainer/DisableCapturesButton"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 2

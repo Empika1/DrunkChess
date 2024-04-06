@@ -120,58 +120,59 @@ func _ready():
 										null, null, [showDefault], [showHovered], [showPressed], 
 										[showDisabled], [], [], false)
 
+func showOneSprite(sprite: Control):
+	if spriteDefault != null: spriteDefault.visible = false
+	if spriteHovered != null: spriteHovered.visible = false
+	if spritePressed != null: spritePressed.visible = false
+	if spriteDisabled != null: spriteDisabled.visible = false
+	if spriteDefaultToggled != null: spriteDefaultToggled.visible = false
+	if spriteHoveredToggled != null: spriteHoveredToggled.visible = false
+	if spritePressedToggled != null: spritePressedToggled.visible = false
+	if spriteDisabledToggled != null: spriteDisabledToggled.visible = false
+	sprite.visible = true
+
 func showDefault():
 	var mat: ShaderMaterial = material as ShaderMaterial
-	if (not buttonImprover.buttonIsToggledOn) or useNonToggledScale:
+	if (not buttonImprover.buttonIsToggledOn) or useDefaultScale or useNonToggledScale:
 		outerAspectRatioContainer.ratio = scaleDefault
 	else:
 		outerAspectRatioContainer.ratio = scaleDefaultToggled
-	if (not buttonImprover.buttonIsToggledOn) or useNonToggledOuterDistances:
+	if (not buttonImprover.buttonIsToggledOn) or useDefaultOuterDistances or useNonToggledOuterDistances:
 		mat.set_shader_parameter("outerDistances", outerDistancesDefault)
 	else:
 		mat.set_shader_parameter("outerDistances", outerDistancesDefaultToggled)
-	if (not buttonImprover.buttonIsToggledOn) or useNonToggledThickness:
+	if (not buttonImprover.buttonIsToggledOn) or useDefaultThickness or useNonToggledThickness:
 		mat.set_shader_parameter("thickness", thicknessDefault)
 	else:
 		mat.set_shader_parameter("thickness", thicknessDefaultToggled)
-	if (not buttonImprover.buttonIsToggledOn) or useNonToggledOuterRadius:
+	if (not buttonImprover.buttonIsToggledOn) or useDefaultOuterRadius or useNonToggledOuterRadius:
 		mat.set_shader_parameter("outerRadius", outerRadiusDefault)
 	else:
 		mat.set_shader_parameter("outerRadius", outerRadiusDefaultToggled)
-	if (not buttonImprover.buttonIsToggledOn) or useNonToggledNoDistortLength:
+	if (not buttonImprover.buttonIsToggledOn) or useDefaultNoDistortLength or useNonToggledNoDistortLength:
 		mat.set_shader_parameter("noDistortLength", noDistortLengthDefault)
 	else:
 		mat.set_shader_parameter("noDistortLength", noDistortLengthDefaultToggled)
-	if (not buttonImprover.buttonIsToggledOn) or useNonToggledInsideBgCol:
+	if (not buttonImprover.buttonIsToggledOn) or useDefaultInsideBgCol or useNonToggledInsideBgCol:
 		mat.set_shader_parameter("insideBgCol", insideBgColDefault)
 	else:
 		mat.set_shader_parameter("insideBgCol", insideBgColDefaultToggled)
-	if (not buttonImprover.buttonIsToggledOn) or useNonToggledOutsideBgCol:
+	if (not buttonImprover.buttonIsToggledOn) or useDefaultOutsideBgCol or useNonToggledOutsideBgCol:
 		mat.set_shader_parameter("outsideBgCol", outsideBgColDefault)
 	else:
 		mat.set_shader_parameter("outsideBgCol", outsideBgColDefaultToggled)
-	if (not buttonImprover.buttonIsToggledOn) or useNonToggledLineCol:
+	if (not buttonImprover.buttonIsToggledOn) or useDefaultLineCol or useNonToggledLineCol:
 		mat.set_shader_parameter("lineCol", lineColDefault)
 	else:
 		mat.set_shader_parameter("lineCol", lineColDefaultToggled)
-	if (not buttonImprover.buttonIsToggledOn) or useNonToggledModulate:
+	if (not buttonImprover.buttonIsToggledOn) or useDefaultModulate or useNonToggledModulate:
 		modulate = modulateDefault
 	else:
 		modulate = modulateDefaultToggled
-	if (not buttonImprover.buttonIsToggledOn) or useNonToggledSprite:
-		spriteHovered.visible = false
-		spritePressed.visible = false
-		spriteDisabled.visible = false
-		spriteDefault.visible = true
+	if (not buttonImprover.buttonIsToggledOn) or useDefaultSprite or useNonToggledSprite:
+		showOneSprite(spriteDefault)
 	else:
-		spriteDefault.visible = false
-		spriteHovered.visible = false
-		spritePressed.visible = false
-		spriteDisabled.visible = false
-		spriteHoveredToggled.visible = false
-		spritePressedToggled.visible = false
-		spriteDisabledToggled.visible = false
-		spriteDefaultToggled.visible = true
+		showOneSprite(spriteDefaultToggled)
 
 func showHovered():
 	var mat: ShaderMaterial = material as ShaderMaterial
@@ -230,21 +231,11 @@ func showHovered():
 	else:
 		modulate = modulateHoveredToggled
 	if useDefaultSprite:
-		spriteDefault.visible = true
+		showOneSprite(spriteDefault)
 	elif (not buttonImprover.buttonIsToggledOn) or useNonToggledSprite:
-		spriteDefault.visible = false
-		spritePressed.visible = false
-		spriteDisabled.visible = false
-		spriteHovered.visible = true
+		showOneSprite(spriteHovered)
 	else:
-		spriteDefault.visible = false
-		spriteHovered.visible = false
-		spritePressed.visible = false
-		spriteDisabled.visible = false
-		spriteDefaultToggled.visible = false
-		spritePressedToggled.visible = false
-		spriteDisabledToggled.visible = false
-		spriteHoveredToggled.visible = true
+		showOneSprite(spriteHoveredToggled)
 
 func showPressed():
 	var mat: ShaderMaterial = material as ShaderMaterial
@@ -303,21 +294,11 @@ func showPressed():
 	else:
 		modulate = modulatePressedToggled
 	if useDefaultSprite:
-		spriteDefault.visible = true
+		showOneSprite(spriteDefault)
 	elif (not buttonImprover.buttonIsToggledOn) or useNonToggledSprite:
-		spriteDefault.visible = false
-		spriteHovered.visible = false
-		spriteDisabled.visible = false
-		spritePressed.visible = true
+		showOneSprite(spritePressed)
 	else:
-		spriteDefault.visible = false
-		spriteHovered.visible = false
-		spritePressed.visible = false
-		spriteDisabled.visible = false
-		spriteDefaultToggled.visible = false
-		spriteHoveredToggled.visible = false
-		spriteDisabledToggled.visible = false
-		spritePressedToggled.visible = true
+		showOneSprite(spritePressedToggled)
 
 func showDisabled():
 	var mat: ShaderMaterial = material as ShaderMaterial
@@ -376,21 +357,11 @@ func showDisabled():
 	else:
 		modulate = modulateDisabledToggled
 	if useDefaultSprite:
-		spriteDefault.visible = true
+		showOneSprite(spriteDefault)
 	elif (not buttonImprover.buttonIsToggledOn) or useNonToggledSprite:
-		spriteDefault.visible = false
-		spriteHovered.visible = false
-		spritePressed.visible = false
-		spriteDisabled.visible = true
+		showOneSprite(spriteDisabled)
 	else:
-		spriteDefault.visible = false
-		spriteHovered.visible = false
-		spritePressed.visible = false
-		spriteDisabled.visible = false
-		spriteDefaultToggled.visible = false
-		spriteHoveredToggled.visible = false
-		spritePressedToggled.visible = false
-		spriteDisabledToggled.visible = true
+		showOneSprite(spriteDisabledToggled)
 
 func disable():
 	buttonImprover.disableButton()
