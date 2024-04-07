@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=3 uid="uid://cudne81ew8j5r"]
+[gd_scene load_steps=55 format=3 uid="uid://cudne81ew8j5r"]
 
 [ext_resource type="Script" path="res://Scripts/UI/SetBorderRatio.gd" id="1_8omxs"]
 [ext_resource type="Theme" uid="uid://bhkvphjy5bskn" path="res://Themes/Main.tres" id="1_gldiy"]
@@ -18,6 +18,9 @@
 [ext_resource type="Script" path="res://Scripts/UI/ScaleProceduralButton.gd" id="14_tqa0o"]
 [ext_resource type="Texture2D" uid="uid://cg74akejbk1k2" path="res://Images/Trash.svg" id="15_lbb2d"]
 [ext_resource type="Script" path="res://Scripts/GameManager.gd" id="15_uqtdi"]
+[ext_resource type="Texture2D" uid="uid://ddjaagorggh0v" path="res://Images/Checkmark.svg" id="19_jxywh"]
+[ext_resource type="Shader" path="res://Shaders/SpriteSheetSlicer.gdshader" id="19_te1wm"]
+[ext_resource type="Texture2D" uid="uid://bchoq8kvi7fty" path="res://Images/Pieces.svg" id="20_ml8gx"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_yxwyt"]
 shader = ExtResource("1_gn3e1")
@@ -169,19 +172,19 @@ gradient = SubResource("Gradient_q25m6")
 width = 1
 height = 1
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_17q52"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_o48cx"]
 shader = ExtResource("11_6jtdc")
-shader_parameter/outerDistances = Vector4(0.02, 0.02, 0.02, 0.02)
+shader_parameter/outerDistances = Vector4(0.06, 0.06, 0.06, 0.06)
 shader_parameter/thickness = 0.075
 shader_parameter/outerRadius = 0.105
 shader_parameter/noDistortLength = 0.245
 shader_parameter/insideBgCol = Color(0.619608, 0.541176, 0.482353, 1)
 shader_parameter/outsideBgCol = Color(0, 0, 0, 0)
-shader_parameter/lineCol = null
-shader_parameter/noiseScale = Vector2(1.745, 0.195)
-shader_parameter/noiseSeed = 0.955
-shader_parameter/realWidth = 89.0
-shader_parameter/realHeight = 89.0
+shader_parameter/lineCol = Color(0, 0, 0, 1)
+shader_parameter/noiseScale = Vector2(1.745, 0.155)
+shader_parameter/noiseSeed = -3.88
+shader_parameter/realWidth = 89.076
+shader_parameter/realHeight = 88.543
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0o055"]
 shader = ExtResource("11_6jtdc")
@@ -197,6 +200,154 @@ shader_parameter/noiseSeed = -3.88
 shader_parameter/realWidth = 89.076
 shader_parameter/realHeight = 88.543
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_88moo"]
+shader = ExtResource("11_6jtdc")
+shader_parameter/outerDistances = Vector4(0.02, 0.02, 0.02, 0.02)
+shader_parameter/thickness = 0.02
+shader_parameter/outerRadius = 0.065
+shader_parameter/noDistortLength = 0.05
+shader_parameter/insideBgCol = Color(0.694118, 0.619608, 0.560784, 1)
+shader_parameter/outsideBgCol = Color(0, 0, 0, 0)
+shader_parameter/lineCol = null
+shader_parameter/noiseScale = Vector2(3.115, 0.065)
+shader_parameter/noiseSeed = 0.175
+shader_parameter/realWidth = 455.9
+shader_parameter/realHeight = 364.369
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_4h3yi"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4xwog"]
+shader = ExtResource("11_6jtdc")
+shader_parameter/outerDistances = Vector4(0.06, 0.06, 0.06, 0.06)
+shader_parameter/thickness = 0.075
+shader_parameter/outerRadius = 0.17
+shader_parameter/noDistortLength = 0.245
+shader_parameter/insideBgCol = Color(0.619608, 0.541176, 0.482353, 1)
+shader_parameter/outsideBgCol = Color(0, 0, 0, 0)
+shader_parameter/lineCol = Color(0, 0, 0, 1)
+shader_parameter/noiseScale = Vector2(0.82, 0.17)
+shader_parameter/noiseSeed = -3.88
+shader_parameter/realWidth = 384.0
+shader_parameter/realHeight = 64.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_55s0b"]
+shader = ExtResource("11_6jtdc")
+shader_parameter/outerDistances = Vector4(0.06, 0.06, 0.06, 0.06)
+shader_parameter/thickness = 0.075
+shader_parameter/outerRadius = 0.17
+shader_parameter/noDistortLength = 0.245
+shader_parameter/insideBgCol = Color(0.619608, 0.541176, 0.482353, 1)
+shader_parameter/outsideBgCol = Color(0, 0, 0, 0)
+shader_parameter/lineCol = Color(0, 0, 0, 1)
+shader_parameter/noiseScale = Vector2(0.82, 0.17)
+shader_parameter/noiseSeed = -4.26
+shader_parameter/realWidth = 384.0
+shader_parameter/realHeight = 64.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7dk31"]
+shader = ExtResource("11_6jtdc")
+shader_parameter/outerDistances = Vector4(0.06, 0.06, 0.06, 0.06)
+shader_parameter/thickness = 0.075
+shader_parameter/outerRadius = 0.17
+shader_parameter/noDistortLength = 0.245
+shader_parameter/insideBgCol = Color(0.619608, 0.541176, 0.482353, 1)
+shader_parameter/outsideBgCol = Color(0, 0, 0, 0)
+shader_parameter/lineCol = Color(0, 0, 0, 1)
+shader_parameter/noiseScale = Vector2(0.82, 0.17)
+shader_parameter/noiseSeed = -0.655
+shader_parameter/realWidth = 384.0
+shader_parameter/realHeight = 64.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xr311"]
+shader = ExtResource("11_6jtdc")
+shader_parameter/outerDistances = Vector4(0.02, 0.02, 0.02, 0.02)
+shader_parameter/thickness = 0.016
+shader_parameter/outerRadius = 0.065
+shader_parameter/noDistortLength = 0.05
+shader_parameter/insideBgCol = Color(0.694118, 0.619608, 0.560784, 1)
+shader_parameter/outsideBgCol = Color(0, 0, 0, 0)
+shader_parameter/lineCol = null
+shader_parameter/noiseScale = Vector2(3.115, 0.065)
+shader_parameter/noiseSeed = 3.77
+shader_parameter/realWidth = 455.9
+shader_parameter/realHeight = 442.714
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_p1mg3"]
+shader = ExtResource("19_te1wm")
+shader_parameter/width = 6
+shader_parameter/height = 2
+shader_parameter/frame = 5
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2mnw7"]
+shader = ExtResource("11_6jtdc")
+shader_parameter/outerDistances = Vector4(0.06, 0.06, 0.06, 0.06)
+shader_parameter/thickness = 0.075
+shader_parameter/outerRadius = 0.17
+shader_parameter/noDistortLength = 0.245
+shader_parameter/insideBgCol = Color(0.619608, 0.541176, 0.482353, 1)
+shader_parameter/outsideBgCol = Color(0, 0, 0, 0)
+shader_parameter/lineCol = Color(0, 0, 0, 1)
+shader_parameter/noiseScale = Vector2(0.82, 0.17)
+shader_parameter/noiseSeed = -3.88
+shader_parameter/realWidth = 384.0
+shader_parameter/realHeight = 64.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nqbmc"]
+shader = ExtResource("11_6jtdc")
+shader_parameter/outerDistances = Vector4(0.06, 0.06, 0.06, 0.06)
+shader_parameter/thickness = 0.075
+shader_parameter/outerRadius = 0.17
+shader_parameter/noDistortLength = 0.245
+shader_parameter/insideBgCol = Color(0.619608, 0.541176, 0.482353, 1)
+shader_parameter/outsideBgCol = Color(0, 0, 0, 0)
+shader_parameter/lineCol = Color(0, 0, 0, 1)
+shader_parameter/noiseScale = Vector2(0.82, 0.17)
+shader_parameter/noiseSeed = -3.5
+shader_parameter/realWidth = 317.0
+shader_parameter/realHeight = 64.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nd6kx"]
+shader = ExtResource("11_6jtdc")
+shader_parameter/outerDistances = Vector4(0.06, 0.06, 0.06, 0.06)
+shader_parameter/thickness = 0.075
+shader_parameter/outerRadius = 0.17
+shader_parameter/noDistortLength = 0.245
+shader_parameter/insideBgCol = Color(0.619608, 0.541176, 0.482353, 1)
+shader_parameter/outsideBgCol = Color(0, 0, 0, 0)
+shader_parameter/lineCol = Color(0, 0, 0, 1)
+shader_parameter/noiseScale = Vector2(0.82, 0.17)
+shader_parameter/noiseSeed = -4.045
+shader_parameter/realWidth = 63.826
+shader_parameter/realHeight = 63.751
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_57qi7"]
+shader = ExtResource("11_6jtdc")
+shader_parameter/outerDistances = Vector4(0.06, 0.06, 0.06, 0.06)
+shader_parameter/thickness = 0.075
+shader_parameter/outerRadius = 0.17
+shader_parameter/noDistortLength = 0.245
+shader_parameter/insideBgCol = Color(0.619608, 0.541176, 0.482353, 1)
+shader_parameter/outsideBgCol = Color(0, 0, 0, 0)
+shader_parameter/lineCol = Color(0, 0, 0, 1)
+shader_parameter/noiseScale = Vector2(0.82, 0.17)
+shader_parameter/noiseSeed = -3.88
+shader_parameter/realWidth = 384.0
+shader_parameter/realHeight = 64.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_api10"]
+shader = ExtResource("11_6jtdc")
+shader_parameter/outerDistances = Vector4(0.06, 0.06, 0.06, 0.06)
+shader_parameter/thickness = 0.075
+shader_parameter/outerRadius = 0.17
+shader_parameter/noDistortLength = 0.245
+shader_parameter/insideBgCol = Color(0.619608, 0.541176, 0.482353, 1)
+shader_parameter/outsideBgCol = Color(0, 0, 0, 0)
+shader_parameter/lineCol = Color(0, 0, 0, 1)
+shader_parameter/noiseScale = Vector2(0.82, 0.17)
+shader_parameter/noiseSeed = 33.245
+shader_parameter/realWidth = 384.0
+shader_parameter/realHeight = 64.0
+
 [node name="Control" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -204,6 +355,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_gldiy")
 
 [node name="TextureRect" type="TextureRect" parent="."]
 material = SubResource("ShaderMaterial_yxwyt")
@@ -372,11 +524,22 @@ material = SubResource("ShaderMaterial_yx8dn")
 layout_mode = 2
 texture = SubResource("PlaceholderTexture2D_kb1m1")
 
-[node name="GameManager" type="Node" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/BoardSquare" node_paths=PackedStringArray("board", "pieceHolder", "trashButton")]
+[node name="GameManager" type="Node" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/BoardSquare" node_paths=PackedStringArray("board", "pieceHolder", "trashButton", "pauseButton", "pauseMenu", "gameEndMenu", "gameEndMenuTitle", "gameEndMenuPiece1", "gameEndMenuPlayAgainButton", "gameEndMenuCopyReplayButton", "gameEndMenuCopyReplayCheckmark", "gameEndMenuSettingsButton", "gameEndMenuMainMenuButton", "screenForMenu")]
 script = ExtResource("15_uqtdi")
 board = NodePath("../Board")
 pieceHolder = NodePath("../PieceHolder")
-trashButton = NodePath("../../../../TrashButtonContainer/AspectRatioContainer2/TrashButton")
+trashButton = NodePath("../../../../TrashButton")
+pauseButton = NodePath("../../../../VBoxContainer/Control/PauseButton")
+pauseMenu = NodePath("../../../../PauseMenu")
+gameEndMenu = NodePath("../../../../GameEndMenu")
+gameEndMenuTitle = NodePath("../../../../GameEndMenu/Control/Label")
+gameEndMenuPiece1 = NodePath("../../../../GameEndMenu/Piece1")
+gameEndMenuPlayAgainButton = NodePath("../../../../GameEndMenu/PlayAgainButton")
+gameEndMenuCopyReplayButton = NodePath("../../../../GameEndMenu/CopyReplayButton")
+gameEndMenuCopyReplayCheckmark = NodePath("../../../../GameEndMenu/TextureRect/Checkmark")
+gameEndMenuSettingsButton = NodePath("../../../../GameEndMenu/SettingsButton")
+gameEndMenuMainMenuButton = NodePath("../../../../GameEndMenu/MainMenuButton")
+screenForMenu = NodePath("../../../../../../ScreenForMenu")
 
 [node name="BoardRenderer" type="Node" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/BoardSquare" node_paths=PackedStringArray("board", "pieceHolder", "blackTimer", "whiteTimer", "blackCaptures", "whiteCaptures", "disableCapturesButton", "lines", "circles", "circleArcs", "arrows", "gameManager")]
 script = ExtResource("2_ern7e")
@@ -386,7 +549,7 @@ blackTimer = NodePath("../../BlackUIContainer/BlackTimer/Control/Label")
 whiteTimer = NodePath("../../WhiteUIContainer/WhiteTimer/Control/Label")
 blackCaptures = NodePath("../../WhiteUIContainer/WhiteCaptures/WhiteCaptures")
 whiteCaptures = NodePath("../../BlackUIContainer/BlackCaptures/BlackCapturesContainer")
-disableCapturesButton = NodePath("../../../../VBoxContainer/DisableCapturesButtonContainer/AspectRatioContainer/DisableCapturesButton")
+disableCapturesButton = NodePath("../../../../VBoxContainer/Control2/DisableCapturesButton")
 lines = NodePath("../Lines")
 circles = NodePath("../Circles")
 circleArcs = NodePath("../CircleArcs")
@@ -456,33 +619,19 @@ size_flags_stretch_ratio = 10.2
 theme_override_constants/separation = 0
 metadata/_edit_use_anchors_ = true
 
-[node name="TrashButtonContainer" type="AspectRatioContainer" parent="AspectRatioContainer/Control"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.873
-anchor_top = 0.43
-anchor_right = 1.0
-anchor_bottom = 0.57
-offset_right = -0.0758667
-offset_bottom = 0.457275
-grow_horizontal = 2
-grow_vertical = 2
-stretch_mode = 3
-
-[node name="AspectRatioContainer2" type="AspectRatioContainer" parent="AspectRatioContainer/Control/TrashButtonContainer"]
-layout_mode = 2
-stretch_mode = 3
-
-[node name="TrashButton" type="TextureButton" parent="AspectRatioContainer/Control/TrashButtonContainer/AspectRatioContainer2" node_paths=PackedStringArray("outerAspectRatioContainer", "spriteDefault", "spriteHovered", "spritePressed", "spriteDisabled")]
+[node name="TrashButton" type="TextureButton" parent="AspectRatioContainer/Control" node_paths=PackedStringArray("spriteDefault", "spriteHovered", "spritePressed", "spriteDisabled")]
 material = SubResource("ShaderMaterial_e8xod")
 layout_mode = 2
+anchor_left = 0.873
+anchor_top = 0.43
+anchor_right = 0.999892
+anchor_bottom = 0.570723
+offset_bottom = -3.05176e-05
 size_flags_horizontal = 3
 size_flags_vertical = 3
-mouse_filter = 2
 texture_normal = SubResource("GradientTexture2D_mxgtm")
 stretch_mode = 0
 script = ExtResource("14_tqa0o")
-outerAspectRatioContainer = NodePath("../..")
 scaleDefault = 1.0
 scaleHovered = 1.1
 scalePressed = 1.2
@@ -517,7 +666,7 @@ spriteDisabled = NodePath("TextureRect")
 useNonToggledSprite = true
 metadata/_edit_use_anchors_ = true
 
-[node name="TextureRect" type="TextureRect" parent="AspectRatioContainer/Control/TrashButtonContainer/AspectRatioContainer2/TrashButton"]
+[node name="TextureRect" type="TextureRect" parent="AspectRatioContainer/Control/TrashButton"]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.127904
@@ -526,6 +675,7 @@ anchor_right = 0.858241
 anchor_bottom = 0.879453
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 texture = ExtResource("15_lbb2d")
 expand_mode = 1
 metadata/_edit_use_anchors_ = true
@@ -540,19 +690,18 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 0
 
-[node name="PauseButtonContainer" type="AspectRatioContainer" parent="AspectRatioContainer/Control/VBoxContainer"]
+[node name="Control" type="Control" parent="AspectRatioContainer/Control/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-stretch_mode = 3
 
-[node name="AspectRatioContainer" type="AspectRatioContainer" parent="AspectRatioContainer/Control/VBoxContainer/PauseButtonContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-stretch_mode = 3
-
-[node name="PauseButton" type="TextureButton" parent="AspectRatioContainer/Control/VBoxContainer/PauseButtonContainer/AspectRatioContainer"]
-material = SubResource("ShaderMaterial_17q52")
-layout_mode = 2
+[node name="PauseButton" type="TextureButton" parent="AspectRatioContainer/Control/VBoxContainer/Control" node_paths=PackedStringArray("spriteDefault")]
+material = SubResource("ShaderMaterial_o48cx")
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 texture_normal = SubResource("GradientTexture2D_mxgtm")
@@ -562,62 +711,60 @@ scaleDefault = 1.0
 scaleHovered = 1.1
 scalePressed = 1.2
 scaleDisabled = 1.0
-outerDistancesDefault = Vector4(0.02, 0.02, 0.02, 0.02)
-outerDistancesHovered = Vector4(0.02, 0.02, 0.02, 0.02)
-outerDistancesPressed = Vector4(0.02, 0.02, 0.02, 0.02)
-outerDistancesDisabled = Vector4(0.02, 0.02, 0.02, 0.02)
+useNonToggledScale = true
+useDefaultOuterDistances = true
+outerDistancesDefault = Vector4(0.06, 0.06, 0.06, 0.06)
+useDefaultThickness = true
 thicknessDefault = 0.075
-thicknessHovered = 0.075
-thicknessPressed = 0.075
-thicknessDisabled = 0.075
+useDefaultOuterRadius = true
 outerRadiusDefault = 0.105
-outerRadiusHovered = 0.105
-outerRadiusPressed = 0.105
-outerRadiusDisabled = 0.105
+useDefaultNoDistortLength = true
 noDistortLengthDefault = 0.245
-noDistortLengthHovered = 0.245
-noDistortLengthPressed = 0.245
-noDistortLengthDisabled = 0.245
 insideBgColDefault = Color(0.619608, 0.541176, 0.482353, 1)
 insideBgColHovered = Color(0.737255, 0.662745, 0.607843, 1)
 insideBgColPressed = Color(0.847059, 0.792157, 0.756863, 1)
 insideBgColDisabled = Color(0.454902, 0.419608, 0.396078, 1)
+useNonToggledInsideBgCol = true
+useDefaultOutsideBgCol = true
 outsideBgColDefault = Color(0, 0, 0, 0)
-outsideBgColHovered = Color(0, 0, 0, 0)
-outsideBgColPressed = Color(0, 0, 0, 0)
-outsideBgColDisabled = Color(0, 0, 0, 0)
+useNonToggledOutsideBgCol = true
+useDefaultLineCol = true
+modulateDefault = Color(1, 1, 1, 1)
+modulateHovered = Color(1, 1, 1, 1)
+modulatePressed = Color(1, 1, 1, 1)
 modulateDisabled = Color(0.65098, 0.65098, 0.65098, 1)
-metadata/_edit_use_anchors_ = true
+useNonToggledModulate = true
+useDefaultSprite = true
+spriteDefault = NodePath("TextureRect")
 
-[node name="TextureRect" type="TextureRect" parent="AspectRatioContainer/Control/VBoxContainer/PauseButtonContainer/AspectRatioContainer/PauseButton"]
+[node name="TextureRect" type="TextureRect" parent="AspectRatioContainer/Control/VBoxContainer/Control/PauseButton"]
 layout_mode = 0
 anchor_left = 0.081044
 anchor_top = 0.0708242
 anchor_right = 0.938187
 anchor_bottom = 0.927967
+mouse_filter = 2
 texture = ExtResource("5_fkwp4")
 expand_mode = 1
 metadata/_edit_use_anchors_ = true
 
-[node name="DisableCapturesButtonContainer" type="AspectRatioContainer" parent="AspectRatioContainer/Control/VBoxContainer"]
+[node name="Control2" type="Control" parent="AspectRatioContainer/Control/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-stretch_mode = 3
 
-[node name="AspectRatioContainer" type="AspectRatioContainer" parent="AspectRatioContainer/Control/VBoxContainer/DisableCapturesButtonContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-stretch_mode = 3
-
-[node name="DisableCapturesButton" type="TextureButton" parent="AspectRatioContainer/Control/VBoxContainer/DisableCapturesButtonContainer/AspectRatioContainer" node_paths=PackedStringArray("outerAspectRatioContainer", "spriteDefault", "spriteHovered", "spritePressed", "spriteDisabled", "spriteDefaultToggled", "spriteHoveredToggled", "spritePressedToggled", "spriteDisabledToggled")]
+[node name="DisableCapturesButton" type="TextureButton" parent="AspectRatioContainer/Control/VBoxContainer/Control2" node_paths=PackedStringArray("spriteDefault", "spriteHovered", "spritePressed", "spriteDisabled", "spriteDefaultToggled", "spriteHoveredToggled", "spritePressedToggled", "spriteDisabledToggled")]
 material = SubResource("ShaderMaterial_0o055")
-layout_mode = 2
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 texture_normal = SubResource("GradientTexture2D_mxgtm")
 stretch_mode = 0
 script = ExtResource("14_tqa0o")
-outerAspectRatioContainer = NodePath("../..")
 scaleDefault = 1.0
 scaleHovered = 1.1
 scalePressed = 1.2
@@ -653,23 +800,20 @@ spriteDefaultToggled = NodePath("Control")
 spriteHoveredToggled = NodePath("Control")
 spritePressedToggled = NodePath("Control")
 spriteDisabledToggled = NodePath("Control")
-metadata/_edit_use_anchors_ = true
 
-[node name="TextureRect" type="TextureRect" parent="AspectRatioContainer/Control/VBoxContainer/DisableCapturesButtonContainer/AspectRatioContainer/DisableCapturesButton"]
+[node name="TextureRect" type="TextureRect" parent="AspectRatioContainer/Control/VBoxContainer/Control2/DisableCapturesButton"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.156033
+anchor_left = 0.155
 anchor_top = 0.148859
-anchor_right = 0.826983
-anchor_bottom = 0.868365
-offset_right = 2.27255
-offset_bottom = -2.19458
+anchor_right = 0.852
+anchor_bottom = 0.84
 rotation = 0.0349066
 mouse_filter = 2
 texture = ExtResource("6_47nvh")
 expand_mode = 1
 
-[node name="TextureRect2" type="TextureRect" parent="AspectRatioContainer/Control/VBoxContainer/DisableCapturesButtonContainer/AspectRatioContainer/DisableCapturesButton"]
+[node name="TextureRect2" type="TextureRect" parent="AspectRatioContainer/Control/VBoxContainer/Control2/DisableCapturesButton"]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.14625
@@ -680,8 +824,627 @@ mouse_filter = 2
 texture = ExtResource("8_f2ix7")
 expand_mode = 1
 
-[node name="Control" type="Control" parent="AspectRatioContainer/Control/VBoxContainer/DisableCapturesButtonContainer/AspectRatioContainer/DisableCapturesButton"]
+[node name="Control" type="Control" parent="AspectRatioContainer/Control/VBoxContainer/Control2/DisableCapturesButton"]
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 mouse_filter = 2
+
+[node name="PauseMenu" type="TextureRect" parent="AspectRatioContainer/Control"]
+visible = false
+z_index = 10
+material = SubResource("ShaderMaterial_88moo")
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.175
+anchor_top = 0.211875
+anchor_right = 0.825
+anchor_bottom = 0.788
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+texture = SubResource("PlaceholderTexture2D_4h3yi")
+metadata/_edit_use_anchors_ = true
+
+[node name="Control" type="Control" parent="AspectRatioContainer/Control/PauseMenu" node_paths=PackedStringArray("label")]
+layout_mode = 1
+anchor_left = 0.05
+anchor_top = 0.0607434
+anchor_right = 0.95
+anchor_bottom = 0.264512
+script = ExtResource("6_v8qg6")
+fontSize = 55.0
+label = NodePath("Label")
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="AspectRatioContainer/Control/PauseMenu/Control"]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = -0.0648645
+anchor_right = 1.0
+anchor_bottom = 0.985681
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 55
+text = "Paused"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="ResumeButton" type="TextureButton" parent="AspectRatioContainer/Control/PauseMenu" node_paths=PackedStringArray("spriteDefault")]
+material = SubResource("ShaderMaterial_4xwog")
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.0789998
+anchor_top = 0.277172
+anchor_right = 0.922
+anchor_bottom = 0.452966
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture_normal = SubResource("GradientTexture2D_mxgtm")
+stretch_mode = 0
+script = ExtResource("14_tqa0o")
+scaleDefault = 1.0
+scaleHovered = 1.05
+scalePressed = 1.1
+scaleDisabled = 1.0
+useNonToggledScale = true
+useDefaultOuterDistances = true
+outerDistancesDefault = Vector4(0.06, 0.06, 0.06, 0.06)
+useDefaultThickness = true
+thicknessDefault = 0.075
+useDefaultOuterRadius = true
+outerRadiusDefault = 0.105
+useDefaultNoDistortLength = true
+noDistortLengthDefault = 0.245
+insideBgColDefault = Color(0.619608, 0.541176, 0.482353, 1)
+insideBgColHovered = Color(0.737255, 0.662745, 0.607843, 1)
+insideBgColPressed = Color(0.847059, 0.792157, 0.756863, 1)
+insideBgColDisabled = Color(0.454902, 0.419608, 0.396078, 1)
+useNonToggledInsideBgCol = true
+useDefaultOutsideBgCol = true
+outsideBgColDefault = Color(0, 0, 0, 0)
+useNonToggledOutsideBgCol = true
+useDefaultLineCol = true
+modulateDefault = Color(1, 1, 1, 1)
+modulateHovered = Color(1, 1, 1, 1)
+modulatePressed = Color(1, 1, 1, 1)
+modulateDisabled = Color(0.65098, 0.65098, 0.65098, 1)
+useNonToggledModulate = true
+useDefaultSprite = true
+spriteDefault = NodePath("Control/Label")
+metadata/_edit_use_anchors_ = true
+
+[node name="Control" type="Control" parent="AspectRatioContainer/Control/PauseMenu/ResumeButton" node_paths=PackedStringArray("label")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("6_v8qg6")
+fontSize = 36.0
+label = NodePath("Label")
+
+[node name="Label" type="Label" parent="AspectRatioContainer/Control/PauseMenu/ResumeButton/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 36
+text = "Resume"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SettingsButton" type="TextureButton" parent="AspectRatioContainer/Control/PauseMenu" node_paths=PackedStringArray("spriteDefault")]
+material = SubResource("ShaderMaterial_55s0b")
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.0789998
+anchor_top = 0.493373
+anchor_right = 0.922
+anchor_bottom = 0.669167
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture_normal = SubResource("GradientTexture2D_mxgtm")
+stretch_mode = 0
+script = ExtResource("14_tqa0o")
+scaleDefault = 1.0
+scaleHovered = 1.05
+scalePressed = 1.1
+scaleDisabled = 1.0
+useNonToggledScale = true
+useDefaultOuterDistances = true
+outerDistancesDefault = Vector4(0.06, 0.06, 0.06, 0.06)
+useDefaultThickness = true
+thicknessDefault = 0.075
+useDefaultOuterRadius = true
+outerRadiusDefault = 0.105
+useDefaultNoDistortLength = true
+noDistortLengthDefault = 0.245
+insideBgColDefault = Color(0.619608, 0.541176, 0.482353, 1)
+insideBgColHovered = Color(0.737255, 0.662745, 0.607843, 1)
+insideBgColPressed = Color(0.847059, 0.792157, 0.756863, 1)
+insideBgColDisabled = Color(0.454902, 0.419608, 0.396078, 1)
+useNonToggledInsideBgCol = true
+useDefaultOutsideBgCol = true
+outsideBgColDefault = Color(0, 0, 0, 0)
+useNonToggledOutsideBgCol = true
+useDefaultLineCol = true
+modulateDefault = Color(1, 1, 1, 1)
+modulateHovered = Color(1, 1, 1, 1)
+modulatePressed = Color(1, 1, 1, 1)
+modulateDisabled = Color(0.65098, 0.65098, 0.65098, 1)
+useNonToggledModulate = true
+useDefaultSprite = true
+spriteDefault = NodePath("Control/Label")
+metadata/_edit_use_anchors_ = true
+
+[node name="Control" type="Control" parent="AspectRatioContainer/Control/PauseMenu/SettingsButton" node_paths=PackedStringArray("label")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("6_v8qg6")
+fontSize = 36.0
+label = NodePath("Label")
+
+[node name="Label" type="Label" parent="AspectRatioContainer/Control/PauseMenu/SettingsButton/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 36
+text = "Settings"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MainMenuButton" type="TextureButton" parent="AspectRatioContainer/Control/PauseMenu" node_paths=PackedStringArray("spriteDefault")]
+material = SubResource("ShaderMaterial_7dk31")
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.0789998
+anchor_top = 0.709577
+anchor_right = 0.922
+anchor_bottom = 0.885364
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture_normal = SubResource("GradientTexture2D_mxgtm")
+stretch_mode = 0
+script = ExtResource("14_tqa0o")
+scaleDefault = 1.0
+scaleHovered = 1.05
+scalePressed = 1.1
+scaleDisabled = 1.0
+useNonToggledScale = true
+useDefaultOuterDistances = true
+outerDistancesDefault = Vector4(0.06, 0.06, 0.06, 0.06)
+useDefaultThickness = true
+thicknessDefault = 0.075
+useDefaultOuterRadius = true
+outerRadiusDefault = 0.105
+useDefaultNoDistortLength = true
+noDistortLengthDefault = 0.245
+insideBgColDefault = Color(0.619608, 0.541176, 0.482353, 1)
+insideBgColHovered = Color(0.737255, 0.662745, 0.607843, 1)
+insideBgColPressed = Color(0.847059, 0.792157, 0.756863, 1)
+insideBgColDisabled = Color(0.454902, 0.419608, 0.396078, 1)
+useNonToggledInsideBgCol = true
+useDefaultOutsideBgCol = true
+outsideBgColDefault = Color(0, 0, 0, 0)
+useNonToggledOutsideBgCol = true
+useDefaultLineCol = true
+modulateDefault = Color(1, 1, 1, 1)
+modulateHovered = Color(1, 1, 1, 1)
+modulatePressed = Color(1, 1, 1, 1)
+modulateDisabled = Color(0.65098, 0.65098, 0.65098, 1)
+useNonToggledModulate = true
+useDefaultSprite = true
+spriteDefault = NodePath("Control/Label")
+metadata/_edit_use_anchors_ = true
+
+[node name="Control" type="Control" parent="AspectRatioContainer/Control/PauseMenu/MainMenuButton" node_paths=PackedStringArray("label")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("6_v8qg6")
+fontSize = 36.0
+label = NodePath("Label")
+
+[node name="Label" type="Label" parent="AspectRatioContainer/Control/PauseMenu/MainMenuButton/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 36
+text = "Main Menu
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="GameEndMenu" type="TextureRect" parent="AspectRatioContainer/Control"]
+visible = false
+z_index = 10
+material = SubResource("ShaderMaterial_xr311")
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.175
+anchor_top = 0.15
+anchor_right = 0.825
+anchor_bottom = 0.85
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+texture = SubResource("PlaceholderTexture2D_4h3yi")
+metadata/_edit_use_anchors_ = true
+
+[node name="Piece1" type="TextureRect" parent="AspectRatioContainer/Control/GameEndMenu"]
+material = SubResource("ShaderMaterial_p1mg3")
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.0197412
+anchor_top = 0.0655051
+anchor_right = 0.203992
+anchor_bottom = 0.255244
+rotation = -0.191986
+texture = ExtResource("20_ml8gx")
+expand_mode = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Piece2" type="TextureRect" parent="AspectRatioContainer/Control/GameEndMenu"]
+material = SubResource("ShaderMaterial_p1mg3")
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.800614
+anchor_top = 0.0316232
+anchor_right = 0.984865
+anchor_bottom = 0.221362
+rotation = 0.191986
+texture = ExtResource("20_ml8gx")
+expand_mode = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Control" type="Control" parent="AspectRatioContainer/Control/GameEndMenu" node_paths=PackedStringArray("label")]
+layout_mode = 1
+anchor_left = 0.05
+anchor_top = 0.0513696
+anchor_right = 0.95
+anchor_bottom = 0.255139
+script = ExtResource("6_v8qg6")
+fontSize = 45.25
+label = NodePath("Label")
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="AspectRatioContainer/Control/GameEndMenu/Control"]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = -0.0648645
+anchor_right = 1.0
+anchor_bottom = 0.985681
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 45
+text = "White Wins!"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="PlayAgainButton" type="TextureButton" parent="AspectRatioContainer/Control/GameEndMenu" node_paths=PackedStringArray("spriteDefault")]
+material = SubResource("ShaderMaterial_2mnw7")
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.0789998
+anchor_top = 0.249434
+anchor_right = 0.92129
+anchor_bottom = 0.393998
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture_normal = SubResource("GradientTexture2D_mxgtm")
+stretch_mode = 0
+script = ExtResource("14_tqa0o")
+scaleDefault = 1.0
+scaleHovered = 1.05
+scalePressed = 1.1
+scaleDisabled = 1.0
+useNonToggledScale = true
+useDefaultOuterDistances = true
+outerDistancesDefault = Vector4(0.06, 0.06, 0.06, 0.06)
+useDefaultThickness = true
+thicknessDefault = 0.075
+useDefaultOuterRadius = true
+outerRadiusDefault = 0.105
+useDefaultNoDistortLength = true
+noDistortLengthDefault = 0.245
+insideBgColDefault = Color(0.619608, 0.541176, 0.482353, 1)
+insideBgColHovered = Color(0.737255, 0.662745, 0.607843, 1)
+insideBgColPressed = Color(0.847059, 0.792157, 0.756863, 1)
+insideBgColDisabled = Color(0.454902, 0.419608, 0.396078, 1)
+useNonToggledInsideBgCol = true
+useDefaultOutsideBgCol = true
+outsideBgColDefault = Color(0, 0, 0, 0)
+useNonToggledOutsideBgCol = true
+useDefaultLineCol = true
+modulateDefault = Color(1, 1, 1, 1)
+modulateHovered = Color(1, 1, 1, 1)
+modulatePressed = Color(1, 1, 1, 1)
+modulateDisabled = Color(0.65098, 0.65098, 0.65098, 1)
+useNonToggledModulate = true
+useDefaultSprite = true
+spriteDefault = NodePath("Control/Label")
+metadata/_edit_use_anchors_ = true
+
+[node name="Control" type="Control" parent="AspectRatioContainer/Control/GameEndMenu/PlayAgainButton" node_paths=PackedStringArray("label")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("6_v8qg6")
+fontSize = 36.0
+label = NodePath("Label")
+
+[node name="Label" type="Label" parent="AspectRatioContainer/Control/GameEndMenu/PlayAgainButton/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 36
+text = "Play Again"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CopyReplayButton" type="TextureButton" parent="AspectRatioContainer/Control/GameEndMenu" node_paths=PackedStringArray("spriteDefault")]
+material = SubResource("ShaderMaterial_nqbmc")
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.0789647
+anchor_top = 0.417877
+anchor_right = 0.774293
+anchor_bottom = 0.56244
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture_normal = SubResource("GradientTexture2D_mxgtm")
+stretch_mode = 0
+script = ExtResource("14_tqa0o")
+scaleDefault = 1.0
+scaleHovered = 1.05
+scalePressed = 1.1
+scaleDisabled = 1.0
+useNonToggledScale = true
+useDefaultOuterDistances = true
+outerDistancesDefault = Vector4(0.06, 0.06, 0.06, 0.06)
+useDefaultThickness = true
+thicknessDefault = 0.075
+useDefaultOuterRadius = true
+outerRadiusDefault = 0.105
+useDefaultNoDistortLength = true
+noDistortLengthDefault = 0.245
+insideBgColDefault = Color(0.619608, 0.541176, 0.482353, 1)
+insideBgColHovered = Color(0.737255, 0.662745, 0.607843, 1)
+insideBgColPressed = Color(0.847059, 0.792157, 0.756863, 1)
+insideBgColDisabled = Color(0.454902, 0.419608, 0.396078, 1)
+useNonToggledInsideBgCol = true
+useDefaultOutsideBgCol = true
+outsideBgColDefault = Color(0, 0, 0, 0)
+useNonToggledOutsideBgCol = true
+useDefaultLineCol = true
+modulateDefault = Color(1, 1, 1, 1)
+modulateHovered = Color(1, 1, 1, 1)
+modulatePressed = Color(1, 1, 1, 1)
+modulateDisabled = Color(0.65098, 0.65098, 0.65098, 1)
+useNonToggledModulate = true
+useDefaultSprite = true
+spriteDefault = NodePath("Control/Label")
+metadata/_edit_use_anchors_ = true
+
+[node name="Control" type="Control" parent="AspectRatioContainer/Control/GameEndMenu/CopyReplayButton" node_paths=PackedStringArray("label")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("6_v8qg6")
+fontSize = 36.0
+label = NodePath("Label")
+
+[node name="Label" type="Label" parent="AspectRatioContainer/Control/GameEndMenu/CopyReplayButton/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 36
+text = "Copy Replay"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="AspectRatioContainer/Control/GameEndMenu"]
+material = SubResource("ShaderMaterial_nd6kx")
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.781
+anchor_top = 0.418
+anchor_right = 0.921
+anchor_bottom = 0.562
+texture = SubResource("GradientTexture2D_mxgtm")
+
+[node name="Checkmark" type="TextureRect" parent="AspectRatioContainer/Control/GameEndMenu/TextureRect"]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -0.0198195
+anchor_right = 0.982907
+anchor_bottom = 1.00391
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("19_jxywh")
+expand_mode = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="SettingsButton" type="TextureButton" parent="AspectRatioContainer/Control/GameEndMenu" node_paths=PackedStringArray("spriteDefault")]
+material = SubResource("ShaderMaterial_57qi7")
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.0789998
+anchor_top = 0.587441
+anchor_right = 0.92129
+anchor_bottom = 0.732003
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture_normal = SubResource("GradientTexture2D_mxgtm")
+stretch_mode = 0
+script = ExtResource("14_tqa0o")
+scaleDefault = 1.0
+scaleHovered = 1.05
+scalePressed = 1.1
+scaleDisabled = 1.0
+useNonToggledScale = true
+useDefaultOuterDistances = true
+outerDistancesDefault = Vector4(0.06, 0.06, 0.06, 0.06)
+useDefaultThickness = true
+thicknessDefault = 0.075
+useDefaultOuterRadius = true
+outerRadiusDefault = 0.105
+useDefaultNoDistortLength = true
+noDistortLengthDefault = 0.245
+insideBgColDefault = Color(0.619608, 0.541176, 0.482353, 1)
+insideBgColHovered = Color(0.737255, 0.662745, 0.607843, 1)
+insideBgColPressed = Color(0.847059, 0.792157, 0.756863, 1)
+insideBgColDisabled = Color(0.454902, 0.419608, 0.396078, 1)
+useNonToggledInsideBgCol = true
+useDefaultOutsideBgCol = true
+outsideBgColDefault = Color(0, 0, 0, 0)
+useNonToggledOutsideBgCol = true
+useDefaultLineCol = true
+modulateDefault = Color(1, 1, 1, 1)
+modulateHovered = Color(1, 1, 1, 1)
+modulatePressed = Color(1, 1, 1, 1)
+modulateDisabled = Color(0.65098, 0.65098, 0.65098, 1)
+useNonToggledModulate = true
+useDefaultSprite = true
+spriteDefault = NodePath("Control/Label")
+metadata/_edit_use_anchors_ = true
+
+[node name="Control" type="Control" parent="AspectRatioContainer/Control/GameEndMenu/SettingsButton" node_paths=PackedStringArray("label")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("6_v8qg6")
+fontSize = 36.0
+label = NodePath("Label")
+
+[node name="Label" type="Label" parent="AspectRatioContainer/Control/GameEndMenu/SettingsButton/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 36
+text = "Settings"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MainMenuButton" type="TextureButton" parent="AspectRatioContainer/Control/GameEndMenu" node_paths=PackedStringArray("spriteDefault")]
+material = SubResource("ShaderMaterial_api10")
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.0789998
+anchor_top = 0.756444
+anchor_right = 0.92129
+anchor_bottom = 0.901006
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture_normal = SubResource("GradientTexture2D_mxgtm")
+stretch_mode = 0
+script = ExtResource("14_tqa0o")
+scaleDefault = 1.0
+scaleHovered = 1.05
+scalePressed = 1.1
+scaleDisabled = 1.0
+useNonToggledScale = true
+useDefaultOuterDistances = true
+outerDistancesDefault = Vector4(0.06, 0.06, 0.06, 0.06)
+useDefaultThickness = true
+thicknessDefault = 0.075
+useDefaultOuterRadius = true
+outerRadiusDefault = 0.105
+useDefaultNoDistortLength = true
+noDistortLengthDefault = 0.245
+insideBgColDefault = Color(0.619608, 0.541176, 0.482353, 1)
+insideBgColHovered = Color(0.737255, 0.662745, 0.607843, 1)
+insideBgColPressed = Color(0.847059, 0.792157, 0.756863, 1)
+insideBgColDisabled = Color(0.454902, 0.419608, 0.396078, 1)
+useNonToggledInsideBgCol = true
+useDefaultOutsideBgCol = true
+outsideBgColDefault = Color(0, 0, 0, 0)
+useNonToggledOutsideBgCol = true
+useDefaultLineCol = true
+modulateDefault = Color(1, 1, 1, 1)
+modulateHovered = Color(1, 1, 1, 1)
+modulatePressed = Color(1, 1, 1, 1)
+modulateDisabled = Color(0.65098, 0.65098, 0.65098, 1)
+useNonToggledModulate = true
+useDefaultSprite = true
+spriteDefault = NodePath("Control/Label")
+metadata/_edit_use_anchors_ = true
+
+[node name="Control" type="Control" parent="AspectRatioContainer/Control/GameEndMenu/MainMenuButton" node_paths=PackedStringArray("label")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("6_v8qg6")
+fontSize = 36.0
+label = NodePath("Label")
+
+[node name="Label" type="Label" parent="AspectRatioContainer/Control/GameEndMenu/MainMenuButton/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 36
+text = "Main Menu"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ScreenForMenu" type="ColorRect" parent="."]
+z_index = 2
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0)

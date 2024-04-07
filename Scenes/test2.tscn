@@ -39,7 +39,7 @@ layout_mode = 2
 size_flags_vertical = 3
 stretch_mode = 3
 
-[node name="DisableCapturesButton" type="TextureButton" parent="AspectRatioContainer" node_paths=PackedStringArray("outerAspectRatioContainer", "spriteDefault", "spriteHovered", "spritePressed", "spriteDisabled", "spriteDefaultToggled", "spriteHoveredToggled", "spritePressedToggled", "spriteDisabledToggled")]
+[node name="DisableCapturesButton" type="TextureButton" parent="AspectRatioContainer" node_paths=PackedStringArray("spriteDefault", "spriteHovered", "spritePressed", "spriteDisabled", "spriteDefaultToggled", "spriteHoveredToggled", "spritePressedToggled", "spriteDisabledToggled")]
 material = SubResource("ShaderMaterial_8gneh")
 layout_mode = 2
 size_flags_horizontal = 3
@@ -47,7 +47,6 @@ size_flags_vertical = 3
 texture_normal = SubResource("GradientTexture2D_gxbeh")
 stretch_mode = 0
 script = ExtResource("2_icw0q")
-outerAspectRatioContainer = NodePath("../..")
 scaleDefault = 1.0
 scaleHovered = 1.1
 scalePressed = 1.2

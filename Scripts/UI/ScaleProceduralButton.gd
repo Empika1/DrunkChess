@@ -1,8 +1,6 @@
 extends TextureButton
 class_name ScaleProceduralButton
 
-@export var outerAspectRatioContainer: AspectRatioContainer
-
 @export var useDefaultScale: bool
 @export var scaleDefault: float
 @export var scaleHovered: float
@@ -120,6 +118,9 @@ func _ready():
 										null, null, [showDefault], [showHovered], [showPressed], 
 										[showDisabled], [], [], false)
 
+func _process(_delta):
+	buttonImprover.stepFrame()
+
 func showOneSprite(sprite: Control):
 	if spriteDefault != null: spriteDefault.visible = false
 	if spriteHovered != null: spriteHovered.visible = false
@@ -131,12 +132,24 @@ func showOneSprite(sprite: Control):
 	if spriteDisabledToggled != null: spriteDisabledToggled.visible = false
 	sprite.visible = true
 
+@onready var startLeftAnchor = anchor_left
+@onready var startRightAnchor = anchor_right
+@onready var startTopAnchor = anchor_top
+@onready var startBottomAnchor = anchor_bottom
+func setScale(scale_: float):
+	var midpoint: Vector2 = Vector2((startLeftAnchor + startRightAnchor) / 2., (startTopAnchor + startBottomAnchor) / 2.)
+	var distance: Vector2 = Vector2(midpoint.x - startLeftAnchor, midpoint.y - startTopAnchor) * scale_
+	anchor_left = midpoint.x - distance.x
+	anchor_right = midpoint.x + distance.x
+	anchor_top = midpoint.y - distance.y
+	anchor_bottom = midpoint.y + distance.y
+
 func showDefault():
 	var mat: ShaderMaterial = material as ShaderMaterial
 	if (not buttonImprover.buttonIsToggledOn) or useDefaultScale or useNonToggledScale:
-		outerAspectRatioContainer.ratio = scaleDefault
+		setScale(scaleDefault)
 	else:
-		outerAspectRatioContainer.ratio = scaleDefaultToggled
+		setScale(scaleDefaultToggled)
 	if (not buttonImprover.buttonIsToggledOn) or useDefaultOuterDistances or useNonToggledOuterDistances:
 		mat.set_shader_parameter("outerDistances", outerDistancesDefault)
 	else:
@@ -177,11 +190,11 @@ func showDefault():
 func showHovered():
 	var mat: ShaderMaterial = material as ShaderMaterial
 	if useDefaultScale:
-		outerAspectRatioContainer.ratio = scaleDefault
+		setScale(scaleDefault)
 	elif (not buttonImprover.buttonIsToggledOn) or useNonToggledScale:
-		outerAspectRatioContainer.ratio = scaleHovered
+		setScale(scaleHovered)
 	else:
-		outerAspectRatioContainer.ratio = scaleHoveredToggled
+		setScale(scaleHoveredToggled)
 	if useDefaultOuterDistances:
 		mat.set_shader_parameter("outerDistances", outerDistancesDefault)
 	elif (not buttonImprover.buttonIsToggledOn) or useNonToggledOuterDistances:
@@ -240,11 +253,11 @@ func showHovered():
 func showPressed():
 	var mat: ShaderMaterial = material as ShaderMaterial
 	if useDefaultScale:
-		outerAspectRatioContainer.ratio = scaleDefault
+		setScale(scaleDefault)
 	elif (not buttonImprover.buttonIsToggledOn) or useNonToggledScale:
-		outerAspectRatioContainer.ratio = scalePressed
+		setScale(scalePressed)
 	else:
-		outerAspectRatioContainer.ratio = scalePressedToggled
+		setScale(scalePressedToggled)
 	if useDefaultOuterDistances:
 		mat.set_shader_parameter("outerDistances", outerDistancesDefault)
 	elif (not buttonImprover.buttonIsToggledOn) or useNonToggledOuterDistances:
@@ -303,11 +316,11 @@ func showPressed():
 func showDisabled():
 	var mat: ShaderMaterial = material as ShaderMaterial
 	if useDefaultScale:
-		outerAspectRatioContainer.ratio = scaleDefault
+		setScale(scaleDefault)
 	elif (not buttonImprover.buttonIsToggledOn) or useNonToggledScale:
-		outerAspectRatioContainer.ratio = scaleDisabled
+		setScale(scaleDisabled)
 	else:
-		outerAspectRatioContainer.ratio = scaleDisabledToggled
+		setScale(scaleDisabledToggled)
 	if useDefaultOuterDistances:
 		mat.set_shader_parameter("outerDistances", outerDistancesDefault)
 	elif (not buttonImprover.buttonIsToggledOn) or useNonToggledOuterDistances:

@@ -1,38 +1,60 @@
 extends RefCounted
 class_name ButtonImprover
 
+var toggleOnPress: bool = false
+
+
 var buttonIsHovered: bool = false
 var buttonIsPressed: bool = false
 var buttonIsDisabled: bool = false
 
-var toggleOnPress: bool = false
 var buttonIsToggledOn: bool = false
-var buttonJustToggled: bool = false #jank and bad but oh well
+var buttonJustToggled: bool = false #jank and bad, for internal use only
+
+
+var buttonHoveredLastFrame: bool = false
+var buttonUnhoveredLastFrame: bool = false
+var buttonPressedLastFrame: bool = false
+var buttonUnpressedLastFrame: bool = false
+var buttonToggledOnLastFrame: bool = false
+var buttonToggledOfflastFrame: bool = false
 
 func hoverButton():
 	if !buttonIsHovered:
 		buttonIsHovered = true
+		buttonHoveredLastFrame = true
 		updateState()
 
 func unhoverButton():
 	if buttonIsHovered:
 		buttonIsHovered = false
+		buttonUnhoveredLastFrame = true
 		updateState()
 
 func pressButton():
 	if !buttonIsPressed:
 		buttonIsPressed = true
+		buttonPressedLastFrame = true
 		if toggleOnPress:
 			buttonIsToggledOn = not buttonIsToggledOn
 			buttonJustToggled = true
+			if buttonIsToggledOn:
+				buttonToggledOnLastFrame = true
+			else:
+				buttonToggledOnLastFrame = true
 		updateState()
 
 func unpressButton():
 	if buttonIsPressed:
 		buttonIsPressed = false
+		buttonUnpressedLastFrame = true
 		if not toggleOnPress:
 			buttonIsToggledOn = not buttonIsToggledOn
 			buttonJustToggled = true
+			if buttonIsToggledOn:
+				buttonToggledOnLastFrame = true
+			else:
+				buttonToggledOnLastFrame = true
 		updateState()
 
 func disableButton():
@@ -92,3 +114,11 @@ func _init(hoverSignal, unhoverSignal, pressSignal, unpressSignal, disableSignal
 	toggleOnFuncs = toggleOnFuncs_
 	toggleOffFuncs = toggleOffFuncs_
 	toggleOnPress = toggleOnPress_
+
+func stepFrame():
+	buttonHoveredLastFrame = false
+	buttonUnhoveredLastFrame = false
+	buttonPressedLastFrame = false
+	buttonUnpressedLastFrame = false
+	buttonToggledOnLastFrame = false
+	buttonToggledOfflastFrame = false

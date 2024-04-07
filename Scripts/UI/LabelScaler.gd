@@ -14,7 +14,12 @@ var initialWidth: float = 0.;
 @export var fontSize: float
 @export var fitType: FitType
 @export var label: Label
+@export var resetInEditor: bool
 func _process(_delta: float):
+	if resetInEditor:
+		initialHeight = 0
+		resetInEditor = false
+
 	if initialHeight == 0 and size.y != 0:
 		initialWidth = size.x
 		initialHeight = size.y

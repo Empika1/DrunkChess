@@ -55,7 +55,7 @@ func _ready() -> void:
 		blackCaptures.add_child(container)
 		blackCapturesContainers.append(container)
 
-func getPieceFrame(col: Piece.PieceColor, type: Piece.PieceType) -> int:
+static func getPieceFrame(col: Piece.PieceColor, type: Piece.PieceType) -> int:
 	return int(col) * 6 + int(type)
 
 func formatTime(seconds_: float) -> String:
