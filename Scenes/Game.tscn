@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=3 uid="uid://cudne81ew8j5r"]
+[gd_scene load_steps=61 format=3 uid="uid://cudne81ew8j5r"]
 
 [ext_resource type="Script" path="res://Scripts/UI/SetBorderRatio.gd" id="1_8omxs"]
 [ext_resource type="Theme" uid="uid://bhkvphjy5bskn" path="res://Themes/Main.tres" id="1_gldiy"]
@@ -18,6 +18,7 @@
 [ext_resource type="Script" path="res://Scripts/UI/ScaleProceduralButton.gd" id="14_tqa0o"]
 [ext_resource type="Texture2D" uid="uid://cg74akejbk1k2" path="res://Images/Trash.svg" id="15_lbb2d"]
 [ext_resource type="Script" path="res://Scripts/GameManager.gd" id="15_uqtdi"]
+[ext_resource type="Texture2D" uid="uid://ds1ut1aihbx7p" path="res://Images/Draw.svg" id="16_mab2a"]
 [ext_resource type="Texture2D" uid="uid://ddjaagorggh0v" path="res://Images/Checkmark.svg" id="19_jxywh"]
 [ext_resource type="Shader" path="res://Shaders/SpriteSheetSlicer.gdshader" id="19_te1wm"]
 [ext_resource type="Texture2D" uid="uid://bchoq8kvi7fty" path="res://Images/Pieces.svg" id="20_ml8gx"]
@@ -172,6 +173,20 @@ gradient = SubResource("Gradient_q25m6")
 width = 1
 height = 1
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2es3q"]
+shader = ExtResource("11_6jtdc")
+shader_parameter/outerDistances = Vector4(0.06, 0.06, 0.06, 0.06)
+shader_parameter/thickness = 0.075
+shader_parameter/outerRadius = 0.105
+shader_parameter/noDistortLength = 0.245
+shader_parameter/insideBgCol = Color(0.619608, 0.541176, 0.482353, 1)
+shader_parameter/outsideBgCol = Color(0, 0, 0, 0)
+shader_parameter/lineCol = Color(0, 0, 0, 1)
+shader_parameter/noiseScale = Vector2(1.745, 0.155)
+shader_parameter/noiseSeed = -3.88
+shader_parameter/realWidth = 89.076
+shader_parameter/realHeight = 88.543
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o48cx"]
 shader = ExtResource("11_6jtdc")
 shader_parameter/outerDistances = Vector4(0.06, 0.06, 0.06, 0.06)
@@ -278,7 +293,13 @@ shader_parameter/width = 6
 shader_parameter/height = 2
 shader_parameter/frame = 5
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_2mnw7"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kgod5"]
+shader = ExtResource("19_te1wm")
+shader_parameter/width = 6
+shader_parameter/height = 2
+shader_parameter/frame = 5
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pav1d"]
 shader = ExtResource("11_6jtdc")
 shader_parameter/outerDistances = Vector4(0.06, 0.06, 0.06, 0.06)
 shader_parameter/thickness = 0.075
@@ -292,7 +313,7 @@ shader_parameter/noiseSeed = -3.88
 shader_parameter/realWidth = 384.0
 shader_parameter/realHeight = 64.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_nqbmc"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_droyb"]
 shader = ExtResource("11_6jtdc")
 shader_parameter/outerDistances = Vector4(0.06, 0.06, 0.06, 0.06)
 shader_parameter/thickness = 0.075
@@ -306,7 +327,7 @@ shader_parameter/noiseSeed = -3.5
 shader_parameter/realWidth = 317.0
 shader_parameter/realHeight = 64.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_nd6kx"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3cbkt"]
 shader = ExtResource("11_6jtdc")
 shader_parameter/outerDistances = Vector4(0.06, 0.06, 0.06, 0.06)
 shader_parameter/thickness = 0.075
@@ -320,7 +341,7 @@ shader_parameter/noiseSeed = -4.045
 shader_parameter/realWidth = 63.826
 shader_parameter/realHeight = 63.751
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_57qi7"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cjehb"]
 shader = ExtResource("11_6jtdc")
 shader_parameter/outerDistances = Vector4(0.06, 0.06, 0.06, 0.06)
 shader_parameter/thickness = 0.075
@@ -348,6 +369,48 @@ shader_parameter/noiseSeed = 33.245
 shader_parameter/realWidth = 384.0
 shader_parameter/realHeight = 64.0
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5qqrl"]
+shader = ExtResource("11_6jtdc")
+shader_parameter/outerDistances = Vector4(0.02, 0.02, 0.02, 0.02)
+shader_parameter/thickness = 0.05
+shader_parameter/outerRadius = 0.1
+shader_parameter/noDistortLength = 0.05
+shader_parameter/insideBgCol = Color(0.694118, 0.619608, 0.560784, 1)
+shader_parameter/outsideBgCol = Color(0, 0, 0, 0)
+shader_parameter/lineCol = null
+shader_parameter/noiseScale = Vector2(3.115, 0.065)
+shader_parameter/noiseSeed = 3.77
+shader_parameter/realWidth = 406.803
+shader_parameter/realHeight = 141.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lnv6j"]
+shader = ExtResource("11_6jtdc")
+shader_parameter/outerDistances = Vector4(0.06, 0.06, 0.06, 0.06)
+shader_parameter/thickness = 0.075
+shader_parameter/outerRadius = 0.17
+shader_parameter/noDistortLength = 0.245
+shader_parameter/insideBgCol = Color(0.619608, 0.541176, 0.482353, 1)
+shader_parameter/outsideBgCol = Color(0, 0, 0, 0)
+shader_parameter/lineCol = Color(0, 0, 0, 1)
+shader_parameter/noiseScale = Vector2(0.82, 0.17)
+shader_parameter/noiseSeed = 7.4
+shader_parameter/realWidth = 170.59
+shader_parameter/realHeight = 61.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_e7o71"]
+shader = ExtResource("11_6jtdc")
+shader_parameter/outerDistances = Vector4(0.06, 0.06, 0.06, 0.06)
+shader_parameter/thickness = 0.075
+shader_parameter/outerRadius = 0.19
+shader_parameter/noDistortLength = 0.245
+shader_parameter/insideBgCol = Color(0.619608, 0.541176, 0.482353, 1)
+shader_parameter/outsideBgCol = Color(0, 0, 0, 0)
+shader_parameter/lineCol = Color(0, 0, 0, 1)
+shader_parameter/noiseScale = Vector2(0.82, -0.265)
+shader_parameter/noiseSeed = 10.035
+shader_parameter/realWidth = 170.59
+shader_parameter/realHeight = 61.0
+
 [node name="Control" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -367,6 +430,17 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("PlaceholderTexture2D_ujew3")
 expand_mode = 2
+
+[node name="ScreenForMenu" type="ColorRect" parent="."]
+z_index = 5
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0)
 
 [node name="BorderRatioSetter" type="Node" parent="." node_paths=PackedStringArray("mats")]
 script = ExtResource("1_8omxs")
@@ -524,16 +598,25 @@ material = SubResource("ShaderMaterial_yx8dn")
 layout_mode = 2
 texture = SubResource("PlaceholderTexture2D_kb1m1")
 
-[node name="GameManager" type="Node" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/BoardSquare" node_paths=PackedStringArray("board", "pieceHolder", "trashButton", "pauseButton", "pauseMenu", "gameEndMenu", "gameEndMenuTitle", "gameEndMenuPiece1", "gameEndMenuPlayAgainButton", "gameEndMenuCopyReplayButton", "gameEndMenuCopyReplayCheckmark", "gameEndMenuSettingsButton", "gameEndMenuMainMenuButton", "screenForMenu")]
+[node name="GameManager" type="Node" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/BoardSquare" node_paths=PackedStringArray("board", "pieceHolder", "trashButton", "pauseButton", "drawButton", "disableCapturesButton", "pauseMenu", "pauseMenuResumeButton", "pauseMenuSettingsButton", "pauseMenuMainMenuButton", "drawMenu", "drawMenuAcceptButton", "drawMenuRejectButton", "gameEndMenu", "gameEndMenuTitle", "gameEndMenuPiece1", "gameEndMenuPiece2", "gameEndMenuPlayAgainButton", "gameEndMenuCopyReplayButton", "gameEndMenuCopyReplayCheckmark", "gameEndMenuSettingsButton", "gameEndMenuMainMenuButton", "screenForMenu")]
 script = ExtResource("15_uqtdi")
 board = NodePath("../Board")
 pieceHolder = NodePath("../PieceHolder")
-trashButton = NodePath("../../../../TrashButton")
-pauseButton = NodePath("../../../../VBoxContainer/Control/PauseButton")
+trashButton = NodePath("../../../../RightButtonsContainer/Control/TrashButton")
+pauseButton = NodePath("../../../../LeftButtonsContainer/Control/PauseButton")
+drawButton = NodePath("../../../../RightButtonsContainer/Control2/OfferDrawButton")
+disableCapturesButton = NodePath("../../../../LeftButtonsContainer/Control2/DisableCapturesButton")
 pauseMenu = NodePath("../../../../PauseMenu")
+pauseMenuResumeButton = NodePath("../../../../PauseMenu/ResumeButton")
+pauseMenuSettingsButton = NodePath("../../../../PauseMenu/SettingsButton")
+pauseMenuMainMenuButton = NodePath("../../../../PauseMenu/MainMenuButton")
+drawMenu = NodePath("../../../../DrawOfferedMenu")
+drawMenuAcceptButton = NodePath("../../../../DrawOfferedMenu/AcceptButton")
+drawMenuRejectButton = NodePath("../../../../DrawOfferedMenu/RejectButton")
 gameEndMenu = NodePath("../../../../GameEndMenu")
 gameEndMenuTitle = NodePath("../../../../GameEndMenu/Control/Label")
 gameEndMenuPiece1 = NodePath("../../../../GameEndMenu/Piece1")
+gameEndMenuPiece2 = NodePath("../../../../GameEndMenu/Piece2")
 gameEndMenuPlayAgainButton = NodePath("../../../../GameEndMenu/PlayAgainButton")
 gameEndMenuCopyReplayButton = NodePath("../../../../GameEndMenu/CopyReplayButton")
 gameEndMenuCopyReplayCheckmark = NodePath("../../../../GameEndMenu/TextureRect/Checkmark")
@@ -549,7 +632,7 @@ blackTimer = NodePath("../../BlackUIContainer/BlackTimer/Control/Label")
 whiteTimer = NodePath("../../WhiteUIContainer/WhiteTimer/Control/Label")
 blackCaptures = NodePath("../../WhiteUIContainer/WhiteCaptures/WhiteCaptures")
 whiteCaptures = NodePath("../../BlackUIContainer/BlackCaptures/BlackCapturesContainer")
-disableCapturesButton = NodePath("../../../../VBoxContainer/Control2/DisableCapturesButton")
+disableCapturesButton = NodePath("../../../../LeftButtonsContainer/Control2/DisableCapturesButton")
 lines = NodePath("../Lines")
 circles = NodePath("../Circles")
 circleArcs = NodePath("../CircleArcs")
@@ -619,14 +702,31 @@ size_flags_stretch_ratio = 10.2
 theme_override_constants/separation = 0
 metadata/_edit_use_anchors_ = true
 
-[node name="TrashButton" type="TextureButton" parent="AspectRatioContainer/Control" node_paths=PackedStringArray("spriteDefault", "spriteHovered", "spritePressed", "spriteDisabled")]
-material = SubResource("ShaderMaterial_e8xod")
-layout_mode = 2
-anchor_left = 0.873
-anchor_top = 0.43
-anchor_right = 0.999892
-anchor_bottom = 0.570723
+[node name="RightButtonsContainer" type="VBoxContainer" parent="AspectRatioContainer/Control"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.872
+anchor_top = 0.355
+anchor_right = 1.0
+anchor_bottom = 0.645
+offset_top = -3.05176e-05
 offset_bottom = -3.05176e-05
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="Control" type="Control" parent="AspectRatioContainer/Control/RightButtonsContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="TrashButton" type="TextureButton" parent="AspectRatioContainer/Control/RightButtonsContainer/Control" node_paths=PackedStringArray("spriteDefault", "spriteHovered", "spritePressed", "spriteDisabled")]
+material = SubResource("ShaderMaterial_e8xod")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 texture_normal = SubResource("GradientTexture2D_mxgtm")
@@ -664,9 +764,8 @@ spriteHovered = NodePath("TextureRect")
 spritePressed = NodePath("TextureRect")
 spriteDisabled = NodePath("TextureRect")
 useNonToggledSprite = true
-metadata/_edit_use_anchors_ = true
 
-[node name="TextureRect" type="TextureRect" parent="AspectRatioContainer/Control/TrashButton"]
+[node name="TextureRect" type="TextureRect" parent="AspectRatioContainer/Control/RightButtonsContainer/Control/TrashButton"]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.127904
@@ -680,7 +779,66 @@ texture = ExtResource("15_lbb2d")
 expand_mode = 1
 metadata/_edit_use_anchors_ = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="AspectRatioContainer/Control"]
+[node name="Control2" type="Control" parent="AspectRatioContainer/Control/RightButtonsContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="OfferDrawButton" type="TextureButton" parent="AspectRatioContainer/Control/RightButtonsContainer/Control2" node_paths=PackedStringArray("spriteDefault")]
+material = SubResource("ShaderMaterial_2es3q")
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture_normal = SubResource("GradientTexture2D_mxgtm")
+stretch_mode = 0
+script = ExtResource("14_tqa0o")
+scaleDefault = 1.0
+scaleHovered = 1.1
+scalePressed = 1.2
+scaleDisabled = 1.0
+useNonToggledScale = true
+useDefaultOuterDistances = true
+outerDistancesDefault = Vector4(0.06, 0.06, 0.06, 0.06)
+useDefaultThickness = true
+thicknessDefault = 0.075
+useDefaultOuterRadius = true
+outerRadiusDefault = 0.105
+useDefaultNoDistortLength = true
+noDistortLengthDefault = 0.245
+insideBgColDefault = Color(0.619608, 0.541176, 0.482353, 1)
+insideBgColHovered = Color(0.737255, 0.662745, 0.607843, 1)
+insideBgColPressed = Color(0.847059, 0.792157, 0.756863, 1)
+insideBgColDisabled = Color(0.454902, 0.419608, 0.396078, 1)
+useNonToggledInsideBgCol = true
+useDefaultOutsideBgCol = true
+outsideBgColDefault = Color(0, 0, 0, 0)
+useNonToggledOutsideBgCol = true
+useDefaultLineCol = true
+modulateDefault = Color(1, 1, 1, 1)
+modulateHovered = Color(1, 1, 1, 1)
+modulatePressed = Color(1, 1, 1, 1)
+modulateDisabled = Color(0.65098, 0.65098, 0.65098, 1)
+useNonToggledModulate = true
+useDefaultSprite = true
+spriteDefault = NodePath("TextureRect2")
+
+[node name="TextureRect2" type="TextureRect" parent="AspectRatioContainer/Control/RightButtonsContainer/Control2/OfferDrawButton"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.124549
+anchor_top = 0.138098
+anchor_right = 0.877358
+anchor_bottom = 0.866359
+mouse_filter = 2
+texture = ExtResource("16_mab2a")
+expand_mode = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="LeftButtonsContainer" type="VBoxContainer" parent="AspectRatioContainer/Control"]
 layout_mode = 1
 anchors_preset = -1
 anchor_top = 0.355
@@ -690,11 +848,11 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 0
 
-[node name="Control" type="Control" parent="AspectRatioContainer/Control/VBoxContainer"]
+[node name="Control" type="Control" parent="AspectRatioContainer/Control/LeftButtonsContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="PauseButton" type="TextureButton" parent="AspectRatioContainer/Control/VBoxContainer/Control" node_paths=PackedStringArray("spriteDefault")]
+[node name="PauseButton" type="TextureButton" parent="AspectRatioContainer/Control/LeftButtonsContainer/Control" node_paths=PackedStringArray("spriteDefault")]
 material = SubResource("ShaderMaterial_o48cx")
 layout_mode = 1
 anchors_preset = -1
@@ -737,7 +895,7 @@ useNonToggledModulate = true
 useDefaultSprite = true
 spriteDefault = NodePath("TextureRect")
 
-[node name="TextureRect" type="TextureRect" parent="AspectRatioContainer/Control/VBoxContainer/Control/PauseButton"]
+[node name="TextureRect" type="TextureRect" parent="AspectRatioContainer/Control/LeftButtonsContainer/Control/PauseButton"]
 layout_mode = 0
 anchor_left = 0.081044
 anchor_top = 0.0708242
@@ -748,11 +906,11 @@ texture = ExtResource("5_fkwp4")
 expand_mode = 1
 metadata/_edit_use_anchors_ = true
 
-[node name="Control2" type="Control" parent="AspectRatioContainer/Control/VBoxContainer"]
+[node name="Control2" type="Control" parent="AspectRatioContainer/Control/LeftButtonsContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="DisableCapturesButton" type="TextureButton" parent="AspectRatioContainer/Control/VBoxContainer/Control2" node_paths=PackedStringArray("spriteDefault", "spriteHovered", "spritePressed", "spriteDisabled", "spriteDefaultToggled", "spriteHoveredToggled", "spritePressedToggled", "spriteDisabledToggled")]
+[node name="DisableCapturesButton" type="TextureButton" parent="AspectRatioContainer/Control/LeftButtonsContainer/Control2" node_paths=PackedStringArray("spriteDefault", "spriteHovered", "spritePressed", "spriteDisabled", "spriteDefaultToggled", "spriteHoveredToggled", "spritePressedToggled", "spriteDisabledToggled")]
 material = SubResource("ShaderMaterial_0o055")
 layout_mode = 1
 anchors_preset = -1
@@ -801,7 +959,7 @@ spriteHoveredToggled = NodePath("Control")
 spritePressedToggled = NodePath("Control")
 spriteDisabledToggled = NodePath("Control")
 
-[node name="TextureRect" type="TextureRect" parent="AspectRatioContainer/Control/VBoxContainer/Control2/DisableCapturesButton"]
+[node name="TextureRect" type="TextureRect" parent="AspectRatioContainer/Control/LeftButtonsContainer/Control2/DisableCapturesButton"]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.155
@@ -813,7 +971,7 @@ mouse_filter = 2
 texture = ExtResource("6_47nvh")
 expand_mode = 1
 
-[node name="TextureRect2" type="TextureRect" parent="AspectRatioContainer/Control/VBoxContainer/Control2/DisableCapturesButton"]
+[node name="TextureRect2" type="TextureRect" parent="AspectRatioContainer/Control/LeftButtonsContainer/Control2/DisableCapturesButton"]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.14625
@@ -824,7 +982,7 @@ mouse_filter = 2
 texture = ExtResource("8_f2ix7")
 expand_mode = 1
 
-[node name="Control" type="Control" parent="AspectRatioContainer/Control/VBoxContainer/Control2/DisableCapturesButton"]
+[node name="Control" type="Control" parent="AspectRatioContainer/Control/LeftButtonsContainer/Control2/DisableCapturesButton"]
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
@@ -1106,7 +1264,7 @@ expand_mode = 1
 metadata/_edit_use_anchors_ = true
 
 [node name="Piece2" type="TextureRect" parent="AspectRatioContainer/Control/GameEndMenu"]
-material = SubResource("ShaderMaterial_p1mg3")
+material = SubResource("ShaderMaterial_kgod5")
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.800614
@@ -1144,7 +1302,7 @@ vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
 
 [node name="PlayAgainButton" type="TextureButton" parent="AspectRatioContainer/Control/GameEndMenu" node_paths=PackedStringArray("spriteDefault")]
-material = SubResource("ShaderMaterial_2mnw7")
+material = SubResource("ShaderMaterial_pav1d")
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.0789998
@@ -1212,7 +1370,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="CopyReplayButton" type="TextureButton" parent="AspectRatioContainer/Control/GameEndMenu" node_paths=PackedStringArray("spriteDefault")]
-material = SubResource("ShaderMaterial_nqbmc")
+material = SubResource("ShaderMaterial_droyb")
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.0789647
@@ -1280,7 +1438,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="TextureRect" type="TextureRect" parent="AspectRatioContainer/Control/GameEndMenu"]
-material = SubResource("ShaderMaterial_nd6kx")
+material = SubResource("ShaderMaterial_3cbkt")
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.781
@@ -1303,7 +1461,7 @@ expand_mode = 1
 metadata/_edit_use_anchors_ = true
 
 [node name="SettingsButton" type="TextureButton" parent="AspectRatioContainer/Control/GameEndMenu" node_paths=PackedStringArray("spriteDefault")]
-material = SubResource("ShaderMaterial_57qi7")
+material = SubResource("ShaderMaterial_cjehb")
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.0789998
@@ -1438,8 +1596,96 @@ text = "Main Menu"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ScreenForMenu" type="ColorRect" parent="."]
-z_index = 2
+[node name="DrawOfferedMenu" type="TextureRect" parent="AspectRatioContainer/Control"]
+visible = false
+z_index = 10
+material = SubResource("ShaderMaterial_5qqrl")
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.21
+anchor_top = 0.387115
+anchor_right = 0.79
+anchor_bottom = 0.610059
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+texture = SubResource("PlaceholderTexture2D_4h3yi")
+metadata/_edit_use_anchors_ = true
+
+[node name="Control" type="Control" parent="AspectRatioContainer/Control/DrawOfferedMenu" node_paths=PackedStringArray("label")]
+layout_mode = 1
+anchor_left = 0.05
+anchor_top = 0.0513696
+anchor_right = 0.95
+anchor_bottom = 0.504994
+offset_left = -0.000160217
+offset_top = -2.51511
+offset_right = -0.000152588
+offset_bottom = -2.51511
+script = ExtResource("6_v8qg6")
+fontSize = 45.25
+label = NodePath("Label")
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="AspectRatioContainer/Control/DrawOfferedMenu/Control"]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = -0.0648645
+anchor_right = 1.0
+anchor_bottom = 0.985681
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 40
+text = "Draw Offered"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="AcceptButton" type="TextureButton" parent="AspectRatioContainer/Control/DrawOfferedMenu" node_paths=PackedStringArray("spriteDefault")]
+material = SubResource("ShaderMaterial_lnv6j")
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.0496555
+anchor_top = 0.431277
+anchor_right = 0.468998
+anchor_bottom = 0.863901
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture_normal = SubResource("GradientTexture2D_mxgtm")
+stretch_mode = 0
+script = ExtResource("14_tqa0o")
+scaleDefault = 1.0
+scaleHovered = 1.05
+scalePressed = 1.1
+scaleDisabled = 1.0
+useNonToggledScale = true
+useDefaultOuterDistances = true
+outerDistancesDefault = Vector4(0.06, 0.06, 0.06, 0.06)
+useDefaultThickness = true
+thicknessDefault = 0.075
+useDefaultOuterRadius = true
+outerRadiusDefault = 0.105
+useDefaultNoDistortLength = true
+noDistortLengthDefault = 0.245
+insideBgColDefault = Color(0.619608, 0.541176, 0.482353, 1)
+insideBgColHovered = Color(0.737255, 0.662745, 0.607843, 1)
+insideBgColPressed = Color(0.847059, 0.792157, 0.756863, 1)
+insideBgColDisabled = Color(0.454902, 0.419608, 0.396078, 1)
+useNonToggledInsideBgCol = true
+useDefaultOutsideBgCol = true
+outsideBgColDefault = Color(0, 0, 0, 0)
+useNonToggledOutsideBgCol = true
+useDefaultLineCol = true
+modulateDefault = Color(1, 1, 1, 1)
+modulateHovered = Color(1, 1, 1, 1)
+modulatePressed = Color(1, 1, 1, 1)
+modulateDisabled = Color(0.65098, 0.65098, 0.65098, 1)
+useNonToggledModulate = true
+useDefaultSprite = true
+spriteDefault = NodePath("Control/Label")
+metadata/_edit_use_anchors_ = true
+
+[node name="Control" type="Control" parent="AspectRatioContainer/Control/DrawOfferedMenu/AcceptButton" node_paths=PackedStringArray("label")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -1447,4 +1693,86 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(0, 0, 0, 0)
+script = ExtResource("6_v8qg6")
+fontSize = 30.0
+label = NodePath("Label")
+
+[node name="Label" type="Label" parent="AspectRatioContainer/Control/DrawOfferedMenu/AcceptButton/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 29
+text = "Accept"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RejectButton" type="TextureButton" parent="AspectRatioContainer/Control/DrawOfferedMenu" node_paths=PackedStringArray("spriteDefault")]
+material = SubResource("ShaderMaterial_e7o71")
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.531
+anchor_top = 0.431277
+anchor_right = 0.95
+anchor_bottom = 0.863901
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture_normal = SubResource("GradientTexture2D_mxgtm")
+stretch_mode = 0
+script = ExtResource("14_tqa0o")
+scaleDefault = 1.0
+scaleHovered = 1.05
+scalePressed = 1.1
+scaleDisabled = 1.0
+useNonToggledScale = true
+useDefaultOuterDistances = true
+outerDistancesDefault = Vector4(0.06, 0.06, 0.06, 0.06)
+useDefaultThickness = true
+thicknessDefault = 0.075
+useDefaultOuterRadius = true
+outerRadiusDefault = 0.105
+useDefaultNoDistortLength = true
+noDistortLengthDefault = 0.245
+insideBgColDefault = Color(0.619608, 0.541176, 0.482353, 1)
+insideBgColHovered = Color(0.737255, 0.662745, 0.607843, 1)
+insideBgColPressed = Color(0.847059, 0.792157, 0.756863, 1)
+insideBgColDisabled = Color(0.454902, 0.419608, 0.396078, 1)
+useNonToggledInsideBgCol = true
+useDefaultOutsideBgCol = true
+outsideBgColDefault = Color(0, 0, 0, 0)
+useNonToggledOutsideBgCol = true
+useDefaultLineCol = true
+modulateDefault = Color(1, 1, 1, 1)
+modulateHovered = Color(1, 1, 1, 1)
+modulatePressed = Color(1, 1, 1, 1)
+modulateDisabled = Color(0.65098, 0.65098, 0.65098, 1)
+useNonToggledModulate = true
+useDefaultSprite = true
+spriteDefault = NodePath("Control/Label")
+metadata/_edit_use_anchors_ = true
+
+[node name="Control" type="Control" parent="AspectRatioContainer/Control/DrawOfferedMenu/RejectButton" node_paths=PackedStringArray("label")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("6_v8qg6")
+fontSize = 30.0
+label = NodePath("Label")
+
+[node name="Label" type="Label" parent="AspectRatioContainer/Control/DrawOfferedMenu/RejectButton/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 29
+text = "Reject"
+horizontal_alignment = 1
+vertical_alignment = 1

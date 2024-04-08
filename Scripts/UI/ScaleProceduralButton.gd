@@ -117,6 +117,7 @@ func _ready():
 	buttonImprover = ButtonImprover.new(mouse_entered, mouse_exited, button_down, button_up,
 										null, null, [showDefault], [showHovered], [showPressed], 
 										[showDisabled], [], [], false)
+	showDefault()
 
 func _process(_delta):
 	buttonImprover.stepFrame()

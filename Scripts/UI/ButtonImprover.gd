@@ -9,8 +9,8 @@ var buttonIsPressed: bool = false
 var buttonIsDisabled: bool = false
 
 var buttonIsToggledOn: bool = false
+var buttonWasToggledOnBeforeBeingDisabled: bool = false
 var buttonJustToggled: bool = false #jank and bad, for internal use only
-
 
 var buttonHoveredLastFrame: bool = false
 var buttonUnhoveredLastFrame: bool = false
@@ -37,6 +37,8 @@ func pressButton():
 		buttonPressedLastFrame = true
 		if toggleOnPress:
 			buttonIsToggledOn = not buttonIsToggledOn
+			if !buttonIsDisabled:
+				buttonWasToggledOnBeforeBeingDisabled = buttonIsToggledOn
 			buttonJustToggled = true
 			if buttonIsToggledOn:
 				buttonToggledOnLastFrame = true
@@ -50,6 +52,8 @@ func unpressButton():
 		buttonUnpressedLastFrame = true
 		if not toggleOnPress:
 			buttonIsToggledOn = not buttonIsToggledOn
+			if !buttonIsDisabled:
+				buttonWasToggledOnBeforeBeingDisabled = buttonIsToggledOn
 			buttonJustToggled = true
 			if buttonIsToggledOn:
 				buttonToggledOnLastFrame = true

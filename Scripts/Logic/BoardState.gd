@@ -5,6 +5,7 @@ enum StateResult {
 	VALID,
 	WIN_WHITE,
 	WIN_BLACK,
+	DRAW,
 	START_PIECE_OUTSIDE_BOARD,
 	START_PIECE_OVERLAPS_PIECE,
 	START_NO_WHITE_KING,
@@ -15,10 +16,7 @@ enum StateResult {
 	START_NONPOSITIVE_BLACK_TIME,
 	MOVE_ONE_PIECE_MOVED_PIECE_DOESNT_EXIST,
 	MOVE_ONE_PIECE_MOVED_PIECE_WRONG_COLOR,
-	MOVE_ONE_PIECE_MOVED_PIECE_OUTSIDE_BOARD,
-	MOVE_ONE_PIECE_MOVED_PIECE_OVERLAPS_PIECE_OF_SAME_COLOR,
-	MOVE_ONE_PIECE_MOVED_PIECE_OVERLAPS_PIECE_OF_OPPOSITE_COLOR,
-	MOVE_ONE_PIECE_MOVED_PIECE_TO_INVALID_POSITION,
+	MOVE_NORMAL_MOVED_TO_PROMOTION_POSITION,
 	MOVE_PROMOTION_PROMOTED_FROM_INVALID_TYPE,
 	MOVE_PROMOTION_PROMOTED_TO_INVALID_TYPE,
 	MOVE_PROMOTION_PROMOTED_IN_INVALID_POSITION,
@@ -58,9 +56,14 @@ var capturedPieces: Array[Piece]
 var turnToMove: Piece.PieceColor
 var result: StateResult
 var previousState: BoardState
+var previousMove: Move #the move applied to the previous state to get here
 var startSettings: StartSettings
 var whiteTime: float #the latest time that white has, updated mutably
 var blackTime: float #same
+
+enum DrawState {NONE, WHITE_OFFERED, BLACK_OFFERED, WHITE_OFFERED_ACCEPTED, 
+				BLACK_OFFERED_ACCEPTED, WHITE_OFFERED_REJECTED, BLACK_OFFERED_REJECTED}
+var drawState: DrawState = DrawState.NONE #has a draw been offered
 
 var movePoints: Array[PieceLogic.PieceMovePoints]
 var piecesCanCapture: Array[Array]
@@ -68,16 +71,17 @@ var castlePieces: PieceLogic.CastlePieces
 var castlePoints: PieceLogic.CastlePoints
 
 func _init(pieces_: Array[Piece], capturedPieces_: Array[Piece], turnToMove_: Piece.PieceColor, 
-	result_: StateResult, previousState_: BoardState, movePoints_: Array[PieceLogic.PieceMovePoints], 
-	piecesCanCapture_: Array[Array], castlePieces_: PieceLogic.CastlePieces, 
-	castlePoints_: PieceLogic.CastlePoints, startSettings_: StartSettings, whiteTime_: float,
-	blackTime_: float):
+	result_: StateResult, previousState_: BoardState, previousMove_: Move, 
+	movePoints_: Array[PieceLogic.PieceMovePoints], piecesCanCapture_: Array[Array], 
+	castlePieces_: PieceLogic.CastlePieces, castlePoints_: PieceLogic.CastlePoints, 
+	startSettings_: StartSettings, whiteTime_: float, blackTime_: float, drawState_: DrawState):
 		
 	pieces = pieces_
 	capturedPieces = capturedPieces_
 	turnToMove = turnToMove_
 	result = result_
 	previousState = previousState_
+	previousMove = previousMove_
 	startSettings = startSettings_
 	whiteTime = whiteTime_
 	blackTime = blackTime_
@@ -88,20 +92,12 @@ func _init(pieces_: Array[Piece], capturedPieces_: Array[Piece], turnToMove_: Pi
 	startSettings = startSettings_
 	whiteTime = whiteTime_
 	blackTime = blackTime_
-
-func addMoveInfo():	
-	for piece: Piece in pieces:
-		var movePoints_: PieceLogic.PieceMovePoints = PieceLogic.calculateMovePoints(piece, pieces)
-		var piecesCanCapture_: Array[Piece] = PieceLogic.piecesCanCapture(piece, pieces, movePoints_)
-		movePoints.append(movePoints_)
-		piecesCanCapture.append(piecesCanCapture_)
-	
-	castlePieces = PieceLogic.availableCastlePieces(pieces, turnToMove)
-	castlePoints = PieceLogic.availableCastlePoints(pieces, turnToMove, castlePieces)
+	drawState = drawState_
 
 static func newStartingState(pieces_: Array[Piece], startSettings_: StartSettings) -> BoardState:
 	var state: BoardState = BoardState.new(pieces_, [], Piece.PieceColor.WHITE, StateResult.VALID, 
-		null, [], [], null, null, startSettings_, startSettings_.startingTime, startSettings_.startingTime)
+		null, null, [], [], null, null, startSettings_, startSettings_.startingTime, 
+		startSettings_.startingTime, DrawState.NONE)
 	state.result = BoardLogic.validateStartingState(state)
 	state.addMoveInfo()
 	return state
@@ -125,6 +121,18 @@ static func newDefaultStartingState(startSettings_: StartSettings) -> BoardState
 	var state: BoardState = BoardState.newStartingState(startPieces, startSettings_)
 	return state
 
+func addMoveInfo():
+	movePoints = []
+	piecesCanCapture = []
+	for piece: Piece in pieces:
+		var movePoints_: PieceLogic.PieceMovePoints = PieceLogic.calculateMovePoints(piece, pieces)
+		var piecesCanCapture_: Array[Piece] = PieceLogic.piecesCanCapture(piece, pieces, movePoints_)
+		movePoints.append(movePoints_)
+		piecesCanCapture.append(piecesCanCapture_)
+	
+	castlePieces = PieceLogic.availableCastlePieces(pieces, turnToMove)
+	castlePoints = PieceLogic.availableCastlePoints(pieces, turnToMove, castlePieces)
+
 func makeMove(move_: Move) -> BoardState:
 	var state: BoardState = BoardLogic.makeMove(self, move_)
 	state.addMoveInfo()
@@ -142,7 +150,27 @@ func updateTimer(newTime: float) -> void: #JANK: this is logic but isnt in board
 		blackTime = maxf(newTime, 0)
 		if blackTime == 0:
 			result = StateResult.WIN_WHITE
-			
+
+func offerDraw() -> void: #JANK: this is logic but isnt in boardlogic
+	if turnToMove == Piece.PieceColor.WHITE:
+		drawState = DrawState.WHITE_OFFERED
+	else:
+		drawState = DrawState.BLACK_OFFERED
+
+func rejectDraw() -> void: #JANK: this is logic but isnt in boardlogic
+	if drawState == DrawState.BLACK_OFFERED:
+		drawState = DrawState.BLACK_OFFERED_REJECTED
+	elif drawState == DrawState.WHITE_OFFERED:
+		drawState = DrawState.WHITE_OFFERED_REJECTED
+
+func confirmDraw() -> void: #JANK: this is logic but isnt in boardlogic
+	if drawState == DrawState.BLACK_OFFERED:
+		drawState = DrawState.BLACK_OFFERED_ACCEPTED
+		result = StateResult.DRAW
+	elif drawState == DrawState.WHITE_OFFERED:
+		drawState = DrawState.WHITE_OFFERED_ACCEPTED
+		result = StateResult.DRAW
+
 func getPreviousWhiteTime() -> float:
 	if previousState == null:
 		return startSettings.startingTime
@@ -164,8 +192,8 @@ func prepareForNext() -> BoardState:
 	for piece in capturedPieces:
 		newCapturedPieces.append(piece.duplicate())
 	
-	return BoardState.new(newPieces, newCapturedPieces, turnToMove, result, previousState, [], [], 
-		null, null, startSettings, whiteTime, blackTime)
+	return BoardState.new(newPieces, newCapturedPieces, turnToMove, result, previousState, previousMove, 
+		movePoints, piecesCanCapture, null, null, startSettings, whiteTime, blackTime, DrawState.NONE)
 
 func findPieceIndex(piece: Piece) -> int:
 	for i in range(len(pieces)):

@@ -141,14 +141,14 @@ func _process(_delta) -> void:
 		sprite.global_position = shadowRealm
 		sprite.piece = null
 	
-	if gameManager.attemptedNextState != null:
+	if gameManager.attemptedNextState != null and !gameManager.isMenuVisible():
 		addHitRadii(gameManager.attemptedNextState.pieces)
 		addMoveIndicators(gameManager.states[-1], gameManager.pieceDragging)
 		addCastleAreas(gameManager.states[-1].castlePoints)
-	elif gameManager.pieceHovering != null:
+	elif gameManager.pieceHovering != null and !gameManager.isMenuVisible():
 		addHitRadius(gameManager.pieceHovering)
 	
-	if not disableCapturesButton.buttonImprover.buttonIsToggledOn:
+	if not disableCapturesButton.buttonImprover.buttonWasToggledOnBeforeBeingDisabled:
 		addCaptureArrows(stateToRender)
 	
 	whiteTimer.text = formatTime(gameManager.states[-1].whiteTime)

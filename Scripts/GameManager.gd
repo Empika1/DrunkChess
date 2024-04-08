@@ -5,10 +5,19 @@ class_name GameManager
 @export var pieceHolder: Control
 @export var trashButton: ScaleProceduralButton
 @export var pauseButton: ScaleProceduralButton
+@export var drawButton: ScaleProceduralButton
+@export var disableCapturesButton: ScaleProceduralButton
 @export var pauseMenu: Control
+@export var pauseMenuResumeButton: ScaleProceduralButton
+@export var pauseMenuSettingsButton: ScaleProceduralButton
+@export var pauseMenuMainMenuButton: ScaleProceduralButton
+@export var drawMenu: Control
+@export var drawMenuAcceptButton: ScaleProceduralButton
+@export var drawMenuRejectButton: ScaleProceduralButton
 @export var gameEndMenu: Control
 @export var gameEndMenuTitle: Label
 @export var gameEndMenuPiece1: TextureRect
+@export var gameEndMenuPiece2: TextureRect
 @export var gameEndMenuPlayAgainButton: ScaleProceduralButton
 @export var gameEndMenuCopyReplayButton: ScaleProceduralButton
 @export var gameEndMenuCopyReplayCheckmark: TextureRect
@@ -65,18 +74,24 @@ var isPiecePlaced: bool = false
 var attemptedNextState: BoardState = null
 const dragBorder: Vector2i = Vector2i(Piece.squareSize, Piece.squareSize)
 func _process(_delta):
-	determineInfoFromMouse()
-	
-	if pieceDragging != null:
-		trashButton.enable()
-		var move: Move = getMoveBeingMade()
-		cancelOrContinueMove(move)
-	else:
-		trashButton.disable()
+	if !isMenuVisible():
+		determineInfoFromMouse()
+		
+		if pieceDragging != null:
+			trashButton.enable()
+			var move: Move = getMoveBeingMade()
+			cancelOrContinueMove(move)
+		else:
+			trashButton.disable()
 
 	updateTimer()
 	checkForPause()
+	checkForDrawOffer()
 	checkForGameEnd()
+	if pauseMenu.visible:
+		checkForActionsOnPauseMenu()
+	if drawMenu.visible:
+		checkForActionsOnDrawMenu()
 	if gameEndMenu.visible:
 		checkForActionsOnGameEndMenu()
 
@@ -148,31 +163,123 @@ func updateTimer():
 		blackTimer.updateTime(getTimeSecs())
 		states[-1].updateTimer(blackTimer.timeRemaining)
 
+func isMenuVisible():
+	return pauseMenu.visible or drawMenu.visible or gameEndMenu.visible
+
+func hideAllMenuItems():
+	pauseMenu.visible = false
+	drawMenu.visible = false
+	gameEndMenu.visible = false
+	screenForMenu.color.a = 0.
+
+var pauseButtonWasEnabled: bool
+var disableCapturesButtonWasEnabled: bool
+var trashButtonWasEnabled: bool
+var drawButtonWasEnabled: bool
+func disableAllButtons():
+	pauseButtonWasEnabled = not pauseButton.buttonImprover.buttonIsDisabled
+	disableCapturesButtonWasEnabled = not disableCapturesButton.buttonImprover.buttonIsDisabled
+	trashButtonWasEnabled = not trashButton.buttonImprover.buttonIsDisabled
+	drawButtonWasEnabled = not drawButton.buttonImprover.buttonIsDisabled
+	pauseButton.disable()
+	disableCapturesButton.disable()
+	trashButton.disable()
+	drawButton.disable()
+
+func undisableAllButtons():
+	if pauseButtonWasEnabled: pauseButton.enable()
+	if disableCapturesButtonWasEnabled: disableCapturesButton.enable()
+	if trashButtonWasEnabled: trashButton.enable()
+	if drawButtonWasEnabled: drawButton.enable()
+
+func pauseTimer():
+	whiteTimer.pause()
+	blackTimer.pause()
+
+func unpauseTimer():
+	if states[-1].turnToMove == Piece.PieceColor.WHITE:
+		whiteTimer.unpause(getTimeSecs())
+	else:
+		blackTimer.unpause(getTimeSecs())
+
 func checkForPause():
-	if pauseButton.buttonImprover.buttonUnpressedLastFrame:
+	if (pauseButton.buttonImprover.buttonUnpressedLastFrame and 
+		!pauseButton.buttonImprover.buttonIsDisabled):
+		hideAllMenuItems()
+		disableAllButtons()
+		pauseTimer()
+		
 		pauseMenu.visible = true
 		screenForMenu.color.v = 0.5
 		screenForMenu.color.a = 0.5
 
+func checkForDrawOffer():
+	if (drawButton.buttonImprover.buttonUnpressedLastFrame and
+		!drawButton.buttonImprover.buttonIsDisabled):
+		hideAllMenuItems()
+		disableAllButtons()
+		pauseTimer()
+		
+		drawMenu.visible = true
+		screenForMenu.color.v = 0.5
+		screenForMenu.color.a = 0.5
+		
+		states[-1].offerDraw()
+
 func checkForGameEnd():
+	if gameEndMenu.visible:
+		return
 	var showMenu: bool = false
 	if states[-1].result == BoardState.StateResult.WIN_WHITE:
 		gameEndMenuTitle.text = "White Wins!"
 		(gameEndMenuPiece1.material as ShaderMaterial).set_shader_parameter("frame", BoardRenderer.getPieceFrame(Piece.PieceColor.WHITE, Piece.PieceType.KING))
+		(gameEndMenuPiece2.material as ShaderMaterial).set_shader_parameter("frame", BoardRenderer.getPieceFrame(Piece.PieceColor.WHITE, Piece.PieceType.KING))
 		screenForMenu.color.v = 1.
 		showMenu = true
 	elif states[-1].result == BoardState.StateResult.WIN_BLACK:
 		gameEndMenuTitle.text = "Black Wins!"
 		(gameEndMenuPiece1.material as ShaderMaterial).set_shader_parameter("frame", BoardRenderer.getPieceFrame(Piece.PieceColor.BLACK, Piece.PieceType.KING))
+		(gameEndMenuPiece2.material as ShaderMaterial).set_shader_parameter("frame", BoardRenderer.getPieceFrame(Piece.PieceColor.BLACK, Piece.PieceType.KING))
 		screenForMenu.color.v = 0.
 		showMenu = true
+	elif states[-1].result == BoardState.StateResult.DRAW:
+		gameEndMenuTitle.text = "Draw!"
+		(gameEndMenuPiece1.material as ShaderMaterial).set_shader_parameter("frame", BoardRenderer.getPieceFrame(Piece.PieceColor.WHITE, Piece.PieceType.KING))
+		(gameEndMenuPiece2.material as ShaderMaterial).set_shader_parameter("frame", BoardRenderer.getPieceFrame(Piece.PieceColor.BLACK, Piece.PieceType.KING))
+		screenForMenu.color.v = 0.5
+		showMenu = true
 	if showMenu:
+		hideAllMenuItems()
+		disableAllButtons()
+		pauseTimer()
+		
 		gameEndMenu.visible = true
 		screenForMenu.color.a = 0.5
 
+func checkForActionsOnPauseMenu():
+	if (pauseMenuResumeButton.buttonImprover.buttonUnpressedLastFrame and
+		!pauseMenuResumeButton.buttonImprover.buttonIsDisabled):
+		undisableAllButtons()
+		hideAllMenuItems()
+		unpauseTimer()
+
+func checkForActionsOnDrawMenu():
+	if (drawMenuAcceptButton.buttonImprover.buttonUnpressedLastFrame and
+		!drawMenuAcceptButton.buttonImprover.buttonIsDisabled):
+		states[-1].confirmDraw()
+	elif (drawMenuRejectButton.buttonImprover.buttonUnpressedLastFrame and
+		!drawMenuRejectButton.buttonImprover.buttonIsDisabled):
+		states[-1].rejectDraw()
+		
+		undisableAllButtons()
+		hideAllMenuItems()
+		unpauseTimer()
+
 func checkForActionsOnGameEndMenu():
-	if gameEndMenuPlayAgainButton.buttonImprover.buttonUnpressedLastFrame:
+	if (gameEndMenuPlayAgainButton.buttonImprover.buttonUnpressedLastFrame and 
+		!gameEndMenuPlayAgainButton.buttonImprover.buttonIsDisabled):
 		get_tree().reload_current_scene()
-	elif gameEndMenuCopyReplayButton.buttonImprover.buttonUnpressedLastFrame:
+	elif (gameEndMenuCopyReplayButton.buttonImprover.buttonUnpressedLastFrame and 
+		!gameEndMenuCopyReplayButton.buttonImprover.buttonIsDisabled):
 		gameEndMenuCopyReplayCheckmark.visible = true #doesn't do anything for now
 		DisplayServer.clipboard_set("PLACEHOLDER")

@@ -9,7 +9,9 @@ static func isPieceOutsideBoard(pos: Vector2i, radius: int, maxPos: Vector2i) ->
 
 class PieceMovePoints:
 	var pieceType: Piece.PieceType
-	var piecesCanCapture: Array[Piece]
+	#var piecesCanCapture: Array[Piece]
+	func duplicate(): #overridden
+		return self
 
 class PawnMovePoints extends PieceMovePoints:
 	var verticalLowerBound: Vector2i #verticalLowerBound.y <= verticalUpperBound.y
@@ -26,6 +28,10 @@ class PawnMovePoints extends PieceMovePoints:
 		positiveDiagonalUpperBound = positiveDiagonalUpperBound_
 		negativeDiagonalLowerBound = negativeDiagonalLowerBound_
 		negativeDiagonalUpperBound = negativeDiagonalUpperBound_
+	func duplicate():
+		print("working")
+		return PawnMovePoints.new(verticalLowerBound, verticalUpperBound, positiveDiagonalLowerBound,
+			positiveDiagonalUpperBound, negativeDiagonalLowerBound, negativeDiagonalUpperBound)
 
 static func calculatePawnMovePoints(pawn: Piece, pieces: Array[Piece]) -> PawnMovePoints:
 	var verticalLowerBound: Vector2i
@@ -295,6 +301,12 @@ class KnightMovePoints extends PieceMovePoints:
 		pieceType = Piece.PieceType.KNIGHT
 		arcStarts = arcStarts_
 		arcEnds = arcEnds_
+	func duplicate():
+		var newArcStarts: Array[Vector2i] = []
+		newArcStarts.append_array(arcStarts)
+		var newArcEnds: Array[Vector2i] = []
+		newArcEnds.append_array(arcEnds)
+		return KnightMovePoints.new(newArcStarts, newArcEnds)
 
 static func calculateKnightMovePoints(knight: Piece, pieces: Array[Piece]) -> KnightMovePoints:
 	var arcStarts: Array[Vector2i] = []
@@ -455,6 +467,9 @@ class BishopMovePoints extends PieceMovePoints:
 		positiveDiagonalUpperBound = positiveDiagonalUpperBound_
 		negativeDiagonalLowerBound = negativeDiagonalLowerBound_
 		negativeDiagonalUpperBound = negativeDiagonalUpperBound_
+	func duplicate():
+		return BishopMovePoints.new(positiveDiagonalLowerBound,positiveDiagonalUpperBound, 
+			negativeDiagonalLowerBound, negativeDiagonalUpperBound)
 
 static func calculateBishopMovePoints(bishop: Piece, pieces: Array[Piece]) -> BishopMovePoints:
 	var positiveDiagonalLowerBoundX: int = maxi(Piece.hitRadius, Piece.hitRadius - bishop.pos.y + bishop.pos.x)
@@ -551,6 +566,9 @@ class RookMovePoints extends PieceMovePoints:
 		verticalUpperBound = verticalUpperBound_
 		horizontalLowerBound = horizontalLowerBound_
 		horizontalUpperBound = horizontalUpperBound_
+	func duplicate():
+		return RookMovePoints.new(verticalLowerBound, verticalUpperBound, 
+			horizontalLowerBound, horizontalUpperBound)
 
 static func calculateRookMovePoints(rook: Piece, pieces: Array[Piece]) -> RookMovePoints:
 	var verticalLowerBound: Vector2i = Vector2i(rook.pos.x, rook.hitRadius)
@@ -633,7 +651,10 @@ class QueenMovePoints extends PieceMovePoints:
 	var verticalUpperBound: Vector2i
 	var horizontalLowerBound: Vector2i #horizontalLowerBound.x <= horizontalUpperBound.x
 	var horizontalUpperBound: Vector2i
-	func _init(positiveDiagonalLowerBound_: Vector2i, positiveDiagonalUpperBound_: Vector2i, negativeDiagonalLowerBound_: Vector2i, negativeDiagonalUpperBound_: Vector2i, verticalLowerBound_: Vector2i, verticalUpperBound_: Vector2i, horizontalLowerBound_: Vector2i, horizontalUpperBound_: Vector2i):
+	func _init(positiveDiagonalLowerBound_: Vector2i, positiveDiagonalUpperBound_: Vector2i, 
+		negativeDiagonalLowerBound_: Vector2i, negativeDiagonalUpperBound_: Vector2i, 
+		verticalLowerBound_: Vector2i, verticalUpperBound_: Vector2i, 
+		horizontalLowerBound_: Vector2i, horizontalUpperBound_: Vector2i):
 		pieceType = Piece.PieceType.QUEEN
 		positiveDiagonalLowerBound = positiveDiagonalLowerBound_
 		positiveDiagonalUpperBound = positiveDiagonalUpperBound_
@@ -643,6 +664,10 @@ class QueenMovePoints extends PieceMovePoints:
 		verticalUpperBound = verticalUpperBound_
 		horizontalLowerBound = horizontalLowerBound_
 		horizontalUpperBound = horizontalUpperBound_
+	func duplicate():
+		return QueenMovePoints.new(positiveDiagonalLowerBound, positiveDiagonalUpperBound,
+			negativeDiagonalLowerBound, negativeDiagonalUpperBound, verticalLowerBound, 
+			verticalUpperBound, horizontalLowerBound, horizontalUpperBound)
 
 static func calculateQueenMovePoints(queen: Piece, pieces: Array[Piece]):
 	var bishopPoints: BishopMovePoints = calculateBishopMovePoints(queen, pieces)
@@ -731,6 +756,10 @@ class KingMovePoints extends PieceMovePoints:
 		verticalUpperBound = verticalUpperBound_
 		horizontalLowerBound = horizontalLowerBound_
 		horizontalUpperBound = horizontalUpperBound_
+	func duplicate():
+		return KingMovePoints.new(positiveDiagonalLowerBound, positiveDiagonalUpperBound,
+			negativeDiagonalLowerBound, negativeDiagonalUpperBound, verticalLowerBound, 
+			verticalUpperBound, horizontalLowerBound, horizontalUpperBound)
 
 static func calculateKingMovePoints(king: Piece, pieces: Array[Piece]) -> KingMovePoints:
 	var bishopPoints: BishopMovePoints = calculateBishopMovePoints(king, pieces)

@@ -52,15 +52,12 @@ static func validateStartingState(state: BoardState) -> BoardState.StateResult:
 		
 	return BoardState.StateResult.VALID
 
-static func validateNormalMove(state: BoardState, move: Move) -> BoardState.StateResult:
+static func validateOnePieceMove(state: BoardState, move: Move) -> BoardState.StateResult:
 	if state.result != BoardState.StateResult.VALID:
 		return state.result
 
 	if move.movedPiece.color != state.turnToMove:
 		return BoardState.StateResult.MOVE_ONE_PIECE_MOVED_PIECE_WRONG_COLOR
-		
-	if isPieceOutsideBoard(move.posMovedTo, move.movedPiece.hitRadius, Vector2i(Piece.boardSize, Piece.boardSize)):
-		return BoardState.StateResult.MOVE_ONE_PIECE_MOVED_PIECE_OUTSIDE_BOARD
 	
 	var pieceFound: bool = false
 	for piece: Piece in state.pieces:
@@ -69,25 +66,28 @@ static func validateNormalMove(state: BoardState, move: Move) -> BoardState.Stat
 			break
 	if not pieceFound:
 		return BoardState.StateResult.MOVE_ONE_PIECE_MOVED_PIECE_DOESNT_EXIST
-		
-	for piece: Piece in state.pieces:
-		if piece.valueEquals(move.movedPiece):
-			continue
-		if piece.color == move.movedPiece.color:
-			if doPiecesOverlap(piece.pos, piece.hitRadius, move.posMovedTo, move.movedPiece.hitRadius):
-				return BoardState.StateResult.MOVE_ONE_PIECE_MOVED_PIECE_OVERLAPS_PIECE_OF_SAME_COLOR
 	
+	var movePos: Vector2i = PieceLogic.closestPosCanMoveTo(move.movedPiece, state.pieces, move.posTryMovedTo, state.movePoints[state.findPieceIndex(move.movedPiece)])
 	for piece: Piece in state.pieces:
-		if piece.color != move.movedPiece.color && piece.type == Piece.PieceType.KING:
-			if doPiecesOverlap(piece.pos, piece.hitRadius, move.posMovedTo, move.movedPiece.hitRadius):
-				if move.movedPiece.color == Piece.PieceColor.WHITE:
-					return BoardState.StateResult.WIN_WHITE
-				else:
-					return BoardState.StateResult.WIN_BLACK
-	
-	if !PieceLogic.canPieceMoveTo(move.movedPiece, state.previousState.pieces, move.posMovedTo, state.previousState.movePoints[state.previousState.findPieceIndex(move.movedPiece)]):
-		return BoardState.StateResult.MOVE_ONE_PIECE_MOVED_PIECE_TO_INVALID_POSITION
+		if (piece.color != move.movedPiece.color && piece.type == Piece.PieceType.KING && 
+			doPiecesOverlap(piece.pos, piece.hitRadius, movePos, move.movedPiece.hitRadius)):
+			if move.movedPiece.color == Piece.PieceColor.WHITE:
+				return BoardState.StateResult.WIN_WHITE
+			else:
+				return BoardState.StateResult.WIN_BLACK
 
+	return BoardState.StateResult.VALID
+
+static func validateNormalMove(state: BoardState, move: Move) -> BoardState.StateResult:
+	var onePieceResult: BoardState.StateResult = validateOnePieceMove(state, move)
+	if onePieceResult != BoardState.StateResult.VALID:
+		return onePieceResult
+	
+	if Piece.isPromotionPosition(
+		PieceLogic.closestPosCanMoveTo(move.movedPiece, state.pieces, move.posTryMovedTo, state.movePoints[state.findPieceIndex(move.movedPiece)]), 
+		state.turnToMove):
+		return BoardState.StateResult.MOVE_NORMAL_MOVED_TO_PROMOTION_POSITION
+		
 	return BoardState.StateResult.VALID
 
 static func validateCastleMove(state: BoardState, move: Move) -> BoardState.StateResult:
@@ -150,15 +150,20 @@ static func validateCastleMove(state: BoardState, move: Move) -> BoardState.Stat
 	return BoardState.StateResult.VALID
 		
 static func validatePromotionMove(state: BoardState, move: Move) -> BoardState.StateResult:
+	var onePieceResult: BoardState.StateResult = validateOnePieceMove(state, move)
+	if onePieceResult != BoardState.StateResult.VALID:
+		return onePieceResult
+		
 	if move.movedPiece.type != Piece.PieceType.PAWN:
 		return BoardState.StateResult.MOVE_PROMOTION_PROMOTED_FROM_INVALID_TYPE
 	if not move.promotingTo in Piece.promotableTo:
 		return BoardState.StateResult.MOVE_PROMOTION_PROMOTED_TO_INVALID_TYPE
-	if not Piece.isPromotionPosition(move.posMovedTo, state.turnToMove):
+	if not Piece.isPromotionPosition(
+		PieceLogic.closestPosCanMoveTo(move.movedPiece, state.pieces, move.posTryMovedTo, state.movePoints[state.findPieceIndex(move.movedPiece)]), 
+		state.turnToMove):
 		return BoardState.StateResult.MOVE_PROMOTION_PROMOTED_IN_INVALID_POSITION
 	
-	var normalResult: BoardState.StateResult = validateNormalMove(state, move)
-	return normalResult
+	return BoardState.StateResult.VALID
 
 static func makeMove(state: BoardState, move: Move) -> BoardState:
 	if state.result != BoardState.StateResult.VALID:
@@ -166,20 +171,22 @@ static func makeMove(state: BoardState, move: Move) -> BoardState:
 	
 	var newState: BoardState = state.prepareForNext()
 	newState.previousState = state
+	newState.previousMove = move
 	match move.moveType:
 		Move.MoveType.NORMAL:
-			var result: BoardState.StateResult = validateNormalMove(newState, move)
-			newState.result = result
+			newState.result = validateNormalMove(newState, move)
+			var movePos: Vector2i = PieceLogic.closestPosCanMoveTo(move.movedPiece, state.pieces, 
+				move.posTryMovedTo, state.movePoints[state.findPieceIndex(move.movedPiece)])
 			for piece: Piece in newState.pieces:
 				if piece.valueEquals(move.movedPiece):
-					piece.pos = move.posMovedTo
+					piece.pos = movePos
 					piece.hasMoved = true
 			
 			var capturedPieceIndices: Array[int] = []
 			for i: int in range(newState.pieces.size()):
 				var piece: Piece = newState.pieces[i]
 				if piece.color != move.movedPiece.color:
-					if doPiecesOverlap(piece.pos, piece.hitRadius, move.posMovedTo, move.movedPiece.hitRadius):
+					if doPiecesOverlap(piece.pos, piece.hitRadius, movePos, move.movedPiece.hitRadius):
 						capturedPieceIndices.append(i)
 			
 			for i: int in range(capturedPieceIndices.size() - 1, -1, -1):
@@ -218,19 +225,20 @@ static func makeMove(state: BoardState, move: Move) -> BoardState:
 			newState.turnToMove = (1 - newState.turnToMove) as Piece.PieceColor
 			return newState
 		_:
-			var result: BoardState.StateResult = validatePromotionMove(newState, move)
-			newState.result = result
+			newState.result = validatePromotionMove(newState, move)
+			var movePos: Vector2i = PieceLogic.closestPosCanMoveTo(move.movedPiece, state.pieces, 
+				move.posTryMovedTo, state.movePoints[state.findPieceIndex(move.movedPiece)])
 			for piece: Piece in newState.pieces:
 				if piece.valueEquals(move.movedPiece):
-					piece.type = Piece.PieceType.QUEEN
-					piece.pos = move.posMovedTo
+					piece.type = move.promotingTo
+					piece.pos = movePos
 					piece.hasMoved = true
 			
 			var capturedPieceIndices: Array[int] = []
 			for i: int in range(newState.pieces.size()):
 				var piece: Piece = newState.pieces[i]
 				if piece.color != move.movedPiece.color:
-					if doPiecesOverlap(piece.pos, piece.hitRadius, move.posMovedTo, move.movedPiece.hitRadius):
+					if doPiecesOverlap(piece.pos, piece.hitRadius, movePos, move.movedPiece.hitRadius):
 						capturedPieceIndices.append(i)
 			
 			for i: int in range(capturedPieceIndices.size() - 1, -1, -1):
