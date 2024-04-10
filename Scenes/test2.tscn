@@ -10,5 +10,3 @@ idleCol = Color(0.290196, 0.290196, 0.290196, 1)
 hoveredCol = Color(0.411765, 0.411765, 0.411765, 1)
 pressedCol = Color(0.854902, 0.854902, 0.854902, 1)
 disabledCol = Color(0.113725, 0.113725, 0.113725, 1)
-toggle = true
-toggleStates = 3

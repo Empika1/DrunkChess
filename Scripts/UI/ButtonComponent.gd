@@ -1,7 +1,6 @@
-extends Control
-class_name CustomButton
+extends RefCounted
+class_name ButtonComponent
 
-@export var toggle: bool = false
 @export var toggleOnPress: bool = false
 @export var toggleStates: int = 1
 
@@ -22,12 +21,8 @@ var state: ButtonState = ButtonState.new(false, false, false, 0)
 
 signal stateUpdated(oldState: ButtonState, newState: ButtonState)
 
-func updateVisualState(_oldState: ButtonState, _newState: ButtonState):
-	pass
-
 func updateState(oldState: ButtonState, newState: ButtonState):
 	state = newState
-	updateVisualState(oldState, newState)
 	stateUpdated.emit(oldState, newState)
 
 func hover():
@@ -61,14 +56,3 @@ func disable():
 	var newState: ButtonState = state.duplicate()
 	newState.isDisabled = true
 	updateState(state, newState)
-
-func _ready():
-	mouse_entered.connect(hover)
-	mouse_exited.connect(unhover)
-
-func _input(event):	
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-		if event.is_pressed() and state.isHovered:
-			press()
-		elif !event.is_pressed():
-			unpress()

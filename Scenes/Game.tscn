@@ -30,7 +30,7 @@ shader_parameter/timeScale = 0.04
 shader_parameter/realWidth = 1152.0
 shader_parameter/realHeight = 648.0
 shader_parameter/scale = 1.4
-shader_parameter/layer1Col1 = Color(0, 0, 0, 1)
+shader_parameter/layer1Col1 = Color(0.14902, 0.188235, 0.74902, 1)
 shader_parameter/layer1Col2 = Color(1, 0.921569, 0.929412, 1)
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_ujew3"]
