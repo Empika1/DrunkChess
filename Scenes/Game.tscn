@@ -30,7 +30,7 @@ shader_parameter/timeScale = 0.04
 shader_parameter/realWidth = 1152.0
 shader_parameter/realHeight = 648.0
 shader_parameter/scale = 1.4
-shader_parameter/layer1Col1 = Color(0.231373, 0.231373, 1, 1)
+shader_parameter/layer1Col1 = Color(0, 0, 0, 1)
 shader_parameter/layer1Col2 = Color(1, 0.921569, 0.929412, 1)
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_ujew3"]
@@ -420,7 +420,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_gldiy")
 
-[node name="TextureRect" type="TextureRect" parent="."]
+[node name="Background" type="TextureRect" parent="."]
 material = SubResource("ShaderMaterial_yxwyt")
 layout_mode = 1
 anchors_preset = 15
@@ -444,7 +444,7 @@ color = Color(0, 0, 0, 0)
 
 [node name="BorderRatioSetter" type="Node" parent="." node_paths=PackedStringArray("mats")]
 script = ExtResource("1_8omxs")
-mats = [NodePath("../AspectRatioContainer/Control/MainContainer/VBoxContainer/WhiteUIContainer/WhiteCaptures"), NodePath("../AspectRatioContainer/Control/MainContainer/VBoxContainer/WhiteUIContainer/WhiteTimer"), NodePath("../AspectRatioContainer/Control/MainContainer/VBoxContainer/BoardSquare/Board/BoardBorder2"), NodePath("../TextureRect")]
+mats = [NodePath("../AspectRatioContainer/Control/MainContainer/VBoxContainer/WhiteUIContainer/WhiteCaptures"), NodePath("../AspectRatioContainer/Control/MainContainer/VBoxContainer/WhiteUIContainer/WhiteTimer"), NodePath("../AspectRatioContainer/Control/MainContainer/VBoxContainer/BoardSquare/Board/BoardBorder2"), NodePath("../Background")]
 
 [node name="BoardContainerResizer" type="Node" parent="." node_paths=PackedStringArray("boardSquare", "mainContainer")]
 script = ExtResource("1_u4wqa")
@@ -1635,7 +1635,7 @@ anchor_right = 1.0
 anchor_bottom = 0.985681
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_font_sizes/font_size = 40
+theme_override_font_sizes/font_size = 45
 text = "Draw Offered"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -1704,7 +1704,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_font_sizes/font_size = 29
+theme_override_font_sizes/font_size = 30
 text = "Accept"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -1772,7 +1772,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_font_sizes/font_size = 29
+theme_override_font_sizes/font_size = 30
 text = "Reject"
 horizontal_alignment = 1
 vertical_alignment = 1
