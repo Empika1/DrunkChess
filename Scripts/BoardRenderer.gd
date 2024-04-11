@@ -7,7 +7,7 @@ class_name BoardRenderer
 @export var whiteTimer: Label
 @export var blackCaptures: HBoxContainer
 @export var whiteCaptures: HBoxContainer
-@export var disableCapturesButton: ScaleProceduralButton
+@export var disableCapturesButton: BorderScaleButton
 
 @export var lines: TextureRect
 @export var circles: TextureRect
@@ -148,7 +148,7 @@ func _process(_delta) -> void:
 	elif gameManager.pieceHovering != null and !gameManager.isMenuVisible():
 		addHitRadius(gameManager.pieceHovering)
 	
-	if not disableCapturesButton.buttonImprover.buttonWasToggledOnBeforeBeingDisabled:
+	if disableCapturesButton.buttonComponent.state.toggleState == 0:
 		addCaptureArrows(stateToRender)
 	
 	whiteTimer.text = formatTime(gameManager.states[-1].whiteTime)

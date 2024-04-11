@@ -1,12 +1,103 @@
-[gd_scene load_steps=2 format=3 uid="uid://b42l4w2003jao"]
+[gd_scene load_steps=8 format=3 uid="uid://b42l4w2003jao"]
 
-[ext_resource type="Script" path="res://Scripts/UI/ColorChangeButton.gd" id="1_vfdqx"]
+[ext_resource type="Shader" path="res://Shaders/RoundedBorder.gdshader" id="1_n12hn"]
+[ext_resource type="Script" path="res://Scripts/UI/BorderScaleButton.gd" id="2_4jrxi"]
+[ext_resource type="Texture2D" uid="uid://8c1new0pr75s" path="res://Images/Captures.svg" id="3_bbdq0"]
+[ext_resource type="Texture2D" uid="uid://djbftsjqt8lpg" path="res://Images/NoBar.svg" id="4_pskpy"]
 
-[node name="ColorRect" type="ColorRect"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_e6kt2"]
+shader = ExtResource("1_n12hn")
+shader_parameter/outerDistances = Vector4(0.06, 0.06, 0.06, 0.06)
+shader_parameter/thickness = 0.075
+shader_parameter/outerRadius = 0.105
+shader_parameter/noDistortLength = 0.245
+shader_parameter/insideBgCol = Color(0.619608, 0.541176, 0.482353, 1)
+shader_parameter/outsideBgCol = Color(0, 0, 0, 0)
+shader_parameter/lineCol = Color(0, 0, 0, 1)
+shader_parameter/noiseScale = Vector2(1.745, 0.155)
+shader_parameter/noiseSeed = -3.88
+shader_parameter/realWidth = 89.076
+shader_parameter/realHeight = 88.543
+
+[sub_resource type="Gradient" id="Gradient_q25m6"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_jk2pj"]
+gradient = SubResource("Gradient_q25m6")
+width = 1
+height = 1
+
+[node name="DisableCapturesButton" type="TextureButton" node_paths=PackedStringArray("spriteDefault", "spriteHovered", "spritePressed", "spriteDisabled", "spriteDefaultToggled", "spriteHoveredToggled", "spritePressedToggled", "spriteDisabledToggled")]
+material = SubResource("ShaderMaterial_e6kt2")
+offset_right = 200.0
+offset_bottom = 200.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture_normal = SubResource("GradientTexture2D_jk2pj")
+stretch_mode = 0
+script = ExtResource("2_4jrxi")
+scaleDefault = 1.0
+scaleHovered = 1.1
+scalePressed = 1.2
+scaleDisabled = 1.0
+useNonToggledScale = true
+useDefaultOuterDistances = true
+outerDistancesDefault = Vector4(0.06, 0.06, 0.06, 0.06)
+useDefaultThickness = true
+thicknessDefault = 0.075
+useDefaultOuterRadius = true
+outerRadiusDefault = 0.105
+useDefaultNoDistortLength = true
+noDistortLengthDefault = 0.245
+insideBgColDefault = Color(0.619608, 0.541176, 0.482353, 1)
+insideBgColHovered = Color(0.737255, 0.662745, 0.607843, 1)
+insideBgColPressed = Color(0.847059, 0.792157, 0.756863, 1)
+insideBgColDisabled = Color(0.454902, 0.419608, 0.396078, 1)
+useNonToggledInsideBgCol = true
+useDefaultOutsideBgCol = true
+outsideBgColDefault = Color(0, 0, 0, 0)
+useNonToggledOutsideBgCol = true
+useDefaultLineCol = true
+modulateDefault = Color(1, 1, 1, 1)
+modulateHovered = Color(1, 1, 1, 1)
+modulatePressed = Color(1, 1, 1, 1)
+modulateDisabled = Color(0.65098, 0.65098, 0.65098, 1)
+useNonToggledModulate = true
+spriteDefault = NodePath("TextureRect2")
+spriteHovered = NodePath("TextureRect2")
+spritePressed = NodePath("TextureRect2")
+spriteDisabled = NodePath("TextureRect2")
+spriteDefaultToggled = NodePath("Control")
+spriteHoveredToggled = NodePath("Control")
+spritePressedToggled = NodePath("Control")
+spriteDisabledToggled = NodePath("Control")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.155
+anchor_top = 0.148859
+anchor_right = 0.852
+anchor_bottom = 0.84
+rotation = 0.0349066
+mouse_filter = 2
+texture = ExtResource("3_bbdq0")
+expand_mode = 1
+
+[node name="TextureRect2" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.14625
+anchor_top = 0.148859
+anchor_right = 0.841902
+anchor_bottom = 0.844511
+mouse_filter = 2
+texture = ExtResource("4_pskpy")
+expand_mode = 1
+
+[node name="Control" type="Control" parent="."]
+anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
-script = ExtResource("1_vfdqx")
-idleCol = Color(0.290196, 0.290196, 0.290196, 1)
-hoveredCol = Color(0.411765, 0.411765, 0.411765, 1)
-pressedCol = Color(0.854902, 0.854902, 0.854902, 1)
-disabledCol = Color(0.113725, 0.113725, 0.113725, 1)
+mouse_filter = 2

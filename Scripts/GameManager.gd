@@ -3,26 +3,26 @@ class_name GameManager
 
 @export var board: TextureRect
 @export var pieceHolder: Control
-@export var trashButton: ScaleProceduralButton
-@export var pauseButton: ScaleProceduralButton
-@export var drawButton: ScaleProceduralButton
-@export var disableCapturesButton: ScaleProceduralButton
+@export var trashButton: BorderScaleButton
+@export var pauseButton: BorderScaleButton
+@export var drawButton: BorderScaleButton
+@export var disableCapturesButton: BorderScaleButton
 @export var pauseMenu: Control
-@export var pauseMenuResumeButton: ScaleProceduralButton
-@export var pauseMenuSettingsButton: ScaleProceduralButton
-@export var pauseMenuMainMenuButton: ScaleProceduralButton
+@export var pauseMenuResumeButton: BorderScaleButton
+@export var pauseMenuSettingsButton: BorderScaleButton
+@export var pauseMenuMainMenuButton: BorderScaleButton
 @export var drawMenu: Control
-@export var drawMenuAcceptButton: ScaleProceduralButton
-@export var drawMenuRejectButton: ScaleProceduralButton
+@export var drawMenuAcceptButton: BorderScaleButton
+@export var drawMenuRejectButton: BorderScaleButton
 @export var gameEndMenu: Control
 @export var gameEndMenuTitle: Label
 @export var gameEndMenuPiece1: TextureRect
 @export var gameEndMenuPiece2: TextureRect
-@export var gameEndMenuPlayAgainButton: ScaleProceduralButton
-@export var gameEndMenuCopyReplayButton: ScaleProceduralButton
+@export var gameEndMenuPlayAgainButton: BorderScaleButton
+@export var gameEndMenuCopyReplayButton: BorderScaleButton
 @export var gameEndMenuCopyReplayCheckmark: TextureRect
-@export var gameEndMenuSettingsButton: ScaleProceduralButton
-@export var gameEndMenuMainMenuButton: ScaleProceduralButton
+@export var gameEndMenuSettingsButton: BorderScaleButton
+@export var gameEndMenuMainMenuButton: BorderScaleButton
 @export var screenForMenu: ColorRect
 
 @onready var states: Array[BoardState] = [BoardState.newDefaultStartingState(BoardState.StartSettings.new(BoardState.StartSettings.AssistMode.MOVE_ARROWS, true, 3000))]
@@ -55,7 +55,7 @@ func isMouseInCancelPosition(mousePosBoard_: Vector2i) -> bool:
 	if (mousePosBoard_.x < -dragBorder.x or mousePosBoard_.y < -dragBorder.y or 
 		mousePosBoard_.x > Piece.boardSize + dragBorder.x or mousePosBoard_.y > Piece.boardSize + dragBorder.y):
 		return true
-	if trashButton.buttonImprover.buttonIsHovered:
+	if trashButton.buttonComponent.state.isHoveredIgnoreDisable:
 		return true
 	return false
 
@@ -85,15 +85,16 @@ func _process(_delta):
 			trashButton.disable()
 
 	updateTimer()
-	checkForPause()
-	checkForDrawOffer()
 	checkForGameEnd()
-	if pauseMenu.visible:
-		checkForActionsOnPauseMenu()
-	if drawMenu.visible:
-		checkForActionsOnDrawMenu()
-	if gameEndMenu.visible:
-		checkForActionsOnGameEndMenu()
+
+func _ready():
+	pauseButton.buttonComponent.stateUpdated.connect(pause)
+	drawButton.buttonComponent.stateUpdated.connect(offerDraw)
+	pauseMenuResumeButton.buttonComponent.stateUpdated.connect(unpause)
+	drawMenuAcceptButton.buttonComponent.stateUpdated.connect(acceptDraw)
+	drawMenuRejectButton.buttonComponent.stateUpdated.connect(rejectDraw)
+	gameEndMenuPlayAgainButton.buttonComponent.stateUpdated.connect(playAgain)
+	gameEndMenuCopyReplayButton.buttonComponent.stateUpdated.connect(copyReplay)
 
 func determineInfoFromMouse():
 	#determine hovered piece
@@ -177,10 +178,10 @@ var disableCapturesButtonWasEnabled: bool
 var trashButtonWasEnabled: bool
 var drawButtonWasEnabled: bool
 func disableAllButtons():
-	pauseButtonWasEnabled = not pauseButton.buttonImprover.buttonIsDisabled
-	disableCapturesButtonWasEnabled = not disableCapturesButton.buttonImprover.buttonIsDisabled
-	trashButtonWasEnabled = not trashButton.buttonImprover.buttonIsDisabled
-	drawButtonWasEnabled = not drawButton.buttonImprover.buttonIsDisabled
+	pauseButtonWasEnabled = not pauseButton.buttonComponent.state.isDisabled
+	disableCapturesButtonWasEnabled = not disableCapturesButton.buttonComponent.state.isDisabled
+	trashButtonWasEnabled = not trashButton.buttonComponent.state.isDisabled
+	drawButtonWasEnabled = not drawButton.buttonComponent.state.isDisabled
 	pauseButton.disable()
 	disableCapturesButton.disable()
 	trashButton.disable()
@@ -202,9 +203,8 @@ func unpauseTimer():
 	else:
 		blackTimer.unpause(getTimeSecs())
 
-func checkForPause():
-	if (pauseButton.buttonImprover.buttonUnpressedLastFrame and 
-		!pauseButton.buttonImprover.buttonIsDisabled):
+func pause(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.ButtonState):
+	if ButtonComponent.justReleased(oldState, newState):
 		hideAllMenuItems()
 		disableAllButtons()
 		pauseTimer()
@@ -213,9 +213,8 @@ func checkForPause():
 		screenForMenu.color.v = 0.5
 		screenForMenu.color.a = 0.5
 
-func checkForDrawOffer():
-	if (drawButton.buttonImprover.buttonUnpressedLastFrame and
-		!drawButton.buttonImprover.buttonIsDisabled):
+func offerDraw(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.ButtonState):
+	if ButtonComponent.justReleased(oldState, newState):
 		hideAllMenuItems()
 		disableAllButtons()
 		pauseTimer()
@@ -256,30 +255,29 @@ func checkForGameEnd():
 		gameEndMenu.visible = true
 		screenForMenu.color.a = 0.5
 
-func checkForActionsOnPauseMenu():
-	if (pauseMenuResumeButton.buttonImprover.buttonUnpressedLastFrame and
-		!pauseMenuResumeButton.buttonImprover.buttonIsDisabled):
+func unpause(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.ButtonState):
+	if ButtonComponent.justReleased(oldState, newState):
 		undisableAllButtons()
 		hideAllMenuItems()
 		unpauseTimer()
 
-func checkForActionsOnDrawMenu():
-	if (drawMenuAcceptButton.buttonImprover.buttonUnpressedLastFrame and
-		!drawMenuAcceptButton.buttonImprover.buttonIsDisabled):
+func acceptDraw(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.ButtonState):
+	if ButtonComponent.justReleased(oldState, newState):
 		states[-1].confirmDraw()
-	elif (drawMenuRejectButton.buttonImprover.buttonUnpressedLastFrame and
-		!drawMenuRejectButton.buttonImprover.buttonIsDisabled):
+
+func rejectDraw(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.ButtonState):
+	if ButtonComponent.justReleased(oldState, newState):
 		states[-1].rejectDraw()
 		
 		undisableAllButtons()
 		hideAllMenuItems()
 		unpauseTimer()
 
-func checkForActionsOnGameEndMenu():
-	if (gameEndMenuPlayAgainButton.buttonImprover.buttonUnpressedLastFrame and 
-		!gameEndMenuPlayAgainButton.buttonImprover.buttonIsDisabled):
+func playAgain(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.ButtonState):
+	if ButtonComponent.justReleased(oldState, newState):
 		get_tree().reload_current_scene()
-	elif (gameEndMenuCopyReplayButton.buttonImprover.buttonUnpressedLastFrame and 
-		!gameEndMenuCopyReplayButton.buttonImprover.buttonIsDisabled):
+
+func copyReplay(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.ButtonState):
+	if ButtonComponent.justReleased(oldState, newState):
 		gameEndMenuCopyReplayCheckmark.visible = true #doesn't do anything for now
 		DisplayServer.clipboard_set("PLACEHOLDER")

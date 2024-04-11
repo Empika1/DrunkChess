@@ -15,10 +15,10 @@
 [ext_resource type="Shader" path="res://Shaders/Arrows.gdshader" id="7_pwngt"]
 [ext_resource type="Texture2D" uid="uid://djbftsjqt8lpg" path="res://Images/NoBar.svg" id="8_f2ix7"]
 [ext_resource type="Shader" path="res://Shaders/RoundedBorder.gdshader" id="11_6jtdc"]
-[ext_resource type="Script" path="res://Scripts/UI/ScaleProceduralButton.gd" id="14_tqa0o"]
 [ext_resource type="Texture2D" uid="uid://cg74akejbk1k2" path="res://Images/Trash.svg" id="15_lbb2d"]
 [ext_resource type="Script" path="res://Scripts/GameManager.gd" id="15_uqtdi"]
 [ext_resource type="Texture2D" uid="uid://ds1ut1aihbx7p" path="res://Images/Draw.svg" id="16_mab2a"]
+[ext_resource type="Script" path="res://Scripts/UI/BorderScaleButton.gd" id="17_4023s"]
 [ext_resource type="Texture2D" uid="uid://ddjaagorggh0v" path="res://Images/Checkmark.svg" id="19_jxywh"]
 [ext_resource type="Shader" path="res://Shaders/SpriteSheetSlicer.gdshader" id="19_te1wm"]
 [ext_resource type="Texture2D" uid="uid://bchoq8kvi7fty" path="res://Images/Pieces.svg" id="20_ml8gx"]
@@ -164,12 +164,12 @@ shader_parameter/noiseSeed = -3.88
 shader_parameter/realWidth = 89.076
 shader_parameter/realHeight = 88.543
 
-[sub_resource type="Gradient" id="Gradient_q25m6"]
+[sub_resource type="Gradient" id="Gradient_8b8bc"]
 offsets = PackedFloat32Array(0)
 colors = PackedColorArray(0, 0, 0, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_mxgtm"]
-gradient = SubResource("Gradient_q25m6")
+gradient = SubResource("Gradient_8b8bc")
 width = 1
 height = 1
 
@@ -719,7 +719,7 @@ theme_override_constants/separation = 0
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="TrashButton" type="TextureButton" parent="AspectRatioContainer/Control/RightButtonsContainer/Control" node_paths=PackedStringArray("spriteDefault", "spriteHovered", "spritePressed", "spriteDisabled")]
+[node name="TrashButton" type="TextureButton" parent="AspectRatioContainer/Control/RightButtonsContainer/Control"]
 material = SubResource("ShaderMaterial_e8xod")
 layout_mode = 1
 anchors_preset = 15
@@ -731,71 +731,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 texture_normal = SubResource("GradientTexture2D_mxgtm")
 stretch_mode = 0
-script = ExtResource("14_tqa0o")
-scaleDefault = 1.0
-scaleHovered = 1.1
-scalePressed = 1.2
-scaleDisabled = 1.0
-useNonToggledScale = true
-useDefaultOuterDistances = true
-outerDistancesDefault = Vector4(0.06, 0.06, 0.06, 0.06)
-useDefaultThickness = true
-thicknessDefault = 0.075
-useDefaultOuterRadius = true
-outerRadiusDefault = 0.105
-useDefaultNoDistortLength = true
-noDistortLengthDefault = 0.245
-insideBgColDefault = Color(0.619608, 0.541176, 0.482353, 1)
-insideBgColHovered = Color(0.737255, 0.662745, 0.607843, 1)
-insideBgColPressed = Color(0.847059, 0.792157, 0.756863, 1)
-insideBgColDisabled = Color(0.454902, 0.419608, 0.396078, 1)
-useNonToggledInsideBgCol = true
-useDefaultOutsideBgCol = true
-outsideBgColDefault = Color(0, 0, 0, 0)
-useNonToggledOutsideBgCol = true
-useDefaultLineCol = true
-modulateDefault = Color(1, 1, 1, 1)
-modulateHovered = Color(1, 1, 1, 1)
-modulatePressed = Color(1, 1, 1, 1)
-modulateDisabled = Color(0.65098, 0.65098, 0.65098, 1)
-useNonToggledModulate = true
-spriteDefault = NodePath("TextureRect")
-spriteHovered = NodePath("TextureRect")
-spritePressed = NodePath("TextureRect")
-spriteDisabled = NodePath("TextureRect")
-useNonToggledSprite = true
-
-[node name="TextureRect" type="TextureRect" parent="AspectRatioContainer/Control/RightButtonsContainer/Control/TrashButton"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.127904
-anchor_top = 0.149116
-anchor_right = 0.858241
-anchor_bottom = 0.879453
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-texture = ExtResource("15_lbb2d")
-expand_mode = 1
-metadata/_edit_use_anchors_ = true
-
-[node name="Control2" type="Control" parent="AspectRatioContainer/Control/RightButtonsContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="OfferDrawButton" type="TextureButton" parent="AspectRatioContainer/Control/RightButtonsContainer/Control2" node_paths=PackedStringArray("spriteDefault")]
-material = SubResource("ShaderMaterial_2es3q")
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-texture_normal = SubResource("GradientTexture2D_mxgtm")
-stretch_mode = 0
-script = ExtResource("14_tqa0o")
+script = ExtResource("17_4023s")
 scaleDefault = 1.0
 scaleHovered = 1.1
 scalePressed = 1.2
@@ -824,7 +760,66 @@ modulatePressed = Color(1, 1, 1, 1)
 modulateDisabled = Color(0.65098, 0.65098, 0.65098, 1)
 useNonToggledModulate = true
 useDefaultSprite = true
-spriteDefault = NodePath("TextureRect2")
+
+[node name="TextureRect" type="TextureRect" parent="AspectRatioContainer/Control/RightButtonsContainer/Control/TrashButton"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.127904
+anchor_top = 0.149116
+anchor_right = 0.858241
+anchor_bottom = 0.879453
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("15_lbb2d")
+expand_mode = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Control2" type="Control" parent="AspectRatioContainer/Control/RightButtonsContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="OfferDrawButton" type="TextureButton" parent="AspectRatioContainer/Control/RightButtonsContainer/Control2"]
+material = SubResource("ShaderMaterial_2es3q")
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture_normal = SubResource("GradientTexture2D_mxgtm")
+stretch_mode = 0
+script = ExtResource("17_4023s")
+scaleDefault = 1.0
+scaleHovered = 1.1
+scalePressed = 1.2
+scaleDisabled = 1.0
+useNonToggledScale = true
+useDefaultOuterDistances = true
+outerDistancesDefault = Vector4(0.06, 0.06, 0.06, 0.06)
+useDefaultThickness = true
+thicknessDefault = 0.075
+useDefaultOuterRadius = true
+outerRadiusDefault = 0.105
+useDefaultNoDistortLength = true
+noDistortLengthDefault = 0.245
+insideBgColDefault = Color(0.619608, 0.541176, 0.482353, 1)
+insideBgColHovered = Color(0.737255, 0.662745, 0.607843, 1)
+insideBgColPressed = Color(0.847059, 0.792157, 0.756863, 1)
+insideBgColDisabled = Color(0.454902, 0.419608, 0.396078, 1)
+useNonToggledInsideBgCol = true
+useDefaultOutsideBgCol = true
+outsideBgColDefault = Color(0, 0, 0, 0)
+useNonToggledOutsideBgCol = true
+useDefaultLineCol = true
+modulateDefault = Color(1, 1, 1, 1)
+modulateHovered = Color(1, 1, 1, 1)
+modulatePressed = Color(1, 1, 1, 1)
+modulateDisabled = Color(0.65098, 0.65098, 0.65098, 1)
+useNonToggledModulate = true
+useDefaultSprite = true
 
 [node name="TextureRect2" type="TextureRect" parent="AspectRatioContainer/Control/RightButtonsContainer/Control2/OfferDrawButton"]
 layout_mode = 1
@@ -852,7 +847,7 @@ theme_override_constants/separation = 0
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="PauseButton" type="TextureButton" parent="AspectRatioContainer/Control/LeftButtonsContainer/Control" node_paths=PackedStringArray("spriteDefault")]
+[node name="PauseButton" type="TextureButton" parent="AspectRatioContainer/Control/LeftButtonsContainer/Control"]
 material = SubResource("ShaderMaterial_o48cx")
 layout_mode = 1
 anchors_preset = -1
@@ -864,7 +859,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 texture_normal = SubResource("GradientTexture2D_mxgtm")
 stretch_mode = 0
-script = ExtResource("14_tqa0o")
+script = ExtResource("17_4023s")
 scaleDefault = 1.0
 scaleHovered = 1.1
 scalePressed = 1.2
@@ -893,7 +888,7 @@ modulatePressed = Color(1, 1, 1, 1)
 modulateDisabled = Color(0.65098, 0.65098, 0.65098, 1)
 useNonToggledModulate = true
 useDefaultSprite = true
-spriteDefault = NodePath("TextureRect")
+test = true
 
 [node name="TextureRect" type="TextureRect" parent="AspectRatioContainer/Control/LeftButtonsContainer/Control/PauseButton"]
 layout_mode = 0
@@ -922,7 +917,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 texture_normal = SubResource("GradientTexture2D_mxgtm")
 stretch_mode = 0
-script = ExtResource("14_tqa0o")
+script = ExtResource("17_4023s")
 scaleDefault = 1.0
 scaleHovered = 1.1
 scalePressed = 1.2
@@ -1029,7 +1024,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
 
-[node name="ResumeButton" type="TextureButton" parent="AspectRatioContainer/Control/PauseMenu" node_paths=PackedStringArray("spriteDefault")]
+[node name="ResumeButton" type="TextureButton" parent="AspectRatioContainer/Control/PauseMenu"]
 material = SubResource("ShaderMaterial_4xwog")
 layout_mode = 1
 anchors_preset = -1
@@ -1041,7 +1036,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 texture_normal = SubResource("GradientTexture2D_mxgtm")
 stretch_mode = 0
-script = ExtResource("14_tqa0o")
+script = ExtResource("17_4023s")
 scaleDefault = 1.0
 scaleHovered = 1.05
 scalePressed = 1.1
@@ -1070,7 +1065,6 @@ modulatePressed = Color(1, 1, 1, 1)
 modulateDisabled = Color(0.65098, 0.65098, 0.65098, 1)
 useNonToggledModulate = true
 useDefaultSprite = true
-spriteDefault = NodePath("Control/Label")
 metadata/_edit_use_anchors_ = true
 
 [node name="Control" type="Control" parent="AspectRatioContainer/Control/PauseMenu/ResumeButton" node_paths=PackedStringArray("label")]
@@ -1097,7 +1091,7 @@ text = "Resume"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="SettingsButton" type="TextureButton" parent="AspectRatioContainer/Control/PauseMenu" node_paths=PackedStringArray("spriteDefault")]
+[node name="SettingsButton" type="TextureButton" parent="AspectRatioContainer/Control/PauseMenu"]
 material = SubResource("ShaderMaterial_55s0b")
 layout_mode = 1
 anchors_preset = -1
@@ -1109,7 +1103,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 texture_normal = SubResource("GradientTexture2D_mxgtm")
 stretch_mode = 0
-script = ExtResource("14_tqa0o")
+script = ExtResource("17_4023s")
 scaleDefault = 1.0
 scaleHovered = 1.05
 scalePressed = 1.1
@@ -1138,7 +1132,6 @@ modulatePressed = Color(1, 1, 1, 1)
 modulateDisabled = Color(0.65098, 0.65098, 0.65098, 1)
 useNonToggledModulate = true
 useDefaultSprite = true
-spriteDefault = NodePath("Control/Label")
 metadata/_edit_use_anchors_ = true
 
 [node name="Control" type="Control" parent="AspectRatioContainer/Control/PauseMenu/SettingsButton" node_paths=PackedStringArray("label")]
@@ -1165,7 +1158,7 @@ text = "Settings"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="MainMenuButton" type="TextureButton" parent="AspectRatioContainer/Control/PauseMenu" node_paths=PackedStringArray("spriteDefault")]
+[node name="MainMenuButton" type="TextureButton" parent="AspectRatioContainer/Control/PauseMenu"]
 material = SubResource("ShaderMaterial_7dk31")
 layout_mode = 1
 anchors_preset = -1
@@ -1177,7 +1170,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 texture_normal = SubResource("GradientTexture2D_mxgtm")
 stretch_mode = 0
-script = ExtResource("14_tqa0o")
+script = ExtResource("17_4023s")
 scaleDefault = 1.0
 scaleHovered = 1.05
 scalePressed = 1.1
@@ -1206,7 +1199,6 @@ modulatePressed = Color(1, 1, 1, 1)
 modulateDisabled = Color(0.65098, 0.65098, 0.65098, 1)
 useNonToggledModulate = true
 useDefaultSprite = true
-spriteDefault = NodePath("Control/Label")
 metadata/_edit_use_anchors_ = true
 
 [node name="Control" type="Control" parent="AspectRatioContainer/Control/PauseMenu/MainMenuButton" node_paths=PackedStringArray("label")]
@@ -1301,7 +1293,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
 
-[node name="PlayAgainButton" type="TextureButton" parent="AspectRatioContainer/Control/GameEndMenu" node_paths=PackedStringArray("spriteDefault")]
+[node name="PlayAgainButton" type="TextureButton" parent="AspectRatioContainer/Control/GameEndMenu"]
 material = SubResource("ShaderMaterial_pav1d")
 layout_mode = 1
 anchors_preset = -1
@@ -1313,7 +1305,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 texture_normal = SubResource("GradientTexture2D_mxgtm")
 stretch_mode = 0
-script = ExtResource("14_tqa0o")
+script = ExtResource("17_4023s")
 scaleDefault = 1.0
 scaleHovered = 1.05
 scalePressed = 1.1
@@ -1342,7 +1334,6 @@ modulatePressed = Color(1, 1, 1, 1)
 modulateDisabled = Color(0.65098, 0.65098, 0.65098, 1)
 useNonToggledModulate = true
 useDefaultSprite = true
-spriteDefault = NodePath("Control/Label")
 metadata/_edit_use_anchors_ = true
 
 [node name="Control" type="Control" parent="AspectRatioContainer/Control/GameEndMenu/PlayAgainButton" node_paths=PackedStringArray("label")]
@@ -1369,7 +1360,7 @@ text = "Play Again"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="CopyReplayButton" type="TextureButton" parent="AspectRatioContainer/Control/GameEndMenu" node_paths=PackedStringArray("spriteDefault")]
+[node name="CopyReplayButton" type="TextureButton" parent="AspectRatioContainer/Control/GameEndMenu"]
 material = SubResource("ShaderMaterial_droyb")
 layout_mode = 1
 anchors_preset = -1
@@ -1381,7 +1372,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 texture_normal = SubResource("GradientTexture2D_mxgtm")
 stretch_mode = 0
-script = ExtResource("14_tqa0o")
+script = ExtResource("17_4023s")
 scaleDefault = 1.0
 scaleHovered = 1.05
 scalePressed = 1.1
@@ -1410,7 +1401,6 @@ modulatePressed = Color(1, 1, 1, 1)
 modulateDisabled = Color(0.65098, 0.65098, 0.65098, 1)
 useNonToggledModulate = true
 useDefaultSprite = true
-spriteDefault = NodePath("Control/Label")
 metadata/_edit_use_anchors_ = true
 
 [node name="Control" type="Control" parent="AspectRatioContainer/Control/GameEndMenu/CopyReplayButton" node_paths=PackedStringArray("label")]
@@ -1460,7 +1450,7 @@ texture = ExtResource("19_jxywh")
 expand_mode = 1
 metadata/_edit_use_anchors_ = true
 
-[node name="SettingsButton" type="TextureButton" parent="AspectRatioContainer/Control/GameEndMenu" node_paths=PackedStringArray("spriteDefault")]
+[node name="SettingsButton" type="TextureButton" parent="AspectRatioContainer/Control/GameEndMenu"]
 material = SubResource("ShaderMaterial_cjehb")
 layout_mode = 1
 anchors_preset = -1
@@ -1472,7 +1462,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 texture_normal = SubResource("GradientTexture2D_mxgtm")
 stretch_mode = 0
-script = ExtResource("14_tqa0o")
+script = ExtResource("17_4023s")
 scaleDefault = 1.0
 scaleHovered = 1.05
 scalePressed = 1.1
@@ -1501,7 +1491,6 @@ modulatePressed = Color(1, 1, 1, 1)
 modulateDisabled = Color(0.65098, 0.65098, 0.65098, 1)
 useNonToggledModulate = true
 useDefaultSprite = true
-spriteDefault = NodePath("Control/Label")
 metadata/_edit_use_anchors_ = true
 
 [node name="Control" type="Control" parent="AspectRatioContainer/Control/GameEndMenu/SettingsButton" node_paths=PackedStringArray("label")]
@@ -1528,7 +1517,7 @@ text = "Settings"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="MainMenuButton" type="TextureButton" parent="AspectRatioContainer/Control/GameEndMenu" node_paths=PackedStringArray("spriteDefault")]
+[node name="MainMenuButton" type="TextureButton" parent="AspectRatioContainer/Control/GameEndMenu"]
 material = SubResource("ShaderMaterial_api10")
 layout_mode = 1
 anchors_preset = -1
@@ -1540,7 +1529,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 texture_normal = SubResource("GradientTexture2D_mxgtm")
 stretch_mode = 0
-script = ExtResource("14_tqa0o")
+script = ExtResource("17_4023s")
 scaleDefault = 1.0
 scaleHovered = 1.05
 scalePressed = 1.1
@@ -1569,7 +1558,6 @@ modulatePressed = Color(1, 1, 1, 1)
 modulateDisabled = Color(0.65098, 0.65098, 0.65098, 1)
 useNonToggledModulate = true
 useDefaultSprite = true
-spriteDefault = NodePath("Control/Label")
 metadata/_edit_use_anchors_ = true
 
 [node name="Control" type="Control" parent="AspectRatioContainer/Control/GameEndMenu/MainMenuButton" node_paths=PackedStringArray("label")]
@@ -1641,7 +1629,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
 
-[node name="AcceptButton" type="TextureButton" parent="AspectRatioContainer/Control/DrawOfferedMenu" node_paths=PackedStringArray("spriteDefault")]
+[node name="AcceptButton" type="TextureButton" parent="AspectRatioContainer/Control/DrawOfferedMenu"]
 material = SubResource("ShaderMaterial_lnv6j")
 layout_mode = 1
 anchors_preset = -1
@@ -1653,7 +1641,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 texture_normal = SubResource("GradientTexture2D_mxgtm")
 stretch_mode = 0
-script = ExtResource("14_tqa0o")
+script = ExtResource("17_4023s")
 scaleDefault = 1.0
 scaleHovered = 1.05
 scalePressed = 1.1
@@ -1682,7 +1670,6 @@ modulatePressed = Color(1, 1, 1, 1)
 modulateDisabled = Color(0.65098, 0.65098, 0.65098, 1)
 useNonToggledModulate = true
 useDefaultSprite = true
-spriteDefault = NodePath("Control/Label")
 metadata/_edit_use_anchors_ = true
 
 [node name="Control" type="Control" parent="AspectRatioContainer/Control/DrawOfferedMenu/AcceptButton" node_paths=PackedStringArray("label")]
@@ -1709,7 +1696,7 @@ text = "Accept"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="RejectButton" type="TextureButton" parent="AspectRatioContainer/Control/DrawOfferedMenu" node_paths=PackedStringArray("spriteDefault")]
+[node name="RejectButton" type="TextureButton" parent="AspectRatioContainer/Control/DrawOfferedMenu"]
 material = SubResource("ShaderMaterial_e7o71")
 layout_mode = 1
 anchors_preset = -1
@@ -1721,7 +1708,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 texture_normal = SubResource("GradientTexture2D_mxgtm")
 stretch_mode = 0
-script = ExtResource("14_tqa0o")
+script = ExtResource("17_4023s")
 scaleDefault = 1.0
 scaleHovered = 1.05
 scalePressed = 1.1
@@ -1750,7 +1737,6 @@ modulatePressed = Color(1, 1, 1, 1)
 modulateDisabled = Color(0.65098, 0.65098, 0.65098, 1)
 useNonToggledModulate = true
 useDefaultSprite = true
-spriteDefault = NodePath("Control/Label")
 metadata/_edit_use_anchors_ = true
 
 [node name="Control" type="Control" parent="AspectRatioContainer/Control/DrawOfferedMenu/RejectButton" node_paths=PackedStringArray("label")]

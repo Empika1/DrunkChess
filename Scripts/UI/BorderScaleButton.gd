@@ -111,6 +111,8 @@ class_name BorderScaleButton
 @export var spritePressedToggled: Control
 @export var spriteDisabledToggled: Control
 
+@export var test: bool
+
 var buttonComponent: ButtonComponent = ButtonComponent.new()
 
 func _ready():
@@ -120,22 +122,33 @@ func _ready():
 	
 	mouse_entered.connect(buttonComponent.hover)
 	mouse_exited.connect(buttonComponent.unhover)
+	visibility_changed.connect(
+		func(): 
+			if !is_visible_in_tree():
+				buttonComponent.unpress()
+				buttonComponent.unhover())
 
 func _input(event):	
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.is_pressed() and buttonComponent.state.isHovered:
-			buttonComponent.press()
+			if !buttonComponent.state.isPressed:
+				buttonComponent.press()
 		elif !event.is_pressed():
-			buttonComponent.unpress()
+			if buttonComponent.state.isPressed:
+				buttonComponent.unpress()
 
 func updateVisuals(_oldState: ButtonComponent.ButtonState, newState: ButtonComponent.ButtonState):
 	if newState.isDisabled:
+		if test: print("disabled")
 		showDisabled(newState)
 	elif newState.isPressed:
+		if test: print("pressed")
 		showPressed(newState)
 	elif newState.isHovered:
+		if test: print("hovered")
 		showHovered(newState)
 	else:
+		if test: print("idles")
 		showDefault(newState)
 
 func showDefault(state: ButtonComponent.ButtonState):
@@ -379,7 +392,7 @@ func showOneSprite(sprite: Control):
 	if spriteHoveredToggled != null: spriteHoveredToggled.visible = false
 	if spritePressedToggled != null: spritePressedToggled.visible = false
 	if spriteDisabledToggled != null: spriteDisabledToggled.visible = false
-	sprite.visible = true
+	if sprite != null: sprite.visible = true
 
 @onready var startLeftAnchor = anchor_left
 @onready var startRightAnchor = anchor_right
@@ -392,3 +405,9 @@ func setScale(scale_: float):
 	anchor_right = midpoint.x + distance.x
 	anchor_top = midpoint.y - distance.y
 	anchor_bottom = midpoint.y + distance.y
+
+func enable():
+	buttonComponent.enable()
+
+func disable():
+	buttonComponent.disable()
