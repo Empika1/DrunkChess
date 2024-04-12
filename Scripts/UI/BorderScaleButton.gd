@@ -1,4 +1,4 @@
-extends TextureButton
+extends Control
 class_name BorderScaleButton
 
 @export var useDefaultScale: bool

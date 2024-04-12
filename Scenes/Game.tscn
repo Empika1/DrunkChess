@@ -1,4 +1,4 @@
-[gd_scene load_steps=61 format=3 uid="uid://cudne81ew8j5r"]
+[gd_scene load_steps=74 format=3 uid="uid://cudne81ew8j5r"]
 
 [ext_resource type="Script" path="res://Scripts/UI/SetBorderRatio.gd" id="1_8omxs"]
 [ext_resource type="Theme" uid="uid://bhkvphjy5bskn" path="res://Themes/Main.tres" id="1_gldiy"]
@@ -164,14 +164,7 @@ shader_parameter/noiseSeed = -3.88
 shader_parameter/realWidth = 89.076
 shader_parameter/realHeight = 88.543
 
-[sub_resource type="Gradient" id="Gradient_8b8bc"]
-offsets = PackedFloat32Array(0)
-colors = PackedColorArray(0, 0, 0, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_mxgtm"]
-gradient = SubResource("Gradient_8b8bc")
-width = 1
-height = 1
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_kbbtc"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_2es3q"]
 shader = ExtResource("11_6jtdc")
@@ -187,6 +180,8 @@ shader_parameter/noiseSeed = -3.88
 shader_parameter/realWidth = 89.076
 shader_parameter/realHeight = 88.543
 
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_l4inv"]
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o48cx"]
 shader = ExtResource("11_6jtdc")
 shader_parameter/outerDistances = Vector4(0.06, 0.06, 0.06, 0.06)
@@ -201,6 +196,8 @@ shader_parameter/noiseSeed = -3.88
 shader_parameter/realWidth = 89.076
 shader_parameter/realHeight = 88.543
 
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_kn2a5"]
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0o055"]
 shader = ExtResource("11_6jtdc")
 shader_parameter/outerDistances = Vector4(0.06, 0.06, 0.06, 0.06)
@@ -214,6 +211,8 @@ shader_parameter/noiseScale = Vector2(1.745, 0.155)
 shader_parameter/noiseSeed = -3.88
 shader_parameter/realWidth = 89.076
 shader_parameter/realHeight = 88.543
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_tfwd3"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_88moo"]
 shader = ExtResource("11_6jtdc")
@@ -245,6 +244,8 @@ shader_parameter/noiseSeed = -3.88
 shader_parameter/realWidth = 384.0
 shader_parameter/realHeight = 64.0
 
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_b1x0u"]
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_55s0b"]
 shader = ExtResource("11_6jtdc")
 shader_parameter/outerDistances = Vector4(0.06, 0.06, 0.06, 0.06)
@@ -259,6 +260,8 @@ shader_parameter/noiseSeed = -4.26
 shader_parameter/realWidth = 384.0
 shader_parameter/realHeight = 64.0
 
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_uape6"]
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7dk31"]
 shader = ExtResource("11_6jtdc")
 shader_parameter/outerDistances = Vector4(0.06, 0.06, 0.06, 0.06)
@@ -272,6 +275,8 @@ shader_parameter/noiseScale = Vector2(0.82, 0.17)
 shader_parameter/noiseSeed = -0.655
 shader_parameter/realWidth = 384.0
 shader_parameter/realHeight = 64.0
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_h8vc1"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_xr311"]
 shader = ExtResource("11_6jtdc")
@@ -313,6 +318,8 @@ shader_parameter/noiseSeed = -3.88
 shader_parameter/realWidth = 384.0
 shader_parameter/realHeight = 64.0
 
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_5r0je"]
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_droyb"]
 shader = ExtResource("11_6jtdc")
 shader_parameter/outerDistances = Vector4(0.06, 0.06, 0.06, 0.06)
@@ -326,6 +333,8 @@ shader_parameter/noiseScale = Vector2(0.82, 0.17)
 shader_parameter/noiseSeed = -3.5
 shader_parameter/realWidth = 317.0
 shader_parameter/realHeight = 64.0
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_asdwq"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_3cbkt"]
 shader = ExtResource("11_6jtdc")
@@ -341,6 +350,15 @@ shader_parameter/noiseSeed = -4.045
 shader_parameter/realWidth = 63.826
 shader_parameter/realHeight = 63.751
 
+[sub_resource type="Gradient" id="Gradient_8b8bc"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_mxgtm"]
+gradient = SubResource("Gradient_8b8bc")
+width = 1
+height = 1
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_cjehb"]
 shader = ExtResource("11_6jtdc")
 shader_parameter/outerDistances = Vector4(0.06, 0.06, 0.06, 0.06)
@@ -355,6 +373,8 @@ shader_parameter/noiseSeed = -3.88
 shader_parameter/realWidth = 384.0
 shader_parameter/realHeight = 64.0
 
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_7rui5"]
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_api10"]
 shader = ExtResource("11_6jtdc")
 shader_parameter/outerDistances = Vector4(0.06, 0.06, 0.06, 0.06)
@@ -368,6 +388,8 @@ shader_parameter/noiseScale = Vector2(0.82, 0.17)
 shader_parameter/noiseSeed = 33.245
 shader_parameter/realWidth = 384.0
 shader_parameter/realHeight = 64.0
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_whwun"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_5qqrl"]
 shader = ExtResource("11_6jtdc")
@@ -397,6 +419,8 @@ shader_parameter/noiseSeed = 7.4
 shader_parameter/realWidth = 170.59
 shader_parameter/realHeight = 61.0
 
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_vrn1q"]
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_e7o71"]
 shader = ExtResource("11_6jtdc")
 shader_parameter/outerDistances = Vector4(0.06, 0.06, 0.06, 0.06)
@@ -410,6 +434,8 @@ shader_parameter/noiseScale = Vector2(0.82, -0.265)
 shader_parameter/noiseSeed = 10.035
 shader_parameter/realWidth = 170.59
 shader_parameter/realHeight = 61.0
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_l71jy"]
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -619,7 +645,7 @@ gameEndMenuPiece1 = NodePath("../../../../GameEndMenu/Piece1")
 gameEndMenuPiece2 = NodePath("../../../../GameEndMenu/Piece2")
 gameEndMenuPlayAgainButton = NodePath("../../../../GameEndMenu/PlayAgainButton")
 gameEndMenuCopyReplayButton = NodePath("../../../../GameEndMenu/CopyReplayButton")
-gameEndMenuCopyReplayCheckmark = NodePath("../../../../GameEndMenu/TextureRect/Checkmark")
+gameEndMenuCopyReplayCheckmark = NodePath("../../../../GameEndMenu/CheckmarkHolder/Checkmark")
 gameEndMenuSettingsButton = NodePath("../../../../GameEndMenu/SettingsButton")
 gameEndMenuMainMenuButton = NodePath("../../../../GameEndMenu/MainMenuButton")
 screenForMenu = NodePath("../../../../../../ScreenForMenu")
@@ -719,7 +745,7 @@ theme_override_constants/separation = 0
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="TrashButton" type="TextureButton" parent="AspectRatioContainer/Control/RightButtonsContainer/Control"]
+[node name="TrashButton" type="TextureRect" parent="AspectRatioContainer/Control/RightButtonsContainer/Control"]
 material = SubResource("ShaderMaterial_e8xod")
 layout_mode = 1
 anchors_preset = 15
@@ -729,8 +755,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-texture_normal = SubResource("GradientTexture2D_mxgtm")
-stretch_mode = 0
+texture = SubResource("PlaceholderTexture2D_kbbtc")
 script = ExtResource("17_4023s")
 scaleDefault = 1.0
 scaleHovered = 1.1
@@ -779,7 +804,7 @@ metadata/_edit_use_anchors_ = true
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="OfferDrawButton" type="TextureButton" parent="AspectRatioContainer/Control/RightButtonsContainer/Control2"]
+[node name="OfferDrawButton" type="TextureRect" parent="AspectRatioContainer/Control/RightButtonsContainer/Control2"]
 material = SubResource("ShaderMaterial_2es3q")
 layout_mode = 1
 anchors_preset = -1
@@ -789,8 +814,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-texture_normal = SubResource("GradientTexture2D_mxgtm")
-stretch_mode = 0
+texture = SubResource("PlaceholderTexture2D_l4inv")
 script = ExtResource("17_4023s")
 scaleDefault = 1.0
 scaleHovered = 1.1
@@ -847,7 +871,7 @@ theme_override_constants/separation = 0
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="PauseButton" type="TextureButton" parent="AspectRatioContainer/Control/LeftButtonsContainer/Control"]
+[node name="PauseButton" type="TextureRect" parent="AspectRatioContainer/Control/LeftButtonsContainer/Control"]
 material = SubResource("ShaderMaterial_o48cx")
 layout_mode = 1
 anchors_preset = -1
@@ -857,8 +881,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-texture_normal = SubResource("GradientTexture2D_mxgtm")
-stretch_mode = 0
+texture = SubResource("PlaceholderTexture2D_kn2a5")
 script = ExtResource("17_4023s")
 scaleDefault = 1.0
 scaleHovered = 1.1
@@ -904,7 +927,7 @@ metadata/_edit_use_anchors_ = true
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="DisableCapturesButton" type="TextureButton" parent="AspectRatioContainer/Control/LeftButtonsContainer/Control2" node_paths=PackedStringArray("spriteDefault", "spriteHovered", "spritePressed", "spriteDisabled", "spriteDefaultToggled", "spriteHoveredToggled", "spritePressedToggled", "spriteDisabledToggled")]
+[node name="DisableCapturesButton" type="TextureRect" parent="AspectRatioContainer/Control/LeftButtonsContainer/Control2" node_paths=PackedStringArray("spriteDefault", "spriteHovered", "spritePressed", "spriteDisabled", "spriteDefaultToggled", "spriteHoveredToggled", "spritePressedToggled", "spriteDisabledToggled")]
 material = SubResource("ShaderMaterial_0o055")
 layout_mode = 1
 anchors_preset = -1
@@ -914,8 +937,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-texture_normal = SubResource("GradientTexture2D_mxgtm")
-stretch_mode = 0
+texture = SubResource("PlaceholderTexture2D_tfwd3")
 script = ExtResource("17_4023s")
 scaleDefault = 1.0
 scaleHovered = 1.1
@@ -1023,7 +1045,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
 
-[node name="ResumeButton" type="TextureButton" parent="AspectRatioContainer/Control/PauseMenu"]
+[node name="ResumeButton" type="TextureRect" parent="AspectRatioContainer/Control/PauseMenu"]
 material = SubResource("ShaderMaterial_4xwog")
 layout_mode = 1
 anchors_preset = -1
@@ -1033,8 +1055,7 @@ anchor_right = 0.922
 anchor_bottom = 0.452966
 size_flags_horizontal = 3
 size_flags_vertical = 3
-texture_normal = SubResource("GradientTexture2D_mxgtm")
-stretch_mode = 0
+texture = SubResource("PlaceholderTexture2D_b1x0u")
 script = ExtResource("17_4023s")
 scaleDefault = 1.0
 scaleHovered = 1.05
@@ -1090,7 +1111,7 @@ text = "Resume"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="SettingsButton" type="TextureButton" parent="AspectRatioContainer/Control/PauseMenu"]
+[node name="SettingsButton" type="TextureRect" parent="AspectRatioContainer/Control/PauseMenu"]
 material = SubResource("ShaderMaterial_55s0b")
 layout_mode = 1
 anchors_preset = -1
@@ -1100,8 +1121,7 @@ anchor_right = 0.922
 anchor_bottom = 0.669167
 size_flags_horizontal = 3
 size_flags_vertical = 3
-texture_normal = SubResource("GradientTexture2D_mxgtm")
-stretch_mode = 0
+texture = SubResource("PlaceholderTexture2D_uape6")
 script = ExtResource("17_4023s")
 scaleDefault = 1.0
 scaleHovered = 1.05
@@ -1157,7 +1177,7 @@ text = "Settings"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="MainMenuButton" type="TextureButton" parent="AspectRatioContainer/Control/PauseMenu"]
+[node name="MainMenuButton" type="TextureRect" parent="AspectRatioContainer/Control/PauseMenu"]
 material = SubResource("ShaderMaterial_7dk31")
 layout_mode = 1
 anchors_preset = -1
@@ -1167,8 +1187,7 @@ anchor_right = 0.922
 anchor_bottom = 0.885364
 size_flags_horizontal = 3
 size_flags_vertical = 3
-texture_normal = SubResource("GradientTexture2D_mxgtm")
-stretch_mode = 0
+texture = SubResource("PlaceholderTexture2D_h8vc1")
 script = ExtResource("17_4023s")
 scaleDefault = 1.0
 scaleHovered = 1.05
@@ -1292,7 +1311,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
 
-[node name="PlayAgainButton" type="TextureButton" parent="AspectRatioContainer/Control/GameEndMenu"]
+[node name="PlayAgainButton" type="TextureRect" parent="AspectRatioContainer/Control/GameEndMenu"]
 material = SubResource("ShaderMaterial_pav1d")
 layout_mode = 1
 anchors_preset = -1
@@ -1302,8 +1321,7 @@ anchor_right = 0.92129
 anchor_bottom = 0.393998
 size_flags_horizontal = 3
 size_flags_vertical = 3
-texture_normal = SubResource("GradientTexture2D_mxgtm")
-stretch_mode = 0
+texture = SubResource("PlaceholderTexture2D_5r0je")
 script = ExtResource("17_4023s")
 scaleDefault = 1.0
 scaleHovered = 1.05
@@ -1359,7 +1377,7 @@ text = "Play Again"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="CopyReplayButton" type="TextureButton" parent="AspectRatioContainer/Control/GameEndMenu"]
+[node name="CopyReplayButton" type="TextureRect" parent="AspectRatioContainer/Control/GameEndMenu"]
 material = SubResource("ShaderMaterial_droyb")
 layout_mode = 1
 anchors_preset = -1
@@ -1369,8 +1387,7 @@ anchor_right = 0.774293
 anchor_bottom = 0.56244
 size_flags_horizontal = 3
 size_flags_vertical = 3
-texture_normal = SubResource("GradientTexture2D_mxgtm")
-stretch_mode = 0
+texture = SubResource("PlaceholderTexture2D_asdwq")
 script = ExtResource("17_4023s")
 scaleDefault = 1.0
 scaleHovered = 1.05
@@ -1426,7 +1443,7 @@ text = "Copy Replay"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="AspectRatioContainer/Control/GameEndMenu"]
+[node name="CheckmarkHolder" type="TextureRect" parent="AspectRatioContainer/Control/GameEndMenu"]
 material = SubResource("ShaderMaterial_3cbkt")
 layout_mode = 1
 anchors_preset = -1
@@ -1436,7 +1453,7 @@ anchor_right = 0.921
 anchor_bottom = 0.562
 texture = SubResource("GradientTexture2D_mxgtm")
 
-[node name="Checkmark" type="TextureRect" parent="AspectRatioContainer/Control/GameEndMenu/TextureRect"]
+[node name="Checkmark" type="TextureRect" parent="AspectRatioContainer/Control/GameEndMenu/CheckmarkHolder"]
 visible = false
 layout_mode = 1
 anchors_preset = -1
@@ -1449,7 +1466,7 @@ texture = ExtResource("19_jxywh")
 expand_mode = 1
 metadata/_edit_use_anchors_ = true
 
-[node name="SettingsButton" type="TextureButton" parent="AspectRatioContainer/Control/GameEndMenu"]
+[node name="SettingsButton" type="TextureRect" parent="AspectRatioContainer/Control/GameEndMenu"]
 material = SubResource("ShaderMaterial_cjehb")
 layout_mode = 1
 anchors_preset = -1
@@ -1459,8 +1476,7 @@ anchor_right = 0.92129
 anchor_bottom = 0.732003
 size_flags_horizontal = 3
 size_flags_vertical = 3
-texture_normal = SubResource("GradientTexture2D_mxgtm")
-stretch_mode = 0
+texture = SubResource("PlaceholderTexture2D_7rui5")
 script = ExtResource("17_4023s")
 scaleDefault = 1.0
 scaleHovered = 1.05
@@ -1516,7 +1532,7 @@ text = "Settings"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="MainMenuButton" type="TextureButton" parent="AspectRatioContainer/Control/GameEndMenu"]
+[node name="MainMenuButton" type="TextureRect" parent="AspectRatioContainer/Control/GameEndMenu"]
 material = SubResource("ShaderMaterial_api10")
 layout_mode = 1
 anchors_preset = -1
@@ -1526,8 +1542,7 @@ anchor_right = 0.92129
 anchor_bottom = 0.901006
 size_flags_horizontal = 3
 size_flags_vertical = 3
-texture_normal = SubResource("GradientTexture2D_mxgtm")
-stretch_mode = 0
+texture = SubResource("PlaceholderTexture2D_whwun")
 script = ExtResource("17_4023s")
 scaleDefault = 1.0
 scaleHovered = 1.05
@@ -1584,7 +1599,6 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="DrawOfferedMenu" type="TextureRect" parent="AspectRatioContainer/Control"]
-visible = false
 z_index = 10
 material = SubResource("ShaderMaterial_5qqrl")
 layout_mode = 1
@@ -1628,7 +1642,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
 
-[node name="AcceptButton" type="TextureButton" parent="AspectRatioContainer/Control/DrawOfferedMenu"]
+[node name="AcceptButton" type="TextureRect" parent="AspectRatioContainer/Control/DrawOfferedMenu"]
 material = SubResource("ShaderMaterial_lnv6j")
 layout_mode = 1
 anchors_preset = -1
@@ -1638,8 +1652,7 @@ anchor_right = 0.468998
 anchor_bottom = 0.863901
 size_flags_horizontal = 3
 size_flags_vertical = 3
-texture_normal = SubResource("GradientTexture2D_mxgtm")
-stretch_mode = 0
+texture = SubResource("PlaceholderTexture2D_vrn1q")
 script = ExtResource("17_4023s")
 scaleDefault = 1.0
 scaleHovered = 1.05
@@ -1690,12 +1703,12 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_font_sizes/font_size = 30
+theme_override_font_sizes/font_size = 58
 text = "Accept"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="RejectButton" type="TextureButton" parent="AspectRatioContainer/Control/DrawOfferedMenu"]
+[node name="RejectButton" type="TextureRect" parent="AspectRatioContainer/Control/DrawOfferedMenu"]
 material = SubResource("ShaderMaterial_e7o71")
 layout_mode = 1
 anchors_preset = -1
@@ -1705,8 +1718,7 @@ anchor_right = 0.95
 anchor_bottom = 0.863901
 size_flags_horizontal = 3
 size_flags_vertical = 3
-texture_normal = SubResource("GradientTexture2D_mxgtm")
-stretch_mode = 0
+texture = SubResource("PlaceholderTexture2D_l71jy")
 script = ExtResource("17_4023s")
 scaleDefault = 1.0
 scaleHovered = 1.05

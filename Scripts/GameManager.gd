@@ -183,7 +183,6 @@ func disableAllButtons():
 	trashButtonWasEnabled = not trashButton.buttonComponent.state.isDisabled
 	drawButtonWasEnabled = not drawButton.buttonComponent.state.isDisabled
 	pauseButton.disable()
-	print("pauseButtonDisable")
 	disableCapturesButton.disable()
 	trashButton.disable()
 	drawButton.disable()

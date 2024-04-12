@@ -1,0 +1,121 @@
+[gd_scene load_steps=10 format=3 uid="uid://dl1rr64si2eyw"]
+
+[ext_resource type="Theme" uid="uid://bhkvphjy5bskn" path="res://Themes/Main.tres" id="1_c8mro"]
+[ext_resource type="Shader" path="res://Shaders/Background.gdshader" id="1_iueet"]
+[ext_resource type="Shader" path="res://Shaders/RoundedBorder.gdshader" id="3_u0k3n"]
+[ext_resource type="Script" path="res://Scripts/UI/BorderScaleButton.gd" id="4_eb2ir"]
+[ext_resource type="Script" path="res://Scripts/UI/LabelScaler.gd" id="5_a8so6"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_llqsq"]
+shader = ExtResource("1_iueet")
+shader_parameter/posterizationLayers = 7.0
+shader_parameter/timeScale = 0.04
+shader_parameter/realWidth = 1152.0
+shader_parameter/realHeight = 648.0
+shader_parameter/scale = 1.4
+shader_parameter/layer1Col1 = Color(0.14902, 0.188235, 0.74902, 1)
+shader_parameter/layer1Col2 = Color(1, 0.921569, 0.929412, 1)
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_aiek0"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_u5hpe"]
+shader = ExtResource("3_u0k3n")
+shader_parameter/outerDistances = Vector4(0.06, 0.06, 0.06, 0.06)
+shader_parameter/thickness = 0.075
+shader_parameter/outerRadius = 0.17
+shader_parameter/noDistortLength = 0.245
+shader_parameter/insideBgCol = Color(0.619608, 0.541176, 0.482353, 1)
+shader_parameter/outsideBgCol = Color(0, 0, 0, 0)
+shader_parameter/lineCol = Color(0, 0, 0, 1)
+shader_parameter/noiseScale = Vector2(0.82, 0.17)
+shader_parameter/noiseSeed = 7.4
+shader_parameter/realWidth = 170.59
+shader_parameter/realHeight = 61.0
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_72g76"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_c8mro")
+
+[node name="Background" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_llqsq")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("PlaceholderTexture2D_aiek0")
+expand_mode = 2
+
+[node name="AcceptButton" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_u5hpe")
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.260417
+anchor_top = 0.430556
+anchor_right = 0.721354
+anchor_bottom = 0.74537
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = SubResource("PlaceholderTexture2D_72g76")
+script = ExtResource("4_eb2ir")
+scaleDefault = 1.0
+scaleHovered = 1.05
+scalePressed = 1.1
+scaleDisabled = 1.0
+useNonToggledScale = true
+useDefaultOuterDistances = true
+outerDistancesDefault = Vector4(0.06, 0.06, 0.06, 0.06)
+useDefaultThickness = true
+thicknessDefault = 0.075
+useDefaultOuterRadius = true
+outerRadiusDefault = 0.105
+useDefaultNoDistortLength = true
+noDistortLengthDefault = 0.245
+insideBgColDefault = Color(0.619608, 0.541176, 0.482353, 1)
+insideBgColHovered = Color(0.737255, 0.662745, 0.607843, 1)
+insideBgColPressed = Color(0.847059, 0.792157, 0.756863, 1)
+insideBgColDisabled = Color(0.454902, 0.419608, 0.396078, 1)
+useNonToggledInsideBgCol = true
+useDefaultOutsideBgCol = true
+outsideBgColDefault = Color(0, 0, 0, 0)
+useNonToggledOutsideBgCol = true
+useDefaultLineCol = true
+modulateDefault = Color(1, 1, 1, 1)
+modulateHovered = Color(1, 1, 1, 1)
+modulatePressed = Color(1, 1, 1, 1)
+modulateDisabled = Color(0.65098, 0.65098, 0.65098, 1)
+useNonToggledModulate = true
+useDefaultSprite = true
+metadata/_edit_use_anchors_ = true
+
+[node name="Control" type="Control" parent="AcceptButton" node_paths=PackedStringArray("label")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("5_a8so6")
+fontSize = 73.085
+label = NodePath("Label")
+
+[node name="Label" type="Label" parent="AcceptButton/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 73
+text = "Play"
+horizontal_alignment = 1
+vertical_alignment = 1
