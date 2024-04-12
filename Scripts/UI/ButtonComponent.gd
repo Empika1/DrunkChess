@@ -1,8 +1,8 @@
 extends RefCounted
 class_name ButtonComponent
 
-@export var toggleOnPress: bool = false
-@export var toggleStates: int = 1
+var toggleOnPress: bool = false
+var toggleStates: int = 1
 
 class ButtonState:
 	var isHoveredIgnoreDisable: bool
@@ -23,6 +23,13 @@ class ButtonState:
 	func duplicate() -> ButtonState:
 		return ButtonState.new(isHoveredIgnoreDisable, isPressedIgnoreDisable, 
 			isHovered, isPressed, isDisabled, toggleState)
+	func toString() -> String:
+		return ("isHoveredIgnoreDisable: " + str(isHoveredIgnoreDisable) + "\n"
+		+ "isPressedIgnoreDisable: " + str(isPressedIgnoreDisable) + "\n"
+		+ "isHovered: " + str(isHovered) + "\n"
+		+ "isPressed: " + str(isPressed) + "\n"
+		+ "isDisabled: " + str(isDisabled) + "\n"
+		+ "toggleState: " + str(toggleState))
 
 var state: ButtonState = ButtonState.new(false, false, false, false, false, 0)
 
@@ -41,10 +48,12 @@ static func justReleased(oldState: ButtonState, newState: ButtonState):
 static func justToggled(oldState: ButtonState, newState: ButtonState):
 	return oldState.toggleState != newState.toggleState
 
+signal stateUpdatedEarly(oldState: ButtonState, newState: ButtonState) #hacky solution to make sure some methods are called first
 signal stateUpdated(oldState: ButtonState, newState: ButtonState)
 
 func updateState(oldState: ButtonState, newState: ButtonState):
 	state = newState
+	stateUpdatedEarly.emit(oldState, newState)
 	stateUpdated.emit(oldState, newState)
 
 func hover():

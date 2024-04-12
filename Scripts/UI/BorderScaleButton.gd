@@ -111,22 +111,15 @@ class_name BorderScaleButton
 @export var spritePressedToggled: Control
 @export var spriteDisabledToggled: Control
 
-@export var test: bool
-
 var buttonComponent: ButtonComponent = ButtonComponent.new()
 
 func _ready():
 	buttonComponent.toggleStates = 2
 	buttonComponent.toggleOnPress = false
-	buttonComponent.stateUpdated.connect(updateVisuals)
+	buttonComponent.stateUpdatedEarly.connect(updateVisuals)
 	
 	mouse_entered.connect(buttonComponent.hover)
 	mouse_exited.connect(buttonComponent.unhover)
-	visibility_changed.connect(
-		func(): 
-			if !is_visible_in_tree():
-				buttonComponent.unpress()
-				buttonComponent.unhover())
 
 func _input(event):	
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
@@ -139,16 +132,12 @@ func _input(event):
 
 func updateVisuals(_oldState: ButtonComponent.ButtonState, newState: ButtonComponent.ButtonState):
 	if newState.isDisabled:
-		if test: print("disabled")
 		showDisabled(newState)
 	elif newState.isPressed:
-		if test: print("pressed")
 		showPressed(newState)
 	elif newState.isHovered:
-		if test: print("hovered")
 		showHovered(newState)
 	else:
-		if test: print("idles")
 		showDefault(newState)
 
 func showDefault(state: ButtonComponent.ButtonState):

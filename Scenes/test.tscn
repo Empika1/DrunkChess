@@ -1,8 +1,14 @@
-[gd_scene format=3 uid="uid://6ybrga46cr3v"]
+[gd_scene load_steps=3 format=3 uid="uid://6ybrga46cr3v"]
 
-[node name="Node2D" type="Node2D"]
+[ext_resource type="Script" path="res://Scripts/test2.gd" id="1_vl4o6"]
+[ext_resource type="Script" path="res://Scripts/test1.gd" id="2_os8iq"]
 
-[node name="Label" type="Label" parent="."]
-offset_right = 286.0
-offset_bottom = 23.0
-text = "ghghghghghghghghghghghghghghgh"
+[node name="Node" type="Node"]
+
+[node name="Node1" type="Node" parent="." node_paths=PackedStringArray("node2")]
+script = ExtResource("2_os8iq")
+node2 = NodePath("../Node2")
+
+[node name="Node2" type="Node" parent="." node_paths=PackedStringArray("node1")]
+script = ExtResource("1_vl4o6")
+node1 = NodePath("../Node1")

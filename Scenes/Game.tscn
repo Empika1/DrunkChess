@@ -888,7 +888,6 @@ modulatePressed = Color(1, 1, 1, 1)
 modulateDisabled = Color(0.65098, 0.65098, 0.65098, 1)
 useNonToggledModulate = true
 useDefaultSprite = true
-test = true
 
 [node name="TextureRect" type="TextureRect" parent="AspectRatioContainer/Control/LeftButtonsContainer/Control/PauseButton"]
 layout_mode = 0
