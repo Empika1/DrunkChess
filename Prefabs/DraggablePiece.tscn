@@ -12,8 +12,8 @@ shader_parameter/frame = 0
 
 [node name="TextureRect" type="TextureRect"]
 material = SubResource("ShaderMaterial_5ru4c")
-offset_right = 256.0
-offset_bottom = 256.0
+offset_right = 100.0
+offset_bottom = 100.0
 texture = ExtResource("2_7o78c")
 expand_mode = 1
 script = ExtResource("3_7k8si")

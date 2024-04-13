@@ -16,20 +16,10 @@ uniform float noiseSeed;
 uniform float realWidth;
 uniform float realHeight;
 
-//varying float aspectRatio;
-//varying float model11;
-varying float canvas11;
-//varying float screen11;
+varying float screen11;
 void vertex() {
-	//model11 = MODEL_MATRIX[1][1];
-	canvas11 = CANVAS_MATRIX[1][1];
-	//screen11 = SCREEN_MATRIX[1][1];
-	//aspectRatio = (CANVAS_MATRIX[0][0] / CANVAS_MATRIX[1][1]) * (MODEL_MATRIX[0][0] / MODEL_MATRIX[1][1]);
+	screen11 = SCREEN_MATRIX[1][1];
 }
-
-//float sampleNoise(float uv) {
-	//return (texture(noise, vec2(mod(uv * noiseScale.x + noiseSeed, 1.), 0.)).r - noiseMean) * noiseScale.y;
-//}
 
 const float noiseScaleYConst = 0.1;
 float sampleNoise(float uv) {
@@ -111,7 +101,7 @@ void fragment() {
 		circleCenter = bottomRightCircleCenter;
 	}
 	
-	float newBlur = blurC / canvas11/ realHeight * 500.;
+	float newBlur = getBlurValue(screen11, realHeight);
 	if(circleCenter != vec2(-9999.)) {
 		float dist = length(newUV - circleCenter);
 		float innerRadius = outerRadius - thickness;

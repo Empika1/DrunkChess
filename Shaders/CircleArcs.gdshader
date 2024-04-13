@@ -15,13 +15,16 @@ const int numArcs = 128;
 uniform vec2[numArcs] arcStarts;
 uniform vec2[numArcs] arcEnds;
 
-varying float canvas11;
+uniform float realWidth;
+uniform float realHeight;
+
+varying float screen11;
 void vertex() {
-	canvas11 = CANVAS_MATRIX[1][1];
+	screen11 = SCREEN_MATRIX[1][1];
 }
 
 void fragment() {
-	float blur = blurC / canvas11;
+	float blur = getBlurValue(screen11, realHeight);
 	
 	COLOR = vec4(0.);
 	

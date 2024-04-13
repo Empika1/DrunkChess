@@ -91,9 +91,8 @@ func _process(_delta) -> void:
 		
 		sprite.piece = piece
 		(sprite.material as ShaderMaterial).set_shader_parameter("frame", getPieceFrame(piece.color, piece.type))
-		sprite.scale = board.size / board.texture.get_size()
-		sprite.size = Vector2i(256, 256)
-		sprite.global_position = gameManager.boardPosToGamePos(piece.pos) - (sprite.size * sprite.scale / 2)
+		sprite.size = board.size / 8
+		sprite.global_position = gameManager.boardPosToGamePos(piece.pos) - sprite.size / 2
 	
 	var whiteCapturedPiecesSorted: Array[Piece] = []
 	var blackCapturedPiecesSorted: Array[Piece] = []

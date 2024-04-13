@@ -1,10 +1,9 @@
-[gd_scene load_steps=74 format=3 uid="uid://cudne81ew8j5r"]
+[gd_scene load_steps=76 format=3 uid="uid://cudne81ew8j5r"]
 
 [ext_resource type="Script" path="res://Scripts/UI/SetBorderRatio.gd" id="1_8omxs"]
 [ext_resource type="Theme" uid="uid://bhkvphjy5bskn" path="res://Themes/Main.tres" id="1_gldiy"]
 [ext_resource type="Shader" path="res://Shaders/Background.gdshader" id="1_gn3e1"]
 [ext_resource type="Script" path="res://Scripts/UI/BoardContainerResizer.gd" id="1_u4wqa"]
-[ext_resource type="Texture2D" uid="uid://ypsrekatbbsx" path="res://Images/Board.svg" id="2_7sewj"]
 [ext_resource type="Script" path="res://Scripts/BoardRenderer.gd" id="2_ern7e"]
 [ext_resource type="Shader" path="res://Shaders/Lines.gdshader" id="4_uql85"]
 [ext_resource type="Texture2D" uid="uid://clkdvmwwplkqy" path="res://Images/Pause.svg" id="5_fkwp4"]
@@ -12,6 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://8c1new0pr75s" path="res://Images/Captures.svg" id="6_47nvh"]
 [ext_resource type="Shader" path="res://Shaders/CircleArcs.gdshader" id="6_uw84t"]
 [ext_resource type="Script" path="res://Scripts/UI/LabelScaler.gd" id="6_v8qg6"]
+[ext_resource type="Shader" path="res://Shaders/Board.gdshader" id="7_jmsrs"]
 [ext_resource type="Shader" path="res://Shaders/Arrows.gdshader" id="7_pwngt"]
 [ext_resource type="Texture2D" uid="uid://djbftsjqt8lpg" path="res://Images/NoBar.svg" id="8_f2ix7"]
 [ext_resource type="Shader" path="res://Shaders/RoundedBorder.gdshader" id="11_6jtdc"]
@@ -63,6 +63,20 @@ shader_parameter/noiseSeed = 1.465
 shader_parameter/realWidth = 204.0
 shader_parameter/realHeight = 70.0
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_aprie"]
+shader = ExtResource("7_jmsrs")
+shader_parameter/col1 = Color(0.780392, 0.701961, 0.639216, 1)
+shader_parameter/col2 = Color(0.482353, 0.431373, 0.396078, 1)
+shader_parameter/numSquares = 8.0
+shader_parameter/numWaves = 8.0
+shader_parameter/squareOffset = Vector2(0.038, 0.038)
+shader_parameter/distort = Vector2(0.004, 0.004)
+shader_parameter/cornerRadius = null
+shader_parameter/realWidth = 496.0
+shader_parameter/realHeight = 496.0
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_3ehps"]
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_uhl4r"]
 shader = ExtResource("11_6jtdc")
 shader_parameter/outerDistances = Vector4(0.015, 0.015, 0.015, 0.015)
@@ -86,6 +100,8 @@ shader_parameter/lineEnds = PackedVector2Array()
 shader_parameter/lineColorsrg = PackedVector2Array()
 shader_parameter/lineColorsba = PackedVector2Array()
 shader_parameter/lineThicknesses = PackedFloat32Array()
+shader_parameter/realWidth = 496.0
+shader_parameter/realHeight = 496.0
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_4pcoh"]
 
@@ -95,6 +111,8 @@ shader_parameter/circleCenters = null
 shader_parameter/circleRadii = null
 shader_parameter/circleColorsrg = null
 shader_parameter/circleColorsba = null
+shader_parameter/realWidth = 496.0
+shader_parameter/realHeight = 496.0
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_d5phv"]
 
@@ -108,6 +126,8 @@ shader_parameter/circleColorsba = null
 shader_parameter/arcEndIndices = null
 shader_parameter/arcStarts = null
 shader_parameter/arcEnds = null
+shader_parameter/realWidth = 496.0
+shader_parameter/realHeight = 496.0
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_xcd1x"]
 
@@ -119,6 +139,8 @@ shader_parameter/arrowColorsrg = null
 shader_parameter/arrowColorsba = null
 shader_parameter/arrowThicknesses = null
 shader_parameter/arrowDistortPoints = null
+shader_parameter/realWidth = 496.0
+shader_parameter/realHeight = 496.0
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_kb1m1"]
 
@@ -579,8 +601,9 @@ size_flags_stretch_ratio = 7.30233
 
 [node name="Board" type="TextureRect" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/BoardSquare"]
 self_modulate = Color(1, 0.898039, 0.819608, 1)
+material = SubResource("ShaderMaterial_aprie")
 layout_mode = 2
-texture = ExtResource("2_7sewj")
+texture = SubResource("PlaceholderTexture2D_3ehps")
 expand_mode = 1
 
 [node name="BoardBorder2" type="TextureRect" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/BoardSquare/Board"]
@@ -1599,6 +1622,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="DrawOfferedMenu" type="TextureRect" parent="AspectRatioContainer/Control"]
+visible = false
 z_index = 10
 material = SubResource("ShaderMaterial_5qqrl")
 layout_mode = 1
@@ -1703,7 +1727,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_font_sizes/font_size = 58
+theme_override_font_sizes/font_size = 30
 text = "Accept"
 horizontal_alignment = 1
 vertical_alignment = 1

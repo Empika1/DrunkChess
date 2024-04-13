@@ -9,13 +9,16 @@ uniform vec2[numlines] lineColorsrg;
 uniform vec2[numlines] lineColorsba;
 uniform float[numlines] lineThicknesses;
 
-varying float canvas11;
+uniform float realWidth;
+uniform float realHeight;
+
+varying float screen11;
 void vertex() {
-	canvas11 = CANVAS_MATRIX[1][1];
+	screen11 = SCREEN_MATRIX[1][1];
 }
 
 void fragment() {
-	float blur = blurC / canvas11;
+	float blur = getBlurValue(screen11, realHeight);
 	COLOR = vec4(0.);
 	for(int i = 0; i < numlines; i++) {
 		vec4 col1 = vec4(lineColorsrg[i].xy, lineColorsba[i].xy);
