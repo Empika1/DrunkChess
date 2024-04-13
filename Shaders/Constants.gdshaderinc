@@ -1,4 +1,4 @@
-const float blurC = 75.;
+const float blurC = 15.;
 float getBlurValue(float screen11, float realHeight) {
-	return blurC * screen11 / realHeight;
+	return blurC * pow(screen11, 0.5) / realHeight;
 }

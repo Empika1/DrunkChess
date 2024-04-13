@@ -46,9 +46,8 @@ void fragment() {
 		col1 *= lineBlur(d, c, UV, blur);
 		col1 *= lineBlur(f, e, UV, blur);
 		
-		vec4 linearColor = pow(COLOR, vec4(2.3));
-		vec4 linearCol = pow(col1, vec4(2.3));
-		vec4 mixedColor = mix(linearColor, linearCol, col1.a);
-		COLOR = pow(mixedColor, vec4(1.0 / 2.3));
+		COLOR.rgb = col1.rgb + COLOR.rgb * (1. - col1.a);
+		COLOR.a = col1.a + COLOR.a * (1. - col1.a);
 	}
+	if (COLOR.a != 0.) COLOR.rgb /= COLOR.a;
 }

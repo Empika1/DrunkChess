@@ -67,9 +67,8 @@ void fragment() {
 		
 		vec4 maxCol = max(col1, col2);
 		
-		vec4 linearColor = pow(COLOR, vec4(2.3));
-		vec4 linearCol = pow(maxCol, vec4(2.3));
-		vec4 mixedColor = mix(linearColor, linearCol, maxCol.a);
-		COLOR = pow(mixedColor, vec4(1.0 / 2.3));
+		COLOR.rgb = maxCol.rgb + COLOR.rgb * (1. - maxCol.a);
+		COLOR.a = maxCol.a + COLOR.a * (1. - maxCol.a);
 	}
+	if (COLOR.a != 0.) COLOR.rgb /= COLOR.a;
 }

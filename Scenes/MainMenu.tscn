@@ -1,7 +1,8 @@
-[gd_scene load_steps=10 format=3 uid="uid://dl1rr64si2eyw"]
+[gd_scene load_steps=11 format=3 uid="uid://dl1rr64si2eyw"]
 
 [ext_resource type="Theme" uid="uid://bhkvphjy5bskn" path="res://Themes/Main.tres" id="1_c8mro"]
 [ext_resource type="Shader" path="res://Shaders/Background.gdshader" id="1_iueet"]
+[ext_resource type="Script" path="res://Scripts/MainMenuManager.gd" id="2_5hk46"]
 [ext_resource type="Shader" path="res://Shaders/RoundedBorder.gdshader" id="3_u0k3n"]
 [ext_resource type="Script" path="res://Scripts/UI/BorderScaleButton.gd" id="4_eb2ir"]
 [ext_resource type="Script" path="res://Scripts/UI/LabelScaler.gd" id="5_a8so6"]
@@ -29,12 +30,12 @@ shader_parameter/outsideBgCol = Color(0, 0, 0, 0)
 shader_parameter/lineCol = Color(0, 0, 0, 1)
 shader_parameter/noiseScale = Vector2(0.82, 0.17)
 shader_parameter/noiseSeed = 7.4
-shader_parameter/realWidth = 170.59
-shader_parameter/realHeight = 61.0
+shader_parameter/realWidth = 530.999
+shader_parameter/realHeight = 203.999
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_72g76"]
 
-[node name="MainMenu" type="Control"]
+[node name="MainMenu" type="Control" node_paths=PackedStringArray("playButton")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -42,6 +43,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_c8mro")
+script = ExtResource("2_5hk46")
+playButton = NodePath("PlayButton")
 
 [node name="Background" type="TextureRect" parent="."]
 material = SubResource("ShaderMaterial_llqsq")
@@ -54,7 +57,7 @@ grow_vertical = 2
 texture = SubResource("PlaceholderTexture2D_aiek0")
 expand_mode = 2
 
-[node name="AcceptButton" type="TextureRect" parent="."]
+[node name="PlayButton" type="TextureRect" parent="."]
 material = SubResource("ShaderMaterial_u5hpe")
 layout_mode = 1
 anchors_preset = -1
@@ -96,7 +99,7 @@ useNonToggledModulate = true
 useDefaultSprite = true
 metadata/_edit_use_anchors_ = true
 
-[node name="Control" type="Control" parent="AcceptButton" node_paths=PackedStringArray("label")]
+[node name="Control" type="Control" parent="PlayButton" node_paths=PackedStringArray("label")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -108,7 +111,7 @@ script = ExtResource("5_a8so6")
 fontSize = 73.085
 label = NodePath("Label")
 
-[node name="Label" type="Label" parent="AcceptButton/Control"]
+[node name="Label" type="Label" parent="PlayButton/Control"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

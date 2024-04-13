@@ -29,17 +29,17 @@ void fragment() {
 		float distanceSquared = l2(UV - circleCenters[i]);
 		
 		if(distanceSquared <= radiusSquared) {
-			col.a *= 1.;
+			col *= 1.;
 		}
 		else if(distanceSquared <= radiusBlurSquared) {
-			col.a *= sqrt(1. - (distanceSquared - radiusSquared) / (radiusBlurSquared - radiusSquared)); 
+			col *= sqrt(1. - (distanceSquared - radiusSquared) / (radiusBlurSquared - radiusSquared)); 
 		}
 		else {
-			col.a *= 0.;
+			col *= 0.;
 		}
-		vec4 linearColor = pow(COLOR, vec4(2.3));
-		vec4 linearCol = pow(col, vec4(2.3));
-		vec4 mixedColor = mix(linearColor, linearCol, col.a);
-		COLOR = pow(mixedColor, vec4(1.0 / 2.3));
+		
+		COLOR.rgb = col.rgb + COLOR.rgb * (1. - col.a);
+		COLOR.a = col.a + COLOR.a * (1. - col.a);
 	}
+	if (COLOR.a != 0.) COLOR.rgb /= COLOR.a;
 }

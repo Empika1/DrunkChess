@@ -40,16 +40,16 @@ void fragment() {
 		float distanceSquared = l2(UV - center);
 		
 		if(distanceSquared <= outerRadiusSquared && distanceSquared >= innerRadiusSquared) {
-			col.a *= 1.;
+			col *= 1.;
 		}
 		else if(distanceSquared > outerRadiusSquared && distanceSquared <= outerRadiusBlurSquared) {
-			col.a *= sqrt(1. - (distanceSquared - outerRadiusSquared) / (outerRadiusBlurSquared - outerRadiusSquared)); 
+			col *= sqrt(1. - (distanceSquared - outerRadiusSquared) / (outerRadiusBlurSquared - outerRadiusSquared)); 
 		}
 		else if(distanceSquared < innerRadiusSquared && distanceSquared >= innerRadiusBlurSquared) {
-			col.a *= sqrt(1. - (innerRadiusSquared - distanceSquared) / (innerRadiusSquared - innerRadiusBlurSquared)); 
+			col *= sqrt(1. - (innerRadiusSquared - distanceSquared) / (innerRadiusSquared - innerRadiusBlurSquared)); 
 		}
 		else {
-			col.a *= 0.;
+			col *= 0.;
 		}
 		
 		int j = 0;
@@ -62,14 +62,13 @@ void fragment() {
 			vec2 arcEnd = arcEnds[j];
 			if(!aClockwise(UV - center, arcStart - center) && aClockwise(UV - center, arcEnd - center))
 			{
-				col.a *= 0.;
+				col *= 0.;
 				break;
 			}
 		}
 		
-		vec4 linearColor = pow(COLOR, vec4(2.3));
-		vec4 linearCol = pow(col, vec4(2.3));
-		vec4 mixedColor = mix(linearColor, linearCol, col.a);
-		COLOR = pow(mixedColor, vec4(1.0 / 2.3));
+		COLOR.rgb = col.rgb + COLOR.rgb * (1. - col.a);
+		COLOR.a = col.a + COLOR.a * (1. - col.a);
 	}
+	if (COLOR.a != 0.) COLOR.rgb /= COLOR.a;
 }

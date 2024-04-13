@@ -91,10 +91,12 @@ func _ready():
 	pauseButton.buttonComponent.stateUpdated.connect(pause)
 	drawButton.buttonComponent.stateUpdated.connect(offerDraw)
 	pauseMenuResumeButton.buttonComponent.stateUpdated.connect(unpause)
+	pauseMenuMainMenuButton.buttonComponent.stateUpdated.connect(goToMainMenu)
 	drawMenuAcceptButton.buttonComponent.stateUpdated.connect(acceptDraw)
 	drawMenuRejectButton.buttonComponent.stateUpdated.connect(rejectDraw)
 	gameEndMenuPlayAgainButton.buttonComponent.stateUpdated.connect(playAgain)
 	gameEndMenuCopyReplayButton.buttonComponent.stateUpdated.connect(copyReplay)
+	gameEndMenuMainMenuButton.buttonComponent.stateUpdated.connect(goToMainMenu)
 
 func determineInfoFromMouse():
 	#determine hovered piece
@@ -260,6 +262,10 @@ func unpause(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.Bu
 		undisableAllButtons()
 		hideAllMenuItems()
 		unpauseTimer()
+
+func goToMainMenu(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.ButtonState):
+	if ButtonComponent.justReleased(oldState, newState):
+		get_tree().change_scene_to_file("res://Scenes/MainMenu.tscn")
 
 func acceptDraw(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.ButtonState):
 	if ButtonComponent.justReleased(oldState, newState):
