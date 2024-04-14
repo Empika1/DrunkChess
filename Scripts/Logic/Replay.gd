@@ -1,148 +1,150 @@
 extends RefCounted
 class_name Replay
 
-static func pieceToDict(piece: Piece) -> Dictionary:
-	return {
-		"pos": piece.pos,
-		"type": piece.type,
-		"color": piece.color,
-		"hasMoved": piece.hasMoved,
-	}
+static func pieceToArr(piece: Piece) -> Array:
+	return [
+		piece.pos,
+		piece.type,
+		piece.color,
+		piece.hasMoved,
+	]
 
-static func dictToPiece(dict: Dictionary) -> Piece:
-	if (!dict.has("pos") or !dict["pos"] is Vector2i or 
-		!dict.has("type") or !dict["type"] is Piece.PieceType or 
-		!dict.has("color") or !dict["color"] is Piece.PieceColor or 
-		!dict.has("hasMoved") or !dict["hasMoved"] is bool):
+static func arrToPiece(arr: Array) -> Piece:
+	if (len(arr) < 4 or
+		!arr[0] is Vector2i or 
+		!arr[1] is Piece.PieceType or 
+		!arr[2] is Piece.PieceColor or 
+		!arr[3] is bool):
 		return null
 	return Piece.new(
-		dict["pos"],
-		dict["type"],
-		dict["color"],
-		dict["hasMoved"]
+		arr[0],
+		arr[1],
+		arr[2],
+		arr[3]
 	)
 
-static func startSettingsToDict(startSettings: BoardState.StartSettings):
-	return {
-		"isTimed": startSettings.isTimed,
-		"startingTime": startSettings.startingTime,
-		"assistMode": startSettings.assistMode,
-	}
+static func startSettingsToArr(startSettings: BoardState.StartSettings) -> Array:
+	return [
+		startSettings.isTimed,
+		startSettings.startingTime,
+		startSettings.assistMode,
+	]
 
-static func dictToStartSettings(dict: Dictionary) -> BoardState.StartSettings:
-	if (!dict.has("isTimed") or !dict["isTimed"] is bool or 
-		!dict.has("startingTime") or !dict["startingTime"] is float or 
-		!dict.has("assistMode") or !dict["assistMode"] is BoardState.StartSettings.AssistMode):
+static func dictToStartSettings(arr: Array) -> BoardState.StartSettings:
+	if (len(arr) < 3 or
+		!arr[0] is bool or 
+		!arr[1] is float or 
+		!arr[2] is BoardState.StartSettings.AssistMode):
 		return null
 	return BoardState.StartSettings.new(
-		dict["assistMode"], #weird order cause i'm stupid
-		dict["isTimed"],
-		dict["startingTime"]
+		arr[2], #weird order cause i'm stupid
+		arr[0],
+		arr[1]
 	)
 
-static func moveToDict(move: Move) -> Dictionary:
-	return {
-		"moveType": move.moveType,
-		"movedPiece": null if move.movedPiece == null else pieceToDict(move.movedPiece),
-		"posTryMovedTo": move.posTryMovedTo,
-		"promotingTo": move.promotingTo,
-		"movedKing": null if move.movedKing == null else pieceToDict(move.movedKing),
-		"movedRook": null if move.movedRook == null else pieceToDict(move.movedRook),
-	}
+static func moveToArr(move: Move) -> Array:
+	return [
+		move.moveType,
+		null if move.movedPiece == null else pieceToArr(move.movedPiece),
+		move.posTryMovedTo,
+		move.promotingTo,
+		null if move.movedKing == null else pieceToArr(move.movedKing),
+		null if move.movedRook == null else pieceToArr(move.movedRook),
+	]
 
-static func dictToMove(dict: Dictionary) -> Move:
-	if !dict.has("moveType") or !dict["moveType"] is Move.MoveType:
+static func arrToMove(arr: Array) -> Move:
+	if len(arr) < 6 or !arr[0] is Move.MoveType:
 		return null
 	
-	match dict["moveType"]:
+	match arr[0]:
 		Move.MoveType.NORMAL, Move.MoveType.PROMOTION:
-			if !dict.has("movedPiece") or !dict["movedPiece"] is Dictionary:
+			if !arr[1] is Array:
 				return null
-			var movedPiece = dictToPiece(dict["movedPiece"])
+			var movedPiece = arrToPiece(arr[1])
 			if movedPiece == null:
 				return null
-			if !dict.has("posTryMovedTo") or !dict["posTryMovedTo"] is Vector2i:
+			if !arr[2] is Vector2i:
 				return null
-			if dict["moveType"] == Move.MoveType.NORMAL:
-				return Move.newNormal(movedPiece, dict["posTryMovedTo"])
-			if !dict.has("promotingTo") or !dict["promotingTo"] is Piece.PieceType:
+			if arr[0] == Move.MoveType.NORMAL:
+				return Move.newNormal(movedPiece, arr[2])
+			if !arr[3] is Piece.PieceType:
 				return null
-			return Move.newPromotion(movedPiece, dict["posTryMovedTo"], dict["promotingTo"])
+			return Move.newPromotion(movedPiece, arr[2], arr[3])
 		Move.MoveType.CASTLE:
-			if !dict.has("movedKing") or !dict["movedKing"] is Dictionary:
+			if !arr[4] is Array:
 				return null
-			var movedKing = dictToPiece(dict["movedKing"])
+			var movedKing = arrToPiece(arr[4])
 			if movedKing == null:
 				return null
-			if !dict.has("movedRook") or !dict["movedRook"] is Dictionary:
+			if !arr[5] is Array:
 				return null
-			var movedRook = dictToPiece(dict["movedRook"])
+			var movedRook = arrToPiece(arr[5])
 			if movedRook == null:
 				return null
 			return Move.newCastle(movedKing, movedRook)
 		_:
 			return null
 
-static func boardStateToDict(boardState: BoardState) -> Dictionary:
+static func boardStateToArr(boardState: BoardState) -> Array:
 	var pieces = []
 	for piece in boardState.pieces:
-		pieces.append(pieceToDict(piece))
+		pieces.append(pieceToArr(piece))
 	var capturedPieces = []
 	for piece in boardState.capturedPieces:
-		capturedPieces.append(pieceToDict(piece))
-	return {
-		"pieces": pieces,
-		"capturedPieces": capturedPieces,
-		"turnToMove": boardState.turnToMove,
-		"result": boardState.result,
-		"previousState": null if boardState.previousState == null else boardStateToDict(boardState.previousState),
-		"previousMove": null if boardState.previousMove == null else moveToDict(boardState.previousMove),
-		"startSettings": null if boardState.startSettings == null else startSettingsToDict(boardState.startSettings),
-		"whiteTime": boardState.whiteTime,
-		"blackTime": boardState.blackTime,
-		"drawState": boardState.drawState
+		capturedPieces.append(pieceToArr(piece))
+	return [
+		pieces,
+		capturedPieces,
+		boardState.turnToMove,
+		boardState.result,
+		null if boardState.previousState == null else boardStateToArr(boardState.previousState),
+		null if boardState.previousMove == null else moveToArr(boardState.previousMove),
+		null if boardState.startSettings == null else startSettingsToArr(boardState.startSettings),
+		boardState.whiteTime,
+		boardState.blackTime,
+		boardState.drawState
 		#move info generated on conversion back, not saved
-	}
+	]
 
-static func dictToBoardState(dict: Dictionary) -> BoardState:
-	if (!dict.has("pieces") or !dict["pieces"] is Array[Dictionary] or 
-		!dict.has("capturedPieces") or !dict["capturedPieces"] is Array[Dictionary] or 
-		!dict.has("turnToMove") or !dict["turnToMove"] is Piece.PieceColor or 
-		!dict.has("result") or !dict["result"] is BoardState.StateResult or
-		!dict.has("previousState") or !(dict["previousState"] == null or dict["previousState"] is Dictionary) or
-		!dict.has("previousMove") or !(dict["previousMove"] == null or dict["previousMove"] is Dictionary) or
-		!dict.has("startSettings") or !(dict["startSettings"] == null or dict["startSettings"] is Dictionary) or
-		!dict.has("whiteTime") or !dict["whiteTime"] is float or
-		!dict.has("blackTime") or !dict["blackTime"] is float or
-		!dict.has("drawState") or !dict["drawState"] is BoardState.DrawState):
+static func arrToBoardState(arr: Array) -> BoardState:
+	if (!arr[0] is Array[Array] or 
+		!arr[1] is Array[Array] or 
+		!arr[2] is Piece.PieceColor or 
+		!arr[3] is BoardState.StateResult or
+		!(arr[4] == null or arr[4] is Array) or
+		!(arr[5] == null or arr[5] is Array) or
+		!(arr[6] == null or arr[6] is Array) or
+		!arr[7] is float or
+		!arr[8] is float or
+		!arr[9] is BoardState.DrawState):
 		return null
 	var pieces: Array[Piece] = []
-	for pieceDict: Dictionary in dict["pieces"]:
-		var piece = dictToPiece(pieceDict)
+	for pieceArr: Array in arr[0]:
+		var piece = arrToPiece(pieceArr)
 		if piece == null:
 			return null
 		pieces.append(piece)
 	var capturedPieces: Array[Piece] = []
-	for capturedPieceDict: Dictionary in dict["pieces"]:
-		var capturedPiece = dictToPiece(capturedPieceDict)
+	for capturedPieceDict: Array in arr[1]:
+		var capturedPiece = arrToPiece(capturedPieceDict)
 		if capturedPiece == null:
 			return null
 		capturedPieces.append(capturedPiece)
 	var boardState: BoardState = BoardState.new(
 		pieces,
 		capturedPieces,
-		dict["turnToMove"],
-		dict["result"],
-		dict["previousState"],
-		dict["previousMove"],
+		arr[2],
+		arr[3],
+		arr[4],
+		arr[5],
 		[],
 		[],
 		null,
 		null,
-		dict["startSettings"],
-		dict["whiteTime"],
-		dict["blackTime"],
-		dict["drawState"],
+		arr[6],
+		arr[7],
+		arr[8],
+		arr[9],
 	)
 	boardState.addMoveInfo()
 	return boardState
@@ -198,63 +200,63 @@ class StateUpdate:
 		)
 		return [move, stateUpdate.whiteTime, stateUpdate.blackTime, stateUpdate.drawState]
 
-static func stateUpdateToDict(stateUpdate: StateUpdate) -> Dictionary:
-	return {
-		"moveType": stateUpdate.moveType,
-		"movedPieceIndex": stateUpdate.movedPieceIndex,
-		"posTryMovedTo": stateUpdate.posTryMovedTo,
-		"promotingTo": stateUpdate.promotingTo,
-		"movedKingIndex": stateUpdate.movedKingIndex,
-		"movedRookIndex": stateUpdate.movedRookIndex,
-		"whiteTime": stateUpdate.whiteTime,
-		"blackTime": stateUpdate.whiteTime,
-		"drawState": stateUpdate.drawState
-	}
+static func stateUpdateToArr(stateUpdate: StateUpdate) -> Array:
+	return [
+		stateUpdate.moveType,
+		stateUpdate.movedPieceIndex,
+		stateUpdate.posTryMovedTo,
+		stateUpdate.promotingTo,
+		stateUpdate.movedKingIndex,
+		stateUpdate.movedRookIndex,
+		stateUpdate.whiteTime,
+		stateUpdate.blackTime,
+		stateUpdate.drawState
+	]
 
-static func dictToStateUpdate(dict: Dictionary) -> StateUpdate:
-	if (!dict.has("moveType") or !dict["moveType"] is Move.MoveType or
-		!dict.has("movedPieceIndex") or !dict["movedPieceIndex"] is int or
-		!dict.has("posTryMovedTo") or !dict["posTryMovedTo"] is Vector2i or
-		!dict.has("promotingTo") or !dict["promotingTo"] is Piece.PieceType or 
-		!dict.has("movedKingIndex") or !dict["movedKingIndex"] is int or
-		!dict.has("movedRookIndex") or !dict["movedRookIndex"] is int or
-		!dict.has("whiteTime") or !dict["whiteTime"] is float or
-		!dict.has("blackTime") or !dict["whiteTime"] is float or
-		!dict.has("drawState") or !dict["drawState"] is BoardState.DrawState):
+static func arrToStateUpdate(arr: Array) -> StateUpdate:
+	if (!arr[0] is Move.MoveType or
+		!arr[1] is int or
+		!arr[2] is Vector2i or
+		!arr[3] is Piece.PieceType or 
+		!arr[4] is int or
+		!arr[5] is int or
+		!arr[6] is float or
+		!arr[7] is float or
+		!arr[8] is BoardState.DrawState):
 		return null
 	return StateUpdate.new(
-		dict["moveType"],
-		dict["movedPieceIndex"],
-		dict["posTryMovedTo"],
-		dict["promotingTo"],
-		dict["movedKingIndex"],
-		dict["movedRookIndex"],
-		dict["whiteTime"],
-		dict["blackTime"],
-		dict["drawState"]
+		arr[0],
+		arr[1],
+		arr[2],
+		arr[3],
+		arr[4],
+		arr[5],
+		arr[6],
+		arr[7],
+		arr[8],
 	)
 
-static func replayToDict(replay: Replay) -> Dictionary:
-	var stateUpdates_: Array[Dictionary] = []
+static func replayToArr(replay: Replay) -> Array:
+	var stateUpdates_: Array[Array] = []
 	for stateUpdate in replay.stateUpdates:
-		stateUpdates_.append(stateUpdateToDict(stateUpdate))
-	return {
-		"startingState": null if replay.startingState == null else boardStateToDict(replay.startingState),
-		"stateUpdates": stateUpdates_
-	}
+		stateUpdates_.append(stateUpdateToArr(stateUpdate))
+	return [
+		null if replay.startingState == null else boardStateToArr(replay.startingState),
+		stateUpdates_
+	]
 
-static func dictToReplay(dict: Dictionary) -> Replay:
-	if (!dict.has("startingState") or !(dict["startingState"] == null or dict["startingState"] is Dictionary) or
-		!dict.has("stateUpdates") or !dict["stateUpdates"] is Array[Dictionary]):
+static func arrToReplay(arr: Array) -> Replay:
+	if (!(arr[0] == null or arr[0] is Array) or
+		!arr[1] is Array[Array]):
 		return null
 	var stateUpdates_: Array[StateUpdate] = []
-	for stateUpdateDict in dict["stateUpdates"]:
-		var stateUpdate: StateUpdate = dictToStateUpdate(stateUpdateDict)
+	for stateUpdateArr in arr[1]:
+		var stateUpdate: StateUpdate = arrToStateUpdate(stateUpdateArr)
 		if stateUpdate == null:
 			return null
 		stateUpdates_.append(stateUpdate)
 	return Replay.new(
-		null if dict["startingState"] == null else dictToBoardState(dict["startingState"]),
+		null if arr[0] == null else arrToBoardState(arr[0]),
 		stateUpdates_
 	)
 
@@ -305,9 +307,10 @@ static func replayToState(replay: Replay) -> BoardState:
 	return states[-1]
 
 static func replayToString(replay: Replay) -> String:
-	var dict: Dictionary = replayToDict(replay)
-	var arr: PackedByteArray = var_to_bytes(dict).compress(3)
-	return Marshalls.variant_to_base64(arr, false)
+	var arr: Array = replayToArr(replay)
+	print(arr)
+	var byteArr: PackedByteArray = var_to_bytes(arr).compress(3)
+	return Marshalls.variant_to_base64(byteArr, false)
 
 static func stringToReplay(string: String) -> Replay:
-	return dictToReplay(Marshalls.base64_to_variant(string, false))
+	return arrToReplay(Marshalls.base64_to_variant(string, false))
