@@ -193,9 +193,11 @@ func prepareForNext() -> BoardState:
 		newCapturedPieces.append(piece.duplicate())
 	
 	return BoardState.new(newPieces, newCapturedPieces, turnToMove, result, previousState, previousMove, 
-		movePoints, piecesCanCapture, null, null, startSettings, whiteTime, blackTime, DrawState.NONE)
+		movePoints, piecesCanCapture, null, null, startSettings, whiteTime, blackTime, drawState)
 
 func findPieceIndex(piece: Piece) -> int:
+	if piece == null:
+		return -1
 	for i in range(len(pieces)):
 		if pieces[i].valueEquals(piece):
 			return i

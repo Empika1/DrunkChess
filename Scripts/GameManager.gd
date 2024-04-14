@@ -285,5 +285,11 @@ func playAgain(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.
 
 func copyReplay(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.ButtonState):
 	if ButtonComponent.justReleased(oldState, newState):
+		DisplayServer.clipboard_set(
+			Replay.replayToString(
+				Replay.stateToReplay(
+					states[-1]
+				)
+			)
+		)
 		gameEndMenuCopyReplayCheckmark.visible = true #doesn't do anything for now
-		DisplayServer.clipboard_set("PLACEHOLDER")

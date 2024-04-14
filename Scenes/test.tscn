@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://bcu7ppdi7ff4f"]
+[gd_scene load_steps=5 format=3 uid="uid://bcu7ppdi7ff4f"]
 
 [ext_resource type="Shader" path="res://Shaders/Lines.gdshader" id="1_854x0"]
+[ext_resource type="Script" path="res://Scripts/test.gd" id="2_tps1m"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_s6psu"]
 shader = ExtResource("1_854x0")
@@ -22,3 +23,4 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("PlaceholderTexture2D_u45u1")
+script = ExtResource("2_tps1m")
