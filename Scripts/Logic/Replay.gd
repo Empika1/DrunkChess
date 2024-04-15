@@ -107,8 +107,8 @@ static func boardStateToArr(boardState: BoardState) -> Array:
 	]
 
 static func arrToBoardState(arr: Array) -> BoardState:
-	if (!arr[0] is Array[Array] or 
-		!arr[1] is Array[Array] or 
+	if (!arr[0] is Array or 
+		!arr[1] is Array or 
 		!arr[2] is Piece.PieceColor or 
 		!arr[3] is BoardState.StateResult or
 		!(arr[4] == null or arr[4] is Array) or
@@ -237,7 +237,7 @@ static func arrToStateUpdate(arr: Array) -> StateUpdate:
 	)
 
 static func replayToArr(replay: Replay) -> Array:
-	var stateUpdates_: Array[Array] = []
+	var stateUpdates_: Array = []
 	for stateUpdate in replay.stateUpdates:
 		stateUpdates_.append(stateUpdateToArr(stateUpdate))
 	return [
@@ -247,12 +247,14 @@ static func replayToArr(replay: Replay) -> Array:
 
 static func arrToReplay(arr: Array) -> Replay:
 	if (!(arr[0] == null or arr[0] is Array) or
-		!arr[1] is Array[Array]):
+		!arr[1] is Array):
+		print(arr[1])
 		return null
 	var stateUpdates_: Array[StateUpdate] = []
 	for stateUpdateArr in arr[1]:
 		var stateUpdate: StateUpdate = arrToStateUpdate(stateUpdateArr)
 		if stateUpdate == null:
+			print("fail2")
 			return null
 		stateUpdates_.append(stateUpdate)
 	return Replay.new(
@@ -306,11 +308,21 @@ static func replayToState(replay: Replay) -> BoardState:
 			states[-1].result = BoardState.StateResult.DRAW
 	return states[-1]
 
+const replayCompressionMode: int = 3
 static func replayToString(replay: Replay) -> String:
 	var arr: Array = replayToArr(replay)
-	print(arr)
-	var byteArr: PackedByteArray = var_to_bytes(arr).compress(3)
-	return Marshalls.variant_to_base64(byteArr, false)
+	var uncompressedByteArr: PackedByteArray = var_to_bytes(arr)
+	var byteArr: PackedByteArray = uncompressedByteArr.compress(replayCompressionMode)
+	var string: String = Marshalls.raw_to_base64(byteArr)
+	return "v1" + string
 
 static func stringToReplay(string: String) -> Replay:
-	return arrToReplay(Marshalls.base64_to_variant(string, false))
+	if string.substr(0, 2) != "v1":
+		return null
+	var byteArr = Marshalls.base64_to_raw(string.substr(2))
+	var uncompressedByteArr = byteArr.decompress_dynamic(-1, replayCompressionMode)
+	if uncompressedByteArr == PackedByteArray([]):
+		return null
+	var arr: Array = bytes_to_var(uncompressedByteArr)
+	var replay: Replay = arrToReplay(arr)
+	return replay
