@@ -83,7 +83,7 @@ static func validateNormalMove(state: BoardState, move: Move) -> BoardState.Stat
 	if onePieceResult != BoardState.StateResult.VALID:
 		return onePieceResult
 	
-	if Piece.isPromotionPosition(
+	if move.movedPiece.type == Piece.PieceType.PAWN && Piece.isPromotionPosition(
 		PieceLogic.closestPosCanMoveTo(move.movedPiece, state.pieces, move.posTryMovedTo, state.movePoints[state.findPieceIndex(move.movedPiece)]), 
 		state.turnToMove):
 		return BoardState.StateResult.MOVE_NORMAL_MOVED_TO_PROMOTION_POSITION

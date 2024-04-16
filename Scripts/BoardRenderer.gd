@@ -143,7 +143,10 @@ func _process(_delta) -> void:
 	if gameManager.attemptedNextState != null and !gameManager.isMenuVisible():
 		addHitRadii(gameManager.attemptedNextState.pieces)
 		addMoveIndicators(gameManager.states[-1], gameManager.pieceDragging)
-		addCastleAreas(gameManager.states[-1].castlePoints)
+		if (gameManager.attemptedNextState.previousMove.moveType == Move.MoveType.CASTLE or
+		   (gameManager.attemptedNextState.previousMove.moveType == Move.MoveType.NORMAL and
+			gameManager.pieceDragging.type == Piece.PieceType.KING)):
+			addCastleAreas(gameManager.states[-1].castlePoints)
 	elif gameManager.pieceHovering != null and !gameManager.isMenuVisible():
 		addHitRadius(gameManager.pieceHovering)
 	

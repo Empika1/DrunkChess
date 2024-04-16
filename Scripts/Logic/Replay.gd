@@ -30,7 +30,7 @@ static func startSettingsToArr(startSettings: BoardState.StartSettings) -> Array
 		startSettings.assistMode,
 	]
 
-static func dictToStartSettings(arr: Array) -> BoardState.StartSettings:
+static func arrToStartSettings(arr: Array) -> BoardState.StartSettings:
 	if (len(arr) < 3 or
 		!arr[0] is bool or 
 		!arr[1] is float or 
@@ -135,13 +135,13 @@ static func arrToBoardState(arr: Array) -> BoardState:
 		capturedPieces,
 		arr[2],
 		arr[3],
-		arr[4],
-		arr[5],
+		null if arr[4] == null else arrToBoardState(arr[4]),
+		null if arr[5] == null else arrToMove(arr[5]),
 		[],
 		[],
 		null,
 		null,
-		arr[6],
+		null if arr[6] == null else arrToStartSettings(arr[6]),
 		arr[7],
 		arr[8],
 		arr[9],

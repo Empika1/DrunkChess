@@ -25,8 +25,8 @@ class_name GameManager
 @export var gameEndMenuMainMenuButton: BorderScaleButton
 @export var screenForMenu: ColorRect
 
-#@onready var states: Array[BoardState] = [BoardState.newDefaultStartingState(BoardState.StartSettings.new(BoardState.StartSettings.AssistMode.MOVE_ARROWS, true, 3000))]
-@onready var states: Array[BoardState] = [Replay.replayToState(Replay.stringToReplay("v1H4sIAAAAAAAACpNhYGBgAmIZIOaC0gpQmgWI2YCYQQCCQeqYoeoZoZgBm9oPqGoZ8Kk1QKghaO4FVLU4zTVAuJeRkLkGCPcyEmMuse41IMG9AQj3wjBOcwMQ7mUixlxi3RtAgnsLEO5lIWRuAcK9LMSYS6x7C0hw7wSEe1kJmTsB4V5WYswl1r0TIBibexnR1W5gID49bGAgPj1sIMG9ILXEhu8FBuLz2wUG4vPbBRLce4EE935gIL48+8BAfHn2gQT3fiDsXmQzmJDER8vp0XJ6tJxmoF05Tax7R8vp0XIaTRxGMyDJMyOZD2IzNFi7MsH5jAyVL9UMOXKWOyDLwfSyIZlJSjpFb3Owke0mRgbLLSfK6nKXOyC7gwNKc6L5nY8BKd8XIOwG0f+BAEaDzA3onZ53KRO3HehmC5Npdhif7qa7WfjNFkQOMwJmt4vdPPc9nXizhZDdHUC82YobijIuZpDg7gn4zTbkWCNzK5V4s1HcbUC82fy6m+bmp5Hg7g34zd5TMlmiJYmw2bBySgjZbLT6jxSzATHEXQgcDwAA"))]
+@onready var states: Array[BoardState] = [BoardState.newDefaultStartingState(BoardState.StartSettings.new(BoardState.StartSettings.AssistMode.MOVE_ARROWS, true, 3000))]
+#@onready var states: Array[BoardState] = [Replay.replayToState(Replay.stringToReplay("v1H4sIAAAAAAAACpNhYGBgAmIZIOaC0gpQmgWI2YCYQQCCQeqYoeoZoZgBm9oPqGoZ8Kk1QKghaO4FVLU4zTVAuJeRkLkGCPcyEmMuse41IMG9AQj3wjBOcwMQ7mUixlxi3RtAgnsLEO5lIWRuAcK9LMSYS6x7C0hw7wSEe1kJmTsB4V5WYswl1r0TIBibexnR1W5gID49bGAgPj1sIMG9ILXEhu8FBuLz2wUG4vPbBRLce4EE935gIL48+8BAfHn2gQT3fiDsXmQzmJDER8vp0XJ6tJxmoF05Tax7R8vp0XIaTRxGMyDJMyOZD2IzNFi7MsH5jAyVL9UMOXKWOyDLwfSyIZlJSjpFb3Owke0mRgbLLSfK6nKXOyC7gwNKc6L5nY8BKd8XIOwG0f+BAEaDzA3onZ53KRO3HehmC5Npdhif7qa7WfjNFkQOMwJmt4vdPPc9nXizhZDdHUC82YobijIuZpDg7gn4zTbkWCNzK5V4s1HcbUC82fy6m+bmp5Hg7g34zd5TMlmiJYmw2bBySgjZbLT6jxSzATHEXQgcDwAA"))]
 
 func getScaledRectSize() -> float:
 	return board.get_rect().size.x
@@ -74,9 +74,17 @@ var dragPos: Vector2i = Vector2i(0, 0)
 var isPiecePlaced: bool = false
 var attemptedNextState: BoardState = null
 const dragBorder: Vector2i = Vector2i(Piece.squareSize, Piece.squareSize)
+
+var copiedStateString: String = ""
 func _process(_delta):
 	if !isMenuVisible():
 		determineInfoFromMouse()
+		
+		if Input.is_action_just_pressed("test"):
+			states.append(Replay.replayToState(Replay.stringToReplay(copiedStateString)))
+		
+		if Input.is_action_just_pressed("test2"):
+			copiedStateString = Replay.replayToString(Replay.stateToReplay(states[-1]))
 		
 		if pieceDragging != null:
 			trashButton.enable()
@@ -120,10 +128,11 @@ func getMoveBeingMade() -> Move:
 	#find if the move is a castle move
 	var castlePieces: PieceLogic.CastlePieces = states[-1].castlePieces
 	var castlePoints: PieceLogic.CastlePoints = states[-1].castlePoints
-	if castlePoints.canCastleLeft and (mousePosBoard - castlePoints.kingPointLeft).length_squared() <= BoardRenderer.castleRadius ** 2:
-		move = Move.newCastle(castlePieces.king, castlePieces.leftRook)
-	if castlePoints.canCastleRight and (mousePosBoard - castlePoints.kingPointRight).length_squared() <= BoardRenderer.castleRadius ** 2:
-		move = Move.newCastle(castlePieces.king, castlePieces.rightRook)
+	if pieceDragging.type == Piece.PieceType.KING:
+		if castlePoints.canCastleLeft and (mousePosBoard - castlePoints.kingPointLeft).length_squared() <= BoardRenderer.castleRadius ** 2:
+			move = Move.newCastle(castlePieces.king, castlePieces.leftRook)
+		if castlePoints.canCastleRight and (mousePosBoard - castlePoints.kingPointRight).length_squared() <= BoardRenderer.castleRadius ** 2:
+			move = Move.newCastle(castlePieces.king, castlePieces.rightRook)
 	
 	#if not castle, make normal or promotion move
 	if move == null:
