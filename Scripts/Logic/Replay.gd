@@ -111,7 +111,7 @@ static func arrToBoardState(arr: Array) -> BoardState:
 		!arr[1] is Array or 
 		!arr[2] is Piece.PieceColor or 
 		!arr[3] is BoardState.StateResult or
-		!(arr[4] == null or arr[4] is Array) or
+		!arr[4] is Array or
 		!(arr[5] == null or arr[5] is Array) or
 		!(arr[6] == null or arr[6] is Array) or
 		!arr[7] is float or
@@ -135,7 +135,7 @@ static func arrToBoardState(arr: Array) -> BoardState:
 		capturedPieces,
 		arr[2],
 		arr[3],
-		null if arr[4] == null else arrToBoardState(arr[4]),
+		arrToBoardState(arr[4]),
 		null if arr[5] == null else arrToMove(arr[5]),
 		[],
 		[],
@@ -241,12 +241,12 @@ static func replayToArr(replay: Replay) -> Array:
 	for stateUpdate in replay.stateUpdates:
 		stateUpdates_.append(stateUpdateToArr(stateUpdate))
 	return [
-		null if replay.startingState == null else boardStateToArr(replay.startingState),
+		boardStateToArr(replay.startingState),
 		stateUpdates_
 	]
 
 static func arrToReplay(arr: Array) -> Replay:
-	if (!(arr[0] == null or arr[0] is Array) or
+	if (!arr[0] is Array or
 		!arr[1] is Array):
 		print(arr[1])
 		return null
@@ -254,11 +254,10 @@ static func arrToReplay(arr: Array) -> Replay:
 	for stateUpdateArr in arr[1]:
 		var stateUpdate: StateUpdate = arrToStateUpdate(stateUpdateArr)
 		if stateUpdate == null:
-			print("fail2")
 			return null
 		stateUpdates_.append(stateUpdate)
 	return Replay.new(
-		null if arr[0] == null else arrToBoardState(arr[0]),
+		arrToBoardState(arr[0]),
 		stateUpdates_
 	)
 
@@ -272,8 +271,10 @@ func _init(startingState_: BoardState, stateUpdates_: Array[StateUpdate]):
 static func stateToReplay(state: BoardState) -> Replay:
 	var states: Array[BoardState] = []
 	var currentState: BoardState = state
-	while currentState.previousState != null:
+	while true:
 		states.append(currentState)
+		if currentState.previousState == null:
+			break
 		currentState = currentState.previousState
 	states.reverse()
 	
@@ -289,6 +290,7 @@ static func stateToReplay(state: BoardState) -> Replay:
 
 static func replayToState(replay: Replay) -> BoardState:
 	var states: Array[BoardState] = [replay.startingState]
+	print(replay.startingState)
 	for update: StateUpdate in replay.stateUpdates:
 		var moveAndStuff: Array = StateUpdate.stateUpdateToMoveAndStuff(states[-1], update)
 		var move: Move = moveAndStuff[0]
@@ -326,3 +328,5 @@ static func stringToReplay(string: String) -> Replay:
 	var arr: Array = bytes_to_var(uncompressedByteArr)
 	var replay: Replay = arrToReplay(arr)
 	return replay
+
+#static func replayToBytes(replay: Replay) -> 

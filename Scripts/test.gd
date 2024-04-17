@@ -1,6 +1,7 @@
 extends Node
 
-var states: Array[BoardState] = [Replay.replayToState(Replay.stringToReplay("v1H4sIAAAAAAAACpNhYGBgAmIZIOaC0gpQmgWI2YCYQQCCQeqYoeoZoZgBm9oPqGoZ8Kk1QKghaO4FVLU4zTVAuJeRkLkGCPcyEmMuse41IMG9AQj3wjBOcwMQ7mUixlxi3RtAgnsLEO5lIWRuAcK9LMSYS6x7C0hw7wSEe1kJmTsB4V5WYswl1r0TIBibexnR1W5gID49bGAgPj1sIMG9ILXEhu8FBuLz2wUG4vPbBRLce4EE935gIL48+8BAfHn2gQT3fiDsXmQzmJDER8vp0XJ6tJxmoF05Tax7R8vp0XIaTRxGMyDJMyOZD2IzNFi7MsH5jAyVL9UMOXKWOyDLwfSyIZlJSjpFb3Owke0mRgbLLSfK6nKXOyC7gwNKc6L5nY8BKd8XIOwG0f+BAEaDzA3onZ53KRO3HehmC5Npdhif7qa7WfjNFkQOMwJmt4vdPPc9nXizhZDdHUC82YobijIuZpDg7gn4zTbkWCNzK5V4s1HcbUC82fy6m+bmp5Hg7g34zd5TMlmiJYmw2bBySgjZbLT6jxSzATHEXQgcDwAA"))]
-
 func _ready():
-	pass
+	var arr: BitArray = BitArray.new()
+	arr.arr = [0, 0, 0, 0, 0, 0, 0, 0]
+	arr.setBit(55, true)
+	print(arr.getBit(54))
