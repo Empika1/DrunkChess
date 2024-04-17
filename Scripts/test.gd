@@ -2,6 +2,6 @@ extends Node
 
 func _ready():
 	var arr: BitArray = BitArray.new()
-	arr.arr = [0, 0, 0, 0, 0, 0, 0, 0]
-	arr.setBit(55, true)
-	print(arr.getBit(54))
+	arr.changeLength(25)
+	arr.setFromInt(4, 15, 29127)
+	print(arr.getToInt(4, 15))

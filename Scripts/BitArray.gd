@@ -4,44 +4,31 @@ class_name BitArray
 var arr: PackedByteArray = PackedByteArray([])
 var length: int = 0
 
-const oneMasks = [0b01111111,
-				  0b10111111,
-				  0b11011111,
-				  0b11101111,
-				  0b11110111,
-				  0b11111011,
-				  0b11111101,
-				  0b11111110]
+func getBit(index: int) -> int:
+	var byteI: int = index / 8
+	var bitI: int = index % 8
+	return 0 if arr[byteI] & (0b10000000 >> bitI) == 0 else 1
 
-const zeroMasks = [0b10000000,
-				   0b01000000,
-				   0b00100000,
-				   0b00010000,
-				   0b00001000,
-				   0b00000100,
-				   0b00000010,
-				   0b00000001]
+func getBitBool(index: int) -> bool:
+	return true if getBit(index) == 1 else false
 
-func getBit(i: int) -> bool:
-	var byteI: int = i / 8
-	var bitI: int = i % 8
-	return false if arr[byteI] & (0b10000000 >> bitI) == 0 else true
-
-func setBit(i: int, value: bool) -> void:
-	var byteI: int = i / 8
-	var bitI: int = i % 8
-	if value:
+func setBit(index: int, value: int) -> void:
+	var byteI: int = index / 8
+	var bitI: int = index % 8
+	if value != 0:
 		arr[byteI] = arr[byteI] | (0b10000000 >> bitI)
 	else:
 		arr[byteI] = arr[byteI] & ~(0b10000000 >> bitI)
 
-func changeLength(diff: int):
-	if diff == 0:
+func setBitBool(index: int, value: bool) -> void:
+	setBit(index, 1 if value else 0)
+
+func changeLength(newLength: int) -> void:
+	if newLength == length:
 		return
 	
-	var newLength: int = length + diff
 	var arrNeededLength: int = newLength / 8
-	if diff > 0:
+	if newLength > length:
 		while len(arr) < arrNeededLength + 1:
 			arr.append(0)
 	else:
@@ -49,3 +36,22 @@ func changeLength(diff: int):
 			arr.remove_at(len(arr) - 1)
 	
 	length = newLength
+
+func setFromInt(index: int, numBits: int, value: int) -> void:
+	for i in range(numBits):
+		var bitI: int = index + i
+		setBit(bitI, (value >> (numBits - i - 1)) & 0b1)
+
+func getToInt(index: int, numBits: int) -> int:
+	var value: int = 0
+	for i in range(numBits):
+		var bitI: int = index + i
+		value |= getBit(bitI) << (numBits - i - 1)
+		print(getBit(bitI))
+	return value
+
+func toString():
+	var string: String = ""
+	for i in range(length):
+		string += str(1 if getBit(i) else 0)
+	return string
