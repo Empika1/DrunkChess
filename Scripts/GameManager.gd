@@ -80,11 +80,11 @@ func _process(_delta):
 	if !isMenuVisible():
 		determineInfoFromMouse()
 		
-		if Input.is_action_just_pressed("test"):
-			states.append(Replay.replayToState(Replay.stringToReplay(copiedStateString)))
-		
-		if Input.is_action_just_pressed("test2"):
-			copiedStateString = Replay.replayToString(Replay.stateToReplay(states[-1]))
+		#if Input.is_action_just_pressed("test"):
+			#states.append(Replay.replayToState(Replay.stringToReplay(copiedStateString)))
+		#
+		#if Input.is_action_just_pressed("test2"):
+			#copiedStateString = Replay.replayToString(Replay.stateToReplay(states[-1]))
 		
 		if pieceDragging != null:
 			trashButton.enable()
@@ -295,5 +295,5 @@ func playAgain(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.
 
 func copyReplay(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.ButtonState):
 	if ButtonComponent.justReleased(oldState, newState):
-		DisplayServer.clipboard_set(Replay.replayToString(Replay.stateToReplay(states[-1])))
+		DisplayServer.clipboard_set(Replay.validBoardStateToBitArray(states[-1]).toBase64(3))
 		gameEndMenuCopyReplayCheckmark.visible = true

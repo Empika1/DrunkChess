@@ -1,7 +1,7 @@
 extends Node
 
 func _ready():
-	var arr: BitArray = BitArray.new()
-	arr.changeLength(25)
-	arr.setFromInt(4, 15, 29127)
-	print(arr.getToInt(4, 15))
+	var b: BitArray = BitArray.new()
+	b.changeLength(64)
+	b.setFromFloat(0, 3000)
+	print(b.dataToString())

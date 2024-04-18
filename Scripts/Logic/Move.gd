@@ -2,7 +2,7 @@ extends RefCounted
 class_name Move
 
 enum MoveType {
-	NORMAL, PROMOTION, CASTLE, NULL_MOVE_TYPE
+	NORMAL, PROMOTION, CASTLE
 }
 
 func isOnePiece(moveType_: MoveType) -> bool:
