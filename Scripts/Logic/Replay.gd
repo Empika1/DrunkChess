@@ -9,6 +9,8 @@ static func validateBoardStateForReplay(startingState: BoardState, moves: Array[
 	for piece in startingState.pieces:
 		if piece.hasMoved:
 			return false
+		if piece.pos.x < 0 or piece.pos.x > Piece.boardSize or piece.pos.y < 0 or piece.pos.y > Piece.boardSize:
+			return false
 	var currentState: BoardState = startingState
 	for move in moves:
 		if currentState.result != BoardState.StateResult.VALID:
@@ -61,7 +63,7 @@ static func validBoardStateToBitArray(state: BoardState) -> BitArray:
 			blackPieces.append(piece)
 	
 	#read in starting state of board
-	#read in number of white pieces, number of black pieces, number of white captured pieces, number of black captured pieces as 4 ubytes
+	#read in number of white pieces, number of black pieces
 	arr.changeLength(i + 16)
 	arr.setFromInt(i, 8, len(whitePieces))
 	i += 8
@@ -129,6 +131,77 @@ static func validBoardStateToBitArray(state: BoardState) -> BitArray:
 	
 	return arr
 
+static func bitArrayToValidBoardState(arr: BitArray) -> BoardState:
+	var i: int = 0
+	
+	#read in version
+	var versionNum: int = arr.getToInt(i, 8)
+	i += 8
+	if versionNum != 1:
+		return null #only v1 replays allowed
+	
+	#read in start settings
+	var assistModeInt: int = arr.getToInt(i, 2)
+	i += 2
+	if assistModeInt < 0 or assistModeInt > 2:
+		return null #invalid assist mode
+	var isTimedInt: int = arr.getToInt(i, 1)
+	i += 1
+	if isTimedInt < 0 or isTimedInt > 1:
+		return null
+	var isTimed = true if isTimedInt == 1 else false
+	var startingTime: float = -1
+	if isTimed:
+		startingTime = arr.getToFloat(i)
+		i += 64
+		if startingTime < 0:
+			return null #no negative starting time
+	var startSettings: BoardState.StartSettings = BoardState.StartSettings.new(
+		assistModeInt, isTimed, startingTime
+	)
+	
+	#read in number of pieces
+	var numWhitePieces: int = arr.getToInt(i, 8)
+	i += 8
+	if numWhitePieces < 0:
+		return null
+	var numBlackPieces: int = arr.getToInt(i, 8)
+	i += 8
+	if numBlackPieces < 0:
+		return null
+	
+	#read in pieces
+	var pieces: Array[Piece] = []
+	for pieceI in range(numWhitePieces + numBlackPieces):
+		var typeInt: int = arr.getToInt(i, 3)
+		i += 3
+		if typeInt < 0 or typeInt > 7:
+			return null #invalid type
+		var posX: int = arr.getToInt(i, 16)
+		i += 16
+		if posX < 0 or posX > Piece.boardSize:
+			return null
+		var posY: int = arr.getToInt(i, 16)
+		i += 16
+		if posY < 0 or posY > Piece.boardSize:
+			return null
+		var pos: Vector2i = Vector2i(posX, posY)
+		var hasMovedInt: int = arr.getToInt(i, 1)
+		i += 1
+		if hasMovedInt < 0 or hasMovedInt > 1:
+			return null
+		var piece: Piece = Piece.new(
+			pos, typeInt, 
+			Piece.PieceColor.WHITE if i < numWhitePieces else Piece.PieceColor.BLACK, 
+			true if hasMovedInt == 1 else false)
+		pieces.append(piece)
+	
+	#
+	
+	#var startSettings: BoardState.StartSettings = BoardState.StartSettings.new()
+	
+	
+	return null
 
 #static func pieceToArr(piece: Piece) -> Array:
 	#return [
