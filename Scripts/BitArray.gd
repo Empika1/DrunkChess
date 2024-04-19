@@ -24,7 +24,6 @@ func setBitBool(index: int, value: bool) -> void:
 	setBit(index, 1 if value else 0)
 
 func changeLength(newLength: int) -> void:
-	print("LENGTH COMPARISON ", length, " ", newLength)
 	if newLength == length:
 		return
 	
@@ -48,7 +47,6 @@ func getToInt(index: int, numBits: int) -> int:
 	for i in range(numBits):
 		var bitI: int = index + i
 		value |= getBit(bitI) << (numBits - i - 1)
-		print(getBit(bitI))
 	return value
 
 static func floatBitsToInt(value: float) -> int:
