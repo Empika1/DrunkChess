@@ -42,9 +42,6 @@ static func validBoardStateToBitArray(state: BoardState) -> BitArray:
 	if !validateBoardStateForReplay(startingState, moves):
 		return null
 	
-	for piece in startingState.pieces:
-		print(piece.toString())
-	
 	#read in startsettings
 	arr.changeLength(i + 3)
 	arr.setFromInt(i, 2, int(startingState.startSettings.assistMode))
@@ -74,15 +71,28 @@ static func validBoardStateToBitArray(state: BoardState) -> BitArray:
 		arr.setFromInt(i, 16, piece.pos.y)
 		i += 16
 	
-	#read in number of state updates, as 32 bit uint
+	#read in number of states updates
 	arr.changeLength(i + 32)
 	arr.setFromInt(i, 32, len(moves))
 	i += 32
 	
-	#read in all state updates
-	for updateI in range(len(moves)):
-		var move: Move = moves[updateI]
-		var state_: BoardState = states[updateI + 1]
+	#read in first "state update"
+	arr.changeLength(i + 67)
+	print(int(startingState.drawState))
+	arr.setFromInt(i, 3, int(startingState.drawState)) #7 options for draw state, so 3 bytes
+	i += 3
+	arr.changeLength(i + 64)
+	print(startingState.whiteTime)
+	if startingState.turnToMove == Piece.PieceColor.WHITE:
+		arr.setFromFloat(i, startingState.whiteTime)
+	else:
+		arr.setFromFloat(i,startingState.blackTime)
+	i += 64
+	
+	#read in all moves
+	for moveI in range(len(moves)):
+		var move: Move = moves[moveI]
+		var state_: BoardState = states[moveI + 1]
 		
 		arr.changeLength(i + 2)
 		arr.setFromInt(i, 2, int(move.moveType)) #3 options for type, so 2 bytes
@@ -91,7 +101,6 @@ static func validBoardStateToBitArray(state: BoardState) -> BitArray:
 			Move.MoveType.NORMAL:
 				arr.changeLength(i + 40)
 				arr.setFromInt(i, 8, state_.previousState.findPieceIndex(move.movedPiece)) #8 bytes for index of moved piece
-				print(state_.previousState.findPieceIndex(move.movedPiece))
 				i += 8
 				arr.setFromInt(i, 16, move.posTryMovedTo.x) #16 bytes for x pos and y pos each
 				i += 16
@@ -100,7 +109,6 @@ static func validBoardStateToBitArray(state: BoardState) -> BitArray:
 			Move.MoveType.PROMOTION:
 				arr.changeLength(i + 43)
 				arr.setFromInt(i, 8, state_.previousState.findPieceIndex(move.movedPiece)) #8 bytes for index of moved piece
-				print(state_.previousState.findPieceIndex(move.movedPiece))
 				i += 8
 				arr.setFromInt(i, 16, move.posTryMovedTo.x) #16 bytes for x pos and y pos each
 				i += 16
@@ -114,7 +122,8 @@ static func validBoardStateToBitArray(state: BoardState) -> BitArray:
 				i += 8
 				arr.setFromInt(i, 8, state_.previousState.findPieceIndex(move.movedRook))
 				i += 8
-		arr.changeLength(i + 5)
+		
+		arr.changeLength(i + 67)
 		arr.setFromInt(i, 3, int(state_.drawState)) #7 options for draw state, so 3 bytes
 		i += 3
 		arr.changeLength(i + 64)
@@ -123,7 +132,6 @@ static func validBoardStateToBitArray(state: BoardState) -> BitArray:
 		else:
 			arr.setFromFloat(i, state_.blackTime)
 		i += 64
-	
 	return arr
 
 static func bitArrayToValidBoardState(arr: BitArray) -> BoardState:
@@ -133,19 +141,16 @@ static func bitArrayToValidBoardState(arr: BitArray) -> BoardState:
 	var versionNum: int = arr.getToInt(i, 8)
 	i += 8
 	if versionNum != 1:
-		print("r1")
 		return null #only v1 replays allowed
 	
 	#read in start settings
 	var assistModeInt: int = arr.getToInt(i, 2)
 	i += 2
 	if assistModeInt < 0 or assistModeInt > 2:
-		print("r2")
 		return null #invalid assist mode
 	var isTimedInt: int = arr.getToInt(i, 1)
 	i += 1
 	if isTimedInt < 0 or isTimedInt > 1:
-		print("r3")
 		return null
 	var isTimed = true if isTimedInt == 1 else false
 	var startingTime: float = -1
@@ -153,7 +158,6 @@ static func bitArrayToValidBoardState(arr: BitArray) -> BoardState:
 		startingTime = arr.getToFloat(i)
 		i += 64
 		if startingTime < 0:
-			print("r4")
 			return null #no negative starting time
 	var startSettings: BoardState.StartSettings = BoardState.StartSettings.new(
 		assistModeInt as BoardState.StartSettings.AssistMode, isTimed, startingTime
@@ -163,7 +167,6 @@ static func bitArrayToValidBoardState(arr: BitArray) -> BoardState:
 	var numPieces: int = arr.getToInt(i, 8)
 	i += 8
 	if numPieces < 0:
-		print("r5")
 		return null
 	
 	#read in pieces
@@ -172,22 +175,18 @@ static func bitArrayToValidBoardState(arr: BitArray) -> BoardState:
 		var colorInt: int = arr.getToInt(i, 1)
 		i += 1
 		if colorInt < 0:
-			print("r6")
 			return null
 		var typeInt: int = arr.getToInt(i, 3)
 		i += 3
 		if typeInt < 0 or typeInt > 7:
-			print("r7")
 			return null
 		var posX: int = arr.getToInt(i, 16)
 		i += 16
 		if posX < 0 or posX > Piece.boardSize:
-			print("r8")
 			return null
 		var posY: int = arr.getToInt(i, 16)
 		i += 16
 		if posY < 0 or posY > Piece.boardSize:
-			print("r9")
 			return null
 		var pos: Vector2i = Vector2i(posX, posY)
 		var piece: Piece = Piece.new(
@@ -199,85 +198,86 @@ static func bitArrayToValidBoardState(arr: BitArray) -> BoardState:
 	
 	#construct first state
 	var startingState: BoardState = BoardState.newStartingState(pieces, startSettings)
-	print("++++++++++++++++++++++++++++++")
-	for piece in startingState.pieces:
-		print(piece.toString())
 	
 	#read in number of state updates
 	var numStateUpdates: int = arr.getToInt(i, 32)
 	i += 32
 	if numStateUpdates < 0:
-		print("r10")
 		return null
+	
+	#read in first state update
+	var firstDrawStateInt: int = arr.getToInt(i, 3)
+	print(firstDrawStateInt)
+	i += 3
+	if firstDrawStateInt < 0 or firstDrawStateInt > 7:
+		return null
+	var firstNewTime: float = arr.getToFloat(i)
+	print(firstNewTime, " ", i)
+	i += 64
+	startingState.updateTimer(firstNewTime)
+	if startingState.drawState in [BoardState.DrawState.BLACK_OFFERED_ACCEPTED, BoardState.DrawState.WHITE_OFFERED_REJECTED]:
+		startingState.result = BoardState.StateResult.DRAW
+	if numStateUpdates == 0:
+		if !startingState.result in [BoardState.StateResult.VALID, BoardState.StateResult.DRAW, BoardState.StateResult.WIN_WHITE, BoardState.StateResult.WIN_WHITE]:
+			return null
+	else:
+		if startingState.result != BoardState.StateResult.VALID:
+			return null
 	
 	#read in state updates
 	var states: Array[BoardState] = [startingState]
 	for stateI in range(numStateUpdates):
-		print("statei ", stateI)
 		var moveTypeInt: int = arr.getToInt(i, 2)
 		i += 2
 		if moveTypeInt < 0 or moveTypeInt > 3:
-			print("r11")
 			return null
 		var move: Move
 		match moveTypeInt:
 			int(Move.MoveType.NORMAL):
 				var pieceIndex: int = arr.getToInt(i, 8)
-				print("I ", pieceIndex)
 				i += 8
 				if pieceIndex < 0 or pieceIndex >= len(states[-1].pieces):
-					print("r12")
 					return null
 				var piece: Piece = states[-1].pieces[pieceIndex]
-				print(pieceIndex, " ", Piece.PieceColor.keys()[states[-1].turnToMove], " ", Piece.PieceColor.keys()[piece.color])
 				var posTryMovedToX: int = arr.getToInt(i, 16)
 				i += 16
 				if posTryMovedToX < 0:
-					print("r13")
 					return null
 				var posTryMovedToY: int = arr.getToInt(i, 16)
 				i += 16
 				if posTryMovedToY < 0:
-					print("r14")
 					return null
 				var posTryMovedTo: Vector2i = Vector2i(posTryMovedToX, posTryMovedToY)
 				move = Move.newNormal(piece, posTryMovedTo)
 			int(Move.MoveType.PROMOTION):
 				var pieceIndex: int = arr.getToInt(i, 8)
-				print("I ", pieceIndex)
 				i += 8
 				if pieceIndex < 0 or pieceIndex >= len(states[-1].pieces):
-					print("r15")
 					return null
 				var piece: Piece = states[-1].pieces[pieceIndex]
 				var posTryMovedToX: int = arr.getToInt(i, 16)
 				i += 16
 				if posTryMovedToX < 0:
-					print("r16")
 					return null
 				var posTryMovedToY: int = arr.getToInt(i, 16)
 				i += 16
 				if posTryMovedToY < 0:
-					print("r17")
 					return null
 				var posTryMovedTo: Vector2i = Vector2i(posTryMovedToX, posTryMovedToY)
 				var promotingToInt: int = arr.getToInt(i, 3)
 				i += 3
 				if promotingToInt < 0 or promotingToInt > 7:
-					print("r18")
 					return null
 				move = Move.newPromotion(piece, posTryMovedTo, promotingToInt)
 			int(Move.MoveType.CASTLE):
 				var kingIndex: int = arr.getToInt(i, 8)
 				i += 8
 				if kingIndex < 0 or kingIndex >= len(states[-1].pieces):
-					print("r19")
 					return null
 				var king: Piece = states[-1].pieces[kingIndex]
 				var rookIndex: int = arr.getToInt(i, 8)
 				i += 8
 				if rookIndex < 0 or rookIndex >= len(states[-1].pieces):
-					print("r20")
 					return null
 				var rook: Piece = states[-1].pieces[rookIndex]
 				move = Move.newCastle(king, rook)
@@ -285,7 +285,6 @@ static func bitArrayToValidBoardState(arr: BitArray) -> BoardState:
 		var drawStateInt: int = arr.getToInt(i, 3)
 		i += 3
 		if drawStateInt < 0 or drawStateInt > 7:
-			print("r21")
 			return null
 		var newTime: float = arr.getToFloat(i)
 		i += 64
@@ -295,12 +294,9 @@ static func bitArrayToValidBoardState(arr: BitArray) -> BoardState:
 			nextState.result = BoardState.StateResult.DRAW
 		if stateI == numStateUpdates - 1:
 			if !nextState.result in [BoardState.StateResult.VALID, BoardState.StateResult.DRAW, BoardState.StateResult.WIN_WHITE, BoardState.StateResult.WIN_WHITE]:
-				print("r22")
 				return null
 		else:
 			if nextState.result != BoardState.StateResult.VALID:
-				print(BoardState.StateResult.keys()[nextState.result])
-				print("r23")
 				return null
 		states.append(nextState)
 	return states[-1]

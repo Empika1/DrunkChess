@@ -72,7 +72,7 @@ func toBase64(compressionMode: int) -> String:
 
 static func fromBase64(string: String, compressionMode: int) -> BitArray:
 	var bitArr: BitArray = BitArray.new()
-	bitArr.data = Marshalls.base64_to_raw(string).decompress_dynamic(compressionMode)
+	bitArr.data = Marshalls.base64_to_raw(string).decompress_dynamic(-1, compressionMode)
 	if len(bitArr.data) < 4:
 		return null
 	bitArr.length = bitArr.data.decode_u32(len(bitArr.data) - 4)
