@@ -1,4 +1,4 @@
-[gd_scene load_steps=66 format=3 uid="uid://5sjfdbro2a3m"]
+[gd_scene load_steps=65 format=3 uid="uid://5sjfdbro2a3m"]
 
 [ext_resource type="Theme" uid="uid://bhkvphjy5bskn" path="res://Themes/Main.tres" id="1_7gpx2"]
 [ext_resource type="Shader" path="res://Shaders/Background.gdshader" id="2_ifcu1"]
@@ -11,8 +11,7 @@
 [ext_resource type="Shader" path="res://Shaders/Circles.gdshader" id="9_sad7g"]
 [ext_resource type="Shader" path="res://Shaders/CircleArcs.gdshader" id="10_336b7"]
 [ext_resource type="Shader" path="res://Shaders/Arrows.gdshader" id="11_6ldbs"]
-[ext_resource type="Script" path="res://Scripts/GameManager.gd" id="12_ryb5m"]
-[ext_resource type="Script" path="res://Scripts/BoardRenderer.gd" id="13_d4k6a"]
+[ext_resource type="Texture2D" uid="uid://dpxo0muoxuh0o" path="res://Images/ForwardButton.svg" id="14_rwljf"]
 [ext_resource type="Script" path="res://Scripts/UI/BorderScaleButton.gd" id="14_trfd7"]
 [ext_resource type="Shader" path="res://Shaders/SpriteSheetSlicer.gdshader" id="20_y5n5r"]
 [ext_resource type="Texture2D" uid="uid://bchoq8kvi7fty" path="res://Images/Pieces.svg" id="21_lqexx"]
@@ -150,7 +149,7 @@ shader_parameter/outsideBgCol = Color(0, 0, 0, 0)
 shader_parameter/lineCol = null
 shader_parameter/noiseScale = Vector2(0.54, 0.435)
 shader_parameter/noiseSeed = 2.44
-shader_parameter/realWidth = 160.0
+shader_parameter/realWidth = 162.0
 shader_parameter/realHeight = 68.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_dy5q6"]
@@ -164,8 +163,8 @@ shader_parameter/outsideBgCol = Color(0, 0, 0, 0)
 shader_parameter/lineCol = null
 shader_parameter/noiseScale = Vector2(0.54, 0.29)
 shader_parameter/noiseSeed = -9.36
-shader_parameter/realWidth = 160.0
-shader_parameter/realHeight = 68.0
+shader_parameter/realWidth = 119.7
+shader_parameter/realHeight = 60.18
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0vxi8"]
 shader = ExtResource("5_74tjg")
@@ -178,8 +177,8 @@ shader_parameter/outsideBgCol = Color(0, 0, 0, 0)
 shader_parameter/lineCol = null
 shader_parameter/noiseScale = Vector2(-0.98, 0.115)
 shader_parameter/noiseSeed = 31.57
-shader_parameter/realWidth = 87.68
-shader_parameter/realHeight = 68.0
+shader_parameter/realWidth = 63.8
+shader_parameter/realHeight = 60.18
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_5u2cg"]
 
@@ -194,7 +193,7 @@ shader_parameter/outsideBgCol = Color(0, 0, 0, 0)
 shader_parameter/lineCol = null
 shader_parameter/noiseScale = Vector2(0.54, 0.435)
 shader_parameter/noiseSeed = 1.465
-shader_parameter/realWidth = 160.0
+shader_parameter/realWidth = 163.0
 shader_parameter/realHeight = 68.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_88moo"]
@@ -608,52 +607,6 @@ material = SubResource("ShaderMaterial_yx8dn")
 layout_mode = 2
 texture = SubResource("PlaceholderTexture2D_kb1m1")
 
-[node name="GameManager" type="Node" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/BoardSquare" node_paths=PackedStringArray("board", "pieceHolder", "trashButton", "pauseButton", "drawButton", "disableCapturesButton", "pauseMenu", "pauseMenuResumeButton", "pauseMenuSettingsButton", "pauseMenuMainMenuButton", "drawMenu", "drawMenuAcceptButton", "drawMenuRejectButton", "gameEndMenu", "gameEndMenuTitle", "gameEndMenuPiece1", "gameEndMenuPiece2", "gameEndMenuPlayAgainButton", "gameEndMenuCopyReplayButton", "gameEndMenuCopyReplayCheckmark", "gameEndMenuSettingsButton", "gameEndMenuMainMenuButton", "screenForMenu")]
-script = ExtResource("12_ryb5m")
-board = NodePath("../Board")
-pieceHolder = NodePath("../PieceHolder")
-trashButton = NodePath("")
-pauseButton = NodePath("")
-drawButton = NodePath("")
-disableCapturesButton = NodePath("")
-pauseMenu = NodePath("../../../../PauseMenu")
-pauseMenuResumeButton = NodePath("../../../../PauseMenu/ResumeButton")
-pauseMenuSettingsButton = NodePath("../../../../PauseMenu/SettingsButton")
-pauseMenuMainMenuButton = NodePath("../../../../PauseMenu/MainMenuButton")
-drawMenu = NodePath("../../../../DrawOfferedMenu")
-drawMenuAcceptButton = NodePath("../../../../DrawOfferedMenu/AcceptButton")
-drawMenuRejectButton = NodePath("../../../../DrawOfferedMenu/RejectButton")
-gameEndMenu = NodePath("../../../../GameEndMenu")
-gameEndMenuTitle = NodePath("../../../../GameEndMenu/Control/Label")
-gameEndMenuPiece1 = NodePath("../../../../GameEndMenu/Piece1")
-gameEndMenuPiece2 = NodePath("../../../../GameEndMenu/Piece2")
-gameEndMenuPlayAgainButton = NodePath("../../../../GameEndMenu/PlayAgainButton")
-gameEndMenuCopyReplayButton = NodePath("../../../../GameEndMenu/CopyReplayButton")
-gameEndMenuCopyReplayCheckmark = NodePath("../../../../GameEndMenu/CheckmarkHolder/Checkmark")
-gameEndMenuSettingsButton = NodePath("../../../../GameEndMenu/SettingsButton")
-gameEndMenuMainMenuButton = NodePath("../../../../GameEndMenu/MainMenuButton")
-screenForMenu = NodePath("../../../../../../ScreenForMenu")
-
-[node name="BoardRenderer" type="Node" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/BoardSquare" node_paths=PackedStringArray("board", "pieceHolder", "blackTimer", "whiteTimer", "blackCaptures", "whiteCaptures", "disableCapturesButton", "lines", "circles", "circleArcs", "arrows", "gameManager")]
-script = ExtResource("13_d4k6a")
-board = NodePath("../Board")
-pieceHolder = NodePath("../PieceHolder")
-blackTimer = NodePath("../../BlackUIContainer/BlackTimer/Control/Label")
-whiteTimer = NodePath("../../WhiteUIContainer/WhiteTimer/Control/Label")
-blackCaptures = NodePath("../../WhiteUIContainer/WhiteCaptures/WhiteCaptures")
-whiteCaptures = NodePath("../../BlackUIContainer/BlackCaptures/BlackCapturesContainer")
-disableCapturesButton = NodePath("")
-lines = NodePath("../Lines")
-circles = NodePath("../Circles")
-circleArcs = NodePath("../CircleArcs")
-arrows = NodePath("../Arrows")
-gameManager = NodePath("../GameManager")
-hitRadiusColor = Color(0, 0, 0, 0.501961)
-thickness = 0.01
-whiteCapturerArrowColor = Color(1, 0.356863, 0.290196, 1)
-blackCapturerArrowColor = Color(0, 0.72549, 0.4, 1)
-arrowThickness = 0.005
-
 [node name="WhiteUIContainer" type="HBoxContainer" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
@@ -685,7 +638,7 @@ anchor_right = 1.0
 anchor_bottom = 1.01408
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_font_sizes/font_size = 28
+theme_override_font_sizes/font_size = 35
 text = "5:00"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -694,18 +647,24 @@ metadata/_edit_use_anchors_ = true
 [node name="Control2" type="Control" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/WhiteUIContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_stretch_ratio = 0.05
+size_flags_stretch_ratio = 1.05
 
-[node name="BackForwardButtons" type="Panel" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/WhiteUIContainer"]
+[node name="BackForwardButtons" type="Panel" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/WhiteUIContainer/Control2"]
 material = SubResource("ShaderMaterial_dy5q6")
-layout_mode = 2
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.15
+anchor_right = 0.85
+anchor_bottom = 0.885
+grow_horizontal = 2
+grow_vertical = 2
 size_flags_horizontal = 3
 
-[node name="TextureRect" type="TextureRect" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/WhiteUIContainer/BackForwardButtons"]
+[node name="TextureRect" type="TextureRect" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/WhiteUIContainer/Control2/BackForwardButtons"]
 material = SubResource("ShaderMaterial_0vxi8")
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.452
+anchor_left = 0.467
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_right = -1.52588e-05
@@ -713,10 +672,16 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("PlaceholderTexture2D_5u2cg")
 
-[node name="Control3" type="Control" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/WhiteUIContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_stretch_ratio = 0.05
+[node name="TextureRect2" type="TextureRect" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/WhiteUIContainer/Control2/BackForwardButtons"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.564627
+anchor_top = 0.153273
+anchor_right = 0.923858
+anchor_bottom = 0.867797
+texture = ExtResource("14_rwljf")
+expand_mode = 1
+metadata/_edit_use_anchors_ = true
 
 [node name="WhiteCaptures" type="Panel" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/WhiteUIContainer"]
 material = SubResource("ShaderMaterial_gfptd")
