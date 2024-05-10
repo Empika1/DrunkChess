@@ -1,4 +1,4 @@
-[gd_scene load_steps=65 format=3 uid="uid://5sjfdbro2a3m"]
+[gd_scene load_steps=67 format=3 uid="uid://5sjfdbro2a3m"]
 
 [ext_resource type="Theme" uid="uid://bhkvphjy5bskn" path="res://Themes/Main.tres" id="1_7gpx2"]
 [ext_resource type="Shader" path="res://Shaders/Background.gdshader" id="2_ifcu1"]
@@ -11,6 +11,8 @@
 [ext_resource type="Shader" path="res://Shaders/Circles.gdshader" id="9_sad7g"]
 [ext_resource type="Shader" path="res://Shaders/CircleArcs.gdshader" id="10_336b7"]
 [ext_resource type="Shader" path="res://Shaders/Arrows.gdshader" id="11_6ldbs"]
+[ext_resource type="Script" path="res://Scripts/UI/ModulateScaleButton.gd" id="12_4qrii"]
+[ext_resource type="Texture2D" uid="uid://dpbyu18u3qpxa" path="res://Images/BackButton.svg" id="12_5g07o"]
 [ext_resource type="Texture2D" uid="uid://dpxo0muoxuh0o" path="res://Images/ForwardButton.svg" id="14_rwljf"]
 [ext_resource type="Script" path="res://Scripts/UI/BorderScaleButton.gd" id="14_trfd7"]
 [ext_resource type="Shader" path="res://Shaders/SpriteSheetSlicer.gdshader" id="20_y5n5r"]
@@ -660,7 +662,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 
-[node name="TextureRect" type="TextureRect" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/WhiteUIContainer/Control2/BackForwardButtons"]
+[node name="Border" type="TextureRect" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/WhiteUIContainer/Control2/BackForwardButtons"]
 material = SubResource("ShaderMaterial_0vxi8")
 layout_mode = 1
 anchors_preset = -1
@@ -672,15 +674,72 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("PlaceholderTexture2D_5u2cg")
 
-[node name="TextureRect2" type="TextureRect" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/WhiteUIContainer/Control2/BackForwardButtons"]
+[node name="LeftArrowButton" type="Control" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/WhiteUIContainer/Control2/BackForwardButtons" node_paths=PackedStringArray("spriteDefault")]
+layout_mode = 1
+anchor_left = 0.0334169
+anchor_top = 0.0664673
+anchor_right = 0.47619
+anchor_bottom = 0.930542
+script = ExtResource("12_4qrii")
+scaleDefault = 1.0
+scaleHovered = 1.05
+scalePressed = 1.1
+scaleDisabled = 0.95
+useNonToggledScale = true
+useDefaultModulate = true
+modulateDefault = Color(1, 1, 1, 1)
+useDefaultSprite = true
+spriteDefault = NodePath("LeftArrow")
+metadata/_edit_use_anchors_ = true
+
+[node name="LeftArrow" type="TextureRect" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/WhiteUIContainer/Control2/BackForwardButtons/LeftArrowButton"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.564627
-anchor_top = 0.153273
-anchor_right = 0.923858
-anchor_bottom = 0.867797
+anchor_left = 0.180864
+anchor_top = 0.177385
+anchor_right = 0.867139
+anchor_bottom = 0.850462
+texture = ExtResource("12_5g07o")
+expand_mode = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="RightArrowButton" type="Control" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/WhiteUIContainer/Control2/BackForwardButtons" node_paths=PackedStringArray("spriteDefault")]
+layout_mode = 1
+anchor_left = 0.526316
+anchor_top = 0.0664673
+anchor_right = 0.952381
+anchor_bottom = 0.930542
+offset_left = -2.67029e-05
+offset_right = -3.05176e-05
+script = ExtResource("12_4qrii")
+scaleDefault = 1.0
+scaleHovered = 1.05
+scalePressed = 1.1
+scaleDisabled = 0.95
+useNonToggledScale = true
+useDefaultModulate = true
+modulateDefault = Color(1, 1, 1, 1)
+useDefaultSprite = true
+spriteDefault = NodePath("RightArrow2")
+metadata/_edit_use_anchors_ = true
+
+[node name="RightArrow2" type="TextureRect" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/WhiteUIContainer/Control2/BackForwardButtons/RightArrowButton"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.148741
+anchor_top = 0.177385
+anchor_right = 0.835016
+anchor_bottom = 0.850462
 texture = ExtResource("14_rwljf")
 expand_mode = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="MouseBlocker" type="Control" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/WhiteUIContainer/Control2/BackForwardButtons"]
+layout_mode = 1
+anchor_left = 0.467836
+anchor_top = -0.0166168
+anchor_right = 0.53467
+anchor_bottom = 0.997009
 metadata/_edit_use_anchors_ = true
 
 [node name="WhiteCaptures" type="Panel" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/WhiteUIContainer"]
