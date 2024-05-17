@@ -9,7 +9,7 @@ class_name ReplayManager
 @export var whiteCaptures: HBoxContainer
 @export var nextButton: ModulateScaleButton
 @export var previousButton: ModulateScaleButton
-@export var loadMenuButton: ModulateScaleButton
+@export var loadMenuButton: BorderScaleButton
 
 @export var menu: TextureRect
 @export var menuBox: LineEdit
@@ -100,6 +100,12 @@ func resetPieces(states_: Array[BoardState]) -> void:
 		container.stretch_mode = AspectRatioContainer.STRETCH_HEIGHT_CONTROLS_WIDTH
 		blackCaptures.add_child(container)
 		blackCapturesContainers.append(container)
+	
+	previousButton.buttonComponent.disable()
+	if len(states) == 1:
+		nextButton.buttonComponent.disable()
+	else:
+		nextButton.buttonComponent.enable()
 
 func _ready() -> void:
 	loadMenuButton.buttonComponent.stateUpdated.connect(pause)
@@ -148,7 +154,7 @@ func next(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.Butto
 			previousButton.buttonComponent.enable()
 
 var stateToRender: BoardState
-func _process(_delta) -> void:
+func _process(_delta) -> void:	
 	deleteCircles(); deleteLines(); deleteArcs(); deleteArrows();
 	stateToRender = states[stateIndex]
 #
@@ -349,7 +355,9 @@ func undisableAllButtons():
 	if loadMenuButtonWasEnabled: loadMenuButton.enable()
 
 func pause(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.ButtonState):
+	print("1")
 	if ButtonComponent.justReleased(oldState, newState):
+		print("2")
 		disableAllButtons()
 		
 		menu.visible = true
@@ -365,8 +373,8 @@ func unpause(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.Bu
 func loadReplay(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.ButtonState):
 	if ButtonComponent.justReleased(oldState, newState):
 		if enteredReplayStates != []: #double check
-			resetPieces(enteredReplayStates)
 			unpause(oldState, newState)
+			resetPieces(enteredReplayStates)
 
 var enteredReplayStates: Array[BoardState] = []
 @export var invalidColor: Color

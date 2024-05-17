@@ -289,6 +289,5 @@ func playAgain(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.
 
 func copyReplay(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.ButtonState):
 	if ButtonComponent.justReleased(oldState, newState):
-		#print(Replay.validBoardStateToBitArray(states[-1]).toBase64(3))
 		DisplayServer.clipboard_set(Replay.validBoardStateToBitArray(states[-1]).toBase64(3))
 		gameEndMenuCopyReplayCheckmark.visible = true

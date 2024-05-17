@@ -1,4 +1,4 @@
-[gd_scene load_steps=47 format=3 uid="uid://5sjfdbro2a3m"]
+[gd_scene load_steps=48 format=3 uid="uid://5sjfdbro2a3m"]
 
 [ext_resource type="Theme" uid="uid://bhkvphjy5bskn" path="res://Themes/Main.tres" id="1_7gpx2"]
 [ext_resource type="Shader" path="res://Shaders/Background.gdshader" id="2_ifcu1"]
@@ -56,6 +56,8 @@ shader_parameter/noiseScale = Vector2(0.54, 0.29)
 shader_parameter/noiseSeed = -9.36
 shader_parameter/realWidth = 142.978
 shader_parameter/realHeight = 62.0
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_5tn2h"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_2aubl"]
 shader = ExtResource("5_74tjg")
@@ -403,7 +405,8 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 1.05
 
-[node name="LoadMenuButtons" type="Panel" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/BlackUIContainer/Control3"]
+[node name="LoadMenuButton" type="TextureRect" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/BlackUIContainer/Control3"]
+z_index = 1
 material = SubResource("ShaderMaterial_dy5q6")
 layout_mode = 1
 anchors_preset = -1
@@ -414,33 +417,38 @@ anchor_bottom = 1.07463
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
-metadata/_edit_use_anchors_ = true
-
-[node name="Control2" type="Control" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/BlackUIContainer/Control3/LoadMenuButtons" node_paths=PackedStringArray("spriteDefault")]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-script = ExtResource("12_4qrii")
+texture = SubResource("PlaceholderTexture2D_5tn2h")
+script = ExtResource("16_7embo")
 scaleDefault = 1.0
 scaleHovered = 1.05
 scalePressed = 1.1
 scaleDisabled = 0.95
 useNonToggledScale = true
+useDefaultOuterDistances = true
+outerDistancesDefault = Vector4(0, 0, -0.1, 0)
+useDefaultThickness = true
+thicknessDefault = 0.09
+useDefaultOuterRadius = true
+outerRadiusDefault = 0.235
+useDefaultNoDistortLength = true
+noDistortLengthDefault = 0.195
+insideBgColDefault = Color(0.619608, 0.541176, 0.482353, 1)
+insideBgColHovered = Color(0.737255, 0.662745, 0.607843, 1)
+insideBgColPressed = Color(0.847059, 0.792157, 0.756863, 1)
+insideBgColDisabled = Color(0.454902, 0.419608, 0.396078, 1)
+useNonToggledInsideBgCol = true
+useDefaultOutsideBgCol = true
+outsideBgColDefault = Color(0, 0, 0, 0)
+useDefaultLineCol = true
 useDefaultModulate = true
-useDefaultSprite = true
-spriteDefault = NodePath("Control")
+modulateDefault = Color(1, 1, 1, 1)
 metadata/_edit_use_anchors_ = true
 
-[node name="Control" type="Control" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/BlackUIContainer/Control3/LoadMenuButtons/Control2" node_paths=PackedStringArray("label")]
+[node name="Control" type="Control" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/BlackUIContainer/Control3/LoadMenuButton" node_paths=PackedStringArray("label")]
 layout_mode = 1
 anchor_top = 0.016129
-anchor_right = 1.0
-anchor_bottom = 0.919355
-offset_top = 0.354839
-offset_bottom = 0.354839
+anchor_right = 0.99316
+anchor_bottom = 0.903223
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -450,7 +458,7 @@ fitType = 2
 label = NodePath("Label")
 metadata/_edit_use_anchors_ = true
 
-[node name="Label" type="Label" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/BlackUIContainer/Control3/LoadMenuButtons/Control2/Control"]
+[node name="Label" type="Label" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/BlackUIContainer/Control3/LoadMenuButton/Control"]
 texture_filter = 1
 layout_mode = 1
 anchors_preset = 15
@@ -544,7 +552,7 @@ blackCaptures = NodePath("../../BlackUIContainer/BlackCaptures/BlackCapturesCont
 whiteCaptures = NodePath("../../WhiteUIContainer/WhiteCaptures/WhiteCaptures")
 nextButton = NodePath("../../WhiteUIContainer/Control2/BackForwardButtons/RightArrowButton")
 previousButton = NodePath("../../WhiteUIContainer/Control2/BackForwardButtons/LeftArrowButton")
-loadMenuButton = NodePath("../../BlackUIContainer/Control3/LoadMenuButtons/Control2")
+loadMenuButton = NodePath("../../BlackUIContainer/Control3/LoadMenuButton")
 menu = NodePath("../../../../ReplayMenu")
 menuBox = NodePath("../../../../ReplayMenu/Control2/Control3/Control/LineEdit")
 menuMainMenuButton = NodePath("../../../../ReplayMenu/MainMenuButton")
