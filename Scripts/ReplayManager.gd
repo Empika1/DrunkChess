@@ -9,13 +9,22 @@ class_name ReplayManager
 @export var whiteCaptures: HBoxContainer
 @export var nextButton: ModulateScaleButton
 @export var previousButton: ModulateScaleButton
+@export var loadMenuButton: ModulateScaleButton
+
+@export var menu: TextureRect
+@export var menuBox: LineEdit
+@export var menuMainMenuButton: BorderScaleButton
+@export var menuLoadReplayButton: BorderScaleButton
+@export var menuLoadReplayButtonText: Label
+
+@export var screenForMenu: ColorRect
 
 @export var lines: TextureRect
 @export var circles: TextureRect
 @export var circleArcs: TextureRect
 @export var arrows: TextureRect
 
-var replayString: String = "H4sIAAAAAAAACmPMEHnHAAIsYgoMCgxJDHIMAgoMCQxMDFIMQglAETWQSAJQhA0oIrIAKOIFElkAFOECikg8AIr0gUQeAEX4gCLSIHM2AUUEQeYIAUVEQeaEgURA5ogBRYRB5liBREDmSAGhOMicOpAIyBw5oAgILGSau9pQ7WXFFcndrasLOUTe7l146kCzwpQGxgYGh+W5b/nCWCTZ0n/fimZitU6aXLInq0EVZKmA5m2R2UsfhzDOVDMyWtDod2PJXX2pBeHsDAwAXgJNl+8AAAA="
+var replayString: String = "H4sIAAAAAAAACmPMEHnHAAIsYgoMCgxJDHIMAgoMCQxMDFIMQglAETWQSAJQhA0oIrIAKOIFElkAFOECikg8AIr0gUQeAEX4gCLSIHM2AUUEQeYIAUVEQeaEgURA5ogBRYRB5liBREDmSAGhOMicOpAIyBw5oAgQMCoyzd3QLJQ3vUd4AsMEBg6Rt/O1mXg8DxQ3MDcwOCzP+RkhkOTHcodBhoGJ1Tro66H+GA1lBYYHDAKat6avE6l66KjOwMrA0Oh3blo7UB/HCQYPBhauspItlhECCZ4HGA4wKARv8jBUe1nJZAR0FiPT3EmOnebeJ4Ras6Wmcoi8mcTjuSvOgZuTgQEAzoAYPyYBAAA="
 var states: Array[BoardState] = []
 var stateIndex: int = 0
 
@@ -43,18 +52,32 @@ func addPieceToFreePool(piece) -> void:
 	pieceHolder.add_child(sprite)
 	sprite.init(piece)
 
-func _ready() -> void:
-	nextButton.buttonComponent.stateUpdated.connect(next)
-	previousButton.buttonComponent.stateUpdated.connect(previous)
-	previousButton.buttonComponent.disable()
+func tryStringToStateList(replayString_: String) -> Array[BoardState]: #returns [] if invalid replay
+	var arr: BitArray = BitArray.fromBase64(replayString_, 3)
+	if arr == null:
+		return []
+	var state: BoardState = Replay.bitArrayToValidBoardState(arr)
+	if state == null:
+		return []
 	
-	states = [Replay.bitArrayToValidBoardState(BitArray.fromBase64(replayString, 3))]
-	while states[-1].previousState != null:
-		states.append(states[-1].previousState)
-	states.reverse()
-	print(len(states))
-	
-	for piece in states[-1].pieces:
+	var states_: Array[BoardState] = [Replay.bitArrayToValidBoardState(BitArray.fromBase64(replayString_, 3))]
+	while states_[-1].previousState != null:
+		states_.append(states_[-1].previousState)
+	states_.reverse()
+	return states_
+
+func resetPieces(states_: Array[BoardState]) -> void:
+	states = states_
+	stateIndex = 0
+	for node in whiteCaptures.get_children():
+		whiteCaptures.remove_child(node)
+		node.queue_free()
+	for node in blackCaptures.get_children():
+		blackCaptures.remove_child(node)
+		node.queue_free()
+	whiteCapturesContainers = []
+	blackCapturesContainers = []
+	for piece in states_[0].pieces:
 		addPieceToFreePool(piece)
 		
 		var container: AspectRatioContainer = AspectRatioContainer.new()
@@ -78,6 +101,19 @@ func _ready() -> void:
 		blackCaptures.add_child(container)
 		blackCapturesContainers.append(container)
 
+func _ready() -> void:
+	loadMenuButton.buttonComponent.stateUpdated.connect(pause)
+	menuLoadReplayButton.buttonComponent.stateUpdated.connect(loadReplay)
+	menuMainMenuButton.buttonComponent.stateUpdated.connect(goToMainMenu)
+	
+	nextButton.buttonComponent.stateUpdated.connect(next)
+	previousButton.buttonComponent.stateUpdated.connect(previous)
+	
+	menuBox.text_changed.connect(updateEnteredReplay)
+	
+	var states_: Array[BoardState] = tryStringToStateList(replayString)
+	resetPieces(states_)
+
 static func getPieceFrame(col: Piece.PieceColor, type: Piece.PieceType) -> int:
 	return int(col) * 6 + int(type)
 
@@ -100,12 +136,16 @@ func previous(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.B
 		stateIndex -= 1
 		if stateIndex == 0:
 			previousButton.buttonComponent.disable()
+		else:
+			nextButton.buttonComponent.enable()
 
 func next(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.ButtonState):
 	if ButtonComponent.justReleased(oldState, newState):
 		stateIndex += 1
 		if stateIndex == len(states) - 1:
 			nextButton.buttonComponent.disable()
+		else:
+			previousButton.buttonComponent.enable()
 
 var stateToRender: BoardState
 func _process(_delta) -> void:
@@ -126,51 +166,51 @@ func _process(_delta) -> void:
 		sprite.size = board.size / 8
 		sprite.global_position = boardPosToGamePos(piece.pos) - sprite.size / 2
 	
-	#var whiteCapturedPiecesSorted: Array[Piece] = []
-	#var blackCapturedPiecesSorted: Array[Piece] = []
-	#for piece in stateToRender.capturedPieces:
-		#if piece.color == Piece.PieceColor.WHITE:
-			#whiteCapturedPiecesSorted.append(piece)
-		#else:
-			#blackCapturedPiecesSorted.append(piece)
-	#whiteCapturedPiecesSorted.sort_custom(Piece.sortByType)
-	#blackCapturedPiecesSorted.sort_custom(Piece.sortByType)
-	#var i: int = 0
-	#while i < len(whiteCapturedPiecesSorted):
-		#var piece: Piece = whiteCapturedPiecesSorted[i]
-		#var sprite: DraggablePiece = freePiecePool.pop_back()
-		#usedPiecePool.append(sprite)
-		#sprite.piece = piece
-		#(sprite.material as ShaderMaterial).set_shader_parameter("frame", getPieceFrame(piece.color, piece.type))
-		#if i > 0 and piece.type != whiteCapturedPiecesSorted[i - 1].type:
-			#whiteCapturesContainers[i].size_flags_horizontal = Control.SIZE_EXPAND_FILL
-			#i += 1
-		#sprite.reparent(whiteCapturesContainers[i])
-		#whiteCapturesContainers[i].size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		#i += 1
-	#while i < len(whiteCapturesContainers):
-		#whiteCapturesContainers[i].size_flags_horizontal = Control.SIZE_FILL
-		#i += 1
-	#i = 0
-	#while i < len(blackCapturedPiecesSorted):
-		#var piece: Piece = blackCapturedPiecesSorted[i]
-		#var sprite: DraggablePiece = freePiecePool.pop_back()
-		#usedPiecePool.append(sprite)
-		#sprite.piece = piece
-		#(sprite.material as ShaderMaterial).set_shader_parameter("frame", getPieceFrame(piece.color, piece.type))
-		#if i > 0 and piece.type != blackCapturedPiecesSorted[i - 1].type:
-			#blackCapturesContainers[i].size_flags_horizontal = Control.SIZE_EXPAND_FILL
-			#i += 1
-		#sprite.reparent(blackCapturesContainers[i])
-		#blackCapturesContainers[i].size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		#i += 1
-	#while i < len(blackCapturesContainers):
-		#blackCapturesContainers[i].size_flags_horizontal = Control.SIZE_FILL
-		#i += 1
-	#
-	#for sprite in freePiecePool:
-		#sprite.global_position = shadowRealm
-		#sprite.piece = null
+	var whiteCapturedPiecesSorted: Array[Piece] = []
+	var blackCapturedPiecesSorted: Array[Piece] = []
+	for piece in stateToRender.capturedPieces:
+		if piece.color == Piece.PieceColor.WHITE:
+			whiteCapturedPiecesSorted.append(piece)
+		else:
+			blackCapturedPiecesSorted.append(piece)
+	whiteCapturedPiecesSorted.sort_custom(Piece.sortByType)
+	blackCapturedPiecesSorted.sort_custom(Piece.sortByType)
+	var i: int = 0
+	while i < len(whiteCapturedPiecesSorted):
+		var piece: Piece = whiteCapturedPiecesSorted[i]
+		var sprite: DraggablePiece = freePiecePool.pop_back()
+		usedPiecePool.append(sprite)
+		sprite.piece = piece
+		(sprite.material as ShaderMaterial).set_shader_parameter("frame", getPieceFrame(piece.color, piece.type))
+		if i > 0 and piece.type != whiteCapturedPiecesSorted[i - 1].type:
+			whiteCapturesContainers[i].size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			i += 1
+		sprite.reparent(whiteCapturesContainers[i])
+		whiteCapturesContainers[i].size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		i += 1
+	while i < len(whiteCapturesContainers):
+		whiteCapturesContainers[i].size_flags_horizontal = Control.SIZE_FILL
+		i += 1
+	i = 0
+	while i < len(blackCapturedPiecesSorted):
+		var piece: Piece = blackCapturedPiecesSorted[i]
+		var sprite: DraggablePiece = freePiecePool.pop_back()
+		usedPiecePool.append(sprite)
+		sprite.piece = piece
+		(sprite.material as ShaderMaterial).set_shader_parameter("frame", getPieceFrame(piece.color, piece.type))
+		if i > 0 and piece.type != blackCapturedPiecesSorted[i - 1].type:
+			blackCapturesContainers[i].size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			i += 1
+		sprite.reparent(blackCapturesContainers[i])
+		blackCapturesContainers[i].size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		i += 1
+	while i < len(blackCapturesContainers):
+		blackCapturesContainers[i].size_flags_horizontal = Control.SIZE_FILL
+		i += 1
+	
+	for sprite in freePiecePool:
+		sprite.global_position = shadowRealm
+		sprite.piece = null
 	
 	addCaptureArrows(stateToRender)
 	
@@ -287,3 +327,59 @@ func addCaptureArrows(state: BoardState) -> void:
 			arrowDisplace = Vector2(arrowDisplace.y, -arrowDisplace.x)
 			arrowDisplace *= lengthMultiplier
 			arrowDistortPoints.append(arrowMidpoint + arrowDisplace)
+
+func goToMainMenu(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.ButtonState):
+	if ButtonComponent.justReleased(oldState, newState):
+		get_tree().change_scene_to_file("res://Scenes/MainMenu.tscn")
+
+var nextButtonWasEnabled: bool
+var previousButtonWasEnabled: bool
+var loadMenuButtonWasEnabled: bool
+func disableAllButtons():
+	nextButtonWasEnabled = not nextButton.buttonComponent.state.isDisabled
+	previousButtonWasEnabled = not previousButton.buttonComponent.state.isDisabled
+	loadMenuButtonWasEnabled = not loadMenuButton.buttonComponent.state.isDisabled
+	nextButton.disable()
+	previousButton.disable()
+	loadMenuButton.disable()
+
+func undisableAllButtons():
+	if nextButtonWasEnabled: nextButton.enable()
+	if previousButtonWasEnabled: previousButton.enable()
+	if loadMenuButtonWasEnabled: loadMenuButton.enable()
+
+func pause(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.ButtonState):
+	if ButtonComponent.justReleased(oldState, newState):
+		disableAllButtons()
+		
+		menu.visible = true
+		screenForMenu.color.a = 0.5
+
+func unpause(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.ButtonState):
+	if ButtonComponent.justReleased(oldState, newState):
+		undisableAllButtons()
+		
+		menu.visible = false
+		screenForMenu.color.a = 0.
+		
+func loadReplay(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.ButtonState):
+	if ButtonComponent.justReleased(oldState, newState):
+		if enteredReplayStates != []: #double check
+			resetPieces(enteredReplayStates)
+			unpause(oldState, newState)
+
+var enteredReplayStates: Array[BoardState] = []
+@export var invalidColor: Color
+@export var validColor: Color
+func updateEnteredReplay(newText: String):
+	print(newText)
+	enteredReplayStates = tryStringToStateList(newText)
+	print(len(enteredReplayStates))
+	if enteredReplayStates == []:
+		menuLoadReplayButton.buttonComponent.disable()
+		menuLoadReplayButtonText.add_theme_color_override("font_color", invalidColor)
+		menuLoadReplayButtonText.text = "Invalid Replay"
+	else:
+		menuLoadReplayButton.buttonComponent.enable()
+		menuLoadReplayButtonText.add_theme_color_override("font_color", validColor)
+		menuLoadReplayButtonText.text = "Load"

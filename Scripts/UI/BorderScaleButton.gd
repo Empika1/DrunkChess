@@ -111,6 +111,8 @@ class_name BorderScaleButton
 @export var spritePressedToggled: Control
 @export var spriteDisabledToggled: Control
 
+@export var disableInitially: bool = false
+
 var buttonComponent: ButtonComponent = ButtonComponent.new()
 
 func _ready():
@@ -120,6 +122,9 @@ func _ready():
 	
 	mouse_entered.connect(buttonComponent.hover)
 	mouse_exited.connect(buttonComponent.unhover)
+	
+	if disableInitially:
+		buttonComponent.disable()
 
 func _input(event):	
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
