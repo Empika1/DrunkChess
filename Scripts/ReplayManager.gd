@@ -7,8 +7,8 @@ class_name ReplayManager
 @export var whiteTimer: Label
 @export var blackCaptures: HBoxContainer
 @export var whiteCaptures: HBoxContainer
-@export var nextButton: ModulateScaleButton
-@export var previousButton: ModulateScaleButton
+@export var nextButton: BorderScaleButton
+@export var previousButton: BorderScaleButton
 @export var loadMenuButton: BorderScaleButton
 
 @export var menu: TextureRect
@@ -142,16 +142,14 @@ func previous(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.B
 		stateIndex -= 1
 		if stateIndex == 0:
 			previousButton.buttonComponent.disable()
-		else:
-			nextButton.buttonComponent.enable()
+		nextButton.buttonComponent.enable()
 
 func next(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.ButtonState):
 	if ButtonComponent.justReleased(oldState, newState):
 		stateIndex += 1
 		if stateIndex == len(states) - 1:
 			nextButton.buttonComponent.disable()
-		else:
-			previousButton.buttonComponent.enable()
+		previousButton.buttonComponent.enable()
 
 var stateToRender: BoardState
 func _process(_delta) -> void:	
