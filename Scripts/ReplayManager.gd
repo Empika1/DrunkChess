@@ -24,7 +24,7 @@ class_name ReplayManager
 @export var circleArcs: TextureRect
 @export var arrows: TextureRect
 
-var replayString: String = "H4sIAAAAAAAACmPMEHnHAAIsYgoMCgxJDHIMAgoMCQxMDFIMQglAETWQSAJQhA0oIrIAKOIFElkAFOECikg8AIr0gUQeAEX4gCLSIHM2AUUEQeYIAUVEQeaEgURA5ogBRYRB5liBREDmSAGhOMicOpAIyBw5oAgQMCoyzd3QLJQ3vUd4AsMEBg6Rt/O1mXg8DxQ3MDcwOCzP+RkhkOTHcodBhoGJ1Tro66H+GA1lBYYHDAKat6avE6l66KjOwMrA0Oh3blo7UB/HCQYPBhauspItlhECCZ4HGA4wKARv8jBUe1nJZAR0FiPT3EmOnebeJ4Ras6Wmcoi8mcTjuSvOgZuTgQEAzoAYPyYBAAA="
+static var replayString: String = "H4sIAAAAAAAACh3Myw1AUBSE4SFYEOJNSOSulGChBAWI5Y2VKpSgBjWoSClmzFmc5Fv8zpFu0LzawGDHgNTAwkWH3FJGiaUElPKmLJKbElLal3JJXkpC6dV5KJk6OaVSZ5WoU1MKdWaJOh2vUeeUqDNQtNiN/o/JBz5cRd2OqwAAAA=="
 var states: Array[BoardState] = []
 var stateIndex: int = 0
 
@@ -103,6 +103,7 @@ func resetPieces(states_: Array[BoardState]) -> void:
 	
 	previousButton.buttonComponent.disable()
 	if len(states) == 1:
+		print("s")
 		nextButton.buttonComponent.disable()
 	else:
 		nextButton.buttonComponent.enable()

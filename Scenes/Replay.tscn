@@ -16,15 +16,15 @@
 [ext_resource type="Texture2D" uid="uid://dpxo0muoxuh0o" path="res://Images/ForwardButton.svg" id="14_rwljf"]
 [ext_resource type="Script" path="res://Scripts/UI/BorderScaleButton.gd" id="16_7embo"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_yxwyt"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_41qxn"]
 shader = ExtResource("2_ifcu1")
 shader_parameter/posterizationLayers = 7.0
 shader_parameter/timeScale = 0.04
 shader_parameter/realWidth = 1152.0
 shader_parameter/realHeight = 648.0
 shader_parameter/scale = 1.4
-shader_parameter/layer1Col1 = Color(0.14902, 0.188235, 0.74902, 1)
-shader_parameter/layer1Col2 = Color(1, 0.921569, 0.929412, 1)
+shader_parameter/layer1Col1 = Color(0.109804, 0.541176, 0.423529, 1)
+shader_parameter/layer1Col2 = Color(1, 0.976471, 0.921569, 1)
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_ujew3"]
 
@@ -344,7 +344,7 @@ theme = ExtResource("1_7gpx2")
 
 [node name="Background" type="TextureRect" parent="."]
 z_index = -5
-material = SubResource("ShaderMaterial_yxwyt")
+material = SubResource("ShaderMaterial_41qxn")
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -775,7 +775,7 @@ texture = ExtResource("14_rwljf")
 expand_mode = 1
 metadata/_edit_use_anchors_ = true
 
-[node name="Corner" type="TextureRect" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/WhiteUIContainer/Control2/RightArrowButton" node_paths=PackedStringArray("spriteDefault")]
+[node name="Corner" type="TextureRect" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/WhiteUIContainer/Control2/RightArrowButton"]
 z_index = -1
 material = SubResource("ShaderMaterial_xbh5l")
 layout_mode = 1
@@ -786,32 +786,6 @@ anchor_right = 0.023231
 anchor_bottom = 1.36667
 mouse_filter = 0
 texture = SubResource("PlaceholderTexture2D_p15ug")
-script = ExtResource("16_7embo")
-scaleDefault = 1.0
-scaleHovered = 1.05
-scalePressed = 1.1
-scaleDisabled = 0.95
-useNonToggledScale = true
-useDefaultOuterDistances = true
-outerDistancesDefault = Vector4(-0.15, -0.26, 0.03, 0.03)
-useDefaultThickness = true
-thicknessDefault = 0.09
-useDefaultOuterRadius = true
-outerRadiusDefault = 0.235
-useDefaultNoDistortLength = true
-noDistortLengthDefault = 0.35
-insideBgColDefault = Color(0.619608, 0.541176, 0.482353, 1)
-insideBgColHovered = Color(0.737255, 0.662745, 0.607843, 1)
-insideBgColPressed = Color(0.847059, 0.792157, 0.756863, 1)
-insideBgColDisabled = Color(0.454902, 0.419608, 0.396078, 1)
-useNonToggledInsideBgCol = true
-useDefaultOutsideBgCol = true
-outsideBgColDefault = Color(0, 0, 0, 0)
-useDefaultLineCol = true
-useDefaultModulate = true
-modulateDefault = Color(1, 1, 1, 1)
-useDefaultSprite = true
-spriteDefault = NodePath("../RightArrow")
 metadata/_edit_use_anchors_ = true
 
 [node name="Border" type="TextureRect" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/WhiteUIContainer/Control2"]

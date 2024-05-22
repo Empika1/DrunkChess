@@ -647,7 +647,7 @@ material = SubResource("ShaderMaterial_yx8dn")
 layout_mode = 2
 texture = SubResource("PlaceholderTexture2D_kb1m1")
 
-[node name="GameManager" type="Node" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/BoardSquare" node_paths=PackedStringArray("board", "pieceHolder", "trashButton", "pauseButton", "drawButton", "disableCapturesButton", "pauseMenu", "pauseMenuResumeButton", "pauseMenuSettingsButton", "pauseMenuMainMenuButton", "drawMenu", "drawMenuAcceptButton", "drawMenuRejectButton", "gameEndMenu", "gameEndMenuTitle", "gameEndMenuPiece1", "gameEndMenuPiece2", "gameEndMenuPlayAgainButton", "gameEndMenuCopyReplayButton", "gameEndMenuCopyReplayCheckmark", "gameEndMenuSettingsButton", "gameEndMenuMainMenuButton", "screenForMenu")]
+[node name="GameManager" type="Node" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/BoardSquare" node_paths=PackedStringArray("board", "pieceHolder", "trashButton", "pauseButton", "drawButton", "disableCapturesButton", "pauseMenu", "pauseMenuResumeButton", "pauseMenuSettingsButton", "pauseMenuMainMenuButton", "drawMenu", "drawMenuAcceptButton", "drawMenuRejectButton", "gameEndMenu", "gameEndMenuTitle", "gameEndMenuPiece1", "gameEndMenuPiece2", "gameEndMenuPlayAgainButton", "gameEndMenuCopyReplayButton", "gameEndMenuCopyReplayCheckmark", "gameEndMenuCopyReplayText", "gameEndMenuSettingsButton", "gameEndMenuMainMenuButton", "screenForMenu")]
 script = ExtResource("15_uqtdi")
 board = NodePath("../Board")
 pieceHolder = NodePath("../PieceHolder")
@@ -667,8 +667,9 @@ gameEndMenuTitle = NodePath("../../../../GameEndMenu/Control/Label")
 gameEndMenuPiece1 = NodePath("../../../../GameEndMenu/Piece1")
 gameEndMenuPiece2 = NodePath("../../../../GameEndMenu/Piece2")
 gameEndMenuPlayAgainButton = NodePath("../../../../GameEndMenu/PlayAgainButton")
-gameEndMenuCopyReplayButton = NodePath("../../../../GameEndMenu/CopyReplayButton")
+gameEndMenuCopyReplayButton = NodePath("../../../../GameEndMenu/CopyViewReplayButton")
 gameEndMenuCopyReplayCheckmark = NodePath("../../../../GameEndMenu/CheckmarkHolder/Checkmark")
+gameEndMenuCopyReplayText = NodePath("../../../../GameEndMenu/CopyViewReplayButton/Control/Label")
 gameEndMenuSettingsButton = NodePath("../../../../GameEndMenu/SettingsButton")
 gameEndMenuMainMenuButton = NodePath("../../../../GameEndMenu/MainMenuButton")
 screenForMenu = NodePath("../../../../../../ScreenForMenu")
@@ -1400,7 +1401,7 @@ text = "Play Again"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="CopyReplayButton" type="TextureRect" parent="AspectRatioContainer/Control/GameEndMenu"]
+[node name="CopyViewReplayButton" type="TextureRect" parent="AspectRatioContainer/Control/GameEndMenu"]
 material = SubResource("ShaderMaterial_droyb")
 layout_mode = 1
 anchors_preset = -1
@@ -1442,7 +1443,7 @@ useNonToggledModulate = true
 useDefaultSprite = true
 metadata/_edit_use_anchors_ = true
 
-[node name="Control" type="Control" parent="AspectRatioContainer/Control/GameEndMenu/CopyReplayButton" node_paths=PackedStringArray("label")]
+[node name="Control" type="Control" parent="AspectRatioContainer/Control/GameEndMenu/CopyViewReplayButton" node_paths=PackedStringArray("label")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -1454,7 +1455,7 @@ script = ExtResource("6_v8qg6")
 fontSize = 36.0
 label = NodePath("Label")
 
-[node name="Label" type="Label" parent="AspectRatioContainer/Control/GameEndMenu/CopyReplayButton/Control"]
+[node name="Label" type="Label" parent="AspectRatioContainer/Control/GameEndMenu/CopyViewReplayButton/Control"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

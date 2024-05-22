@@ -91,7 +91,7 @@ static func validBoardStateToBitArray(state: BoardState) -> BitArray:
 	if startingState.turnToMove == Piece.PieceColor.WHITE:
 		arr.setFromFloat(i, startingState.whiteTime)
 	else:
-		arr.setFromFloat(i,startingState.blackTime)
+		arr.setFromFloat(i, startingState.blackTime)
 	i += 64
 	
 	#read in all moves

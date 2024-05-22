@@ -21,11 +21,12 @@ class_name GameManager
 @export var gameEndMenuPlayAgainButton: BorderScaleButton
 @export var gameEndMenuCopyReplayButton: BorderScaleButton
 @export var gameEndMenuCopyReplayCheckmark: TextureRect
+@export var gameEndMenuCopyReplayText: Label
 @export var gameEndMenuSettingsButton: BorderScaleButton
 @export var gameEndMenuMainMenuButton: BorderScaleButton
 @export var screenForMenu: ColorRect
 
-@onready var states: Array[BoardState] = [BoardState.newDefaultStartingState(BoardState.StartSettings.new(BoardState.StartSettings.AssistMode.MOVE_ARROWS, true, 3000))]
+@onready var states: Array[BoardState] = [BoardState.newDefaultStartingState(BoardState.StartSettings.new(BoardState.StartSettings.AssistMode.MOVE_ARROWS, true, 600))]
 #@onready var states: Array[BoardState] = [Replay.replayToState(Replay.stringToReplay("v1H4sIAAAAAAAACpNhYGBgAmIZIOaC0gpQmgWI2YCYQQCCQeqYoeoZoZgBm9oPqGoZ8Kk1QKghaO4FVLU4zTVAuJeRkLkGCPcyEmMuse41IMG9AQj3wjBOcwMQ7mUixlxi3RtAgnsLEO5lIWRuAcK9LMSYS6x7C0hw7wSEe1kJmTsB4V5WYswl1r0TIBibexnR1W5gID49bGAgPj1sIMG9ILXEhu8FBuLz2wUG4vPbBRLce4EE935gIL48+8BAfHn2gQT3fiDsXmQzmJDER8vp0XJ6tJxmoF05Tax7R8vp0XIaTRxGMyDJMyOZD2IzNFi7MsH5jAyVL9UMOXKWOyDLwfSyIZlJSjpFb3Owke0mRgbLLSfK6nKXOyC7gwNKc6L5nY8BKd8XIOwG0f+BAEaDzA3onZ53KRO3HehmC5Npdhif7qa7WfjNFkQOMwJmt4vdPPc9nXizhZDdHUC82YobijIuZpDg7gn4zTbkWCNzK5V4s1HcbUC82fy6m+bmp5Hg7g34zd5TMlmiJYmw2bBySgjZbLT6jxSzATHEXQgcDwAA"))]
 
 func getScaledRectSize() -> float:
@@ -287,7 +288,14 @@ func playAgain(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.
 	if ButtonComponent.justReleased(oldState, newState):
 		get_tree().reload_current_scene()
 
+var replayString: String = ""
 func copyReplay(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.ButtonState):
 	if ButtonComponent.justReleased(oldState, newState):
-		DisplayServer.clipboard_set(Replay.validBoardStateToBitArray(states[-1]).toBase64(3))
-		gameEndMenuCopyReplayCheckmark.visible = true
+		if gameEndMenuCopyReplayCheckmark.visible:
+			ReplayManager.replayString = replayString
+			get_tree().change_scene_to_file("res://Scenes/Replay.tscn")
+		else:
+			replayString = Replay.validBoardStateToBitArray(states[-1]).toBase64(3)
+			DisplayServer.clipboard_set(replayString)
+			gameEndMenuCopyReplayCheckmark.visible = true
+			gameEndMenuCopyReplayText.text = "View Replay"
