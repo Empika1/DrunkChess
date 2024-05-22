@@ -172,7 +172,7 @@ shader_parameter/noiseSeed = 1.465
 shader_parameter/realWidth = 199.0
 shader_parameter/realHeight = 68.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_e8xod"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ut7u8"]
 shader = ExtResource("11_6jtdc")
 shader_parameter/outerDistances = Vector4(0.06, 0.06, 0.06, 0.06)
 shader_parameter/thickness = 0.075
@@ -182,13 +182,13 @@ shader_parameter/insideBgCol = Color(0.619608, 0.541176, 0.482353, 1)
 shader_parameter/outsideBgCol = Color(0, 0, 0, 0)
 shader_parameter/lineCol = Color(0, 0, 0, 1)
 shader_parameter/noiseScale = Vector2(1.745, 0.155)
-shader_parameter/noiseSeed = -3.88
+shader_parameter/noiseSeed = -5.22
 shader_parameter/realWidth = 89.076
 shader_parameter/realHeight = 88.543
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_kbbtc"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_2es3q"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lrukx"]
 shader = ExtResource("11_6jtdc")
 shader_parameter/outerDistances = Vector4(0.06, 0.06, 0.06, 0.06)
 shader_parameter/thickness = 0.075
@@ -198,13 +198,13 @@ shader_parameter/insideBgCol = Color(0.619608, 0.541176, 0.482353, 1)
 shader_parameter/outsideBgCol = Color(0, 0, 0, 0)
 shader_parameter/lineCol = Color(0, 0, 0, 1)
 shader_parameter/noiseScale = Vector2(1.745, 0.155)
-shader_parameter/noiseSeed = -3.88
+shader_parameter/noiseSeed = -2.76
 shader_parameter/realWidth = 89.076
 shader_parameter/realHeight = 88.543
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_l4inv"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_o48cx"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mmkmm"]
 shader = ExtResource("11_6jtdc")
 shader_parameter/outerDistances = Vector4(0.06, 0.06, 0.06, 0.06)
 shader_parameter/thickness = 0.075
@@ -214,7 +214,7 @@ shader_parameter/insideBgCol = Color(0.619608, 0.541176, 0.482353, 1)
 shader_parameter/outsideBgCol = Color(0, 0, 0, 0)
 shader_parameter/lineCol = Color(0, 0, 0, 1)
 shader_parameter/noiseScale = Vector2(1.745, 0.155)
-shader_parameter/noiseSeed = -3.88
+shader_parameter/noiseSeed = -3.395
 shader_parameter/realWidth = 89.076
 shader_parameter/realHeight = 88.543
 
@@ -770,7 +770,7 @@ layout_mode = 2
 size_flags_vertical = 3
 
 [node name="TrashButton" type="TextureRect" parent="AspectRatioContainer/Control/RightButtonsContainer/Control"]
-material = SubResource("ShaderMaterial_e8xod")
+material = SubResource("ShaderMaterial_ut7u8")
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -829,7 +829,7 @@ layout_mode = 2
 size_flags_vertical = 3
 
 [node name="OfferDrawButton" type="TextureRect" parent="AspectRatioContainer/Control/RightButtonsContainer/Control2"]
-material = SubResource("ShaderMaterial_2es3q")
+material = SubResource("ShaderMaterial_lrukx")
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -896,7 +896,7 @@ layout_mode = 2
 size_flags_vertical = 3
 
 [node name="PauseButton" type="TextureRect" parent="AspectRatioContainer/Control/LeftButtonsContainer/Control"]
-material = SubResource("ShaderMaterial_o48cx")
+material = SubResource("ShaderMaterial_mmkmm")
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0

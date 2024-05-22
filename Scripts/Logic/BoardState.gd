@@ -139,17 +139,18 @@ func makeMove(move_: Move) -> BoardState:
 	return state
 
 func updateTimer(newTime: float) -> void: #JANK: this is logic but isnt in boardlogic
-	if result != StateResult.VALID:
-		return
-	
-	if turnToMove == Piece.PieceColor.WHITE:
-		whiteTime = maxf(newTime, 0)
-		if whiteTime == 0:
-			result = StateResult.WIN_BLACK
-	else:
-		blackTime = maxf(newTime, 0)
-		if blackTime == 0:
-			result = StateResult.WIN_WHITE
+	if startSettings.isTimed:
+		if result != StateResult.VALID:
+			return
+		
+		if turnToMove == Piece.PieceColor.WHITE:
+			whiteTime = maxf(newTime, 0)
+			if whiteTime == 0:
+				result = StateResult.WIN_BLACK
+		else:
+			blackTime = maxf(newTime, 0)
+			if blackTime == 0:
+				result = StateResult.WIN_WHITE
 
 func offerDraw() -> void: #JANK: this is logic but isnt in boardlogic
 	if turnToMove == Piece.PieceColor.WHITE:

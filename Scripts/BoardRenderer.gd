@@ -153,8 +153,12 @@ func _process(_delta) -> void:
 	if disableCapturesButton.buttonComponent.state.toggleState == 0:
 		addCaptureArrows(stateToRender)
 	
-	whiteTimer.text = formatTime(gameManager.states[-1].whiteTime)
-	blackTimer.text = formatTime(gameManager.states[-1].blackTime)
+	if gameManager.states[0].startSettings.isTimed:
+		whiteTimer.text = formatTime(gameManager.states[-1].whiteTime)
+		blackTimer.text = formatTime(gameManager.states[-1].blackTime)
+	else:
+		whiteTimer.text = "XX:XX"
+		blackTimer.text = "XX:XX"
 	
 	setCircles(); setLines(); setArcs(); setArrows();
 
