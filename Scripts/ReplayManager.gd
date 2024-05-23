@@ -64,6 +64,7 @@ func tryStringToStateList(replayString_: String) -> Array[BoardState]: #returns 
 	while states_[-1].previousState != null:
 		states_.append(states_[-1].previousState)
 	states_.reverse()
+	
 	return states_
 
 func resetPieces(states_: Array[BoardState]) -> void:
@@ -180,35 +181,41 @@ func _process(_delta) -> void:
 			blackCapturedPiecesSorted.append(piece)
 	whiteCapturedPiecesSorted.sort_custom(Piece.sortByType)
 	blackCapturedPiecesSorted.sort_custom(Piece.sortByType)
+	
 	var i: int = 0
-	while i < len(whiteCapturedPiecesSorted):
-		var piece: Piece = whiteCapturedPiecesSorted[i]
+	var pieceI: int = 0
+	while pieceI < len(whiteCapturedPiecesSorted):
+		var piece: Piece = whiteCapturedPiecesSorted[pieceI]
 		var sprite: DraggablePiece = freePiecePool.pop_back()
 		usedPiecePool.append(sprite)
 		sprite.piece = piece
 		(sprite.material as ShaderMaterial).set_shader_parameter("frame", getPieceFrame(piece.color, piece.type))
-		if i > 0 and piece.type != whiteCapturedPiecesSorted[i - 1].type:
+		if pieceI > 0 and piece.type != whiteCapturedPiecesSorted[pieceI - 1].type:
 			whiteCapturesContainers[i].size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			i += 1
 		sprite.reparent(whiteCapturesContainers[i])
 		whiteCapturesContainers[i].size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		i += 1
+		pieceI += 1
 	while i < len(whiteCapturesContainers):
 		whiteCapturesContainers[i].size_flags_horizontal = Control.SIZE_FILL
 		i += 1
+	
 	i = 0
-	while i < len(blackCapturedPiecesSorted):
-		var piece: Piece = blackCapturedPiecesSorted[i]
+	pieceI = 0
+	while pieceI < len(blackCapturedPiecesSorted):
+		var piece: Piece = blackCapturedPiecesSorted[pieceI]
 		var sprite: DraggablePiece = freePiecePool.pop_back()
 		usedPiecePool.append(sprite)
 		sprite.piece = piece
 		(sprite.material as ShaderMaterial).set_shader_parameter("frame", getPieceFrame(piece.color, piece.type))
-		if i > 0 and piece.type != blackCapturedPiecesSorted[i - 1].type:
+		if pieceI > 0 and piece.type != blackCapturedPiecesSorted[pieceI - 1].type:
 			blackCapturesContainers[i].size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			i += 1
 		sprite.reparent(blackCapturesContainers[i])
 		blackCapturesContainers[i].size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		i += 1
+		pieceI += 1
 	while i < len(blackCapturesContainers):
 		blackCapturesContainers[i].size_flags_horizontal = Control.SIZE_FILL
 		i += 1
@@ -219,8 +226,8 @@ func _process(_delta) -> void:
 	
 	addCaptureArrows(stateToRender)
 	
-	whiteTimer.text = formatTime(states[-1].whiteTime)
-	blackTimer.text = formatTime(states[-1].blackTime)
+	whiteTimer.text = formatTime(stateToRender.whiteTime)
+	blackTimer.text = formatTime(stateToRender.blackTime)
 	
 	setCircles(); setLines(); setArcs(); setArrows();
 

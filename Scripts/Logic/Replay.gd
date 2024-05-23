@@ -132,7 +132,7 @@ static func validBoardStateToBitArray(state: BoardState) -> BitArray:
 		arr.setFromInt(i, 3, int(state_.drawState)) #7 options for draw state, so 3 bytes
 		i += 3
 		arr.changeLength(i + 64)
-		if state.turnToMove == Piece.PieceColor.WHITE:
+		if state_.turnToMove == Piece.PieceColor.WHITE:
 			arr.setFromFloat(i, state_.whiteTime)
 		else:
 			arr.setFromFloat(i, state_.blackTime)

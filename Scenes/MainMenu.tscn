@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://dl1rr64si2eyw"]
+[gd_scene load_steps=12 format=3 uid="uid://dl1rr64si2eyw"]
 
 [ext_resource type="Theme" uid="uid://bhkvphjy5bskn" path="res://Themes/Main.tres" id="1_c8mro"]
 [ext_resource type="Shader" path="res://Shaders/Background.gdshader" id="1_iueet"]
@@ -6,6 +6,7 @@
 [ext_resource type="Shader" path="res://Shaders/RoundedBorder.gdshader" id="3_u0k3n"]
 [ext_resource type="Script" path="res://Scripts/UI/BorderScaleButton.gd" id="4_eb2ir"]
 [ext_resource type="Script" path="res://Scripts/UI/LabelScaler.gd" id="5_a8so6"]
+[ext_resource type="Texture2D" uid="uid://cpe8vhek6y478" path="res://Images/Title.svg" id="7_tpnxt"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_llqsq"]
 shader = ExtResource("1_iueet")
@@ -112,6 +113,96 @@ fontSize = 73.085
 label = NodePath("Label")
 
 [node name="Label" type="Label" parent="PlayButton/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 115
+text = "Play"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.012
+anchor_top = 0.012
+anchor_right = 0.988
+anchor_bottom = 0.988
+grow_horizontal = 2
+grow_vertical = 2
+ratio = 1.109
+metadata/_edit_use_anchors_ = true
+
+[node name="Control" type="Control" parent="AspectRatioContainer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="AspectRatioContainer/Control"]
+layout_mode = 0
+offset_left = 9.69238
+offset_top = 12.224
+offset_right = 620.692
+offset_bottom = 345.224
+texture = ExtResource("7_tpnxt")
+expand_mode = 1
+
+[node name="PlayButton" type="TextureRect" parent="AspectRatioContainer/Control"]
+material = SubResource("ShaderMaterial_u5hpe")
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.109783
+anchor_top = 0.430075
+anchor_right = 0.841193
+anchor_bottom = 0.744725
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = SubResource("PlaceholderTexture2D_72g76")
+script = ExtResource("4_eb2ir")
+scaleDefault = 1.0
+scaleHovered = 1.05
+scalePressed = 1.1
+scaleDisabled = 1.0
+useNonToggledScale = true
+useDefaultOuterDistances = true
+outerDistancesDefault = Vector4(0.06, 0.06, 0.06, 0.06)
+useDefaultThickness = true
+thicknessDefault = 0.075
+useDefaultOuterRadius = true
+outerRadiusDefault = 0.105
+useDefaultNoDistortLength = true
+noDistortLengthDefault = 0.245
+insideBgColDefault = Color(0.619608, 0.541176, 0.482353, 1)
+insideBgColHovered = Color(0.737255, 0.662745, 0.607843, 1)
+insideBgColPressed = Color(0.847059, 0.792157, 0.756863, 1)
+insideBgColDisabled = Color(0.454902, 0.419608, 0.396078, 1)
+useNonToggledInsideBgCol = true
+useDefaultOutsideBgCol = true
+outsideBgColDefault = Color(0, 0, 0, 0)
+useNonToggledOutsideBgCol = true
+useDefaultLineCol = true
+modulateDefault = Color(1, 1, 1, 1)
+modulateHovered = Color(1, 1, 1, 1)
+modulatePressed = Color(1, 1, 1, 1)
+modulateDisabled = Color(0.65098, 0.65098, 0.65098, 1)
+useNonToggledModulate = true
+useDefaultSprite = true
+metadata/_edit_use_anchors_ = true
+
+[node name="Control" type="Control" parent="AspectRatioContainer/Control/PlayButton" node_paths=PackedStringArray("label")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("5_a8so6")
+fontSize = 73.085
+label = NodePath("../../../../PlayButton/Control/Label")
+
+[node name="Label" type="Label" parent="AspectRatioContainer/Control/PlayButton/Control"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
