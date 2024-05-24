@@ -9,8 +9,7 @@ static func isPieceOutsideBoard(pos: Vector2i, radius: int, maxPos: Vector2i) ->
 
 class PieceMovePoints:
 	var pieceType: Piece.PieceType
-	#var piecesCanCapture: Array[Piece]
-	func duplicate(): #overridden
+	func duplicate():
 		return self
 
 class PawnMovePoints extends PieceMovePoints:
@@ -941,12 +940,22 @@ class CastlePoints:
 		kingPointRight = kingPointRight_
 		rookPointRight = rookPointRight_
 
-static func availableCastlePoints(pieces: Array[Piece], turn: Piece.PieceColor, castlePieces: CastlePieces = null) -> CastlePoints: #inner arrays have king pos 1st, rook pos 2nd
+static func availableCastlePoints(pieces: Array[Piece], turn: Piece.PieceColor, castlePieces: CastlePieces = null, 
+	movePoints: Array[PieceMovePoints] = [], piecesCanCapture_: Array[Array] = []) -> CastlePoints: #inner arrays have king pos 1st, rook pos 2nd
 	var king: Piece = null	
 	var leftRook: Piece = null	
 	var rightRook: Piece = null
 	if castlePieces == null:
 		castlePieces = availableCastlePieces(pieces, turn)
+	if movePoints == []:
+		for piece: Piece in pieces:
+			movePoints.append(calculateMovePoints(piece, pieces))
+	if piecesCanCapture_ == []:
+		var pieceI: int = 0
+		for piece: Piece in pieces:
+			var piecesCanCapture__: Array[Piece] = piecesCanCapture(piece, pieces, movePoints[pieceI])
+			piecesCanCapture_.append(piecesCanCapture__)
+			pieceI += 1
 	king = castlePieces.king
 	leftRook = castlePieces.leftRook
 	rightRook = castlePieces.rightRook
@@ -954,6 +963,11 @@ static func availableCastlePoints(pieces: Array[Piece], turn: Piece.PieceColor, 
 	var points: CastlePoints = CastlePoints.new(false, Vector2i(0, 0), Vector2i(0, 0), false, Vector2i(0, 0), Vector2i(0, 0))
 	if king == null:
 		return points
+	
+	for piecesCanCapture__: Array[Piece] in piecesCanCapture_:
+		for piece: Piece in piecesCanCapture__:
+			if piece.valueEquals(king):
+				return points
 
 	var canCastleLeft: bool = true
 	if leftRook != null:

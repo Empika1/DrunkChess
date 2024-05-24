@@ -134,6 +134,12 @@ static func validateCastleMove(state: BoardState, move: Move) -> BoardState.Stat
 	if not rookFound:
 		return BoardState.StateResult.MOVE_CASTLE_MOVED_ROOK_DOESNT_EXIST
 	
+	for piecesCanCapture: Array[Piece] in state.piecesCanCapture:
+		for piece: Piece in piecesCanCapture:
+			if piece.valueEquals(move.movedKing):
+				print("NUH UHHHH")
+				return BoardState.StateResult.MOVE_CASTLE_IN_CHECK
+	
 	var lowerBound: int = min(move.movedKing.pos.x, move.movedRook.pos.x);
 	var upperBound: int = max(move.movedKing.pos.x, move.movedRook.pos.x);
 	for piece: Piece in state.pieces:

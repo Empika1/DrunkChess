@@ -32,6 +32,7 @@ enum StateResult {
 	MOVE_CASTLE_ROOK_NOT_AT_DEFAULT_START_POS,
 	MOVE_CASTLE_CASTLING_THROUGH_SAME_COLOR_PIECE,
 	MOVE_CASTLE_CASTLING_THROUGH_OPPOSITE_COLOR_PIECE,
+	MOVE_CASTLE_IN_CHECK,
 	NULL_STATE_RESULT,
 }
 
@@ -131,7 +132,7 @@ func addMoveInfo():
 		piecesCanCapture.append(piecesCanCapture_)
 	
 	castlePieces = PieceLogic.availableCastlePieces(pieces, turnToMove)
-	castlePoints = PieceLogic.availableCastlePoints(pieces, turnToMove, castlePieces)
+	castlePoints = PieceLogic.availableCastlePoints(pieces, turnToMove, castlePieces, movePoints, piecesCanCapture)
 
 func makeMove(move_: Move) -> BoardState:
 	var state: BoardState = BoardLogic.makeMove(self, move_)
