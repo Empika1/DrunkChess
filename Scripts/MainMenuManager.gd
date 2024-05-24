@@ -9,6 +9,7 @@ func _ready():
 	loadReplayButton.buttonComponent.stateUpdated.connect(loadReplay)
 
 func _process(_delta):
+	title.pivot_offset = Vector2(title.size.x * 316.075/611, title.size.y * 191.68/333)
 	title.rotation = sin(float(Time.get_ticks_msec()) / 500) / 50
 
 func play(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.ButtonState):
