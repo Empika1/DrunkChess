@@ -50,7 +50,7 @@ shader_parameter/noiseSeed = 9.82
 shader_parameter/realWidth = 378.748
 shader_parameter/realHeight = 108.0
 
-[node name="MainMenu" type="Control" node_paths=PackedStringArray("playButton")]
+[node name="MainMenu" type="Control" node_paths=PackedStringArray("title", "playButton", "loadReplayButton")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -59,7 +59,9 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_c8mro")
 script = ExtResource("2_5hk46")
+title = NodePath("AspectRatioContainer/Control/Title")
 playButton = NodePath("AspectRatioContainer/Control/PlayButton")
+loadReplayButton = NodePath("AspectRatioContainer/Control/LoadReplayButton")
 
 [node name="Background" type="TextureRect" parent="."]
 material = SubResource("ShaderMaterial_llqsq")
@@ -87,7 +89,7 @@ metadata/_edit_use_anchors_ = true
 [node name="Control" type="Control" parent="AspectRatioContainer"]
 layout_mode = 2
 
-[node name="TextureRect" type="TextureRect" parent="AspectRatioContainer/Control"]
+[node name="Title" type="TextureRect" parent="AspectRatioContainer/Control"]
 layout_mode = 0
 anchor_left = 0.0434098
 anchor_top = -0.00122698
@@ -166,7 +168,7 @@ text = "Play"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="PlayButton2" type="TextureRect" parent="AspectRatioContainer/Control"]
+[node name="LoadReplayButton" type="TextureRect" parent="AspectRatioContainer/Control"]
 material = SubResource("ShaderMaterial_8gnl7")
 layout_mode = 1
 anchors_preset = -1
@@ -208,7 +210,7 @@ useNonToggledModulate = true
 useDefaultSprite = true
 metadata/_edit_use_anchors_ = true
 
-[node name="Control" type="Control" parent="AspectRatioContainer/Control/PlayButton2" node_paths=PackedStringArray("label")]
+[node name="Control" type="Control" parent="AspectRatioContainer/Control/LoadReplayButton" node_paths=PackedStringArray("label")]
 layout_mode = 1
 anchor_top = -0.0277778
 anchor_right = 1.0
@@ -221,7 +223,7 @@ fontSize = 51.73
 label = NodePath("Label")
 metadata/_edit_use_anchors_ = true
 
-[node name="Label" type="Label" parent="AspectRatioContainer/Control/PlayButton2/Control"]
+[node name="Label" type="Label" parent="AspectRatioContainer/Control/LoadReplayButton/Control"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -229,6 +231,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_font_sizes/font_size = 51
-text = "View Replay"
+text = "Load Replay"
 horizontal_alignment = 1
 vertical_alignment = 1
