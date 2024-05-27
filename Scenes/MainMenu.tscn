@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://dl1rr64si2eyw"]
+[gd_scene load_steps=30 format=3 uid="uid://dl1rr64si2eyw"]
 
 [ext_resource type="Theme" uid="uid://bhkvphjy5bskn" path="res://Themes/Main.tres" id="1_c8mro"]
 [ext_resource type="Shader" path="res://Shaders/Background.gdshader" id="1_iueet"]
@@ -50,7 +50,101 @@ shader_parameter/noiseSeed = 9.82
 shader_parameter/realWidth = 378.748
 shader_parameter/realHeight = 108.0
 
-[node name="MainMenu" type="Control" node_paths=PackedStringArray("title", "playButton", "loadReplayButton")]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2dup6"]
+shader = ExtResource("3_u0k3n")
+shader_parameter/outerDistances = Vector4(0.02, 0.02, 0.02, 0.02)
+shader_parameter/thickness = 0.02
+shader_parameter/outerRadius = 0.065
+shader_parameter/noDistortLength = 0.05
+shader_parameter/insideBgCol = Color(0.694118, 0.619608, 0.560784, 1)
+shader_parameter/outsideBgCol = Color(0, 0, 0, 0)
+shader_parameter/lineCol = null
+shader_parameter/noiseScale = Vector2(3.115, 0.065)
+shader_parameter/noiseSeed = 0.175
+shader_parameter/realWidth = 483.978
+shader_parameter/realHeight = 419.973
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_6tdqa"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_abj1d"]
+shader = ExtResource("3_u0k3n")
+shader_parameter/outerDistances = Vector4(0.06, 0.06, 0.06, 0.06)
+shader_parameter/thickness = 0.075
+shader_parameter/outerRadius = 0.17
+shader_parameter/noDistortLength = 0.245
+shader_parameter/insideBgCol = Color(0.619608, 0.541176, 0.482353, 1)
+shader_parameter/outsideBgCol = Color(0, 0, 0, 0)
+shader_parameter/lineCol = Color(0, 0, 0, 1)
+shader_parameter/noiseScale = Vector2(0.82, 0.17)
+shader_parameter/noiseSeed = 1.05
+shader_parameter/realWidth = 170.0
+shader_parameter/realHeight = 80.0
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_edb28"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8kn1x"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_n3m4w"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_sy6m8"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_u16n6"]
+shader = ExtResource("3_u0k3n")
+shader_parameter/outerDistances = Vector4(0.06, 0.06, 0.06, 0.06)
+shader_parameter/thickness = 0.075
+shader_parameter/outerRadius = 0.17
+shader_parameter/noDistortLength = 0.245
+shader_parameter/insideBgCol = Color(0.619608, 0.541176, 0.482353, 1)
+shader_parameter/outsideBgCol = Color(0, 0, 0, 0)
+shader_parameter/lineCol = Color(0, 0, 0, 1)
+shader_parameter/noiseScale = Vector2(0.82, 0.17)
+shader_parameter/noiseSeed = -0.77
+shader_parameter/realWidth = 85.0
+shader_parameter/realHeight = 80.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_y6hxa"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8ivdj"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ai2t7"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bruow"]
+shader = ExtResource("3_u0k3n")
+shader_parameter/outerDistances = Vector4(0.06, 0.06, 0.06, 0.06)
+shader_parameter/thickness = 0.075
+shader_parameter/outerRadius = 0.17
+shader_parameter/noDistortLength = 0.245
+shader_parameter/insideBgCol = Color(0.619608, 0.541176, 0.482353, 1)
+shader_parameter/outsideBgCol = Color(0, 0, 0, 0)
+shader_parameter/lineCol = Color(0, 0, 0, 1)
+shader_parameter/noiseScale = Vector2(0.82, 0.17)
+shader_parameter/noiseSeed = -6.87
+shader_parameter/realWidth = 86.0
+shader_parameter/realHeight = 80.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_brqgd"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_oj155"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_81hhh"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_j4npa"]
+shader = ExtResource("3_u0k3n")
+shader_parameter/outerDistances = Vector4(0.06, 0.06, 0.06, 0.06)
+shader_parameter/thickness = 0.075
+shader_parameter/outerRadius = 0.17
+shader_parameter/noDistortLength = 0.245
+shader_parameter/insideBgCol = Color(0.619608, 0.541176, 0.482353, 1)
+shader_parameter/outsideBgCol = Color(0, 0, 0, 0)
+shader_parameter/lineCol = Color(0, 0, 0, 1)
+shader_parameter/noiseScale = Vector2(0.82, 0.17)
+shader_parameter/noiseSeed = -0.655
+shader_parameter/realWidth = 384.0
+shader_parameter/realHeight = 64.0
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_pov3r"]
+
+[node name="MainMenu" type="Control" node_paths=PackedStringArray("title", "playButton", "loadReplayButton", "playMenuTimeControlBox1", "playMenuTimeControlBox2", "playMenuTimeControlBox3")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -62,6 +156,9 @@ script = ExtResource("2_5hk46")
 title = NodePath("AspectRatioContainer/Control/Title")
 playButton = NodePath("AspectRatioContainer/Control/PlayButton")
 loadReplayButton = NodePath("AspectRatioContainer/Control/LoadReplayButton")
+playMenuTimeControlBox1 = NodePath("AspectRatioContainer/Control/PlayMenu/TimeControlContainer/TextureRect/LineEdit")
+playMenuTimeControlBox2 = NodePath("AspectRatioContainer/Control/PlayMenu/TimeControlContainer/TextureRect2/LineEdit2")
+playMenuTimeControlBox3 = NodePath("AspectRatioContainer/Control/PlayMenu/TimeControlContainer/TextureRect3/LineEdit3")
 
 [node name="Background" type="TextureRect" parent="."]
 material = SubResource("ShaderMaterial_llqsq")
@@ -233,5 +330,245 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_font_sizes/font_size = 51
 text = "Load Replay"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PlayMenu" type="TextureRect" parent="AspectRatioContainer/Control"]
+z_index = 10
+material = SubResource("ShaderMaterial_2dup6")
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.154968
+anchor_top = 0.167957
+anchor_right = 0.845
+anchor_bottom = 0.832
+mouse_filter = 0
+texture = SubResource("PlaceholderTexture2D_6tdqa")
+metadata/_edit_use_anchors_ = true
+
+[node name="TimeControlContainer" type="HBoxContainer" parent="AspectRatioContainer/Control/PlayMenu"]
+z_index = 5
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.128318
+anchor_top = 0.462563
+anchor_right = 0.872
+anchor_bottom = 0.653883
+mouse_filter = 2
+theme_override_constants/separation = 0
+metadata/_edit_use_anchors_ = true
+
+[node name="TextureRect" type="TextureRect" parent="AspectRatioContainer/Control/PlayMenu/TimeControlContainer" node_paths=PackedStringArray("label")]
+material = SubResource("ShaderMaterial_abj1d")
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+mouse_filter = 2
+texture = SubResource("PlaceholderTexture2D_edb28")
+script = ExtResource("5_a8so6")
+fontSize = 30.0
+label = NodePath("LineEdit")
+
+[node name="LineEdit" type="LineEdit" parent="AspectRatioContainer/Control/PlayMenu/TimeControlContainer/TextureRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_selected_color = Color(1, 1, 1, 1)
+theme_override_colors/font_placeholder_color = Color(0, 0, 0, 0.5)
+theme_override_colors/caret_color = Color(0, 0, 0, 1)
+theme_override_colors/selection_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxEmpty_8kn1x")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_n3m4w")
+theme_override_styles/read_only = SubResource("StyleBoxEmpty_sy6m8")
+placeholder_text = "0000"
+alignment = 1
+max_length = 6
+flat = true
+
+[node name="Control" type="Control" parent="AspectRatioContainer/Control/PlayMenu/TimeControlContainer" node_paths=PackedStringArray("label")]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.1
+mouse_filter = 2
+script = ExtResource("5_a8so6")
+fontSize = 70.0
+label = NodePath("Label2")
+
+[node name="Label2" type="Label" parent="AspectRatioContainer/Control/PlayMenu/TimeControlContainer/Control"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -0.75
+anchor_top = -0.2
+anchor_right = 1.875
+anchor_bottom = 1.125
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 70
+text = ":"
+metadata/_edit_use_anchors_ = true
+
+[node name="TextureRect2" type="TextureRect" parent="AspectRatioContainer/Control/PlayMenu/TimeControlContainer" node_paths=PackedStringArray("label")]
+material = SubResource("ShaderMaterial_u16n6")
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+texture = SubResource("PlaceholderTexture2D_edb28")
+script = ExtResource("5_a8so6")
+fontSize = 30.0
+label = NodePath("LineEdit2")
+
+[node name="LineEdit2" type="LineEdit" parent="AspectRatioContainer/Control/PlayMenu/TimeControlContainer/TextureRect2"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -0.158824
+anchor_right = 1.15882
+anchor_bottom = 1.0
+offset_left = 13.5
+offset_right = -13.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_selected_color = Color(1, 1, 1, 1)
+theme_override_colors/font_placeholder_color = Color(0, 0, 0, 0.5)
+theme_override_colors/caret_color = Color(0, 0, 0, 1)
+theme_override_colors/selection_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxEmpty_y6hxa")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_8ivdj")
+theme_override_styles/read_only = SubResource("StyleBoxEmpty_ai2t7")
+placeholder_text = "00"
+alignment = 1
+max_length = 2
+flat = true
+metadata/_edit_use_anchors_ = true
+
+[node name="Control2" type="Control" parent="AspectRatioContainer/Control/PlayMenu/TimeControlContainer" node_paths=PackedStringArray("label")]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.1
+mouse_filter = 2
+script = ExtResource("5_a8so6")
+fontSize = 70.0
+label = NodePath("Label")
+
+[node name="Label" type="Label" parent="AspectRatioContainer/Control/PlayMenu/TimeControlContainer/Control2"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -0.75
+anchor_top = -0.2
+anchor_right = 1.875
+anchor_bottom = 1.125
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 70
+text = ":"
+metadata/_edit_use_anchors_ = true
+
+[node name="TextureRect3" type="TextureRect" parent="AspectRatioContainer/Control/PlayMenu/TimeControlContainer" node_paths=PackedStringArray("label")]
+material = SubResource("ShaderMaterial_bruow")
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+texture = SubResource("PlaceholderTexture2D_edb28")
+script = ExtResource("5_a8so6")
+fontSize = 30.0
+label = NodePath("LineEdit3")
+
+[node name="LineEdit3" type="LineEdit" parent="AspectRatioContainer/Control/PlayMenu/TimeControlContainer/TextureRect3"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -0.151163
+anchor_right = 1.15116
+anchor_bottom = 1.0
+offset_left = 13.0
+offset_right = -13.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_selected_color = Color(1, 1, 1, 1)
+theme_override_colors/font_placeholder_color = Color(0, 0, 0, 0.5)
+theme_override_colors/caret_color = Color(0, 0, 0, 1)
+theme_override_colors/selection_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxEmpty_brqgd")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_oj155")
+theme_override_styles/read_only = SubResource("StyleBoxEmpty_81hhh")
+placeholder_text = "00"
+alignment = 1
+max_length = 2
+flat = true
+metadata/_edit_use_anchors_ = true
+
+[node name="MainMenuButton" type="TextureRect" parent="AspectRatioContainer/Control/PlayMenu"]
+material = SubResource("ShaderMaterial_j4npa")
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.0789998
+anchor_top = 0.709577
+anchor_right = 0.922
+anchor_bottom = 0.885364
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = SubResource("PlaceholderTexture2D_pov3r")
+script = ExtResource("4_eb2ir")
+scaleDefault = 1.0
+scaleHovered = 1.05
+scalePressed = 1.1
+scaleDisabled = 1.0
+useNonToggledScale = true
+useDefaultOuterDistances = true
+outerDistancesDefault = Vector4(0.06, 0.06, 0.06, 0.06)
+useDefaultThickness = true
+thicknessDefault = 0.075
+useDefaultOuterRadius = true
+outerRadiusDefault = 0.105
+useDefaultNoDistortLength = true
+noDistortLengthDefault = 0.245
+insideBgColDefault = Color(0.619608, 0.541176, 0.482353, 1)
+insideBgColHovered = Color(0.737255, 0.662745, 0.607843, 1)
+insideBgColPressed = Color(0.847059, 0.792157, 0.756863, 1)
+insideBgColDisabled = Color(0.454902, 0.419608, 0.396078, 1)
+useNonToggledInsideBgCol = true
+useDefaultOutsideBgCol = true
+outsideBgColDefault = Color(0, 0, 0, 0)
+useNonToggledOutsideBgCol = true
+useDefaultLineCol = true
+modulateDefault = Color(1, 1, 1, 1)
+modulateHovered = Color(1, 1, 1, 1)
+modulatePressed = Color(1, 1, 1, 1)
+modulateDisabled = Color(0.65098, 0.65098, 0.65098, 1)
+useNonToggledModulate = true
+useDefaultSprite = true
+metadata/_edit_use_anchors_ = true
+
+[node name="Control" type="Control" parent="AspectRatioContainer/Control/PlayMenu/MainMenuButton" node_paths=PackedStringArray("label")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("5_a8so6")
+fontSize = 36.0
+label = NodePath("Label")
+
+[node name="Label" type="Label" parent="AspectRatioContainer/Control/PlayMenu/MainMenuButton/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 36
+text = "Main Menu
+"
 horizontal_alignment = 1
 vertical_alignment = 1
