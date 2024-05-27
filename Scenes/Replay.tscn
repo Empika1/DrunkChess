@@ -825,6 +825,7 @@ theme_override_constants/separation = 0
 metadata/_edit_use_anchors_ = true
 
 [node name="ReplayMenu" type="TextureRect" parent="AspectRatioContainer/Control"]
+visible = false
 z_index = 10
 material = SubResource("ShaderMaterial_5qqrl")
 layout_mode = 1

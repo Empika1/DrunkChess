@@ -233,7 +233,7 @@ static func bitArrayToValidBoardState(arr: BitArray) -> BoardState:
 		startingState.result = BoardState.StateResult.DRAW
 	if numStateUpdates == 0:
 		if !startingState.result in [BoardState.StateResult.VALID, BoardState.StateResult.DRAW, BoardState.StateResult.WIN_WHITE, BoardState.StateResult.WIN_BLACK]:
-			print("b12")
+			print("b12", " ", BoardState.StateResult.keys()[startingState.result])
 			return null
 	else:
 		if startingState.result != BoardState.StateResult.VALID:

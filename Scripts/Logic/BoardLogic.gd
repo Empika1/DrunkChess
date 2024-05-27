@@ -15,10 +15,11 @@ static func isPieceOutsideBoard(pos: Vector2i, radius: int, maxPos: Vector2i) ->
 	return pos.x - radius < 0 or pos.y - radius < 0 or pos.x + radius > maxPos.x or pos.y + radius > maxPos.y
 
 static func validateStartingState(state: BoardState) -> BoardState.StateResult:
-	if state.whiteTime <= 0:
-		return BoardState.StateResult.START_NONPOSITIVE_WHITE_TIME
-	if state.blackTime <= 0:
-		return BoardState.StateResult.START_NONPOSITIVE_BLACK_TIME
+	if state.startSettings.isTimed:
+		if state.whiteTime <= 0:
+			return BoardState.StateResult.START_NONPOSITIVE_WHITE_TIME
+		if state.blackTime <= 0:
+			return BoardState.StateResult.START_NONPOSITIVE_BLACK_TIME
 	
 	for piece: Piece in state.pieces:
 		if isPieceOutsideBoard(piece.pos, piece.hitRadius, Vector2i(Piece.boardSize, Piece.boardSize)):

@@ -226,8 +226,12 @@ func _process(_delta) -> void:
 	
 	addCaptureArrows(stateToRender)
 	
-	whiteTimer.text = formatTime(stateToRender.whiteTime)
-	blackTimer.text = formatTime(stateToRender.blackTime)
+	if stateToRender.startSettings.isTimed:
+		whiteTimer.text = formatTime(stateToRender.whiteTime)
+		blackTimer.text = formatTime(stateToRender.blackTime)
+	else:
+		whiteTimer.text = "XX:XX"
+		blackTimer.text = "XX:XX"
 	
 	setCircles(); setLines(); setArcs(); setArrows();
 

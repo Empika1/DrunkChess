@@ -1,27 +1,64 @@
 extends Node
 
+@export var screenForMenu: ColorRect
 @export var title: TextureRect
 @export var playButton: BorderScaleButton
 @export var loadReplayButton: BorderScaleButton
+
+@export var playMenu: Control
+@export var playMenuCheckbox: BorderScaleButton
 @export var playMenuTimeControlBox1: LineEdit
 @export var playMenuTimeControlBox2: LineEdit
 @export var playMenuTimeControlBox3: LineEdit
+@export var playMenuPlayButton: BorderScaleButton
+@export var playMenuExitButton: BorderScaleButton
 
 func _ready():
-	playButton.buttonComponent.stateUpdated.connect(play)
+	playButton.buttonComponent.stateUpdated.connect(openPlayMenu)
 	loadReplayButton.buttonComponent.stateUpdated.connect(loadReplay)
+	
+	playMenuCheckbox.buttonComponent.stateUpdated.connect(toggleIsTimed)	
 	playMenuTimeControlBox1.text_changed.connect(box1TextChanged)
 	playMenuTimeControlBox2.text_changed.connect(func(newText: String): box2Or3TextChanged(newText, playMenuTimeControlBox2))
 	playMenuTimeControlBox3.text_changed.connect(func(newText: String): box2Or3TextChanged(newText, playMenuTimeControlBox3))
+	playMenuPlayButton.buttonComponent.stateUpdated.connect(play)
+	playMenuExitButton.buttonComponent.stateUpdated.connect(closePlayMenu)
 
 func _process(_delta):
 	title.pivot_offset = Vector2(title.size.x * 316.075/611, title.size.y * 191.68/333)
 	title.rotation = sin(float(Time.get_ticks_msec()) / 500) / 50
 
+func openPlayMenu(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.ButtonState):
+	if ButtonComponent.justReleased(oldState, newState):
+		screenForMenu.color = Color(0.5, 0.5, 0.5, 0.5)
+		playMenu.visible = true
+
+func toggleIsTimed(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.ButtonState):
+	if ButtonComponent.justToggled(oldState, newState):
+		if newState.toggleState == 0:
+			playMenuTimeControlBox1.editable = false
+			playMenuTimeControlBox2.editable = false
+			playMenuTimeControlBox3.editable = false
+		else:
+			playMenuTimeControlBox1.editable = true
+			playMenuTimeControlBox2.editable = true
+			playMenuTimeControlBox3.editable = true
+
 func play(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.ButtonState):
 	if ButtonComponent.justReleased(oldState, newState):
-		GameManager.states = [BoardState.newDefaultStartingState(BoardState.StartSettings.new(BoardState.StartSettings.AssistMode.MOVE_ARROWS, true, 900))]
+		var isTimed: int = playMenuCheckbox.buttonComponent.state.toggleState == 1
+		var timeSeconds: int = 0
+		if isTimed:
+			timeSeconds = int(playMenuTimeControlBox1.text) * 3600 + int(playMenuTimeControlBox2.text) * 60 + int(playMenuTimeControlBox3.text)
+		timeSeconds = max(timeSeconds, 1)
+		
+		GameManager.states = [BoardState.newDefaultStartingState(BoardState.StartSettings.new(BoardState.StartSettings.AssistMode.MOVE_ARROWS, isTimed, timeSeconds))]
 		get_tree().change_scene_to_file("res://Scenes/Game.tscn")
+
+func closePlayMenu(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.ButtonState):
+	if ButtonComponent.justReleased(oldState, newState):
+		screenForMenu.color = Color(0.5, 0.5, 0.5, 0.)
+		playMenu.visible = false
 
 func loadReplay(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.ButtonState):
 	if ButtonComponent.justReleased(oldState, newState):
