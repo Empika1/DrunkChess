@@ -24,6 +24,15 @@ class_name GameManager
 @export var gameEndMenuCopyReplayText: Label
 @export var gameEndMenuSettingsButton: BorderScaleButton
 @export var gameEndMenuMainMenuButton: BorderScaleButton
+@export var promoteMenu: Control
+@export var promoteMenuKnightButton: BorderScaleButton
+@export var promoteMenuKnight: TextureRect
+@export var promoteMenuBishopButton: BorderScaleButton
+@export var promoteMenuBishop: TextureRect
+@export var promoteMenuRookButton: BorderScaleButton
+@export var promoteMenuRook: TextureRect
+@export var promoteMenuQueenButton: BorderScaleButton
+@export var promoteMenuQueen: TextureRect
 @export var screenForMenu: ColorRect
 
 static var states: Array[BoardState] = [BoardState.newDefaultStartingState(BoardState.StartSettings.new(BoardState.StartSettings.AssistMode.MOVE_ARROWS, true, 600))]
@@ -63,6 +72,29 @@ func isMouseInCancelPosition(mousePosBoard_: Vector2i) -> bool:
 func getTimeSecs() -> float:
 	return float(Time.get_ticks_msec()) / 1000.
 
+func _ready():
+	pauseButton.buttonComponent.stateUpdated.connect(pause)
+	drawButton.buttonComponent.stateUpdated.connect(offerDraw)
+	pauseMenuResumeButton.buttonComponent.stateUpdated.connect(unpause)
+	pauseMenuMainMenuButton.buttonComponent.stateUpdated.connect(goToMainMenu)
+	drawMenuAcceptButton.buttonComponent.stateUpdated.connect(acceptDraw)
+	drawMenuRejectButton.buttonComponent.stateUpdated.connect(rejectDraw)
+	gameEndMenuPlayAgainButton.buttonComponent.stateUpdated.connect(playAgain)
+	gameEndMenuCopyReplayButton.buttonComponent.stateUpdated.connect(copyReplay)
+	gameEndMenuMainMenuButton.buttonComponent.stateUpdated.connect(goToMainMenu)
+	promoteMenuKnightButton.buttonComponent.stateUpdated.connect(
+		func(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.ButtonState): 
+			promote(oldState, newState, Piece.PieceType.KNIGHT))
+	promoteMenuBishopButton.buttonComponent.stateUpdated.connect(
+		func(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.ButtonState): 
+			promote(oldState, newState, Piece.PieceType.BISHOP))
+	promoteMenuRookButton.buttonComponent.stateUpdated.connect(
+		func(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.ButtonState): 
+			promote(oldState, newState, Piece.PieceType.ROOK))
+	promoteMenuQueenButton.buttonComponent.stateUpdated.connect(
+		func(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.ButtonState): 
+			promote(oldState, newState, Piece.PieceType.QUEEN))
+
 @onready var whiteTimer: CustomTimer = CustomTimer.new(states[0].startSettings.startingTime, float(Time.get_ticks_msec()) / 1000., true, false)
 @onready var blackTimer: CustomTimer = CustomTimer.new(states[0].startSettings.startingTime, float(Time.get_ticks_msec()) / 1000., true, true)
 var mousePosGame: Vector2i
@@ -89,17 +121,6 @@ func _process(_delta):
 
 	updateTimer()
 	checkForGameEnd()
-
-func _ready():
-	pauseButton.buttonComponent.stateUpdated.connect(pause)
-	drawButton.buttonComponent.stateUpdated.connect(offerDraw)
-	pauseMenuResumeButton.buttonComponent.stateUpdated.connect(unpause)
-	pauseMenuMainMenuButton.buttonComponent.stateUpdated.connect(goToMainMenu)
-	drawMenuAcceptButton.buttonComponent.stateUpdated.connect(acceptDraw)
-	drawMenuRejectButton.buttonComponent.stateUpdated.connect(rejectDraw)
-	gameEndMenuPlayAgainButton.buttonComponent.stateUpdated.connect(playAgain)
-	gameEndMenuCopyReplayButton.buttonComponent.stateUpdated.connect(copyReplay)
-	gameEndMenuMainMenuButton.buttonComponent.stateUpdated.connect(goToMainMenu)
 
 func determineInfoFromMouse():
 	#determine hovered piece
@@ -171,12 +192,13 @@ func updateTimer():
 		states[-1].updateTimer(blackTimer.timeRemaining)
 
 func isMenuVisible():
-	return pauseMenu.visible or drawMenu.visible or gameEndMenu.visible
+	return pauseMenu.visible or drawMenu.visible or gameEndMenu.visible or promoteMenu.visible
 
 func hideAllMenuItems():
 	pauseMenu.visible = false
 	drawMenu.visible = false
 	gameEndMenu.visible = false
+	promoteMenu.visible = false
 	screenForMenu.color.a = 0.
 
 var pauseButtonWasEnabled: bool
@@ -260,6 +282,20 @@ func checkForGameEnd():
 		
 		gameEndMenu.visible = true
 		screenForMenu.color.a = 0.5
+
+func openPromoteMenu():
+	promoteMenu.visible = true
+	screenForMenu.color.a = 0.5
+	screenForMenu.color.v = 1. if states[-1].turnToMove == Piece.PieceColor.WHITE else 0.
+	(promoteMenuKnight.material as ShaderMaterial).set_shader_parameter("frame", BoardRenderer.getPieceFrame(states[-1].turnToMove, Piece.PieceType.KNIGHT))
+	(promoteMenuBishop.material as ShaderMaterial).set_shader_parameter("frame", BoardRenderer.getPieceFrame(states[-1].turnToMove, Piece.PieceType.BISHOP))
+	(promoteMenuRook.material as ShaderMaterial).set_shader_parameter("frame", BoardRenderer.getPieceFrame(states[-1].turnToMove, Piece.PieceType.ROOK))
+	(promoteMenuQueen.material as ShaderMaterial).set_shader_parameter("frame", BoardRenderer.getPieceFrame(states[-1].turnToMove, Piece.PieceType.QUEEN))
+
+func promote(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.ButtonState, type: Piece.PieceType):
+	if ButtonComponent.justReleased(oldState, newState):
+		states[-1] = states[-2].makeMove(Move.newPromotion(states[-1].previousMove.movedPiece, states[-1].previousMove.posTryMovedTo, type))
+		promoteMenu.visible = false
 
 func unpause(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.ButtonState):
 	if ButtonComponent.justReleased(oldState, newState):

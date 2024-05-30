@@ -1,4 +1,4 @@
-[gd_scene load_steps=76 format=3 uid="uid://cudne81ew8j5r"]
+[gd_scene load_steps=83 format=3 uid="uid://cudne81ew8j5r"]
 
 [ext_resource type="Script" path="res://Scripts/UI/SetBorderRatio.gd" id="1_8omxs"]
 [ext_resource type="Theme" uid="uid://bhkvphjy5bskn" path="res://Themes/Main.tres" id="1_gldiy"]
@@ -427,7 +427,7 @@ shader_parameter/noiseSeed = 3.77
 shader_parameter/realWidth = 406.803
 shader_parameter/realHeight = 141.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_lnv6j"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0kt7f"]
 shader = ExtResource("11_6jtdc")
 shader_parameter/outerDistances = Vector4(0.06, 0.06, 0.06, 0.06)
 shader_parameter/thickness = 0.075
@@ -436,8 +436,8 @@ shader_parameter/noDistortLength = 0.245
 shader_parameter/insideBgCol = Color(0.619608, 0.541176, 0.482353, 1)
 shader_parameter/outsideBgCol = Color(0, 0, 0, 0)
 shader_parameter/lineCol = Color(0, 0, 0, 1)
-shader_parameter/noiseScale = Vector2(0.82, 0.17)
-shader_parameter/noiseSeed = 7.4
+shader_parameter/noiseScale = Vector2(0.82, 0.225)
+shader_parameter/noiseSeed = 8.46
 shader_parameter/realWidth = 170.59
 shader_parameter/realHeight = 61.0
 
@@ -458,6 +458,72 @@ shader_parameter/realWidth = 170.59
 shader_parameter/realHeight = 61.0
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_l71jy"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fufi6"]
+shader = ExtResource("11_6jtdc")
+shader_parameter/outerDistances = Vector4(0.02, 0.02, 0.02, 0.02)
+shader_parameter/thickness = 0.05
+shader_parameter/outerRadius = 0.1
+shader_parameter/noDistortLength = 0.05
+shader_parameter/insideBgCol = Color(0.694118, 0.619608, 0.560784, 1)
+shader_parameter/outsideBgCol = Color(0, 0, 0, 0)
+shader_parameter/lineCol = null
+shader_parameter/noiseScale = Vector2(3.115, 0.065)
+shader_parameter/noiseSeed = 3.77
+shader_parameter/realWidth = 280.554
+shader_parameter/realHeight = 141.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lnv6j"]
+shader = ExtResource("11_6jtdc")
+shader_parameter/outerDistances = Vector4(0.06, 0.06, 0.06, 0.06)
+shader_parameter/thickness = 0.075
+shader_parameter/outerRadius = 0.17
+shader_parameter/noDistortLength = 0.245
+shader_parameter/insideBgCol = Color(0.619608, 0.541176, 0.482353, 1)
+shader_parameter/outsideBgCol = Color(0, 0, 0, 0)
+shader_parameter/lineCol = Color(0, 0, 0, 1)
+shader_parameter/noiseScale = Vector2(0.82, 0.225)
+shader_parameter/noiseSeed = 8.46
+shader_parameter/realWidth = 61.0
+shader_parameter/realHeight = 61.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2ofmr"]
+shader = ExtResource("19_te1wm")
+shader_parameter/width = 6
+shader_parameter/height = 2
+shader_parameter/frame = 1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_u3pmf"]
+shader = ExtResource("11_6jtdc")
+shader_parameter/outerDistances = Vector4(0.06, 0.06, 0.06, 0.06)
+shader_parameter/thickness = 0.075
+shader_parameter/outerRadius = 0.17
+shader_parameter/noDistortLength = 0.245
+shader_parameter/insideBgCol = Color(0.619608, 0.541176, 0.482353, 1)
+shader_parameter/outsideBgCol = Color(0, 0, 0, 0)
+shader_parameter/lineCol = Color(0, 0, 0, 1)
+shader_parameter/noiseScale = Vector2(0.82, 0.225)
+shader_parameter/noiseSeed = 8.88
+shader_parameter/realWidth = 61.0
+shader_parameter/realHeight = 61.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gcsnc"]
+shader = ExtResource("19_te1wm")
+shader_parameter/width = 6
+shader_parameter/height = 2
+shader_parameter/frame = 2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_e8gqn"]
+shader = ExtResource("19_te1wm")
+shader_parameter/width = 6
+shader_parameter/height = 2
+shader_parameter/frame = 3
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kcg77"]
+shader = ExtResource("19_te1wm")
+shader_parameter/width = 6
+shader_parameter/height = 2
+shader_parameter/frame = 4
 
 [node name="Control2" type="Control"]
 layout_mode = 3
@@ -1668,7 +1734,7 @@ vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
 
 [node name="AcceptButton" type="TextureRect" parent="AspectRatioContainer/Control/DrawOfferedMenu"]
-material = SubResource("ShaderMaterial_lnv6j")
+material = SubResource("ShaderMaterial_0kt7f")
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.0496555
@@ -1798,3 +1864,257 @@ theme_override_font_sizes/font_size = 30
 text = "Reject"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="PromoteMenu" type="TextureRect" parent="AspectRatioContainer/Control"]
+z_index = 10
+material = SubResource("ShaderMaterial_fufi6")
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.3
+anchor_top = 0.387115
+anchor_right = 0.7
+anchor_bottom = 0.610059
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+texture = SubResource("PlaceholderTexture2D_4h3yi")
+metadata/_edit_use_anchors_ = true
+
+[node name="Control" type="Control" parent="AspectRatioContainer/Control/PromoteMenu" node_paths=PackedStringArray("label")]
+layout_mode = 1
+anchor_left = 0.05
+anchor_top = 0.0513696
+anchor_right = 0.95
+anchor_bottom = 0.504994
+offset_left = -0.000160217
+offset_top = -2.51511
+offset_right = -0.000152588
+offset_bottom = -2.51511
+script = ExtResource("6_v8qg6")
+fontSize = 40.185
+label = NodePath("Label")
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="AspectRatioContainer/Control/PromoteMenu/Control"]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = -0.0648645
+anchor_right = 1.0
+anchor_bottom = 0.985681
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 40
+text = "Promote"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="AspectRatioContainer/Control/PromoteMenu"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.0661584
+anchor_top = 0.453899
+anchor_right = 0.934
+anchor_bottom = 0.886522
+theme_override_constants/separation = 0
+metadata/_edit_use_anchors_ = true
+
+[node name="KnightButton" type="TextureRect" parent="AspectRatioContainer/Control/PromoteMenu/HBoxContainer"]
+material = SubResource("ShaderMaterial_lnv6j")
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = SubResource("PlaceholderTexture2D_vrn1q")
+script = ExtResource("17_4023s")
+scaleDefault = 1.0
+scaleHovered = 1.05
+scalePressed = 1.1
+scaleDisabled = 1.0
+useNonToggledScale = true
+useDefaultOuterDistances = true
+outerDistancesDefault = Vector4(0.06, 0.06, 0.06, 0.06)
+useDefaultThickness = true
+thicknessDefault = 0.075
+useDefaultOuterRadius = true
+outerRadiusDefault = 0.105
+useDefaultNoDistortLength = true
+noDistortLengthDefault = 0.245
+insideBgColDefault = Color(0.619608, 0.541176, 0.482353, 1)
+insideBgColHovered = Color(0.737255, 0.662745, 0.607843, 1)
+insideBgColPressed = Color(0.847059, 0.792157, 0.756863, 1)
+insideBgColDisabled = Color(0.454902, 0.419608, 0.396078, 1)
+useNonToggledInsideBgCol = true
+useDefaultOutsideBgCol = true
+outsideBgColDefault = Color(0, 0, 0, 0)
+useNonToggledOutsideBgCol = true
+useDefaultLineCol = true
+modulateDefault = Color(1, 1, 1, 1)
+modulateHovered = Color(1, 1, 1, 1)
+modulatePressed = Color(1, 1, 1, 1)
+modulateDisabled = Color(0.65098, 0.65098, 0.65098, 1)
+useNonToggledModulate = true
+useDefaultSprite = true
+metadata/_edit_use_anchors_ = true
+
+[node name="TextureRect" type="TextureRect" parent="AspectRatioContainer/Control/PromoteMenu/HBoxContainer/KnightButton"]
+material = SubResource("ShaderMaterial_2ofmr")
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.1
+anchor_top = 0.1
+anchor_right = 0.9
+anchor_bottom = 0.9
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("20_ml8gx")
+expand_mode = 1
+
+[node name="BishopButton" type="TextureRect" parent="AspectRatioContainer/Control/PromoteMenu/HBoxContainer"]
+material = SubResource("ShaderMaterial_u3pmf")
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = SubResource("PlaceholderTexture2D_vrn1q")
+script = ExtResource("17_4023s")
+scaleDefault = 1.0
+scaleHovered = 1.05
+scalePressed = 1.1
+scaleDisabled = 1.0
+useNonToggledScale = true
+useDefaultOuterDistances = true
+outerDistancesDefault = Vector4(0.06, 0.06, 0.06, 0.06)
+useDefaultThickness = true
+thicknessDefault = 0.075
+useDefaultOuterRadius = true
+outerRadiusDefault = 0.105
+useDefaultNoDistortLength = true
+noDistortLengthDefault = 0.245
+insideBgColDefault = Color(0.619608, 0.541176, 0.482353, 1)
+insideBgColHovered = Color(0.737255, 0.662745, 0.607843, 1)
+insideBgColPressed = Color(0.847059, 0.792157, 0.756863, 1)
+insideBgColDisabled = Color(0.454902, 0.419608, 0.396078, 1)
+useNonToggledInsideBgCol = true
+useDefaultOutsideBgCol = true
+outsideBgColDefault = Color(0, 0, 0, 0)
+useNonToggledOutsideBgCol = true
+useDefaultLineCol = true
+modulateDefault = Color(1, 1, 1, 1)
+modulateHovered = Color(1, 1, 1, 1)
+modulatePressed = Color(1, 1, 1, 1)
+modulateDisabled = Color(0.65098, 0.65098, 0.65098, 1)
+useNonToggledModulate = true
+useDefaultSprite = true
+metadata/_edit_use_anchors_ = true
+
+[node name="TextureRect" type="TextureRect" parent="AspectRatioContainer/Control/PromoteMenu/HBoxContainer/BishopButton"]
+material = SubResource("ShaderMaterial_gcsnc")
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.1
+anchor_top = 0.1
+anchor_right = 0.9
+anchor_bottom = 0.9
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("20_ml8gx")
+expand_mode = 1
+
+[node name="RookButton" type="TextureRect" parent="AspectRatioContainer/Control/PromoteMenu/HBoxContainer"]
+material = SubResource("ShaderMaterial_lnv6j")
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = SubResource("PlaceholderTexture2D_vrn1q")
+script = ExtResource("17_4023s")
+scaleDefault = 1.0
+scaleHovered = 1.05
+scalePressed = 1.1
+scaleDisabled = 1.0
+useNonToggledScale = true
+useDefaultOuterDistances = true
+outerDistancesDefault = Vector4(0.06, 0.06, 0.06, 0.06)
+useDefaultThickness = true
+thicknessDefault = 0.075
+useDefaultOuterRadius = true
+outerRadiusDefault = 0.105
+useDefaultNoDistortLength = true
+noDistortLengthDefault = 0.245
+insideBgColDefault = Color(0.619608, 0.541176, 0.482353, 1)
+insideBgColHovered = Color(0.737255, 0.662745, 0.607843, 1)
+insideBgColPressed = Color(0.847059, 0.792157, 0.756863, 1)
+insideBgColDisabled = Color(0.454902, 0.419608, 0.396078, 1)
+useNonToggledInsideBgCol = true
+useDefaultOutsideBgCol = true
+outsideBgColDefault = Color(0, 0, 0, 0)
+useNonToggledOutsideBgCol = true
+useDefaultLineCol = true
+modulateDefault = Color(1, 1, 1, 1)
+modulateHovered = Color(1, 1, 1, 1)
+modulatePressed = Color(1, 1, 1, 1)
+modulateDisabled = Color(0.65098, 0.65098, 0.65098, 1)
+useNonToggledModulate = true
+useDefaultSprite = true
+metadata/_edit_use_anchors_ = true
+
+[node name="TextureRect" type="TextureRect" parent="AspectRatioContainer/Control/PromoteMenu/HBoxContainer/RookButton"]
+material = SubResource("ShaderMaterial_e8gqn")
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.1
+anchor_top = 0.1
+anchor_right = 0.9
+anchor_bottom = 0.9
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("20_ml8gx")
+expand_mode = 1
+
+[node name="QueenButton" type="TextureRect" parent="AspectRatioContainer/Control/PromoteMenu/HBoxContainer"]
+material = SubResource("ShaderMaterial_lnv6j")
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = SubResource("PlaceholderTexture2D_vrn1q")
+script = ExtResource("17_4023s")
+scaleDefault = 1.0
+scaleHovered = 1.05
+scalePressed = 1.1
+scaleDisabled = 1.0
+useNonToggledScale = true
+useDefaultOuterDistances = true
+outerDistancesDefault = Vector4(0.06, 0.06, 0.06, 0.06)
+useDefaultThickness = true
+thicknessDefault = 0.075
+useDefaultOuterRadius = true
+outerRadiusDefault = 0.105
+useDefaultNoDistortLength = true
+noDistortLengthDefault = 0.245
+insideBgColDefault = Color(0.619608, 0.541176, 0.482353, 1)
+insideBgColHovered = Color(0.737255, 0.662745, 0.607843, 1)
+insideBgColPressed = Color(0.847059, 0.792157, 0.756863, 1)
+insideBgColDisabled = Color(0.454902, 0.419608, 0.396078, 1)
+useNonToggledInsideBgCol = true
+useDefaultOutsideBgCol = true
+outsideBgColDefault = Color(0, 0, 0, 0)
+useNonToggledOutsideBgCol = true
+useDefaultLineCol = true
+modulateDefault = Color(1, 1, 1, 1)
+modulateHovered = Color(1, 1, 1, 1)
+modulatePressed = Color(1, 1, 1, 1)
+modulateDisabled = Color(0.65098, 0.65098, 0.65098, 1)
+useNonToggledModulate = true
+useDefaultSprite = true
+metadata/_edit_use_anchors_ = true
+
+[node name="TextureRect" type="TextureRect" parent="AspectRatioContainer/Control/PromoteMenu/HBoxContainer/QueenButton"]
+material = SubResource("ShaderMaterial_kcg77")
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.1
+anchor_top = 0.1
+anchor_right = 0.9
+anchor_bottom = 0.9
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("20_ml8gx")
+expand_mode = 1
