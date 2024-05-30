@@ -1,0 +1,36 @@
+[gd_scene load_steps=5 format=3 uid="uid://caj6hgha3tjjs"]
+
+[ext_resource type="Theme" uid="uid://bhkvphjy5bskn" path="res://Themes/Main.tres" id="1_icxka"]
+[ext_resource type="Shader" path="res://Shaders/Background.gdshader" id="2_58apb"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yxwyt"]
+shader = ExtResource("2_58apb")
+shader_parameter/posterizationLayers = 7.0
+shader_parameter/timeScale = 0.04
+shader_parameter/realWidth = 1152.0
+shader_parameter/realHeight = 648.0
+shader_parameter/scale = 1.4
+shader_parameter/layer1Col1 = Color(0.14902, 0.188235, 0.74902, 1)
+shader_parameter/layer1Col2 = Color(1, 0.921569, 0.929412, 1)
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_ujew3"]
+
+[node name="Control2" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_icxka")
+
+[node name="Background" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_yxwyt")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("PlaceholderTexture2D_ujew3")
+expand_mode = 2

@@ -28,7 +28,7 @@ shader = ExtResource("1_gn3e1")
 shader_parameter/posterizationLayers = 7.0
 shader_parameter/timeScale = 0.04
 shader_parameter/realWidth = 1152.0
-shader_parameter/realHeight = 648.0
+shader_parameter/realHeight = 647.992
 shader_parameter/scale = 1.4
 shader_parameter/layer1Col1 = Color(0.14902, 0.188235, 0.74902, 1)
 shader_parameter/layer1Col2 = Color(1, 0.921569, 0.929412, 1)
@@ -562,14 +562,18 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_gldiy")
 
-[node name="Background" type="TextureRect" parent="."]
-material = SubResource("ShaderMaterial_yxwyt")
+[node name="AspectRatioContainer2" type="AspectRatioContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+ratio = 1.7778
+
+[node name="Background" type="TextureRect" parent="AspectRatioContainer2"]
+material = SubResource("ShaderMaterial_yxwyt")
+layout_mode = 2
 texture = SubResource("PlaceholderTexture2D_ujew3")
 expand_mode = 2
 
@@ -586,7 +590,7 @@ color = Color(0, 0, 0, 0)
 
 [node name="BorderRatioSetter" type="Node" parent="." node_paths=PackedStringArray("mats")]
 script = ExtResource("1_8omxs")
-mats = [NodePath("../AspectRatioContainer/Control/MainContainer/VBoxContainer/WhiteUIContainer/WhiteCaptures"), NodePath("../AspectRatioContainer/Control/MainContainer/VBoxContainer/WhiteUIContainer/WhiteTimer"), NodePath("../AspectRatioContainer/Control/MainContainer/VBoxContainer/BoardSquare/Board/BoardBorder2"), NodePath("../Background")]
+mats = [NodePath("../AspectRatioContainer/Control/MainContainer/VBoxContainer/WhiteUIContainer/WhiteCaptures"), NodePath("../AspectRatioContainer/Control/MainContainer/VBoxContainer/WhiteUIContainer/WhiteTimer"), NodePath("../AspectRatioContainer/Control/MainContainer/VBoxContainer/BoardSquare/Board/BoardBorder2"), NodePath("../AspectRatioContainer2/Background")]
 
 [node name="BoardContainerResizer" type="Node" parent="." node_paths=PackedStringArray("boardSquare", "mainContainer")]
 script = ExtResource("1_u4wqa")
