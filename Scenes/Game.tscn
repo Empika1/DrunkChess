@@ -27,8 +27,8 @@
 shader = ExtResource("1_gn3e1")
 shader_parameter/posterizationLayers = 7.0
 shader_parameter/timeScale = 0.04
-shader_parameter/realWidth = 1152.0
-shader_parameter/realHeight = 647.992
+shader_parameter/realWidth = 1152.01
+shader_parameter/realHeight = 648.0
 shader_parameter/scale = 1.4
 shader_parameter/layer1Col1 = Color(0.14902, 0.188235, 0.74902, 1)
 shader_parameter/layer1Col2 = Color(1, 0.921569, 0.929412, 1)
@@ -570,6 +570,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 ratio = 1.7778
+stretch_mode = 3
 
 [node name="Background" type="TextureRect" parent="AspectRatioContainer2"]
 material = SubResource("ShaderMaterial_yxwyt")
