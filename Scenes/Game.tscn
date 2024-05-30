@@ -1,4 +1,4 @@
-[gd_scene load_steps=83 format=3 uid="uid://cudne81ew8j5r"]
+[gd_scene load_steps=85 format=3 uid="uid://cudne81ew8j5r"]
 
 [ext_resource type="Script" path="res://Scripts/UI/SetBorderRatio.gd" id="1_8omxs"]
 [ext_resource type="Theme" uid="uid://bhkvphjy5bskn" path="res://Themes/Main.tres" id="1_gldiy"]
@@ -513,11 +513,39 @@ shader_parameter/width = 6
 shader_parameter/height = 2
 shader_parameter/frame = 2
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_d03sp"]
+shader = ExtResource("11_6jtdc")
+shader_parameter/outerDistances = Vector4(0.06, 0.06, 0.06, 0.06)
+shader_parameter/thickness = 0.075
+shader_parameter/outerRadius = 0.17
+shader_parameter/noDistortLength = 0.245
+shader_parameter/insideBgCol = Color(0.619608, 0.541176, 0.482353, 1)
+shader_parameter/outsideBgCol = Color(0, 0, 0, 0)
+shader_parameter/lineCol = Color(0, 0, 0, 1)
+shader_parameter/noiseScale = Vector2(0.82, 0.225)
+shader_parameter/noiseSeed = 9.68
+shader_parameter/realWidth = 61.0
+shader_parameter/realHeight = 61.0
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_e8gqn"]
 shader = ExtResource("19_te1wm")
 shader_parameter/width = 6
 shader_parameter/height = 2
 shader_parameter/frame = 3
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mceqy"]
+shader = ExtResource("11_6jtdc")
+shader_parameter/outerDistances = Vector4(0.06, 0.06, 0.06, 0.06)
+shader_parameter/thickness = 0.075
+shader_parameter/outerRadius = 0.17
+shader_parameter/noDistortLength = 0.245
+shader_parameter/insideBgCol = Color(0.619608, 0.541176, 0.482353, 1)
+shader_parameter/outsideBgCol = Color(0, 0, 0, 0)
+shader_parameter/lineCol = Color(0, 0, 0, 1)
+shader_parameter/noiseScale = Vector2(0.82, 0.075)
+shader_parameter/noiseSeed = 6.3
+shader_parameter/realWidth = 61.0
+shader_parameter/realHeight = 61.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_kcg77"]
 shader = ExtResource("19_te1wm")
@@ -713,7 +741,7 @@ material = SubResource("ShaderMaterial_yx8dn")
 layout_mode = 2
 texture = SubResource("PlaceholderTexture2D_kb1m1")
 
-[node name="GameManager" type="Node" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/BoardSquare" node_paths=PackedStringArray("board", "pieceHolder", "trashButton", "pauseButton", "drawButton", "disableCapturesButton", "pauseMenu", "pauseMenuResumeButton", "pauseMenuSettingsButton", "pauseMenuMainMenuButton", "drawMenu", "drawMenuAcceptButton", "drawMenuRejectButton", "gameEndMenu", "gameEndMenuTitle", "gameEndMenuPiece1", "gameEndMenuPiece2", "gameEndMenuPlayAgainButton", "gameEndMenuCopyReplayButton", "gameEndMenuCopyReplayCheckmark", "gameEndMenuCopyReplayText", "gameEndMenuSettingsButton", "gameEndMenuMainMenuButton", "screenForMenu")]
+[node name="GameManager" type="Node" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/BoardSquare" node_paths=PackedStringArray("board", "pieceHolder", "trashButton", "pauseButton", "drawButton", "disableCapturesButton", "pauseMenu", "pauseMenuResumeButton", "pauseMenuSettingsButton", "pauseMenuMainMenuButton", "drawMenu", "drawMenuAcceptButton", "drawMenuRejectButton", "gameEndMenu", "gameEndMenuTitle", "gameEndMenuPiece1", "gameEndMenuPiece2", "gameEndMenuPlayAgainButton", "gameEndMenuCopyReplayButton", "gameEndMenuCopyReplayCheckmark", "gameEndMenuCopyReplayText", "gameEndMenuSettingsButton", "gameEndMenuMainMenuButton", "promoteMenu", "promoteMenuKnightButton", "promoteMenuKnight", "promoteMenuBishopButton", "promoteMenuBishop", "promoteMenuRookButton", "promoteMenuRook", "promoteMenuQueenButton", "promoteMenuQueen", "screenForMenu")]
 script = ExtResource("15_uqtdi")
 board = NodePath("../Board")
 pieceHolder = NodePath("../PieceHolder")
@@ -738,6 +766,15 @@ gameEndMenuCopyReplayCheckmark = NodePath("../../../../GameEndMenu/CheckmarkHold
 gameEndMenuCopyReplayText = NodePath("../../../../GameEndMenu/CopyViewReplayButton/Control/Label")
 gameEndMenuSettingsButton = NodePath("../../../../GameEndMenu/SettingsButton")
 gameEndMenuMainMenuButton = NodePath("../../../../GameEndMenu/MainMenuButton")
+promoteMenu = NodePath("../../../../PromoteMenu")
+promoteMenuKnightButton = NodePath("../../../../PromoteMenu/HBoxContainer/KnightButton")
+promoteMenuKnight = NodePath("../../../../PromoteMenu/HBoxContainer/KnightButton/TextureRect")
+promoteMenuBishopButton = NodePath("../../../../PromoteMenu/HBoxContainer/BishopButton")
+promoteMenuBishop = NodePath("../../../../PromoteMenu/HBoxContainer/BishopButton/TextureRect")
+promoteMenuRookButton = NodePath("../../../../PromoteMenu/HBoxContainer/RookButton")
+promoteMenuRook = NodePath("../../../../PromoteMenu/HBoxContainer/RookButton/TextureRect")
+promoteMenuQueenButton = NodePath("../../../../PromoteMenu/HBoxContainer/QueenButton")
+promoteMenuQueen = NodePath("../../../../PromoteMenu/HBoxContainer/QueenButton/TextureRect")
 screenForMenu = NodePath("../../../../../../ScreenForMenu")
 
 [node name="BoardRenderer" type="Node" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/BoardSquare" node_paths=PackedStringArray("board", "pieceHolder", "blackTimer", "whiteTimer", "blackCaptures", "whiteCaptures", "disableCapturesButton", "lines", "circles", "circleArcs", "arrows", "gameManager")]
@@ -1866,6 +1903,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="PromoteMenu" type="TextureRect" parent="AspectRatioContainer/Control"]
+visible = false
 z_index = 10
 material = SubResource("ShaderMaterial_fufi6")
 layout_mode = 1
@@ -2020,7 +2058,7 @@ texture = ExtResource("20_ml8gx")
 expand_mode = 1
 
 [node name="RookButton" type="TextureRect" parent="AspectRatioContainer/Control/PromoteMenu/HBoxContainer"]
-material = SubResource("ShaderMaterial_lnv6j")
+material = SubResource("ShaderMaterial_d03sp")
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -2070,7 +2108,7 @@ texture = ExtResource("20_ml8gx")
 expand_mode = 1
 
 [node name="QueenButton" type="TextureRect" parent="AspectRatioContainer/Control/PromoteMenu/HBoxContainer"]
-material = SubResource("ShaderMaterial_lnv6j")
+material = SubResource("ShaderMaterial_mceqy")
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3

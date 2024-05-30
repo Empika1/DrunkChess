@@ -173,14 +173,17 @@ func cancelOrContinueMove(move: Move):
 		if Input.is_action_just_pressed("lmb") and isPiecePlaced:
 			#this check is probably not necessary
 			if attemptedNextState.result in [BoardState.StateResult.VALID, BoardState.StateResult.WIN_BLACK, BoardState.StateResult.WIN_WHITE]:
-				states.append(attemptedNextState)
-				if states[-1].turnToMove == Piece.PieceColor.WHITE:
-					whiteTimer.unpause(getTimeSecs())
-					blackTimer.pause()
+				if move.moveType == Move.MoveType.PROMOTION and attemptedNextState.result == BoardState.StateResult.VALID:
+					showPromoteMenu()
 				else:
-					blackTimer.unpause(getTimeSecs())
-					whiteTimer.pause()
-			attemptedNextState = null
+					states.append(attemptedNextState)
+					if states[-1].turnToMove == Piece.PieceColor.WHITE:
+						whiteTimer.unpause(getTimeSecs())
+						blackTimer.pause()
+					else:
+						blackTimer.unpause(getTimeSecs())
+						whiteTimer.pause()
+					attemptedNextState = null
 			pieceDragging = null
 
 func updateTimer():
@@ -283,7 +286,10 @@ func checkForGameEnd():
 		gameEndMenu.visible = true
 		screenForMenu.color.a = 0.5
 
-func openPromoteMenu():
+func showPromoteMenu():
+	hideAllMenuItems()
+	disableAllButtons()
+
 	promoteMenu.visible = true
 	screenForMenu.color.a = 0.5
 	screenForMenu.color.v = 1. if states[-1].turnToMove == Piece.PieceColor.WHITE else 0.
@@ -294,8 +300,17 @@ func openPromoteMenu():
 
 func promote(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.ButtonState, type: Piece.PieceType):
 	if ButtonComponent.justReleased(oldState, newState):
-		states[-1] = states[-2].makeMove(Move.newPromotion(states[-1].previousMove.movedPiece, states[-1].previousMove.posTryMovedTo, type))
-		promoteMenu.visible = false
+		states.append(states[-1].makeMove(Move.newPromotion(attemptedNextState.previousMove.movedPiece, attemptedNextState.previousMove.posTryMovedTo, type)))
+		if states[-1].turnToMove == Piece.PieceColor.WHITE:
+			whiteTimer.unpause(getTimeSecs())
+			blackTimer.pause()
+		else:
+			blackTimer.unpause(getTimeSecs())
+			whiteTimer.pause()
+		attemptedNextState = null
+
+		undisableAllButtons()
+		hideAllMenuItems()
 
 func unpause(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.ButtonState):
 	if ButtonComponent.justReleased(oldState, newState):
@@ -321,6 +336,7 @@ func rejectDraw(oldState: ButtonComponent.ButtonState, newState: ButtonComponent
 
 func playAgain(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.ButtonState):
 	if ButtonComponent.justReleased(oldState, newState):
+		GameManager.states = [BoardState.newDefaultStartingState(states[-1].startSettings)]
 		get_tree().reload_current_scene()
 
 var replayString: String = ""
