@@ -9,20 +9,24 @@ enum FitType {
 	COVER
 }
 
-var initialHeight: float = 0.;
-var initialWidth: float = 0.;
+@export var initialHeight: float = 0.;
+@export var initialWidth: float = 0.;
 @export var fontSize: float
 @export var fitType: FitType
 @export var label: Control
-@export var resetInEditor: bool
+#@export var resetInEditor: bool
 func _process(_delta: float):
-	if resetInEditor:
-		initialHeight = 0
-		resetInEditor = false
-
-	if initialHeight == 0 and size.y != 0:
+	if Engine.is_editor_hint():
 		initialWidth = size.x
 		initialHeight = size.y
+	
+	#if resetInEditor:
+		#initialHeight = 0
+		#resetInEditor = false
+#
+	#if initialHeight == 0 and size.y != 0:
+		#initialWidth = size.x
+		#initialHeight = size.y
 	
 	var wantedSize: int = 0
 	match fitType:

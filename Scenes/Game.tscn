@@ -1,9 +1,7 @@
-[gd_scene load_steps=81 format=3 uid="uid://cudne81ew8j5r"]
+[gd_scene load_steps=79 format=3 uid="uid://cudne81ew8j5r"]
 
-[ext_resource type="Script" path="res://Scripts/UI/SetBorderRatio.gd" id="1_8omxs"]
 [ext_resource type="Theme" uid="uid://bhkvphjy5bskn" path="res://Themes/Main.tres" id="1_gldiy"]
 [ext_resource type="Shader" path="res://Shaders/Background.gdshader" id="1_gn3e1"]
-[ext_resource type="Script" path="res://Scripts/UI/BoardContainerResizer.gd" id="1_u4wqa"]
 [ext_resource type="Script" path="res://Scripts/BoardRenderer.gd" id="2_ern7e"]
 [ext_resource type="Shader" path="res://Shaders/Lines.gdshader" id="4_uql85"]
 [ext_resource type="Texture2D" uid="uid://clkdvmwwplkqy" path="res://Images/Pause.svg" id="5_fkwp4"]
@@ -557,16 +555,6 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0, 0, 0, 0)
 
-[node name="BorderRatioSetter" type="Node" parent="." node_paths=PackedStringArray("mats")]
-script = ExtResource("1_8omxs")
-mats = [NodePath("../AspectRatioContainer/Control/MainContainer/VBoxContainer/WhiteUIContainer/WhiteCaptures"), NodePath("../AspectRatioContainer/Control/MainContainer/VBoxContainer/WhiteUIContainer/WhiteTimer"), NodePath("../AspectRatioContainer/Control/MainContainer/VBoxContainer/BoardSquare/Board/BoardBorder2"), NodePath("../AspectRatioContainer2/Background")]
-
-[node name="BoardContainerResizer" type="Node" parent="." node_paths=PackedStringArray("boardSquare", "mainContainer")]
-script = ExtResource("1_u4wqa")
-boardSquare = NodePath("../AspectRatioContainer/Control/MainContainer/VBoxContainer/BoardSquare")
-mainContainer = NodePath("../AspectRatioContainer/Control/MainContainer")
-r = 0.785
-
 [node name="AspectRatioContainer" type="AspectRatioContainer" parent="."]
 layout_mode = 1
 anchors_preset = -1
@@ -582,36 +570,26 @@ metadata/_edit_use_anchors_ = true
 [node name="Control" type="Control" parent="AspectRatioContainer"]
 layout_mode = 2
 
-[node name="MainContainer" type="AspectRatioContainer" parent="AspectRatioContainer/Control"]
-custom_minimum_size = Vector2(46.045, 74.02)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
+[node name="VBoxContainer" type="VBoxContainer" parent="AspectRatioContainer/Control"]
+layout_mode = 2
+anchor_left = 0.146078
+anchor_right = 0.853922
 anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-size_flags_stretch_ratio = 70.0
-theme = ExtResource("1_gldiy")
-ratio = 0.785
-
-[node name="VBoxContainer" type="VBoxContainer" parent="AspectRatioContainer/Control/MainContainer"]
-layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 0
+metadata/_edit_use_anchors_ = true
 
-[node name="BlackUIContainer" type="HBoxContainer" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer"]
+[node name="BlackUIContainer" type="HBoxContainer" parent="AspectRatioContainer/Control/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 0
 
-[node name="BlackTimer" type="Panel" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/BlackUIContainer"]
+[node name="BlackTimer" type="Panel" parent="AspectRatioContainer/Control/VBoxContainer/BlackUIContainer"]
 material = SubResource("ShaderMaterial_lw55w")
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Control" type="Control" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/BlackUIContainer/BlackTimer" node_paths=PackedStringArray("label")]
+[node name="Control" type="Control" parent="AspectRatioContainer/Control/VBoxContainer/BlackUIContainer/BlackTimer" node_paths=PackedStringArray("label")]
 layout_mode = 1
 anchor_top = 0.0149254
 anchor_right = 1.0
@@ -619,12 +597,14 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("6_v8qg6")
+initialHeight = 66.0
+initialWidth = 198.0
 fontSize = 35.0
 fitType = 2
 label = NodePath("Label")
 metadata/_edit_use_anchors_ = true
 
-[node name="Label" type="Label" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/BlackUIContainer/BlackTimer/Control"]
+[node name="Label" type="Label" parent="AspectRatioContainer/Control/VBoxContainer/BlackUIContainer/BlackTimer/Control"]
 texture_filter = 1
 layout_mode = 1
 anchors_preset = 15
@@ -638,17 +618,17 @@ text = "5:00
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Control2" type="Control" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/BlackUIContainer"]
+[node name="Control2" type="Control" parent="AspectRatioContainer/Control/VBoxContainer/BlackUIContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.5
 
-[node name="BlackCaptures" type="Panel" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/BlackUIContainer"]
+[node name="BlackCaptures" type="Panel" parent="AspectRatioContainer/Control/VBoxContainer/BlackUIContainer"]
 material = SubResource("ShaderMaterial_2aubl")
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="BlackCapturesContainer" type="HBoxContainer" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/BlackUIContainer/BlackCaptures"]
+[node name="BlackCapturesContainer" type="HBoxContainer" parent="AspectRatioContainer/Control/VBoxContainer/BlackUIContainer/BlackCaptures"]
 layout_mode = 2
 anchor_left = 0.0808081
 anchor_top = 0.149254
@@ -659,21 +639,21 @@ size_flags_stretch_ratio = 10.2
 theme_override_constants/separation = 0
 metadata/_edit_use_anchors_ = true
 
-[node name="BoardSquare" type="AspectRatioContainer" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer"]
+[node name="BoardSquare" type="AspectRatioContainer" parent="AspectRatioContainer/Control/VBoxContainer"]
 z_index = 1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 7.30233
 
-[node name="Board" type="TextureRect" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/BoardSquare"]
+[node name="Board" type="TextureRect" parent="AspectRatioContainer/Control/VBoxContainer/BoardSquare"]
 self_modulate = Color(1, 0.898039, 0.819608, 1)
 material = SubResource("ShaderMaterial_aprie")
 layout_mode = 2
 texture = SubResource("PlaceholderTexture2D_3ehps")
 expand_mode = 1
 
-[node name="BoardBorder2" type="TextureRect" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/BoardSquare/Board"]
+[node name="BoardBorder2" type="TextureRect" parent="AspectRatioContainer/Control/VBoxContainer/BoardSquare/Board"]
 z_index = 1
 material = SubResource("ShaderMaterial_uhl4r")
 layout_mode = 2
@@ -686,69 +666,69 @@ offset_bottom = -3.05176e-05
 texture = SubResource("PlaceholderTexture2D_dkrfx")
 metadata/_edit_use_anchors_ = true
 
-[node name="PieceHolder" type="Control" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/BoardSquare"]
+[node name="PieceHolder" type="Control" parent="AspectRatioContainer/Control/VBoxContainer/BoardSquare"]
 z_index = 2
 layout_mode = 2
 
-[node name="Lines" type="TextureRect" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/BoardSquare"]
+[node name="Lines" type="TextureRect" parent="AspectRatioContainer/Control/VBoxContainer/BoardSquare"]
 z_index = 1
 material = SubResource("ShaderMaterial_76xl3")
 layout_mode = 2
 texture = SubResource("PlaceholderTexture2D_4pcoh")
 
-[node name="Circles" type="TextureRect" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/BoardSquare"]
+[node name="Circles" type="TextureRect" parent="AspectRatioContainer/Control/VBoxContainer/BoardSquare"]
 z_index = 1
 material = SubResource("ShaderMaterial_5isd6")
 layout_mode = 2
 texture = SubResource("PlaceholderTexture2D_d5phv")
 
-[node name="CircleArcs" type="TextureRect" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/BoardSquare"]
+[node name="CircleArcs" type="TextureRect" parent="AspectRatioContainer/Control/VBoxContainer/BoardSquare"]
 z_index = 1
 material = SubResource("ShaderMaterial_y1348")
 layout_mode = 2
 texture = SubResource("PlaceholderTexture2D_xcd1x")
 
-[node name="Arrows" type="TextureRect" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/BoardSquare"]
+[node name="Arrows" type="TextureRect" parent="AspectRatioContainer/Control/VBoxContainer/BoardSquare"]
 z_index = 3
 material = SubResource("ShaderMaterial_yx8dn")
 layout_mode = 2
 texture = SubResource("PlaceholderTexture2D_kb1m1")
 
-[node name="GameManager" type="Node" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/BoardSquare" node_paths=PackedStringArray("board", "pieceHolder", "trashButton", "pauseButton", "drawButton", "disableCapturesButton", "pauseMenu", "pauseMenuResumeButton", "pauseMenuMainMenuButton", "drawMenu", "drawMenuAcceptButton", "drawMenuRejectButton", "gameEndMenu", "gameEndMenuTitle", "gameEndMenuPiece1", "gameEndMenuPiece2", "gameEndMenuPlayAgainButton", "gameEndMenuCopyReplayButton", "gameEndMenuCopyReplayCheckmark", "gameEndMenuCopyReplayText", "gameEndMenuMainMenuButton", "promoteMenu", "promoteMenuKnightButton", "promoteMenuKnight", "promoteMenuBishopButton", "promoteMenuBishop", "promoteMenuRookButton", "promoteMenuRook", "promoteMenuQueenButton", "promoteMenuQueen", "screenForMenu")]
+[node name="GameManager" type="Node" parent="AspectRatioContainer/Control/VBoxContainer/BoardSquare" node_paths=PackedStringArray("board", "pieceHolder", "trashButton", "pauseButton", "drawButton", "disableCapturesButton", "pauseMenu", "pauseMenuResumeButton", "pauseMenuMainMenuButton", "drawMenu", "drawMenuAcceptButton", "drawMenuRejectButton", "gameEndMenu", "gameEndMenuTitle", "gameEndMenuPiece1", "gameEndMenuPiece2", "gameEndMenuPlayAgainButton", "gameEndMenuCopyReplayButton", "gameEndMenuCopyReplayCheckmark", "gameEndMenuCopyReplayText", "gameEndMenuMainMenuButton", "promoteMenu", "promoteMenuKnightButton", "promoteMenuKnight", "promoteMenuBishopButton", "promoteMenuBishop", "promoteMenuRookButton", "promoteMenuRook", "promoteMenuQueenButton", "promoteMenuQueen", "screenForMenu")]
 script = ExtResource("15_uqtdi")
 board = NodePath("../Board")
 pieceHolder = NodePath("../PieceHolder")
-trashButton = NodePath("../../../../RightButtonsContainer/Control/TrashButton")
-pauseButton = NodePath("../../../../LeftButtonsContainer/Control/PauseButton")
-drawButton = NodePath("../../../../RightButtonsContainer/Control2/OfferDrawButton")
-disableCapturesButton = NodePath("../../../../LeftButtonsContainer/Control2/DisableCapturesButton")
-pauseMenu = NodePath("../../../../PauseMenu")
-pauseMenuResumeButton = NodePath("../../../../PauseMenu/Control2/ResumeButton")
-pauseMenuMainMenuButton = NodePath("../../../../PauseMenu/Control2/MainMenuButton")
-drawMenu = NodePath("../../../../DrawOfferedMenu")
-drawMenuAcceptButton = NodePath("../../../../DrawOfferedMenu/AcceptButton")
-drawMenuRejectButton = NodePath("../../../../DrawOfferedMenu/RejectButton")
-gameEndMenu = NodePath("../../../../GameEndMenu")
-gameEndMenuTitle = NodePath("../../../../GameEndMenu/Control2/Control/Label")
-gameEndMenuPiece1 = NodePath("../../../../GameEndMenu/Control2/Piece1")
-gameEndMenuPiece2 = NodePath("../../../../GameEndMenu/Control2/Piece2")
-gameEndMenuPlayAgainButton = NodePath("../../../../GameEndMenu/Control2/PlayAgainButton")
-gameEndMenuCopyReplayButton = NodePath("../../../../GameEndMenu/Control2/CopyViewReplayButton")
-gameEndMenuCopyReplayCheckmark = NodePath("../../../../GameEndMenu/Control2/CheckmarkHolder/Checkmark")
-gameEndMenuCopyReplayText = NodePath("../../../../GameEndMenu/Control2/CopyViewReplayButton/Control/Label")
-gameEndMenuMainMenuButton = NodePath("../../../../GameEndMenu/Control2/MainMenuButton")
-promoteMenu = NodePath("../../../../PromoteMenu")
-promoteMenuKnightButton = NodePath("../../../../PromoteMenu/HBoxContainer/KnightButton")
-promoteMenuKnight = NodePath("../../../../PromoteMenu/HBoxContainer/KnightButton/TextureRect")
-promoteMenuBishopButton = NodePath("../../../../PromoteMenu/HBoxContainer/BishopButton")
-promoteMenuBishop = NodePath("../../../../PromoteMenu/HBoxContainer/BishopButton/TextureRect")
-promoteMenuRookButton = NodePath("../../../../PromoteMenu/HBoxContainer/RookButton")
-promoteMenuRook = NodePath("../../../../PromoteMenu/HBoxContainer/RookButton/TextureRect")
-promoteMenuQueenButton = NodePath("../../../../PromoteMenu/HBoxContainer/QueenButton")
-promoteMenuQueen = NodePath("../../../../PromoteMenu/HBoxContainer/QueenButton/TextureRect")
-screenForMenu = NodePath("../../../../../../ScreenForMenu")
+trashButton = NodePath("../../../RightButtonsContainer/Control/TrashButton")
+pauseButton = NodePath("../../../LeftButtonsContainer/Control/PauseButton")
+drawButton = NodePath("../../../RightButtonsContainer/Control2/OfferDrawButton")
+disableCapturesButton = NodePath("../../../LeftButtonsContainer/Control2/DisableCapturesButton")
+pauseMenu = NodePath("../../../PauseMenu")
+pauseMenuResumeButton = NodePath("../../../PauseMenu/Control2/ResumeButton")
+pauseMenuMainMenuButton = NodePath("../../../PauseMenu/Control2/MainMenuButton")
+drawMenu = NodePath("../../../DrawOfferedMenu")
+drawMenuAcceptButton = NodePath("../../../DrawOfferedMenu/AcceptButton")
+drawMenuRejectButton = NodePath("../../../DrawOfferedMenu/RejectButton")
+gameEndMenu = NodePath("../../../GameEndMenu")
+gameEndMenuTitle = NodePath("../../../GameEndMenu/Control2/Control/Label")
+gameEndMenuPiece1 = NodePath("../../../GameEndMenu/Control2/Piece1")
+gameEndMenuPiece2 = NodePath("../../../GameEndMenu/Control2/Piece2")
+gameEndMenuPlayAgainButton = NodePath("../../../GameEndMenu/Control2/PlayAgainButton")
+gameEndMenuCopyReplayButton = NodePath("../../../GameEndMenu/Control2/CopyViewReplayButton")
+gameEndMenuCopyReplayCheckmark = NodePath("../../../GameEndMenu/Control2/CheckmarkHolder/Checkmark")
+gameEndMenuCopyReplayText = NodePath("../../../GameEndMenu/Control2/CopyViewReplayButton/Control/Label")
+gameEndMenuMainMenuButton = NodePath("../../../GameEndMenu/Control2/MainMenuButton")
+promoteMenu = NodePath("../../../PromoteMenu")
+promoteMenuKnightButton = NodePath("../../../PromoteMenu/HBoxContainer/KnightButton")
+promoteMenuKnight = NodePath("../../../PromoteMenu/HBoxContainer/KnightButton/TextureRect")
+promoteMenuBishopButton = NodePath("../../../PromoteMenu/HBoxContainer/BishopButton")
+promoteMenuBishop = NodePath("../../../PromoteMenu/HBoxContainer/BishopButton/TextureRect")
+promoteMenuRookButton = NodePath("../../../PromoteMenu/HBoxContainer/RookButton")
+promoteMenuRook = NodePath("../../../PromoteMenu/HBoxContainer/RookButton/TextureRect")
+promoteMenuQueenButton = NodePath("../../../PromoteMenu/HBoxContainer/QueenButton")
+promoteMenuQueen = NodePath("../../../PromoteMenu/HBoxContainer/QueenButton/TextureRect")
+screenForMenu = NodePath("../../../../../ScreenForMenu")
 
-[node name="BoardRenderer" type="Node" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/BoardSquare" node_paths=PackedStringArray("board", "pieceHolder", "blackTimer", "whiteTimer", "blackCaptures", "whiteCaptures", "disableCapturesButton", "lines", "circles", "circleArcs", "arrows", "gameManager")]
+[node name="BoardRenderer" type="Node" parent="AspectRatioContainer/Control/VBoxContainer/BoardSquare" node_paths=PackedStringArray("board", "pieceHolder", "blackTimer", "whiteTimer", "blackCaptures", "whiteCaptures", "disableCapturesButton", "lines", "circles", "circleArcs", "arrows", "gameManager")]
 script = ExtResource("2_ern7e")
 board = NodePath("../Board")
 pieceHolder = NodePath("../PieceHolder")
@@ -756,7 +736,7 @@ blackTimer = NodePath("../../BlackUIContainer/BlackTimer/Control/Label")
 whiteTimer = NodePath("../../WhiteUIContainer/WhiteTimer/Control/Label")
 blackCaptures = NodePath("../../BlackUIContainer/BlackCaptures/BlackCapturesContainer")
 whiteCaptures = NodePath("../../WhiteUIContainer/WhiteCaptures/WhiteCapturesContainer")
-disableCapturesButton = NodePath("../../../../LeftButtonsContainer/Control2/DisableCapturesButton")
+disableCapturesButton = NodePath("../../../LeftButtonsContainer/Control2/DisableCapturesButton")
 lines = NodePath("../Lines")
 circles = NodePath("../Circles")
 circleArcs = NodePath("../CircleArcs")
@@ -768,17 +748,17 @@ whiteCapturerArrowColor = Color(1, 0.356863, 0.290196, 1)
 blackCapturerArrowColor = Color(0, 0.72549, 0.4, 1)
 arrowThickness = 0.005
 
-[node name="WhiteUIContainer" type="HBoxContainer" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer"]
+[node name="WhiteUIContainer" type="HBoxContainer" parent="AspectRatioContainer/Control/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 0
 
-[node name="WhiteTimer" type="Panel" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/WhiteUIContainer"]
+[node name="WhiteTimer" type="Panel" parent="AspectRatioContainer/Control/VBoxContainer/WhiteUIContainer"]
 material = SubResource("ShaderMaterial_xyrx8")
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Control" type="Control" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/WhiteUIContainer/WhiteTimer" node_paths=PackedStringArray("label")]
+[node name="Control" type="Control" parent="AspectRatioContainer/Control/VBoxContainer/WhiteUIContainer/WhiteTimer" node_paths=PackedStringArray("label")]
 layout_mode = 1
 anchor_top = -0.0441176
 anchor_right = 1.0
@@ -786,12 +766,14 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("6_v8qg6")
+initialHeight = 71.0
+initialWidth = 198.0
 fontSize = 35.0
 fitType = 2
 label = NodePath("Label")
 metadata/_edit_use_anchors_ = true
 
-[node name="Label" type="Label" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/WhiteUIContainer/WhiteTimer/Control"]
+[node name="Label" type="Label" parent="AspectRatioContainer/Control/VBoxContainer/WhiteUIContainer/WhiteTimer/Control"]
 texture_filter = 1
 layout_mode = 1
 anchors_preset = -1
@@ -805,17 +787,17 @@ horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
 
-[node name="Control2" type="Control" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/WhiteUIContainer"]
+[node name="Control2" type="Control" parent="AspectRatioContainer/Control/VBoxContainer/WhiteUIContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.5
 
-[node name="WhiteCaptures" type="Panel" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/WhiteUIContainer"]
+[node name="WhiteCaptures" type="Panel" parent="AspectRatioContainer/Control/VBoxContainer/WhiteUIContainer"]
 material = SubResource("ShaderMaterial_gfptd")
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="WhiteCapturesContainer" type="HBoxContainer" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/WhiteUIContainer/WhiteCaptures"]
+[node name="WhiteCapturesContainer" type="HBoxContainer" parent="AspectRatioContainer/Control/VBoxContainer/WhiteUIContainer/WhiteCaptures"]
 layout_mode = 2
 anchor_left = 0.0808081
 anchor_top = 0.147059
@@ -1134,6 +1116,8 @@ anchor_top = 0.0607434
 anchor_right = 0.95
 anchor_bottom = 0.264512
 script = ExtResource("6_v8qg6")
+initialHeight = 74.2612
+initialWidth = 410.31
 fontSize = 55.0
 label = NodePath("Label")
 metadata/_edit_use_anchors_ = true
@@ -1203,6 +1187,8 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("6_v8qg6")
+initialHeight = 64.0662
+initialWidth = 384.324
 fontSize = 36.0
 label = NodePath("Label")
 
@@ -1271,6 +1257,8 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("6_v8qg6")
+initialHeight = 64.064
+initialWidth = 384.324
 fontSize = 36.0
 label = NodePath("Label")
 
@@ -1346,6 +1334,8 @@ anchor_top = 0.0513696
 anchor_right = 0.95
 anchor_bottom = 0.255139
 script = ExtResource("6_v8qg6")
+initialHeight = 90.2504
+initialWidth = 410.31
 fontSize = 45.25
 label = NodePath("Label")
 
@@ -1412,6 +1402,8 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("6_v8qg6")
+initialHeight = 64.0281
+initialWidth = 384.0
 fontSize = 36.0
 label = NodePath("Label")
 
@@ -1480,6 +1472,8 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("6_v8qg6")
+initialHeight = 64.0276
+initialWidth = 317.0
 fontSize = 36.0
 label = NodePath("Label")
 
@@ -1569,6 +1563,8 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("6_v8qg6")
+initialHeight = 64.0272
+initialWidth = 384.0
 fontSize = 36.0
 label = NodePath("Label")
 
@@ -1611,6 +1607,8 @@ offset_top = -2.51511
 offset_right = -0.000152588
 offset_bottom = -2.51511
 script = ExtResource("6_v8qg6")
+initialHeight = 63.9613
+initialWidth = 366.123
 fontSize = 45.25
 label = NodePath("Label")
 metadata/_edit_use_anchors_ = true
@@ -1680,6 +1678,8 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("6_v8qg6")
+initialHeight = 61.0002
+initialWidth = 170.59
 fontSize = 30.0
 label = NodePath("Label")
 
@@ -1746,6 +1746,8 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("6_v8qg6")
+initialHeight = 61.0002
+initialWidth = 170.451
 fontSize = 30.0
 label = NodePath("Label")
 
@@ -1788,6 +1790,8 @@ offset_top = -2.51511
 offset_right = -0.000152588
 offset_bottom = -2.51511
 script = ExtResource("6_v8qg6")
+initialHeight = 63.9613
+initialWidth = 252.499
 fontSize = 40.185
 label = NodePath("Label")
 metadata/_edit_use_anchors_ = true

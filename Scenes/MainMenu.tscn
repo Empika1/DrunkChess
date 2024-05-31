@@ -300,6 +300,8 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("5_a8so6")
+initialHeight = 111.0
+initialWidth = 280.554
 fontSize = 51.73
 label = NodePath("Label")
 metadata/_edit_use_anchors_ = true
@@ -367,6 +369,8 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("5_a8so6")
+initialHeight = 110.999
+initialWidth = 378.748
 fontSize = 51.73
 label = NodePath("Label")
 metadata/_edit_use_anchors_ = true
@@ -403,6 +407,8 @@ anchor_top = 0.07
 anchor_right = 1.0
 anchor_bottom = 0.215
 script = ExtResource("5_a8so6")
+initialHeight = 60.896
+initialWidth = 483.978
 fontSize = 60.0
 label = NodePath("Label")
 metadata/_edit_use_anchors_ = true
@@ -450,6 +456,8 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("5_a8so6")
+initialHeight = 60.8959
+initialWidth = 483.978
 fontSize = 30.0
 label = NodePath("Label")
 metadata/_edit_use_anchors_ = true
@@ -542,6 +550,8 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("5_a8so6")
+initialHeight = 60.8964
+initialWidth = 483.978
 fontSize = 36.0
 label = NodePath("Label")
 metadata/_edit_use_anchors_ = true
@@ -572,15 +582,18 @@ metadata/_edit_use_anchors_ = true
 [node name="TextureRect" type="TextureRect" parent="AspectRatioContainer/Control/PlayMenu/Control2/TimeControlContainer" node_paths=PackedStringArray("label")]
 material = SubResource("ShaderMaterial_abj1d")
 layout_mode = 2
-offset_right = 170.0
-offset_bottom = 75.0
+anchor_right = 0.472319
+anchor_bottom = 0.988477
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 2.0
 mouse_filter = 2
 texture = SubResource("PlaceholderTexture2D_edb28")
 script = ExtResource("5_a8so6")
+initialHeight = 75.0
+initialWidth = 170.0
 fontSize = 30.0
 label = NodePath("LineEdit")
+metadata/_edit_use_anchors_ = true
 
 [node name="LineEdit" type="LineEdit" parent="AspectRatioContainer/Control/PlayMenu/Control2/TimeControlContainer/TextureRect"]
 layout_mode = 1
@@ -609,15 +622,18 @@ flat = true
 [node name="Control" type="Control" parent="AspectRatioContainer/Control/PlayMenu/Control2/TimeControlContainer" node_paths=PackedStringArray("label")]
 layout_mode = 2
 anchors_preset = 0
-offset_left = 170.0
-offset_right = 179.0
-offset_bottom = 75.0
+anchor_left = 0.472319
+anchor_right = 0.497324
+anchor_bottom = 0.988477
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.1
 mouse_filter = 2
 script = ExtResource("5_a8so6")
+initialHeight = 75.0
+initialWidth = 9.0
 fontSize = 70.0
 label = NodePath("Label2")
+metadata/_edit_use_anchors_ = true
 
 [node name="Label2" type="Label" parent="AspectRatioContainer/Control/PlayMenu/Control2/TimeControlContainer/Control"]
 layout_mode = 1
@@ -636,15 +652,18 @@ metadata/_edit_use_anchors_ = true
 [node name="TextureRect2" type="TextureRect" parent="AspectRatioContainer/Control/PlayMenu/Control2/TimeControlContainer" node_paths=PackedStringArray("label")]
 material = SubResource("ShaderMaterial_u16n6")
 layout_mode = 2
-offset_left = 179.0
-offset_right = 264.0
-offset_bottom = 75.0
+anchor_left = 0.497324
+anchor_right = 0.733484
+anchor_bottom = 0.988477
 size_flags_horizontal = 3
 mouse_filter = 2
 texture = SubResource("PlaceholderTexture2D_edb28")
 script = ExtResource("5_a8so6")
+initialHeight = 75.0
+initialWidth = 85.0
 fontSize = 30.0
 label = NodePath("LineEdit2")
+metadata/_edit_use_anchors_ = true
 
 [node name="LineEdit2" type="LineEdit" parent="AspectRatioContainer/Control/PlayMenu/Control2/TimeControlContainer/TextureRect2"]
 layout_mode = 1
@@ -677,15 +696,18 @@ metadata/_edit_use_anchors_ = true
 [node name="Control2" type="Control" parent="AspectRatioContainer/Control/PlayMenu/Control2/TimeControlContainer" node_paths=PackedStringArray("label")]
 layout_mode = 2
 anchors_preset = 0
-offset_left = 264.0
-offset_right = 273.0
-offset_bottom = 75.0
+anchor_left = 0.733484
+anchor_right = 0.758489
+anchor_bottom = 0.988477
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.1
 mouse_filter = 2
 script = ExtResource("5_a8so6")
+initialHeight = 75.0
+initialWidth = 9.0
 fontSize = 70.0
 label = NodePath("Label")
+metadata/_edit_use_anchors_ = true
 
 [node name="Label" type="Label" parent="AspectRatioContainer/Control/PlayMenu/Control2/TimeControlContainer/Control2"]
 layout_mode = 1
@@ -704,15 +726,18 @@ metadata/_edit_use_anchors_ = true
 [node name="TextureRect3" type="TextureRect" parent="AspectRatioContainer/Control/PlayMenu/Control2/TimeControlContainer" node_paths=PackedStringArray("label")]
 material = SubResource("ShaderMaterial_bruow")
 layout_mode = 2
-offset_left = 273.0
-offset_right = 359.0
-offset_bottom = 75.0
+anchor_left = 0.758489
+anchor_right = 0.997427
+anchor_bottom = 0.988477
 size_flags_horizontal = 3
 mouse_filter = 2
 texture = SubResource("PlaceholderTexture2D_edb28")
 script = ExtResource("5_a8so6")
+initialHeight = 75.0
+initialWidth = 86.0
 fontSize = 30.0
 label = NodePath("LineEdit3")
+metadata/_edit_use_anchors_ = true
 
 [node name="LineEdit3" type="LineEdit" parent="AspectRatioContainer/Control/PlayMenu/Control2/TimeControlContainer/TextureRect3"]
 layout_mode = 1
@@ -792,6 +817,8 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("5_a8so6")
+initialHeight = 74.0
+initialWidth = 198.0
 fontSize = 36.0
 label = NodePath("Label")
 
@@ -858,6 +885,8 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("5_a8so6")
+initialHeight = 74.0
+initialWidth = 197.947
 fontSize = 36.0
 label = NodePath("Label")
 

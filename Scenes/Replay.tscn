@@ -2,8 +2,6 @@
 
 [ext_resource type="Theme" uid="uid://bhkvphjy5bskn" path="res://Themes/Main.tres" id="1_7gpx2"]
 [ext_resource type="Shader" path="res://Shaders/Background.gdshader" id="2_ifcu1"]
-[ext_resource type="Script" path="res://Scripts/UI/SetBorderRatio.gd" id="3_w4eor"]
-[ext_resource type="Script" path="res://Scripts/UI/BoardContainerResizer.gd" id="4_eoj4f"]
 [ext_resource type="Shader" path="res://Shaders/RoundedBorder.gdshader" id="5_74tjg"]
 [ext_resource type="Script" path="res://Scripts/UI/LabelScaler.gd" id="6_h43ro"]
 [ext_resource type="Shader" path="res://Shaders/Board.gdshader" id="7_qgtk2"]
@@ -27,6 +25,37 @@ shader_parameter/layer1Col1 = Color(0.109804, 0.541176, 0.423529, 1)
 shader_parameter/layer1Col2 = Color(1, 0.976471, 0.921569, 1)
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_ujew3"]
+
+[sub_resource type="GDScript" id="GDScript_i5n5q"]
+script/source = "@tool
+extends Node
+
+@export var mats: Array[Control]; 
+func _process(_delta):
+	for i in mats:
+		(i.material as ShaderMaterial).set_shader_parameter(\"realWidth\", i.size.x)
+		(i.material as ShaderMaterial).set_shader_parameter(\"realHeight\", i.size.y)
+"
+
+[sub_resource type="GDScript" id="GDScript_d6j6a"]
+script/source = "@tool
+extends Node
+@export var boardSquare: Control
+@export var mainContainer: AspectRatioContainer
+@export var r: float
+
+func _ready():
+	if not Engine.is_editor_hint():
+		updateRatio()
+
+func _process(_delta):
+	if Engine.is_editor_hint():
+		updateRatio()
+
+func updateRatio() -> void:
+	boardSquare.size_flags_stretch_ratio = 2 * r / (1 - r)
+	mainContainer.ratio = r
+"
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_lw55w"]
 shader = ExtResource("5_74tjg")
@@ -377,11 +406,11 @@ mouse_filter = 2
 color = Color(0.5, 0.5, 0.5, 0)
 
 [node name="BorderRatioSetter" type="Node" parent="." node_paths=PackedStringArray("mats")]
-script = ExtResource("3_w4eor")
+script = SubResource("GDScript_i5n5q")
 mats = [NodePath("../AspectRatioContainer/Control/MainContainer/VBoxContainer/WhiteUIContainer/WhiteCaptures"), NodePath("../AspectRatioContainer/Control/MainContainer/VBoxContainer/WhiteUIContainer/WhiteTimer"), NodePath("../AspectRatioContainer/Control/MainContainer/VBoxContainer/BoardSquare/Board/BoardBorder2"), NodePath("../AspectRatioContainer2/Background")]
 
 [node name="BoardContainerResizer" type="Node" parent="." node_paths=PackedStringArray("boardSquare", "mainContainer")]
-script = ExtResource("4_eoj4f")
+script = SubResource("GDScript_d6j6a")
 boardSquare = NodePath("../AspectRatioContainer/Control/MainContainer/VBoxContainer/BoardSquare")
 mainContainer = NodePath("../AspectRatioContainer/Control/MainContainer")
 r = 0.785
@@ -438,6 +467,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("6_h43ro")
+initialHeight = 66.0
+initialWidth = 162.0
 fontSize = 35.0
 fitType = 2
 label = NodePath("Label")
@@ -510,6 +541,8 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("6_h43ro")
+initialHeight = 55.0
+initialWidth = 142.0
 fontSize = 21.0
 fitType = 2
 label = NodePath("Label")
@@ -645,6 +678,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("6_h43ro")
+initialHeight = 71.0
+initialWidth = 162.0
 fontSize = 35.0
 fitType = 2
 label = NodePath("Label")
@@ -856,6 +891,8 @@ offset_top = -2.51511
 offset_right = -0.000152588
 offset_bottom = -2.51511
 script = ExtResource("6_h43ro")
+initialHeight = 68.4
+initialWidth = 366.0
 fontSize = 45.25
 label = NodePath("Label")
 metadata/_edit_use_anchors_ = true
@@ -911,6 +948,8 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("6_h43ro")
+initialHeight = 62.9999
+initialWidth = 359.0
 fontSize = 27.0
 label = NodePath("LineEdit")
 
@@ -992,8 +1031,10 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("6_h43ro")
+initialHeight = 50.0002
+initialWidth = 170.0
 fontSize = 20.0
-label = NodePath("../../LoadReplayButton/Control/Label")
+label = NodePath("Label")
 
 [node name="Label" type="Label" parent="AspectRatioContainer/Control/ReplayMenu/MainMenuButton/Control"]
 layout_mode = 1
@@ -1062,6 +1103,8 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("6_h43ro")
+initialHeight = 50.0002
+initialWidth = 170.044
 fontSize = 20.0
 label = NodePath("Label")
 
