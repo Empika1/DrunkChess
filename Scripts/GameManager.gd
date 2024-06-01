@@ -35,6 +35,9 @@ class_name GameManager
 @export var promoteMenuQueen: TextureRect
 @export var screenForMenu: ColorRect
 
+var mainMenuScene: PackedScene = load("res://Scenes/MainMenu.tscn")
+var replayScene: PackedScene = load("res://Scenes/Replay.tscn")
+
 static var states: Array[BoardState] = [BoardState.newDefaultStartingState(BoardState.StartSettings.new(BoardState.StartSettings.AssistMode.MOVE_ARROWS, true, 600))]
 
 func getScaledRectSize() -> float:
@@ -121,6 +124,7 @@ func _process(_delta):
 
 	updateTimer()
 	checkForGameEnd()
+	print(BoardState.StateResult.keys()[states[-1].result])
 
 func determineInfoFromMouse():
 	#determine hovered piece
@@ -261,18 +265,21 @@ func checkForGameEnd():
 		return
 	var showMenu: bool = false
 	if states[-1].result == BoardState.StateResult.WIN_WHITE:
+		print("a")
 		gameEndMenuTitle.text = "White Wins!"
 		(gameEndMenuPiece1.material as ShaderMaterial).set_shader_parameter("frame", BoardRenderer.getPieceFrame(Piece.PieceColor.WHITE, Piece.PieceType.KING))
 		(gameEndMenuPiece2.material as ShaderMaterial).set_shader_parameter("frame", BoardRenderer.getPieceFrame(Piece.PieceColor.WHITE, Piece.PieceType.KING))
 		screenForMenu.color.v = 1.
 		showMenu = true
 	elif states[-1].result == BoardState.StateResult.WIN_BLACK:
+		print("b")
 		gameEndMenuTitle.text = "Black Wins!"
 		(gameEndMenuPiece1.material as ShaderMaterial).set_shader_parameter("frame", BoardRenderer.getPieceFrame(Piece.PieceColor.BLACK, Piece.PieceType.KING))
 		(gameEndMenuPiece2.material as ShaderMaterial).set_shader_parameter("frame", BoardRenderer.getPieceFrame(Piece.PieceColor.BLACK, Piece.PieceType.KING))
 		screenForMenu.color.v = 0.
 		showMenu = true
 	elif states[-1].result == BoardState.StateResult.DRAW:
+		print("c")
 		gameEndMenuTitle.text = "Draw!"
 		(gameEndMenuPiece1.material as ShaderMaterial).set_shader_parameter("frame", BoardRenderer.getPieceFrame(Piece.PieceColor.WHITE, Piece.PieceType.KING))
 		(gameEndMenuPiece2.material as ShaderMaterial).set_shader_parameter("frame", BoardRenderer.getPieceFrame(Piece.PieceColor.BLACK, Piece.PieceType.KING))
@@ -320,7 +327,7 @@ func unpause(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.Bu
 
 func goToMainMenu(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.ButtonState):
 	if ButtonComponent.justReleased(oldState, newState):
-		get_tree().change_scene_to_file("res://Scenes/MainMenu.tscn")
+		get_tree().change_scene_to_packed(mainMenuScene)
 
 func acceptDraw(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.ButtonState):
 	if ButtonComponent.justReleased(oldState, newState):
@@ -344,7 +351,7 @@ func copyReplay(oldState: ButtonComponent.ButtonState, newState: ButtonComponent
 	if ButtonComponent.justReleased(oldState, newState):
 		if gameEndMenuCopyReplayCheckmark.visible:
 			ReplayManager.replayString = replayString
-			get_tree().change_scene_to_file("res://Scenes/Replay.tscn")
+			get_tree().change_scene_to_packed(replayScene)
 		else:
 			replayString = Replay.validBoardStateToBitArray(states[-1]).toBase64(3)
 			DisplayServer.clipboard_set(replayString)

@@ -13,6 +13,9 @@ extends Node
 @export var playMenuPlayButton: BorderScaleButton
 @export var playMenuExitButton: BorderScaleButton
 
+var gameScene: PackedScene = load("res://Scenes/Game.tscn")
+var replayScene: PackedScene = load("res://Scenes/Replay.tscn")
+
 func _ready():
 	playButton.buttonComponent.stateUpdated.connect(openPlayMenu)
 	loadReplayButton.buttonComponent.stateUpdated.connect(loadReplay)
@@ -47,13 +50,15 @@ func toggleIsTimed(oldState: ButtonComponent.ButtonState, newState: ButtonCompon
 func play(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.ButtonState):
 	if ButtonComponent.justReleased(oldState, newState):
 		var isTimed: int = playMenuCheckbox.buttonComponent.state.toggleState == 1
-		var timeSeconds: int = 0
+		var timeSeconds: float = 0
 		if isTimed:
-			timeSeconds = int(playMenuTimeControlBox1.text) * 3600 + int(playMenuTimeControlBox2.text) * 60 + int(playMenuTimeControlBox3.text)
-		timeSeconds = max(timeSeconds, 1)
+			timeSeconds += float(playMenuTimeControlBox1.text if playMenuTimeControlBox1.text != "" else playMenuTimeControlBox1.placeholder_text) * 3600
+			timeSeconds += float(playMenuTimeControlBox2.text if playMenuTimeControlBox2.text != "" else playMenuTimeControlBox2.placeholder_text) * 60
+			timeSeconds += float(playMenuTimeControlBox3.text if playMenuTimeControlBox3.text != "" else playMenuTimeControlBox3.placeholder_text)
+		timeSeconds = max(timeSeconds, 0.001)
 		
 		GameManager.states = [BoardState.newDefaultStartingState(BoardState.StartSettings.new(BoardState.StartSettings.AssistMode.MOVE_ARROWS, isTimed, timeSeconds))]
-		get_tree().change_scene_to_file("res://Scenes/Game.tscn")
+		get_tree().change_scene_to_packed(gameScene)
 
 func closePlayMenu(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.ButtonState):
 	if ButtonComponent.justReleased(oldState, newState):
@@ -62,7 +67,8 @@ func closePlayMenu(oldState: ButtonComponent.ButtonState, newState: ButtonCompon
 
 func loadReplay(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.ButtonState):
 	if ButtonComponent.justReleased(oldState, newState):
-		get_tree().change_scene_to_file("res://Scenes/Replay.tscn")
+		ReplayManager.replayString = ReplayManager.defaultReplayString
+		get_tree().change_scene_to_packed(replayScene)
 
 func box1TextChanged(newText: String):
 	var oldCaretColumn: int = playMenuTimeControlBox1.caret_column

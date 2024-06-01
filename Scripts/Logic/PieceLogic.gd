@@ -28,7 +28,6 @@ class PawnMovePoints extends PieceMovePoints:
 		negativeDiagonalLowerBound = negativeDiagonalLowerBound_
 		negativeDiagonalUpperBound = negativeDiagonalUpperBound_
 	func duplicate():
-		print("working")
 		return PawnMovePoints.new(verticalLowerBound, verticalUpperBound, positiveDiagonalLowerBound,
 			positiveDiagonalUpperBound, negativeDiagonalLowerBound, negativeDiagonalUpperBound)
 

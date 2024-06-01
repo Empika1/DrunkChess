@@ -24,12 +24,15 @@ class_name ReplayManager
 @export var circleArcs: TextureRect
 @export var arrows: TextureRect
 
-static var replayString: String = "H4sIAAAAAAAACh3Myw1AUBSE4SFYEOJNSOSulGChBAWI5Y2VKpSgBjWoSClmzFmc5Fv8zpFu0LzawGDHgNTAwkWH3FJGiaUElPKmLJKbElLal3JJXkpC6dV5KJk6OaVSZ5WoU1MKdWaJOh2vUeeUqDNQtNiN/o/JBz5cRd2OqwAAAA=="
+var mainMenuScene: PackedScene = load("res://Scenes/MainMenu.tscn")
+var pieceScene: PackedScene = load("res://Prefabs/DraggablePiece.tscn")
+
+const defaultReplayString: String = "H4sIAAAAAAAACh3Myw1AUBSE4SFYEOJNSOSulGChBAWI5Y2VKpSgBjWoSClmzFmc5Fv8zpFu0LzawGDHgNTAwkWH3FJGiaUElPKmLJKbElLal3JJXkpC6dV5KJk6OaVSZ5WoU1MKdWaJOh2vUeeUqDNQtNiN/o/JBz5cRd2OqwAAAA=="
+static var replayString: String = defaultReplayString
 var states: Array[BoardState] = []
 var stateIndex: int = 0
 
 const shadowRealm: Vector2 = Vector2(9999999, 9999999)
-var pieceScene: PackedScene = preload("res://Prefabs/DraggablePiece.tscn")
 var usedPiecePool: Array[DraggablePiece]
 var freePiecePool: Array[DraggablePiece]
 
@@ -104,7 +107,6 @@ func resetPieces(states_: Array[BoardState]) -> void:
 	
 	previousButton.buttonComponent.disable()
 	if len(states) == 1:
-		print("s")
 		nextButton.buttonComponent.disable()
 	else:
 		nextButton.buttonComponent.enable()
@@ -113,10 +115,8 @@ func _ready() -> void:
 	loadMenuButton.buttonComponent.stateUpdated.connect(pause)
 	menuLoadReplayButton.buttonComponent.stateUpdated.connect(loadReplay)
 	menuMainMenuButton.buttonComponent.stateUpdated.connect(goToMainMenu)
-	
 	nextButton.buttonComponent.stateUpdated.connect(next)
 	previousButton.buttonComponent.stateUpdated.connect(previous)
-	
 	menuBox.text_changed.connect(updateEnteredReplay)
 	
 	var states_: Array[BoardState] = tryStringToStateList(replayString)
@@ -154,7 +154,7 @@ func next(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.Butto
 		previousButton.buttonComponent.enable()
 
 var stateToRender: BoardState
-func _process(_delta) -> void:	
+func _process(_delta) -> void:
 	deleteCircles(); deleteLines(); deleteArcs(); deleteArrows();
 	stateToRender = states[stateIndex]
 #
@@ -346,7 +346,7 @@ func addCaptureArrows(state: BoardState) -> void:
 
 func goToMainMenu(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.ButtonState):
 	if ButtonComponent.justReleased(oldState, newState):
-		get_tree().change_scene_to_file("res://Scenes/MainMenu.tscn")
+		get_tree().change_scene_to_packed(mainMenuScene)
 
 var nextButtonWasEnabled: bool
 var previousButtonWasEnabled: bool
@@ -365,9 +365,7 @@ func undisableAllButtons():
 	if loadMenuButtonWasEnabled: loadMenuButton.enable()
 
 func pause(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.ButtonState):
-	print("1")
 	if ButtonComponent.justReleased(oldState, newState):
-		print("2")
 		disableAllButtons()
 		
 		menu.visible = true
@@ -390,9 +388,7 @@ var enteredReplayStates: Array[BoardState] = []
 @export var invalidColor: Color
 @export var validColor: Color
 func updateEnteredReplay(newText: String):
-	print(newText)
 	enteredReplayStates = tryStringToStateList(newText)
-	print(len(enteredReplayStates))
 	if enteredReplayStates == []:
 		menuLoadReplayButton.buttonComponent.disable()
 		menuLoadReplayButtonText.add_theme_color_override("font_color", invalidColor)

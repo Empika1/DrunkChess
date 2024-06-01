@@ -23,6 +23,11 @@ class ButtonState:
 	func duplicate() -> ButtonState:
 		return ButtonState.new(isHoveredIgnoreDisable, isPressedIgnoreDisable, 
 			isHovered, isPressed, isDisabled, toggleState)
+	func valueEquals(other: ButtonState):
+		return (isHoveredIgnoreDisable == other.isHoveredIgnoreDisable &&
+				isPressedIgnoreDisable == other.isPressedIgnoreDisable &&
+				isHovered == other.isHovered && isPressed == other.isPressed &&
+				isDisabled == other.isDisabled && toggleState == other.toggleState)
 	func toString() -> String:
 		return ("isHoveredIgnoreDisable: " + str(isHoveredIgnoreDisable) + "\n"
 		+ "isPressedIgnoreDisable: " + str(isPressedIgnoreDisable) + "\n"

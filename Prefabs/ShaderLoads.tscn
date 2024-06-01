@@ -1,0 +1,185 @@
+[gd_scene load_steps=28 format=3 uid="uid://b4qp8oguaayrw"]
+
+[ext_resource type="Shader" path="res://Shaders/Arcs.gdshader" id="2_0rgsb"]
+[ext_resource type="Shader" path="res://Shaders/Arrows.gdshader" id="3_8gx8u"]
+[ext_resource type="Shader" path="res://Shaders/Background.gdshader" id="4_umhil"]
+[ext_resource type="Shader" path="res://Shaders/Board.gdshader" id="5_lvmdl"]
+[ext_resource type="Shader" path="res://Shaders/CircleArcs.gdshader" id="6_n4ri3"]
+[ext_resource type="Shader" path="res://Shaders/Circles.gdshader" id="7_tg1a2"]
+[ext_resource type="Shader" path="res://Shaders/Lines.gdshader" id="8_giirt"]
+[ext_resource type="Shader" path="res://Shaders/RoundedBorder.gdshader" id="9_ywwuh"]
+[ext_resource type="Shader" path="res://Shaders/SpriteSheetSlicer.gdshader" id="10_t20cr"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_030do"]
+shader = ExtResource("2_0rgsb")
+shader_parameter/arcCenters = null
+shader_parameter/arcRadii = null
+shader_parameter/arcThicknesses = null
+shader_parameter/arcColorsrg = null
+shader_parameter/arcColorsba = null
+shader_parameter/arcStarts = null
+shader_parameter/arcEnds = null
+shader_parameter/realWidth = null
+shader_parameter/realHeight = null
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_678fx"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vkbsi"]
+shader = ExtResource("3_8gx8u")
+shader_parameter/arrowStarts = null
+shader_parameter/arrowEnds = null
+shader_parameter/arrowColorsrg = null
+shader_parameter/arrowColorsba = null
+shader_parameter/arrowThicknesses = null
+shader_parameter/arrowDistortPoints = null
+shader_parameter/realWidth = null
+shader_parameter/realHeight = null
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_fhbxd"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_txo6r"]
+shader = ExtResource("4_umhil")
+shader_parameter/posterizationLayers = null
+shader_parameter/timeScale = null
+shader_parameter/realWidth = null
+shader_parameter/realHeight = null
+shader_parameter/scale = null
+shader_parameter/layer1Col1 = null
+shader_parameter/layer1Col2 = null
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_swbfb"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gyjtj"]
+shader = ExtResource("5_lvmdl")
+shader_parameter/col1 = null
+shader_parameter/col2 = null
+shader_parameter/numSquares = null
+shader_parameter/numWaves = null
+shader_parameter/squareOffset = null
+shader_parameter/distort = null
+shader_parameter/cornerRadius = null
+shader_parameter/realWidth = null
+shader_parameter/realHeight = null
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_3lmy3"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_l66b6"]
+shader = ExtResource("6_n4ri3")
+shader_parameter/circleCenters = null
+shader_parameter/circleRadii = null
+shader_parameter/circleThicknesses = null
+shader_parameter/circleColorsrg = null
+shader_parameter/circleColorsba = null
+shader_parameter/arcEndIndices = null
+shader_parameter/arcStarts = null
+shader_parameter/arcEnds = null
+shader_parameter/realWidth = null
+shader_parameter/realHeight = null
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_aerg1"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1bm24"]
+shader = ExtResource("7_tg1a2")
+shader_parameter/circleCenters = null
+shader_parameter/circleRadii = null
+shader_parameter/circleColorsrg = null
+shader_parameter/circleColorsba = null
+shader_parameter/realWidth = null
+shader_parameter/realHeight = null
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_o8kny"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_65mw1"]
+shader = ExtResource("8_giirt")
+shader_parameter/lineStarts = null
+shader_parameter/lineEnds = null
+shader_parameter/lineColorsrg = null
+shader_parameter/lineColorsba = null
+shader_parameter/lineThicknesses = null
+shader_parameter/realWidth = null
+shader_parameter/realHeight = null
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_ymm8f"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_aoj53"]
+shader = ExtResource("9_ywwuh")
+shader_parameter/outerDistances = null
+shader_parameter/thickness = null
+shader_parameter/outerRadius = null
+shader_parameter/noDistortLength = null
+shader_parameter/insideBgCol = null
+shader_parameter/outsideBgCol = null
+shader_parameter/lineCol = null
+shader_parameter/noiseScale = null
+shader_parameter/noiseSeed = null
+shader_parameter/realWidth = null
+shader_parameter/realHeight = null
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_xfujb"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vwqw3"]
+shader = ExtResource("10_t20cr")
+shader_parameter/width = null
+shader_parameter/height = null
+shader_parameter/frame = null
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_l723g"]
+
+[node name="ShaderLoads" type="Control"]
+z_index = -20
+layout_mode = 3
+anchors_preset = 0
+
+[node name="Control" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_030do")
+offset_right = 40.0
+offset_bottom = 40.0
+texture = SubResource("PlaceholderTexture2D_678fx")
+
+[node name="Control2" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_vkbsi")
+offset_right = 40.0
+offset_bottom = 40.0
+texture = SubResource("PlaceholderTexture2D_fhbxd")
+
+[node name="Control3" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_txo6r")
+offset_right = 40.0
+offset_bottom = 40.0
+texture = SubResource("PlaceholderTexture2D_swbfb")
+
+[node name="Control4" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_gyjtj")
+offset_right = 40.0
+offset_bottom = 40.0
+texture = SubResource("PlaceholderTexture2D_3lmy3")
+
+[node name="Control5" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_l66b6")
+offset_right = 40.0
+offset_bottom = 40.0
+texture = SubResource("PlaceholderTexture2D_aerg1")
+
+[node name="Control6" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_1bm24")
+offset_right = 40.0
+offset_bottom = 40.0
+texture = SubResource("PlaceholderTexture2D_o8kny")
+
+[node name="Control7" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_65mw1")
+offset_right = 40.0
+offset_bottom = 40.0
+texture = SubResource("PlaceholderTexture2D_ymm8f")
+
+[node name="Control8" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_aoj53")
+offset_right = 40.0
+offset_bottom = 40.0
+texture = SubResource("PlaceholderTexture2D_xfujb")
+
+[node name="Control9" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_vwqw3")
+offset_right = 40.0
+offset_bottom = 40.0
+texture = SubResource("PlaceholderTexture2D_l723g")

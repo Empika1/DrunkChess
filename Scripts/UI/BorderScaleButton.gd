@@ -118,7 +118,7 @@ var buttonComponent: ButtonComponent = ButtonComponent.new()
 func _ready():
 	buttonComponent.toggleStates = 2
 	buttonComponent.toggleOnPress = false
-	buttonComponent.stateUpdatedEarly.connect(updateVisuals)
+	#buttonComponent.stateUpdatedEarly.connect(updateVisuals)
 	
 	mouse_entered.connect(buttonComponent.hover)
 	mouse_exited.connect(buttonComponent.unhover)
@@ -135,15 +135,32 @@ func _input(event):
 			if buttonComponent.state.isPressed:
 				buttonComponent.unpress()
 
-func updateVisuals(_oldState: ButtonComponent.ButtonState, newState: ButtonComponent.ButtonState):
-	if newState.isDisabled:
-		showDisabled(newState)
-	elif newState.isPressed:
-		showPressed(newState)
-	elif newState.isHovered:
-		showHovered(newState)
+#func updateVisuals(_oldState: ButtonComponent.ButtonState, newState: ButtonComponent.ButtonState):
+	#if newState.isDisabled:
+		#showDisabled(newState)
+	#elif newState.isPressed:
+		#showPressed(newState)
+	#elif newState.isHovered:
+		#showHovered(newState)
+	#else:
+		#showDefault(newState)
+		
+#jank af, should be done with signals, but unforunately signals cause weird bugs
+var lastState: ButtonComponent.ButtonState = null
+func _process(_delta):
+	if lastState != null and buttonComponent.state.valueEquals(lastState):
+		return
+	
+	if buttonComponent.state.isDisabled:
+		showDisabled(buttonComponent.state)
+	elif buttonComponent.state.isPressed:
+		showPressed(buttonComponent.state)
+	elif buttonComponent.state.isHovered:
+		showHovered(buttonComponent.state)
 	else:
-		showDefault(newState)
+		showDefault(buttonComponent.state)
+	
+	lastState = buttonComponent.state.duplicate()
 
 func showDefault(state: ButtonComponent.ButtonState):
 	var mat: ShaderMaterial = material as ShaderMaterial

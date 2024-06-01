@@ -15,8 +15,9 @@ class_name BoardRenderer
 @export var arrows: TextureRect
 @export var gameManager: GameManager
 
+var pieceScene: PackedScene = load("res://Prefabs/DraggablePiece.tscn")
+
 const shadowRealm: Vector2 = Vector2(9999999, 9999999)
-var pieceScene: PackedScene = preload("res://Prefabs/DraggablePiece.tscn")
 var usedPiecePool: Array[DraggablePiece]
 var freePiecePool: Array[DraggablePiece]
 

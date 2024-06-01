@@ -138,7 +138,6 @@ static func validateCastleMove(state: BoardState, move: Move) -> BoardState.Stat
 	for piecesCanCapture: Array[Piece] in state.piecesCanCapture:
 		for piece: Piece in piecesCanCapture:
 			if piece.valueEquals(move.movedKing):
-				print("NUH UHHHH")
 				return BoardState.StateResult.MOVE_CASTLE_IN_CHECK
 	
 	var lowerBound: int = min(move.movedKing.pos.x, move.movedRook.pos.x);
