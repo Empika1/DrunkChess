@@ -317,6 +317,7 @@ theme_override_font_sizes/font_size = 51
 text = "Play"
 horizontal_alignment = 1
 vertical_alignment = 1
+justification_flags = 0
 
 [node name="LoadReplayButton" type="TextureRect" parent="AspectRatioContainer/Control"]
 material = SubResource("ShaderMaterial_8gnl7")
@@ -386,6 +387,7 @@ theme_override_font_sizes/font_size = 51
 text = "Load Replay"
 horizontal_alignment = 1
 vertical_alignment = 1
+justification_flags = 0
 
 [node name="PlayMenu" type="TextureRect" parent="AspectRatioContainer/Control"]
 visible = false
@@ -423,6 +425,7 @@ grow_vertical = 2
 theme_override_font_sizes/font_size = 60
 text = "Start Game"
 horizontal_alignment = 1
+justification_flags = 0
 
 [node name="Control2" type="Control" parent="AspectRatioContainer/Control/PlayMenu"]
 layout_mode = 1
@@ -472,6 +475,7 @@ grow_vertical = 2
 theme_override_font_sizes/font_size = 30
 text = "Is timed"
 horizontal_alignment = 1
+justification_flags = 0
 
 [node name="TimedButton" type="TextureRect" parent="AspectRatioContainer/Control/PlayMenu/Control2/IsTimed" node_paths=PackedStringArray("spriteDefaultToggled", "spriteHoveredToggled", "spritePressedToggled", "spriteDisabledToggled")]
 material = SubResource("ShaderMaterial_gj6s5")
@@ -566,6 +570,7 @@ grow_vertical = 2
 theme_override_font_sizes/font_size = 36
 text = "Time Control"
 horizontal_alignment = 1
+justification_flags = 0
 
 [node name="TimeControlContainer" type="Control" parent="AspectRatioContainer/Control/PlayMenu/Control2"]
 z_index = 5
@@ -647,6 +652,7 @@ grow_vertical = 2
 theme_override_font_sizes/font_size = 70
 text = ":"
 horizontal_alignment = 1
+justification_flags = 0
 metadata/_edit_use_anchors_ = true
 
 [node name="TextureRect2" type="TextureRect" parent="AspectRatioContainer/Control/PlayMenu/Control2/TimeControlContainer" node_paths=PackedStringArray("label")]
@@ -721,6 +727,7 @@ grow_vertical = 2
 theme_override_font_sizes/font_size = 70
 text = ":"
 horizontal_alignment = 1
+justification_flags = 0
 metadata/_edit_use_anchors_ = true
 
 [node name="TextureRect3" type="TextureRect" parent="AspectRatioContainer/Control/PlayMenu/Control2/TimeControlContainer" node_paths=PackedStringArray("label")]
@@ -833,6 +840,7 @@ theme_override_font_sizes/font_size = 36
 text = "Play"
 horizontal_alignment = 1
 vertical_alignment = 1
+justification_flags = 0
 
 [node name="ExitButton" type="TextureRect" parent="AspectRatioContainer/Control/PlayMenu"]
 material = SubResource("ShaderMaterial_gci2j")
@@ -901,3 +909,4 @@ theme_override_font_sizes/font_size = 36
 text = "Exit"
 horizontal_alignment = 1
 vertical_alignment = 1
+justification_flags = 0

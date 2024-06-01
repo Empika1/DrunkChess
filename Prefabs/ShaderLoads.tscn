@@ -132,54 +132,63 @@ anchors_preset = 0
 
 [node name="Control" type="TextureRect" parent="."]
 material = SubResource("ShaderMaterial_030do")
+layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 texture = SubResource("PlaceholderTexture2D_678fx")
 
 [node name="Control2" type="TextureRect" parent="."]
 material = SubResource("ShaderMaterial_vkbsi")
+layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 texture = SubResource("PlaceholderTexture2D_fhbxd")
 
 [node name="Control3" type="TextureRect" parent="."]
 material = SubResource("ShaderMaterial_txo6r")
+layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 texture = SubResource("PlaceholderTexture2D_swbfb")
 
 [node name="Control4" type="TextureRect" parent="."]
 material = SubResource("ShaderMaterial_gyjtj")
+layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 texture = SubResource("PlaceholderTexture2D_3lmy3")
 
 [node name="Control5" type="TextureRect" parent="."]
 material = SubResource("ShaderMaterial_l66b6")
+layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 texture = SubResource("PlaceholderTexture2D_aerg1")
 
 [node name="Control6" type="TextureRect" parent="."]
 material = SubResource("ShaderMaterial_1bm24")
+layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 texture = SubResource("PlaceholderTexture2D_o8kny")
 
 [node name="Control7" type="TextureRect" parent="."]
 material = SubResource("ShaderMaterial_65mw1")
+layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 texture = SubResource("PlaceholderTexture2D_ymm8f")
 
 [node name="Control8" type="TextureRect" parent="."]
 material = SubResource("ShaderMaterial_aoj53")
+layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 texture = SubResource("PlaceholderTexture2D_xfujb")
 
 [node name="Control9" type="TextureRect" parent="."]
 material = SubResource("ShaderMaterial_vwqw3")
+layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 texture = SubResource("PlaceholderTexture2D_l723g")

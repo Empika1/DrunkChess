@@ -79,6 +79,12 @@ func resetPieces(states_: Array[BoardState]) -> void:
 	for node in blackCaptures.get_children():
 		blackCaptures.remove_child(node)
 		node.queue_free()
+	usedPiecePool = []
+	freePiecePool = []
+	while pieceHolder.get_child_count() > 0:
+		var child: Node = pieceHolder.get_child(0)
+		pieceHolder.remove_child(child)
+		child.queue_free()
 	whiteCapturesContainers = []
 	blackCapturesContainers = []
 	for piece in states_[0].pieces:

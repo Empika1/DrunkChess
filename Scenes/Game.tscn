@@ -565,7 +565,6 @@ anchor_bottom = 0.988
 grow_horizontal = 2
 grow_vertical = 2
 ratio = 1.109
-metadata/_edit_use_anchors_ = true
 
 [node name="Control" type="Control" parent="AspectRatioContainer"]
 layout_mode = 2
@@ -617,6 +616,7 @@ text = "5:00
 "
 horizontal_alignment = 1
 vertical_alignment = 1
+justification_flags = 0
 
 [node name="Control2" type="Control" parent="AspectRatioContainer/Control/VBoxContainer/BlackUIContainer"]
 layout_mode = 2
@@ -785,6 +785,7 @@ theme_override_font_sizes/font_size = 35
 text = "5:00"
 horizontal_alignment = 1
 vertical_alignment = 1
+justification_flags = 0
 metadata/_edit_use_anchors_ = true
 
 [node name="Control2" type="Control" parent="AspectRatioContainer/Control/VBoxContainer/WhiteUIContainer"]
@@ -1134,6 +1135,7 @@ theme_override_font_sizes/font_size = 55
 text = "Paused"
 horizontal_alignment = 1
 vertical_alignment = 1
+justification_flags = 0
 metadata/_edit_use_anchors_ = true
 
 [node name="ResumeButton" type="TextureRect" parent="AspectRatioContainer/Control/PauseMenu/Control2"]
@@ -1203,6 +1205,7 @@ theme_override_font_sizes/font_size = 36
 text = "Resume"
 horizontal_alignment = 1
 vertical_alignment = 1
+justification_flags = 0
 
 [node name="MainMenuButton" type="TextureRect" parent="AspectRatioContainer/Control/PauseMenu/Control2"]
 material = SubResource("ShaderMaterial_7dk31")
@@ -1274,6 +1277,7 @@ text = "Main Menu
 "
 horizontal_alignment = 1
 vertical_alignment = 1
+justification_flags = 0
 
 [node name="GameEndMenu" type="TextureRect" parent="AspectRatioContainer/Control"]
 visible = false
@@ -1351,6 +1355,7 @@ theme_override_font_sizes/font_size = 45
 text = "White Wins!"
 horizontal_alignment = 1
 vertical_alignment = 1
+justification_flags = 0
 
 [node name="PlayAgainButton" type="TextureRect" parent="AspectRatioContainer/Control/GameEndMenu/Control2"]
 material = SubResource("ShaderMaterial_pav1d")
@@ -1418,6 +1423,7 @@ theme_override_font_sizes/font_size = 36
 text = "Play Again"
 horizontal_alignment = 1
 vertical_alignment = 1
+justification_flags = 0
 
 [node name="CopyViewReplayButton" type="TextureRect" parent="AspectRatioContainer/Control/GameEndMenu/Control2"]
 material = SubResource("ShaderMaterial_droyb")
@@ -1488,6 +1494,7 @@ theme_override_font_sizes/font_size = 36
 text = "Copy Replay"
 horizontal_alignment = 1
 vertical_alignment = 1
+justification_flags = 0
 
 [node name="CheckmarkHolder" type="TextureRect" parent="AspectRatioContainer/Control/GameEndMenu/Control2"]
 material = SubResource("ShaderMaterial_3cbkt")
@@ -1579,6 +1586,7 @@ theme_override_font_sizes/font_size = 36
 text = "Main Menu"
 horizontal_alignment = 1
 vertical_alignment = 1
+justification_flags = 0
 
 [node name="DrawOfferedMenu" type="TextureRect" parent="AspectRatioContainer/Control"]
 visible = false
@@ -1625,6 +1633,7 @@ theme_override_font_sizes/font_size = 45
 text = "Draw Offered"
 horizontal_alignment = 1
 vertical_alignment = 1
+justification_flags = 0
 metadata/_edit_use_anchors_ = true
 
 [node name="AcceptButton" type="TextureRect" parent="AspectRatioContainer/Control/DrawOfferedMenu"]
@@ -1694,6 +1703,7 @@ theme_override_font_sizes/font_size = 30
 text = "Accept"
 horizontal_alignment = 1
 vertical_alignment = 1
+justification_flags = 0
 
 [node name="RejectButton" type="TextureRect" parent="AspectRatioContainer/Control/DrawOfferedMenu"]
 material = SubResource("ShaderMaterial_e7o71")
@@ -1762,6 +1772,7 @@ theme_override_font_sizes/font_size = 30
 text = "Reject"
 horizontal_alignment = 1
 vertical_alignment = 1
+justification_flags = 0
 
 [node name="PromoteMenu" type="TextureRect" parent="AspectRatioContainer/Control"]
 visible = false
@@ -1804,10 +1815,12 @@ anchor_right = 1.0
 anchor_bottom = 0.985681
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_colors/font_color = Color(0.878431, 0.815686, 0.901961, 1)
 theme_override_font_sizes/font_size = 40
 text = "Promote"
 horizontal_alignment = 1
 vertical_alignment = 1
+justification_flags = 0
 metadata/_edit_use_anchors_ = true
 
 [node name="HBoxContainer" type="HBoxContainer" parent="AspectRatioContainer/Control/PromoteMenu"]

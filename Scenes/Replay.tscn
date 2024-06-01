@@ -338,22 +338,6 @@ shader_parameter/realHeight = 63.0
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_a044n"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_w2wpw"]
-shader = ExtResource("5_74tjg")
-shader_parameter/outerDistances = Vector4(0.06, 0.06, 0.06, 0.06)
-shader_parameter/thickness = 0.08
-shader_parameter/outerRadius = 0.17
-shader_parameter/noDistortLength = 0.245
-shader_parameter/insideBgCol = Color(0.619608, 0.541176, 0.482353, 1)
-shader_parameter/outsideBgCol = Color(0, 0, 0, 0)
-shader_parameter/lineCol = Color(0, 0, 0, 1)
-shader_parameter/noiseScale = Vector2(0.82, 0.17)
-shader_parameter/noiseSeed = 6.65
-shader_parameter/realWidth = 170.0
-shader_parameter/realHeight = 50.0
-
-[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_qjggo"]
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_y1ccv"]
 shader = ExtResource("5_74tjg")
 shader_parameter/outerDistances = Vector4(0.06, 0.06, 0.06, 0.06)
@@ -365,6 +349,22 @@ shader_parameter/outsideBgCol = Color(0, 0, 0, 0)
 shader_parameter/lineCol = Color(0, 0, 0, 1)
 shader_parameter/noiseScale = Vector2(0.82, 0.17)
 shader_parameter/noiseSeed = 2.555
+shader_parameter/realWidth = 170.0
+shader_parameter/realHeight = 50.0
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_qjggo"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_r5nry"]
+shader = ExtResource("5_74tjg")
+shader_parameter/outerDistances = Vector4(0.06, 0.06, 0.06, 0.06)
+shader_parameter/thickness = 0.08
+shader_parameter/outerRadius = 0.17
+shader_parameter/noDistortLength = 0.245
+shader_parameter/insideBgCol = Color(0.619608, 0.541176, 0.482353, 1)
+shader_parameter/outsideBgCol = Color(0, 0, 0, 0)
+shader_parameter/lineCol = Color(0, 0, 0, 1)
+shader_parameter/noiseScale = Vector2(0.82, 0.17)
+shader_parameter/noiseSeed = 4.965
 shader_parameter/realWidth = 170.0
 shader_parameter/realHeight = 50.0
 
@@ -487,6 +487,7 @@ text = "5:00
 "
 horizontal_alignment = 1
 vertical_alignment = 1
+justification_flags = 0
 
 [node name="Control3" type="Control" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/BlackUIContainer"]
 layout_mode = 2
@@ -560,6 +561,7 @@ theme_override_font_sizes/font_size = 21
 text = "Load/Menu"
 horizontal_alignment = 1
 vertical_alignment = 1
+justification_flags = 0
 
 [node name="BlackCaptures" type="Panel" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/BlackUIContainer"]
 material = SubResource("ShaderMaterial_2aubl")
@@ -697,6 +699,7 @@ theme_override_font_sizes/font_size = 35
 text = "5:00"
 horizontal_alignment = 1
 vertical_alignment = 1
+justification_flags = 0
 metadata/_edit_use_anchors_ = true
 
 [node name="Control2" type="Control" parent="AspectRatioContainer/Control/MainContainer/VBoxContainer/WhiteUIContainer"]
@@ -909,6 +912,7 @@ theme_override_font_sizes/font_size = 45
 text = "Replay Menu"
 horizontal_alignment = 1
 vertical_alignment = 1
+justification_flags = 0
 
 [node name="Control2" type="TextureRect" parent="AspectRatioContainer/Control/ReplayMenu"]
 z_index = 5
@@ -978,77 +982,6 @@ theme_override_styles/read_only = SubResource("StyleBoxEmpty_a044n")
 placeholder_text = "Paste Here"
 alignment = 1
 flat = true
-metadata/_edit_use_anchors_ = true
-
-[node name="MainMenuButton" type="TextureRect" parent="AspectRatioContainer/Control/ReplayMenu"]
-material = SubResource("ShaderMaterial_w2wpw")
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.0737457
-anchor_top = 0.685168
-anchor_right = 0.491638
-anchor_bottom = 0.904774
-size_flags_horizontal = 3
-size_flags_vertical = 3
-texture = SubResource("PlaceholderTexture2D_qjggo")
-script = ExtResource("16_7embo")
-scaleDefault = 1.0
-scaleHovered = 1.05
-scalePressed = 1.1
-scaleDisabled = 1.0
-useNonToggledScale = true
-useDefaultOuterDistances = true
-outerDistancesDefault = Vector4(0.06, 0.06, 0.06, 0.06)
-useDefaultThickness = true
-thicknessDefault = 0.08
-useDefaultOuterRadius = true
-outerRadiusDefault = 0.17
-useDefaultNoDistortLength = true
-noDistortLengthDefault = 0.245
-insideBgColDefault = Color(0.619608, 0.541176, 0.482353, 1)
-insideBgColHovered = Color(0.737255, 0.662745, 0.607843, 1)
-insideBgColPressed = Color(0.847059, 0.792157, 0.756863, 1)
-insideBgColDisabled = Color(0.454902, 0.419608, 0.396078, 1)
-useNonToggledInsideBgCol = true
-useDefaultOutsideBgCol = true
-outsideBgColDefault = Color(0, 0, 0, 0)
-useNonToggledOutsideBgCol = true
-useDefaultLineCol = true
-modulateDefault = Color(1, 1, 1, 1)
-modulateHovered = Color(1, 1, 1, 1)
-modulatePressed = Color(1, 1, 1, 1)
-modulateDisabled = Color(0.65098, 0.65098, 0.65098, 1)
-useNonToggledModulate = true
-useDefaultSprite = true
-metadata/_edit_use_anchors_ = true
-
-[node name="Control" type="Control" parent="AspectRatioContainer/Control/ReplayMenu/MainMenuButton" node_paths=PackedStringArray("label")]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-script = ExtResource("6_h43ro")
-initialHeight = 50.0002
-initialWidth = 170.0
-fontSize = 20.0
-label = NodePath("Label")
-
-[node name="Label" type="Label" parent="AspectRatioContainer/Control/ReplayMenu/MainMenuButton/Control"]
-layout_mode = 1
-anchors_preset = -1
-anchor_top = -0.0606061
-anchor_right = 1.00044
-anchor_bottom = 1.0101
-offset_right = -1.52588e-05
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_font_sizes/font_size = 20
-text = "Quit To Menu"
-horizontal_alignment = 1
-vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
 
 [node name="LoadReplayButton" type="TextureRect" parent="AspectRatioContainer/Control/ReplayMenu"]
@@ -1122,4 +1055,77 @@ theme_override_font_sizes/font_size = 20
 text = "Invalid Replay"
 horizontal_alignment = 1
 vertical_alignment = 1
+justification_flags = 0
+metadata/_edit_use_anchors_ = true
+
+[node name="MainMenuButton" type="TextureRect" parent="AspectRatioContainer/Control/ReplayMenu"]
+material = SubResource("ShaderMaterial_r5nry")
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.0737457
+anchor_top = 0.685168
+anchor_right = 0.491746
+anchor_bottom = 0.904774
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = SubResource("PlaceholderTexture2D_qjggo")
+script = ExtResource("16_7embo")
+scaleDefault = 1.0
+scaleHovered = 1.05
+scalePressed = 1.1
+scaleDisabled = 1.0
+useNonToggledScale = true
+useDefaultOuterDistances = true
+outerDistancesDefault = Vector4(0.06, 0.06, 0.06, 0.06)
+useDefaultThickness = true
+thicknessDefault = 0.08
+useDefaultOuterRadius = true
+outerRadiusDefault = 0.17
+useDefaultNoDistortLength = true
+noDistortLengthDefault = 0.245
+insideBgColDefault = Color(0.619608, 0.541176, 0.482353, 1)
+insideBgColHovered = Color(0.737255, 0.662745, 0.607843, 1)
+insideBgColPressed = Color(0.847059, 0.792157, 0.756863, 1)
+insideBgColDisabled = Color(0.533333, 0.458824, 0.403922, 1)
+useNonToggledInsideBgCol = true
+useDefaultOutsideBgCol = true
+outsideBgColDefault = Color(0, 0, 0, 0)
+useNonToggledOutsideBgCol = true
+useDefaultLineCol = true
+modulateDefault = Color(1, 1, 1, 1)
+modulateHovered = Color(1, 1, 1, 1)
+modulatePressed = Color(1, 1, 1, 1)
+modulateDisabled = Color(0.65098, 0.65098, 0.65098, 1)
+useNonToggledModulate = true
+useDefaultSprite = true
+metadata/_edit_use_anchors_ = true
+
+[node name="Control" type="Control" parent="AspectRatioContainer/Control/ReplayMenu/MainMenuButton" node_paths=PackedStringArray("label")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("6_h43ro")
+initialHeight = 50.0002
+initialWidth = 170.044
+fontSize = 20.0
+label = NodePath("Label")
+
+[node name="Label" type="Label" parent="AspectRatioContainer/Control/ReplayMenu/MainMenuButton/Control"]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = -0.0606061
+anchor_right = 1.00044
+anchor_bottom = 1.0101
+offset_right = -1.52588e-05
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 20
+text = "Quit To Menu"
+horizontal_alignment = 1
+vertical_alignment = 1
+justification_flags = 0
 metadata/_edit_use_anchors_ = true
