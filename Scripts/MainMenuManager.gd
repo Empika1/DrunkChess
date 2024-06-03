@@ -35,6 +35,8 @@ func openPlayMenu(oldState: ButtonComponent.ButtonState, newState: ButtonCompone
 	if ButtonComponent.justReleased(oldState, newState):
 		screenForMenu.color = Color(0.5, 0.5, 0.5, 0.5)
 		playMenu.visible = true
+		playButton.buttonComponent.disable()
+		loadReplayButton.buttonComponent.disable()
 
 func toggleIsTimed(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.ButtonState):
 	if ButtonComponent.justToggled(oldState, newState):
@@ -64,6 +66,8 @@ func closePlayMenu(oldState: ButtonComponent.ButtonState, newState: ButtonCompon
 	if ButtonComponent.justReleased(oldState, newState):
 		screenForMenu.color = Color(0.5, 0.5, 0.5, 0.)
 		playMenu.visible = false
+		playButton.buttonComponent.enable()
+		loadReplayButton.buttonComponent.enable()
 
 func loadReplay(oldState: ButtonComponent.ButtonState, newState: ButtonComponent.ButtonState):
 	if ButtonComponent.justReleased(oldState, newState):
